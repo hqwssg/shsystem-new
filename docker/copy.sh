@@ -14,6 +14,8 @@ cp ../sql/carbon-report/V1__report_tables.sql ./mysql/db/zz01_report_tables.sql
 cp ../sql/carbon-report/V11__shuohuang_project_integration.sql ./mysql/db/zz02_report_project_integration.sql
 cp ../sql/carbon_permission_model.sql ./mysql/db/zz03_carbon_permission_model.sql
 cp ../sql/carbon_collection_scope_permissions.sql ./mysql/db/zz04_carbon_collection_scope_permissions.sql
+cp ../sql/carbon-energy/V1__energy_tables.sql ./mysql/db/zz05_energy_tables.sql
+cp ../sql/carbon-energy/V2__menus.sql ./mysql/db/zz06_energy_menus.sql
 
 echo "begin copy ruoyi-admin"
 mkdir -p ./web-main/jar ./web-main/html/dist ./web-main/html/carbon-model ./web-main/python
