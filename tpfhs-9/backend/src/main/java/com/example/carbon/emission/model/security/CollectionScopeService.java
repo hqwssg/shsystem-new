@@ -52,6 +52,15 @@ public class CollectionScopeService {
         return false;
     }
 
+    /**
+     * A node is visible when the current department can either read it or maintain it.
+     * This is intentionally broader than the read check: a maintenance grant must
+     * still reveal the node in the tree so the operator can use it.
+     */
+    public boolean canView(String type, String nodeType, Long id) {
+        return isAllowed(type, nodeType, id, false) || isAllowed(type, nodeType, id, true);
+    }
+
     public void require(String type, String nodeType, Long id, boolean write) {
         scopeId(type, nodeType, id);
         if (!isAllowed(type, nodeType, id, write)) {

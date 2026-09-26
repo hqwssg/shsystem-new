@@ -97,6 +97,15 @@ public class MeterTreeNodeDTO {
      */
     private Integer meterReadingMethod;
 
+    /** Latest collection result: 1 success, 2 failed. */
+    private Integer lastCollectionStatus;
+
+    /** Latest collection result detail. */
+    private String lastCollectionMessage;
+
+    /** Time of the latest successful collection. */
+    private String lastCollectionTime;
+
     /**
      * 总表与分表关系：1-总表计数等于各下属分表计数之和，2-总表计数不等于各下属分表计数之和（电表节点）
      */

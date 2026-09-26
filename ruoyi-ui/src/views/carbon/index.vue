@@ -64,9 +64,9 @@ export default {
 
 .module-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 240px));
-  gap: 18px;
-  width: min(100%, 1014px);
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 22px;
+  width: min(100%, 1180px);
 }
 
 .module-button {
@@ -74,15 +74,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  min-height: 112px;
-  padding: 18px;
+  gap: 16px;
+  min-height: 132px;
+  padding: 22px;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
   background: #fff;
   color: #1f2d3d;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0;
   text-align: center;
@@ -90,7 +90,7 @@ export default {
 
   i {
     flex: 0 0 auto;
-    font-size: 26px;
+    font-size: 30px;
   }
 
   span {
@@ -120,8 +120,8 @@ export default {
 
   .lock-icon {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 14px;
+    right: 14px;
     color: #8b95a5;
     font-size: 16px;
   }
@@ -149,6 +149,16 @@ export default {
 
   .module-grid {
     grid-template-columns: 1fr;
+  }
+
+  .module-button {
+    min-height: 88px;
+    padding: 18px;
+    font-size: 18px;
+
+    i {
+      font-size: 26px;
+    }
   }
 }
 </style>

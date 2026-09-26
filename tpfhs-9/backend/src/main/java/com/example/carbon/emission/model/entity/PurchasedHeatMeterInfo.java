@@ -163,6 +163,12 @@ public class PurchasedHeatMeterInfo {
     @Column(name = "last_collection_time")
     private LocalDateTime lastCollectionTime;
 
+    @Column(name = "last_collection_status")
+    private Integer lastCollectionStatus;
+
+    @Column(name = "last_collection_message", length = 500)
+    private String lastCollectionMessage;
+
     /**
      * 启用时间：当启用该节点后自动记录
      * 由 @PreUpdate 在 status 从 0→1 切换时自动写入

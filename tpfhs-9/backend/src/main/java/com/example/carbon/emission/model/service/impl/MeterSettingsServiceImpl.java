@@ -9,11 +9,14 @@ import com.example.carbon.emission.model.repository.PointRepository;
 import com.example.carbon.emission.model.repository.StationIntervalRepository;
 import com.example.carbon.emission.model.service.MeterSettingsService;
 import com.example.carbon.emission.model.service.SystemConfigService;
+import com.example.carbon.emission.model.security.CarbonSecurityContext;
 import com.example.carbon.emission.model.util.PinyinUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -245,6 +248,9 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
         dto.setPowerCategory(m.getPowerCategory());
         dto.setEnergyAllocation(m.getEnergyAllocation());
         dto.setMeterReadingMethod(m.getMeterReadingMethod() != null ? m.getMeterReadingMethod() : 1);
+        dto.setLastCollectionStatus(m.getLastCollectionStatus());
+        dto.setLastCollectionMessage(m.getLastCollectionMessage());
+        dto.setLastCollectionTime(m.getLastCollectionTime() != null ? m.getLastCollectionTime().format(formatter) : null);
         dto.setAutoMeterReadingConfig(m.getAutoMeterReadingConfig());
         dto.setIsCumulative(m.getIsCumulative());
         dto.setIsMobileSource(m.getIsMobileSource());
@@ -376,6 +382,9 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
         m.setPurposeDescription(purposeDesc);
         m.setEnergyAllocation(request.getEnergyAllocation());
         m.setPowerCategory(request.getPowerCategory());
+        if (request.getMeterReadingMethod() != null && request.getMeterReadingMethod() != 1) {
+            requireReadingMethodPermission();
+        }
         m.setMeterReadingMethod(request.getMeterReadingMethod() != null ? request.getMeterReadingMethod() : 1);
         m.setParentChildRelationship(request.getParentChildRelationship() != null ? request.getParentChildRelationship() : 1);
         m.setIsVirtualMeter(request.getIsVirtualMeter() != null ? request.getIsVirtualMeter() : 0);
@@ -477,7 +486,11 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
                 }
                 if (req.getEnergyAllocation() != null) m.setEnergyAllocation(req.getEnergyAllocation());
                 if (req.getPowerCategory() != null) m.setPowerCategory(req.getPowerCategory());
-                if (req.getMeterReadingMethod() != null) m.setMeterReadingMethod(req.getMeterReadingMethod());
+                if (req.getMeterReadingMethod() != null
+                        && !Objects.equals(m.getMeterReadingMethod(), req.getMeterReadingMethod())) {
+                    requireReadingMethodPermission();
+                    m.setMeterReadingMethod(req.getMeterReadingMethod());
+                }
                 if (req.getAutoMeterReadingConfig() != null) m.setAutoMeterReadingConfig(req.getAutoMeterReadingConfig());
                 if (req.getIsCumulative() != null) m.setIsCumulative(req.getIsCumulative());
                 if (req.getIsMobileSource() != null) m.setIsMobileSource(req.getIsMobileSource());
@@ -1306,6 +1319,12 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
     /**
      * 安全地将对象转为 int
      */
+    private void requireReadingMethodPermission() {
+        if (!CarbonSecurityContext.current().hasPermission("carbon:data:auto:manual")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "当前账号没有修改采集点抄表方式的权限");
+        }
+    }
+
     private int toInt(Object value, int defaultValue) {
         if (value == null) return defaultValue;
         try {

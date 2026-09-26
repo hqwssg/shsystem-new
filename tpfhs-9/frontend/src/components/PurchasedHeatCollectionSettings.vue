@@ -179,6 +179,17 @@
             <el-descriptions-item label="抄表方式">
               {{ selectedNode.meterReadingMethod === 1 ? '自动抄表' : '人工录入' }}
             </el-descriptions-item>
+            <el-descriptions-item label="最近采集状态">
+              <el-tag v-if="selectedNode.lastCollectionStatus === 1" type="success">成功</el-tag>
+              <el-tag v-else-if="selectedNode.lastCollectionStatus === 2" type="danger">失败</el-tag>
+              <span v-else>暂无记录</span>
+              <span v-if="selectedNode.lastCollectionMessage" class="collection-status-message">
+                {{ selectedNode.lastCollectionMessage }}
+              </span>
+            </el-descriptions-item>
+            <el-descriptions-item label="最近采集时间">
+              {{ selectedNode.lastCollectionTime || '-' }}
+            </el-descriptions-item>
             <!-- 能耗用途（energy_use字段）暂时隐藏，改用三级能耗分类替代 -->
             <!-- <el-descriptions-item label="能耗用途">{{ selectedNode.energyUse || '-' }}</el-descriptions-item> -->
             <el-descriptions-item label="能耗数据归属">{{ selectedNode.energyAllocation || '-' }}</el-descriptions-item>
@@ -360,7 +371,7 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="抄表方式">
-                <el-radio-group v-model="formData.meterReadingMethod">
+                <el-radio-group v-model="formData.meterReadingMethod" :disabled="!canEditReadingMethod">
                   <el-radio :value="1">自动抄表</el-radio>
                   <el-radio :value="0">人工录入</el-radio>
                 </el-radio-group>
@@ -658,6 +669,7 @@ import { FolderOpened, OfficeBuilding, Collection, Odometer, Plus, ArrowUp, Arro
 import axios from 'axios'
 import { generatePinyinCode } from '../utils/pinyinUtils'
 import { unitApi } from '../api/auth'
+import { hasPermission } from '../utils/permissions'
 import DataSourceSystemDialog from './DataSourceSystemDialog.vue'
 
 const props = defineProps({
@@ -666,6 +678,10 @@ const props = defineProps({
     required: true
   }
 })
+
+const canEditReadingMethod = computed(() =>
+  hasPermission(props.currentUser, 'carbon:data:auto:manual')
+)
 
 const emit = defineEmits(['back'])
 

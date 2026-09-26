@@ -130,4 +130,9 @@ public interface MeterInfoRepository extends JpaRepository<MeterInfo, Long> {
     @Modifying
     @Query("UPDATE MeterInfo m SET m.lastCollectionTime = :time WHERE m.id = :id")
     int updateLastCollectionTime(@Param("id") Long id, @Param("time") LocalDateTime time);
+
+    @Modifying
+    @Query("UPDATE MeterInfo m SET m.lastCollectionTime = CASE WHEN :status = 1 THEN :time ELSE m.lastCollectionTime END, m.lastCollectionStatus = :status, m.lastCollectionMessage = :message WHERE m.id = :id")
+    int updateLastCollectionResult(@Param("id") Long id, @Param("time") LocalDateTime time,
+                                   @Param("status") Integer status, @Param("message") String message);
 }

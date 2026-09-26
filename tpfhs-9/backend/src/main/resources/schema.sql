@@ -193,6 +193,9 @@ CREATE TABLE IF NOT EXISTS emission_node_config (
     collection_point_type TINYINT COMMENT '采集点类型：1-电力表，2-化石燃料，3-外购热能',
     collection_point_id BIGINT COMMENT '采集点ID，指向对应采集点表的主键（根据采集点类型指向emission_meter_info/emission_fossil_fuel_meter_info/emission_purchased_heat_meter_info）',
     collection_point_status TINYINT DEFAULT 1 COMMENT '采集点状态：1-启用，2-禁用，3-被删除（找不到对应记录），4-离线',
+    last_collection_status TINYINT NULL COMMENT '最近一次采集状态：1-成功，2-失败',
+    last_collection_message VARCHAR(500) NULL COMMENT '最近一次采集结果说明',
+    last_collection_time TIMESTAMP NULL COMMENT '最近一次采集完成时间',
     created_by BIGINT COMMENT '创建人ID',
     updated_by BIGINT COMMENT '更新人ID',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -236,6 +239,10 @@ WHERE NOT EXISTS (SELECT 1 FROM sys_config WHERE config_key = 'Collection_task_c
 INSERT INTO sys_config (config_key, config_value, config_name, remark)
 SELECT 'Days_abandon_read_operation', '5', '读取失败的采集任务经过多少天以后取消对该任务的重复读取，单位：天', '读取失败的采集任务经过5天以后取消对该任务的重复读取。某些手动录入的数据可能没有及时录取，所以需要预留足够的时间反复读取。超过该时间间隔后，系统将不再读取该采集点的数据。'
 WHERE NOT EXISTS (SELECT 1 FROM sys_config WHERE config_key = 'Days_abandon_read_operation');
+
+INSERT INTO sys_config (config_key, config_value, config_name, remark)
+SELECT 'carbon.collection.manual.auto-approve', 'false', '具有审核权限的人在提交人工采集数据后自动审核通过', '开启后，具有碳排放数据审核权限的人员提交人工采集数据时自动审核通过；关闭后进入待审核状态。'
+WHERE NOT EXISTS (SELECT 1 FROM sys_config WHERE config_key = 'carbon.collection.manual.auto-approve');
 
 
 
@@ -635,6 +642,8 @@ CREATE TABLE IF NOT EXISTS emission_meter_info (
     sort_order INT DEFAULT 0 COMMENT '排序顺序，数值越小越靠前',
     status TINYINT DEFAULT 1 COMMENT '状态：1-启用，0-停用',
     last_collection_time TIMESTAMP NULL COMMENT '上次采集时间：完成对该采集点数据采集后记录的最近一次采集时间（对应emission_collection_record.collection_time字段的值）',
+    last_collection_status TINYINT NULL COMMENT '最近一次采集状态：1-成功，2-失败',
+    last_collection_message VARCHAR(500) NULL COMMENT '最近一次采集结果说明',
     enable_time TIMESTAMP NULL COMMENT '启用时间：当启用该节点后自动记录',
     disable_time TIMESTAMP NULL COMMENT '停用时间：当停用该节点后自动记录',
     created_by BIGINT COMMENT '创建人ID',
@@ -739,6 +748,8 @@ CREATE TABLE IF NOT EXISTS emission_fossil_fuel_meter_info (
     sort_order INT DEFAULT 0 COMMENT '排序顺序，数值越小越靠前',
     status TINYINT DEFAULT 1 COMMENT '状态：1-启用，0-停用',
     last_collection_time TIMESTAMP NULL COMMENT '上次采集时间：完成对该采集点数据采集后记录的最近一次采集时间（对应emission_collection_record.collection_time字段的值）',
+    last_collection_status TINYINT NULL COMMENT '最近一次采集状态：1-成功，2-失败',
+    last_collection_message VARCHAR(500) NULL COMMENT '最近一次采集结果说明',
     enable_time TIMESTAMP NULL COMMENT '启用时间：当启用该节点后自动记录',
     disable_time TIMESTAMP NULL COMMENT '停用时间：当停用该节点后自动记录',
     energy_use VARCHAR(20) COMMENT '能耗用途：生产用能、生产辅助用能、混合',
@@ -803,6 +814,8 @@ CREATE TABLE IF NOT EXISTS emission_purchased_heat_meter_info (
     sort_order INT DEFAULT 0 COMMENT '排序顺序，数值越小越靠前',
     status TINYINT DEFAULT 1 COMMENT '状态：1-启用，0-停用',
     last_collection_time TIMESTAMP NULL COMMENT '上次采集时间：完成对该采集点数据采集后记录的最近一次采集时间（对应emission_collection_record.collection_time字段的值）',
+    last_collection_status TINYINT NULL COMMENT '最近一次采集状态：1-成功，2-失败',
+    last_collection_message VARCHAR(500) NULL COMMENT '最近一次采集结果说明',
     enable_time TIMESTAMP NULL COMMENT '启用时间：当启用该节点后自动记录',
     disable_time TIMESTAMP NULL COMMENT '停用时间：当停用该节点后自动记录',
     energy_use VARCHAR(20) COMMENT '能耗用途：生产用能、生产辅助用能、混合',
@@ -826,6 +839,12 @@ CREATE TABLE IF NOT EXISTS emission_collection_record (
     reading_value DECIMAL(18, 6) COMMENT '本次采集读取的数值',
     collection_time TIMESTAMP NULL COMMENT '本次采集时间：指系统从计量表直接采集数据的时刻。该数据可能已由电力系统等外部系统在预设时间完成读取并存储',
     collection_status TINYINT DEFAULT 0 COMMENT '本次采集数据状态：0-还未执行读取操作，1-读取成功，2-读取失败，3-多次读取失败后取消',
+    workflow_status VARCHAR(20) NOT NULL DEFAULT 'APPROVED' COMMENT '人工数据审核状态：SUBMITTED-待审核，APPROVED-已通过，REJECTED-已驳回',
+    submitter_id BIGINT COMMENT '提交人ID',
+    submitted_at TIMESTAMP NULL COMMENT '提交时间',
+    reviewer_id BIGINT COMMENT '审核人ID',
+    reviewed_at TIMESTAMP NULL COMMENT '审核时间',
+    review_comment VARCHAR(500) COMMENT '审核意见',
     last_fetch_time TIMESTAMP NULL COMMENT '最后一次读取时间：指系统从外部系统获取其已存储数据的时刻',
     collection_point_name VARCHAR(100) COMMENT '采集点名称，对应emission_meter_info/emission_fossil_fuel_meter_info/emission_purchased_heat_meter_info表的name字段',
     emission_subcategory VARCHAR(50) COMMENT '能耗品种小类（电力表为用电分类如外购电力；化石燃料为燃料种类；外购热能为热力种类）',
@@ -841,8 +860,23 @@ CREATE TABLE IF NOT EXISTS emission_collection_record (
     INDEX idx_collection_point (collection_point_type, collection_point_id) COMMENT '采集点类型+ID联合索引，用于按采集点查询历史记录',
     INDEX idx_collection_time (collection_time) COMMENT '采集时间索引，用于按时间范围查询',
     INDEX idx_collection_status (collection_status) COMMENT '采集状态索引，用于查找未读取(0)或失败(2)的数据进行重新读取',
+    INDEX idx_workflow_status (workflow_status) COMMENT '审核状态索引',
     INDEX idx_created_at (created_at) COMMENT '插入时间索引，用于按记录生成时间排序查询'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='采集记录表';
+
+CREATE TABLE IF NOT EXISTS emission_collection_record_audit (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    record_id BIGINT NOT NULL,
+    action VARCHAR(30) NOT NULL,
+    from_status VARCHAR(20),
+    to_status VARCHAR(20),
+    operator_id BIGINT,
+    operator_name VARCHAR(100),
+    comment VARCHAR(500),
+    operated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_collection_audit_record (record_id),
+    INDEX idx_collection_audit_time (operated_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='采集记录审核流水';
 
 -- ============================================================
 -- 碳排放核算相关表（核算模版/核算节点/核算节点数据）

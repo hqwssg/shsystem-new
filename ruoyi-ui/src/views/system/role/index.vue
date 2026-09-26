@@ -564,16 +564,19 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          const payload = { ...this.form }
+          // admin 是后端计算属性，只读，不应作为请求字段提交。
+          delete payload.admin
           if (this.form.roleId != undefined) {
-            this.form.menuIds = this.getMenuAllCheckedKeys()
-            updateRole(this.form).then(() => {
+            payload.menuIds = this.getMenuAllCheckedKeys()
+            updateRole(payload).then(() => {
               this.$modal.msgSuccess("修改成功")
               this.open = false
               this.getList()
             })
           } else {
-            this.form.menuIds = this.getMenuAllCheckedKeys()
-            addRole(this.form).then(() => {
+            payload.menuIds = this.getMenuAllCheckedKeys()
+            addRole(payload).then(() => {
               this.$modal.msgSuccess("新增成功")
               this.open = false
               this.getList()
@@ -585,8 +588,10 @@ export default {
     /** 提交按钮（数据权限） */
     submitDataScope() {
       if (this.form.roleId != undefined) {
-        this.form.deptIds = this.getDeptAllCheckedKeys()
-        dataScope(this.form).then(() => {
+        const payload = { ...this.form }
+        delete payload.admin
+        payload.deptIds = this.getDeptAllCheckedKeys()
+        dataScope(payload).then(() => {
           this.$modal.msgSuccess("修改成功")
           this.openDataScope = false
           this.getList()

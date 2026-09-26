@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container organization-manage-page">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="岗位编码" prop="postCode">
         <el-input
@@ -79,7 +79,8 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
+    <div class="manage-table-scroll">
+    <el-table height="100%" v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="岗位编号" align="center" prop="postId" />
       <el-table-column label="岗位编码" align="center" prop="postCode" />
@@ -95,7 +96,7 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width manage-operation-column">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -114,6 +115,7 @@
         </template>
       </el-table-column>
     </el-table>
+    </div>
 
     <pagination
       v-show="total>0"

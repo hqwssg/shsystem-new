@@ -6,9 +6,12 @@ import com.example.carbon.emission.model.entity.FossilFuelMeterInfo;
 import com.example.carbon.emission.model.repository.FossilFuelCollectionScopeRepository;
 import com.example.carbon.emission.model.repository.FossilFuelCollectionSubScopeRepository;
 import com.example.carbon.emission.model.repository.FossilFuelMeterInfoRepository;
+import com.example.carbon.emission.model.security.CarbonSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -117,6 +120,9 @@ public class FossilFuelCollectionController {
         node.put("parentMeterId", meter.getParentMeterId());
         node.put("energyAllocation", meter.getEnergyAllocation());
         node.put("meterReadingMethod", meter.getMeterReadingMethod());
+        node.put("lastCollectionStatus", meter.getLastCollectionStatus());
+        node.put("lastCollectionMessage", meter.getLastCollectionMessage());
+        node.put("lastCollectionTime", meter.getLastCollectionTime());
         node.put("status", meter.getStatus());
         node.put("energyUse", meter.getEnergyUse());
         node.put("autoMeterReadingConfig", meter.getAutoMeterReadingConfig());
@@ -355,6 +361,9 @@ public class FossilFuelCollectionController {
 
     @PostMapping("/meters")
     public ResponseEntity<FossilFuelMeterInfo> createMeter(@RequestBody FossilFuelMeterInfo meter) {
+        if (meter.getMeterReadingMethod() != null && meter.getMeterReadingMethod() != 1) {
+            requireReadingMethodPermission();
+        }
         Integer maxOrder = meterRepository.findMaxSortOrderBySubScopeId(meter.getSubScopeId());
         meter.setSortOrder(maxOrder == null ? 0 : maxOrder + 1);
         return ResponseEntity.ok(meterRepository.save(meter));
@@ -377,7 +386,11 @@ public class FossilFuelCollectionController {
         meter.setPurposeDescription(meterDetails.getPurposeDescription());
         meter.setParentMeterId(meterDetails.getParentMeterId());
         meter.setEnergyAllocation(meterDetails.getEnergyAllocation());
-        meter.setMeterReadingMethod(meterDetails.getMeterReadingMethod());
+        if (meterDetails.getMeterReadingMethod() != null
+                && !Objects.equals(meter.getMeterReadingMethod(), meterDetails.getMeterReadingMethod())) {
+            requireReadingMethodPermission();
+            meter.setMeterReadingMethod(meterDetails.getMeterReadingMethod());
+        }
         // 9个新字段
         meter.setIsCumulative(meterDetails.getIsCumulative());
         meter.setIsMobileSource(meterDetails.getIsMobileSource());
@@ -396,6 +409,12 @@ public class FossilFuelCollectionController {
         meter.setEnergyUse(meterDetails.getEnergyUse());
         meter.setAutoMeterReadingConfig(meterDetails.getAutoMeterReadingConfig());
         return ResponseEntity.ok(meterRepository.save(meter));
+    }
+
+    private void requireReadingMethodPermission() {
+        if (!CarbonSecurityContext.current().hasPermission("carbon:data:auto:manual")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "当前账号没有修改采集点抄表方式的权限");
+        }
     }
 
     @DeleteMapping("/meters/{id}")

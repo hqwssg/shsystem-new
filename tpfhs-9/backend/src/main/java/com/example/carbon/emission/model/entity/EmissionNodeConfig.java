@@ -55,6 +55,15 @@ public class EmissionNodeConfig {
     @Column(name = "collection_point_status")
     private Integer collectionPointStatus = 1;
 
+    @Column(name = "last_collection_time")
+    private LocalDateTime lastCollectionTime;
+
+    @Column(name = "last_collection_status")
+    private Integer lastCollectionStatus;
+
+    @Column(name = "last_collection_message", length = 500)
+    private String lastCollectionMessage;
+
     @Column(name = "created_by")
     private Long createdBy;
     

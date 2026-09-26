@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.admin.captcha.CaptchaService;
 import com.ruoyi.admin.web.CachedBodyRequestWrapper;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.exception.CaptchaException;
 import com.ruoyi.common.core.utils.ServletUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.springframework.core.annotation.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,6 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Order(-200)
 public class CaptchaValidationFilter extends OncePerRequestFilter
 {
+    private static final Logger log = LoggerFactory.getLogger(CaptchaValidationFilter.class);
+
     private final CaptchaService captchaService;
 
     public CaptchaValidationFilter(CaptchaService captchaService)
@@ -44,12 +49,26 @@ public class CaptchaValidationFilter extends OncePerRequestFilter
             JSONObject json = JSON.parseObject(body);
             captchaService.checkCaptcha(json.getString("code"), json.getString("uuid"));
         }
+        catch (CaptchaException e)
+        {
+            renderCaptchaError(response, e.getMessage());
+            return;
+        }
         catch (Exception e)
         {
-            ServletUtils.renderString(response, JSON.toJSONString(R.fail(e.getMessage())));
+            log.warn("验证码校验异常", e);
+            String message = e.getMessage();
+            renderCaptchaError(response, message == null || message.isBlank()
+                    ? "验证码校验失败，请刷新验证码后重试" : message);
             return;
         }
         filterChain.doFilter(wrapper, response);
+    }
+
+    private void renderCaptchaError(HttpServletResponse response, String message)
+    {
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+        ServletUtils.renderString(response, JSON.toJSONString(R.fail(message)));
     }
 
     private boolean shouldValidate(HttpServletRequest request)

@@ -7,7 +7,7 @@
       </div>
       <div class="toolbar-actions">
         <el-button icon="el-icon-refresh" :loading="loadingTree" @click="loadTree">刷新节点</el-button>
-        <el-button v-if="canEditData" type="primary" icon="el-icon-download" @click="downloadImportTemplate">下载导入模板</el-button>
+        <el-button v-if="canEditData" type="primary" icon="el-icon-download" :disabled="!canEnterSelected" @click="downloadImportTemplate">下载导入模板</el-button>
       </div>
     </div>
 
@@ -26,15 +26,11 @@
           <span>录入对象</span>
           <small>{{ entryNodeCount }} 个采集点</small>
         </div>
-        <el-select
-          v-model="query.templateId"
-          class="template-select"
-          filterable
-          placeholder="选择模板"
-          @change="handleTemplateChange"
-        >
-          <el-option v-for="item in templates" :key="item.id" :label="item.name" :value="item.id" />
-        </el-select>
+        <div class="tree-source-tip">电表、化石燃料表、外购热能表</div>
+        <div class="tree-actions">
+          <el-button size="mini" icon="el-icon-arrow-down" @click="setTreeExpansion(true)">展开全部</el-button>
+          <el-button size="mini" icon="el-icon-arrow-up" @click="setTreeExpansion(false)">收起全部</el-button>
+        </div>
         <el-input
           v-model="treeKeyword"
           class="tree-search"
@@ -51,7 +47,7 @@
           :data="filteredTree"
           :props="treeProps"
           node-key="id"
-          default-expand-all
+          :default-expanded-keys="expandedKeys"
           highlight-current
           :filter-node-method="filterNode"
           @node-click="handleNodeClick"
@@ -105,41 +101,48 @@
                 <span>采集编码</span>
                 <strong>{{ selectedConfig.equipmentCode || '-' }}</strong>
               </div>
+              <div>
+                <span>采集方式</span>
+                <strong>{{ selectedNode.isCumulative === 1 ? '累加型（按读数时间）' : '周期型（按计量周期）' }}</strong>
+              </div>
             </div>
           </section>
 
           <el-tabs v-model="activeTab" class="entry-tabs" @tab-click="handleTabClick">
             <el-tab-pane label="单条录入" name="single">
               <section class="entry-section">
+                <el-alert
+                  v-if="!canEnterSelected"
+                  class="entry-disabled-alert"
+                  type="info"
+                  show-icon
+                  :closable="false"
+                  title="自动采集节点仅供查看，不能进行人工数据录入"
+                />
                 <el-form ref="entryForm" :model="form" :rules="rules" label-width="104px">
                   <el-row :gutter="16">
                     <el-col :xs="24" :md="8">
-                      <el-form-item label="统计周期" prop="periodType">
-                        <el-select v-model="form.periodType" style="width: 100%" @change="syncPeriodEnd">
+                      <el-form-item :label="selectedNode.isCumulative === 1 ? '采集类型' : '计量周期'" prop="periodType">
+                        <el-select v-model="form.periodType" :disabled="!canEnterSelected" style="width: 100%" @change="syncPeriodEnd">
                           <el-option v-for="item in periodOptions" :key="item.value" :label="item.label" :value="item.value" />
                         </el-select>
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
-                      <el-form-item label="开始日期" prop="periodStart">
+                      <el-form-item :label="selectedNode.isCumulative === 1 ? '读数日期' : '周期开始'" prop="periodStart">
                         <el-date-picker
                           v-model="form.periodStart"
                           type="date"
                           value-format="yyyy-MM-dd"
                           style="width: 100%"
+                          :disabled="!canEnterSelected"
                           @change="syncPeriodEnd"
                         />
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
-                      <el-form-item label="结束日期" prop="periodEnd">
-                        <el-date-picker
-                          v-model="form.periodEnd"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          style="width: 100%"
-                          :disabled="form.periodType !== 'CUSTOM'"
-                        />
+                      <el-form-item v-if="selectedNode.isCumulative !== 1" label="周期结束" prop="periodEnd">
+                        <el-input :value="form.periodEnd" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -147,19 +150,17 @@
                   <el-row :gutter="16">
                     <el-col :xs="24" :md="8">
                       <el-form-item label="活动数据" prop="activityValue">
-                        <el-input-number v-model="form.activityValue" :min="0" :precision="6" style="width: 100%" />
+                        <el-input-number v-model="form.activityValue" :min="0" :precision="6" :disabled="!canEnterSelected" style="width: 100%" />
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
                       <el-form-item label="计量单位" prop="activityUnit">
-                        <el-select v-model="form.activityUnit" allow-create filterable style="width: 100%">
-                          <el-option v-for="unit in unitOptions" :key="unit" :label="unit" :value="unit" />
-                        </el-select>
+                        <el-input :value="selectedConfig.measurementUnit || form.activityUnit || '-'" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
                       <el-form-item label="换算系数" prop="unitConvertRate">
-                        <el-input-number v-model="form.unitConvertRate" :min="0.000001" :precision="8" style="width: 100%" />
+                        <el-input :value="formatNumber(form.unitConvertRate)" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -167,17 +168,17 @@
                   <el-row :gutter="16">
                     <el-col :xs="24" :md="8">
                       <el-form-item label="排放因子" prop="emissionFactor">
-                        <el-input-number v-model="form.emissionFactor" :min="0" :precision="8" style="width: 100%" />
+                        <el-input :value="formatNumber(form.emissionFactor)" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
                       <el-form-item label="因子单位">
-                        <el-input v-model="form.factorUnit" clearable />
+                        <el-input :value="form.factorUnit || '-'" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
                       <el-form-item label="分摊比例">
-                        <el-input-number v-model="form.allocationRatio" :min="0" :max="100" :precision="4" style="width: 100%" />
+                        <el-input :value="formatRatio(form.allocationRatio)" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -185,37 +186,37 @@
                   <el-row :gutter="16">
                     <el-col :xs="24" :md="8">
                       <el-form-item label="碳排放量">
-                        <el-input :value="formatNumber(estimatedEmission)" disabled>
+                        <el-input :value="formatNumber(estimatedEmission)" readonly class="readonly-control">
                           <template slot="append">tCO2e</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
                       <el-form-item label="凭证编号">
-                        <el-input v-model="form.sourceNo" clearable placeholder="如台账编号、电表编号" />
+                        <el-input :value="form.sourceNo || '-'" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                     <el-col :xs="24" :md="8">
                       <el-form-item label="凭证地址">
-                        <el-input v-model="form.evidenceUrl" clearable placeholder="附件地址或文件名" />
+                        <el-input :value="form.evidenceUrl || '-'" readonly class="readonly-control" />
                       </el-form-item>
                     </el-col>
                   </el-row>
 
                   <el-form-item label="备注说明">
-                    <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="补录、估算、异常或修正原因" />
+                    <el-input :value="form.remark || '-'" type="textarea" :rows="3" readonly class="readonly-control" />
                   </el-form-item>
                 </el-form>
 
                 <div class="form-actions">
                   <el-button @click="resetEntryForm">重置</el-button>
-                  <el-button v-if="canEditData" type="primary" plain :loading="saving" @click="saveEntry('DRAFT')">保存草稿</el-button>
-                  <el-button v-if="canSubmitData" type="success" :loading="saving" @click="saveEntry('SUBMITTED')">提交审核</el-button>
+                  <el-button v-if="canEditData" type="primary" plain :loading="saving" :disabled="!canEnterSelected" @click="saveEntry('DRAFT')">保存数据</el-button>
+                  <el-button v-if="canSubmitData" type="success" :loading="saving" :disabled="!canEnterSelected" @click="saveEntry('SUBMITTED')">提交数据</el-button>
                 </div>
               </section>
             </el-tab-pane>
 
-            <el-tab-pane label="批量导入" name="batch">
+            <el-tab-pane label="批量导入" name="batch" :disabled="!canEnterSelected">
               <section class="entry-section">
                 <div class="batch-toolbar">
                   <input ref="importFile" type="file" accept=".csv,text/csv" class="file-input" @change="handleImportFile">
@@ -255,6 +256,7 @@
             <el-tab-pane v-if="canReviewData" :label="`待审核(${pendingRecords.length})`" name="review">
               <section class="entry-section">
                 <el-table v-loading="loadingRecords" :data="pendingRecords" border>
+                  <el-table-column label="提交人" prop="submitterName" width="120" show-overflow-tooltip />
                   <el-table-column label="周期" width="180">
                     <template slot-scope="scope">{{ periodText(scope.row) }}</template>
                   </el-table-column>
@@ -267,7 +269,7 @@
                   <el-table-column label="凭证" min-width="160" show-overflow-tooltip>
                     <template slot-scope="scope">{{ scope.row.sourceNo || scope.row.evidenceUrl || '-' }}</template>
                   </el-table-column>
-                  <el-table-column label="提交时间" prop="updatedAt" width="170" />
+                  <el-table-column label="提交时间" prop="submittedAt" width="170" />
                   <el-table-column label="操作" width="210" align="center" fixed="right">
                     <template slot-scope="scope">
                       <el-button v-if="canReviewData" type="text" icon="el-icon-check" @click="approveRecord(scope.row)">通过</el-button>
@@ -307,7 +309,7 @@
                 <el-table v-loading="loadingRecords" :data="historyRecords" border>
                   <el-table-column label="状态" width="100" align="center">
                     <template slot-scope="scope">
-                      <el-tag size="mini" :type="statusType(scope.row.status)">{{ statusLabel(scope.row.status) }}</el-tag>
+                      <el-tag size="mini" :type="collectionStatusType(scope.row)">{{ collectionStatusLabel(scope.row) }}</el-tag>
                     </template>
                   </el-table-column>
                   <el-table-column label="周期" width="180">
@@ -329,7 +331,6 @@
                   <el-table-column label="操作" width="260" align="center" fixed="right">
                     <template slot-scope="scope">
                       <el-button v-if="canEditData && canEdit(scope.row)" type="text" icon="el-icon-edit" @click="editRecord(scope.row)">编辑</el-button>
-                      <el-button v-if="canSubmitData && canSubmit(scope.row)" type="text" icon="el-icon-position" @click="submitRecord(scope.row)">提交</el-button>
                       <el-button v-if="canLockData && scope.row.status === 'APPROVED'" type="text" icon="el-icon-lock" @click="lockRecord(scope.row)">锁定</el-button>
                       <el-button type="text" icon="el-icon-document" @click="viewAudits(scope.row)">流水</el-button>
                       <el-button v-if="canLockData && canVoid(scope.row)" type="text" icon="el-icon-delete" @click="voidRecord(scope.row)">作废</el-button>
@@ -373,7 +374,7 @@
         >
           <div class="audit-item">
             <strong>{{ auditActionLabel(item.action) }}</strong>
-            <span>{{ statusLabel(item.fromStatus) }} -> {{ statusLabel(item.toStatus) }}</span>
+            <span>{{ auditStatusLabel(item.fromStatus) }} -> {{ auditStatusLabel(item.toStatus) }}</span>
             <p v-if="item.comment">{{ item.comment }}</p>
           </div>
         </el-timeline-item>
@@ -384,7 +385,7 @@
 </template>
 
 <script>
-import { templateApi, nodeApi, emissionApi, flattenCarbonTree } from '@/api/carbon'
+import { collectionApi, emissionApi, flattenCarbonTree } from '@/api/carbon'
 import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
 
 function today() {
@@ -413,6 +414,7 @@ export default {
       serviceError: '',
       templates: [],
       rawTree: null,
+      expandedKeys: [],
       treeKeyword: '',
       manualOnly: false,
       selectedNode: null,
@@ -483,8 +485,12 @@ export default {
     canLockData() {
       return this.isAdmin || hasAnyPermission(this.$store.getters.permissions, ['carbon:data:lock'])
     },
+    canEnterSelected() {
+      return !!this.selectedNode && this.isEntryNode(this.selectedNode)
+        && this.isManualNode(this.selectedNode)
+    },
     selectedConfig() {
-      return (this.selectedNode && this.selectedNode.config) || {}
+      return this.selectedNode || {}
     },
     filteredTree() {
       if (!this.rawTree) return []
@@ -523,7 +529,7 @@ export default {
     }
   },
   created() {
-    this.loadTemplates()
+    this.loadTree()
   },
   methods: {
     operatorId() {
@@ -548,28 +554,17 @@ export default {
         status: 'DRAFT'
       }
     },
-    async loadTemplates() {
-      this.serviceError = ''
-      try {
-        this.templates = await templateApi.list({ silent: true })
-        if (this.templates.length && !this.query.templateId) {
-          this.query.templateId = this.templates[0].id
-        }
-        await this.loadTree()
-      } catch (error) {
-        this.serviceError = this.resolveServiceError(error)
-      }
-    },
     async handleTemplateChange() {
       this.selectedNode = null
       await this.loadTree()
     },
     async loadTree() {
-      if (!this.query.templateId) return
       this.loadingTree = true
       this.serviceError = ''
       try {
-        this.rawTree = await nodeApi.tree(this.query.templateId, { silent: true })
+        const trees = await collectionApi.trees({ silent: true })
+        this.rawTree = { id: 'collection-root', name: '能耗数据采集点', nodeType: 'root', children: trees }
+        this.expandedKeys = [this.rawTree.id].concat(trees.map(tree => tree.id))
         this.selectFirstNode()
       } catch (error) {
         this.rawTree = null
@@ -648,25 +643,21 @@ export default {
       })
     },
     saveEntry(status) {
+      if (!this.canEnterSelected) {
+        this.$message.warning('当前采集点不允许人工录入')
+        return
+      }
       this.$refs.entryForm.validate(async valid => {
         if (!valid) return
-        if (status === 'SUBMITTED' && !this.form.sourceNo && !this.form.evidenceUrl) {
-          this.$message.warning('提交审核前请填写凭证编号或凭证地址')
-          return
-        }
         this.saving = true
         try {
-          const payload = this.buildPayload(status === 'SUBMITTED' ? 'DRAFT' : status)
-          let saved
-          if (this.form.id) {
-            saved = await emissionApi.update(this.form.id, payload)
-          } else {
-            saved = await emissionApi.create(payload)
-          }
-          if (status === 'SUBMITTED') {
-            await emissionApi.submit(saved.id, { operatorId: this.operatorId(), comment: '提交审核' })
-          }
-          this.$message.success(status === 'DRAFT' ? '草稿已保存' : '已提交审核')
+          const result = await collectionApi.manual({
+            collectionPointType: this.selectedNode.collectionPointType,
+            collectionPointId: this.selectedNode.collectionPointId,
+            readingValue: this.form.activityValue,
+            collectionTime: `${this.form.periodStart}T00:00:00`
+          })
+          this.$message.success(result && result.message ? result.message : '人工采集数据已提交，等待审核')
           this.resetEntryForm()
           this.loadHistory()
           this.loadPending()
@@ -679,19 +670,25 @@ export default {
       if (!this.selectedNode) return
       this.loadingRecords = true
       try {
-        const range = this.historyQuery.dateRange || []
-        const page = await emissionApi.query({
-          nodeId: this.selectedNode.id,
-          startDate: range[0],
-          endDate: range[1],
-          status: this.historyQuery.status,
-          page: this.historyQuery.page - 1,
-          size: this.historyQuery.size,
-          sortBy: 'dataDate',
-          sortDirection: 'DESC'
-        }, { silent: true })
-        this.historyRecords = page.content || []
-        this.historyTotal = page.totalElements || 0
+        const rows = await collectionApi.latest(this.selectedNode.collectionPointType, this.selectedNode.collectionPointId)
+        this.historyRecords = (rows || []).map(row => {
+          const collectionStatus = Number(row.collectionStatus !== undefined ? row.collectionStatus : row.collection_status)
+          const readingValue = row.readingValue !== undefined ? row.readingValue : row.reading_value
+          const collectionTime = row.collectionTime || row.collection_time
+          const meterReadingMethod = Number(row.meterReadingMethod !== undefined ? row.meterReadingMethod : row.meter_reading_method)
+          return Object.assign({}, row, {
+            collectionStatus,
+            meterReadingMethod,
+            workflowStatus: row.workflowStatus || 'APPROVED',
+            status: row.workflowStatus || (collectionStatus === 1 ? 'APPROVED' : 'REJECTED'),
+            activityValue: readingValue,
+            activityUnit: row.measurementUnit || row.measurement_unit || this.selectedConfig.measurementUnit,
+            periodStart: collectionTime,
+            periodEnd: collectionTime,
+            periodType: Number(row.isCumulative !== undefined ? row.isCumulative : this.selectedNode.isCumulative) === 1 ? 'DAY' : 'CUSTOM'
+          })
+        })
+        this.historyTotal = this.historyRecords.length
       } catch (error) {
         this.historyRecords = []
         this.historyTotal = 0
@@ -701,16 +698,23 @@ export default {
       }
     },
     async loadPending() {
-      if (!this.selectedNode) return
-      const page = await emissionApi.query({
-        nodeId: this.selectedNode.id,
-        status: 'SUBMITTED',
-        page: 0,
-        size: 100,
-        sortBy: 'createdAt',
-        sortDirection: 'ASC'
-      }, { silent: true })
-      this.pendingRecords = page.content || []
+      if (!this.selectedNode || !this.canReviewData) {
+        this.pendingRecords = []
+        return
+      }
+      try {
+        const rows = await collectionApi.pending(this.selectedNode.collectionPointType, this.selectedNode.collectionPointId, { silent: true })
+        this.pendingRecords = (rows || []).map(row => Object.assign({}, row, {
+          activityValue: row.readingValue,
+          activityUnit: row.measurementUnit,
+          periodStart: row.collectionTime,
+          periodEnd: row.collectionTime,
+          periodType: Number(row.isCumulative) === 1 ? 'DAY' : 'CUSTOM',
+          status: row.workflowStatus || 'SUBMITTED'
+        }))
+      } catch (error) {
+        this.pendingRecords = []
+      }
     },
     handleHistoryQuery() {
       this.historyQuery.page = 1
@@ -738,14 +742,19 @@ export default {
     },
     async submitRecord(row) {
       await this.$confirm('确认提交该记录进入审核？', '系统提示', { type: 'warning' })
-      await emissionApi.submit(row.id, { operatorId: this.operatorId(), comment: '提交审核' })
+      await collectionApi.manual({
+        collectionPointType: row.collectionPointType,
+        collectionPointId: row.collectionPointId,
+        readingValue: row.activityValue || row.readingValue,
+        collectionTime: row.collectionTime
+      })
       this.$message.success('已提交审核')
       this.loadHistory()
       this.loadPending()
     },
     async approveRecord(row) {
       await this.$confirm('确认审核通过该记录？', '系统提示', { type: 'warning' })
-      await emissionApi.approve(row.id, { operatorId: this.operatorId(), comment: '审核通过' })
+      await collectionApi.approve(row.id, { comment: '审核通过' })
       this.$message.success('审核已通过')
       this.loadHistory()
       this.loadPending()
@@ -762,7 +771,7 @@ export default {
       }
       this.saving = true
       try {
-        await emissionApi.reject(this.rejectTarget.id, { operatorId: this.operatorId(), comment: this.rejectComment })
+        await collectionApi.reject(this.rejectTarget.id, { comment: this.rejectComment })
         this.$message.success('已驳回')
         this.rejectVisible = false
         this.loadHistory()
@@ -785,7 +794,7 @@ export default {
       this.loadPending()
     },
     async viewAudits(row) {
-      this.auditLogs = await emissionApi.audits(row.id)
+      this.auditLogs = await collectionApi.audits(row.id)
       this.auditVisible = true
     },
     downloadImportTemplate() {
@@ -920,11 +929,23 @@ export default {
       return String(data.name || '').indexOf(value) !== -1
     },
     isEntryNode(node) {
-      return node && (node.typeId === 3 || node.typeId === 4)
+      return node && node.nodeType === 'meter'
+    },
+    setTreeExpansion(expanded) {
+      const keys = expanded
+        ? flattenCarbonTree(this.rawTree || {}).filter(node => node.children && node.children.length).map(node => node.id)
+        : []
+      this.expandedKeys = keys
+      this.$nextTick(() => {
+        const store = this.$refs.nodeTree && this.$refs.nodeTree.store
+        if (!store || !store.nodesMap) return
+        Object.keys(store.nodesMap).forEach(key => {
+          store.nodesMap[key].expanded = expanded
+        })
+      })
     },
     isManualNode(node) {
-      const source = node && node.config && node.config.dataSource
-      return source === 'MANUAL' || source === '手工录入'
+      return node && Number(node.meterReadingMethod) === 0
     },
     nodeIcon(node) {
       if (!this.isEntryNode(node)) return 'el-icon-folder'
@@ -957,6 +978,22 @@ export default {
       const item = this.statusOptions.find(option => option.value === value)
       return item ? item.type : 'info'
     },
+    collectionStatusLabel(row) {
+      if (row.workflowStatus === 'SUBMITTED') return '待审核'
+      if (row.workflowStatus === 'REJECTED') return '已驳回'
+      const status = Number(row.collectionStatus)
+      if (status === 1) return Number(row.meterReadingMethod) === 0 ? '人工录入成功' : '自动采集成功'
+      if (status === 2) return '自动采集失败'
+      if (status === 3) return '已取消采集'
+      return '待采集'
+    },
+    collectionStatusType(row) {
+      const status = Number(row.collectionStatus)
+      if (status === 1) return 'success'
+      if (status === 2) return 'danger'
+      if (status === 3) return 'info'
+      return 'warning'
+    },
     periodLabel(value) {
       const item = this.periodOptions.find(option => option.value === value)
       return item ? item.label : value
@@ -972,9 +1009,21 @@ export default {
         APPROVE: '审核通过',
         REJECT: '驳回',
         LOCK: '锁定',
-        VOID: '作废'
+        VOID: '作废',
+        MANUAL_ENTRY: '人工录入',
+        AUTO_COLLECTION: '自动采集'
       }
       return map[action] || action
+    },
+    auditStatusLabel(value) {
+      const map = {
+        NOT_COLLECTED: '未采集',
+        PENDING: '待采集',
+        COLLECTED: '采集成功',
+        FAILED: '采集失败',
+        CANCELLED: '已取消'
+      }
+      return map[value] || this.statusLabel(value)
     },
     formatNumber(value) {
       if (value === undefined || value === null || value === '') return '-'
@@ -1007,7 +1056,12 @@ export default {
 
 <style scoped lang="scss">
 .carbon-data-entry {
-  min-height: calc(100vh - 84px);
+  height: calc(100vh - 84px);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
   background: #f6f8fb;
 }
 
@@ -1032,6 +1086,12 @@ export default {
 .toolbar-actions {
   display: flex;
   gap: 8px;
+
+  .el-button {
+    min-height: 36px;
+    padding: 0 16px;
+    white-space: nowrap;
+  }
 }
 
 .service-alert {
@@ -1039,10 +1099,13 @@ export default {
 }
 
 .entry-workbench {
+  flex: 1 1 auto;
+  height: 0;
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
+  min-height: 0;
 }
 
 .node-panel,
@@ -1055,8 +1118,13 @@ export default {
 }
 
 .node-panel {
-  min-height: 680px;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   padding: 16px;
+  overflow: hidden;
 }
 
 .panel-title {
@@ -1080,8 +1148,58 @@ export default {
   margin-bottom: 12px;
 }
 
+.tree-source-tip {
+  margin-bottom: 8px;
+  color: #7a8797;
+  font-size: 12px;
+}
+
+.tree-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  .el-button {
+    flex: 1;
+    margin-left: 0;
+    min-height: 34px;
+    padding: 0 10px;
+    white-space: nowrap;
+  }
+}
+
+.entry-disabled-alert {
+  margin-bottom: 14px;
+}
+
+.entry-form-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.readonly-control {
+  ::v-deep .el-input__inner,
+  ::v-deep textarea {
+    color: #1f2d3d;
+    background: #fff;
+    cursor: default;
+  }
+
+  ::v-deep .el-textarea__inner {
+    color: #1f2d3d;
+    background: #fff;
+    cursor: default;
+  }
+}
+
 .node-tree {
+  flex: 1;
+  min-height: 0;
   margin-top: 6px;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   ::v-deep .el-tree-node__content {
     height: 36px;
@@ -1111,6 +1229,9 @@ export default {
 
 .entry-main {
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
   padding: 16px;
 }
 
@@ -1180,6 +1301,13 @@ export default {
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
+  flex-wrap: nowrap;
+
+  .el-button {
+    min-height: 36px;
+    padding: 0 16px;
+    white-space: nowrap;
+  }
 }
 
 .batch-toolbar {

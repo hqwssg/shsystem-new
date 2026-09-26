@@ -2,7 +2,7 @@
   碳排放核算参数设置页面
   功能描述：
     1. 展示碳排放核算相关参数的设置入口
-    2. 左侧菜单栏包含：碳排放因子设置、能耗数据自动采集点设置、碳排放模型数据字典设置、参数设置（含能耗三级分类设置）
+    2. 左侧菜单栏包含：碳排放因子设置、能耗数据采集点设置、碳排放模型数据字典设置、参数设置（含能耗三级分类设置）
     3. 点击菜单项可在右侧内容区切换对应的设置表单
   
   组件属性：
@@ -37,7 +37,7 @@
       <div class="sidebar">
         <el-menu
           :default-active="activeMenu"
-          :default-openeds="['factor', 'collection', 'params-config']"
+          :default-openeds="['collection']"
           @select="handleMenuSelect"
           class="sidebar-menu"
         >
@@ -74,7 +74,7 @@
           <el-sub-menu index="collection">
             <template #title>
               <el-icon><Collection /></el-icon>
-              <span>能耗数据自动采集点设置</span>
+              <span>能耗数据采集点设置</span>
             </template>
             <el-menu-item index="electric-meter">
               电力表设置

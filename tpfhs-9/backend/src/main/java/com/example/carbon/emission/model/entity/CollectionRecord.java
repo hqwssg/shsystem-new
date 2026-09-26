@@ -65,6 +65,24 @@ public class CollectionRecord {
     @Column(name = "collection_status")
     private Integer collectionStatus = 0;
 
+    @Column(name = "workflow_status", length = 20)
+    private String workflowStatus = "APPROVED";
+
+    @Column(name = "submitter_id")
+    private Long submitterId;
+
+    @Column(name = "submitted_at")
+    private LocalDateTime submittedAt;
+
+    @Column(name = "reviewer_id")
+    private Long reviewerId;
+
+    @Column(name = "reviewed_at")
+    private LocalDateTime reviewedAt;
+
+    @Column(name = "review_comment", length = 500)
+    private String reviewComment;
+
     /**
      * 最后一次读取时间：指系统从外部系统获取其已存储数据的时刻
      */
@@ -143,6 +161,9 @@ public class CollectionRecord {
         updatedAt = createdAt;
         if (collectionStatus == null) {
             collectionStatus = 0;
+        }
+        if (workflowStatus == null) {
+            workflowStatus = "APPROVED";
         }
         if (meterReadingMethod == null) {
             meterReadingMethod = 1;

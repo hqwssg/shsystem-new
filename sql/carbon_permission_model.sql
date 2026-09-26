@@ -85,6 +85,7 @@ INSERT INTO sys_permission_seed VALUES
   ('排放数据提交', 'carbon:data:submit', 32),
   ('排放数据审核', 'carbon:data:review', 33),
   ('排放数据锁定', 'carbon:data:lock', 34),
+  ('采集点抄表方式修改', 'carbon:data:auto:manual', 35),
   ('统计查看', 'carbon:statistics:view', 40),
   ('统计导出', 'carbon:statistics:export', 41),
   ('报告列表', 'carbon:report:list', 50),

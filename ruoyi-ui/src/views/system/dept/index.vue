@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container organization-manage-page">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
       <el-form-item label="部门名称" prop="deptName">
         <el-input
@@ -58,8 +58,10 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
+    <div class="manage-table-scroll">
     <el-table
       v-if="refreshTable"
+      height="100%"
       v-loading="loading"
       :data="deptList"
       row-key="deptId"
@@ -82,7 +84,7 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="210" class-name="small-padding fixed-width manage-operation-column">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -109,6 +111,7 @@
         </template>
       </el-table-column>
     </el-table>
+    </div>
 
     <!-- 添加或修改部门对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>

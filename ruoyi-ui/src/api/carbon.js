@@ -140,6 +140,56 @@ export const emissionApi = {
   }
 }
 
+// 物理采集点树和人工采集记录，和“能耗数据采集点设置”使用同一套数据源。
+export const collectionApi = {
+  async trees(config = {}) {
+    const [electricity, fossil, heat] = await Promise.all([
+      carbonRequest.get('/meter-settings/tree', config),
+      carbonRequest.get('/fossil-fuel-collection/tree', config),
+      carbonRequest.get('/purchased-heat-collection/tree', config)
+    ])
+    const annotate = (node, type, rootKey) => {
+      if (!node) return null
+      const result = Object.assign({}, node, {
+        id: `${rootKey}:${node.id}`,
+        sourceId: node.id,
+        collectionPointType: node.nodeType === 'meter' ? type : null,
+        collectionPointId: node.nodeType === 'meter' ? node.id : null,
+        sourceType: rootKey,
+        children: (node.children || []).map(child => annotate(child, type, rootKey))
+      })
+      if (result.nodeType === 'meter') {
+        result.id = `${rootKey}:meter:${node.id}`
+        result.collectionPointId = node.id
+      }
+      return result
+    }
+    return [
+      annotate(electricity, 1, 'electricity'),
+      annotate(fossil, 2, 'fossil'),
+      annotate(heat, 3, 'heat')
+    ].filter(Boolean)
+  },
+  manual(data) {
+    return carbonRequest.post('/collection-records/manual', data)
+  },
+  pending(type, id, config = {}) {
+    return carbonRequest.get('/collection-records/pending', Object.assign({}, config, { params: cleanParams({ collectionPointType: type, collectionPointId: id }) }))
+  },
+  approve(id, data) {
+    return carbonRequest.post(`/collection-records/${id}/approve`, data || {})
+  },
+  reject(id, data) {
+    return carbonRequest.post(`/collection-records/${id}/reject`, data || {})
+  },
+  latest(type, id) {
+    return carbonRequest.get(`/collection-records/latest/${type}/${id}`)
+  },
+  audits(id) {
+    return carbonRequest.get(`/collection-records/${id}/audits`)
+  }
+}
+
 export function defaultCarbonOptions() {
   return {
     locomotiveTypes: ['HXN3型内燃机车', '国能八轴交流机车', '国能十二轴交流机车'],

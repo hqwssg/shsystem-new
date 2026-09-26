@@ -15,6 +15,7 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -100,6 +101,9 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 
     @Autowired
     private SystemConfigRepository systemConfigRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -345,6 +349,10 @@ public class DataCollectionServiceImpl implements DataCollectionService {
             int abandoned = 0;
             for (CollectionRecord record : pending) {
                 try {
+                    // Manual records wait for approval and must never be read by the scheduler.
+                    if (record.getMeterReadingMethod() != null && record.getMeterReadingMethod() == 0) {
+                        continue;
+                    }
                     // 失败记录超期则放弃，不再重复读取
                     if (record.getCollectionStatus() != null && record.getCollectionStatus() == STATUS_FAILED
                             && isAbandoned(record, abandonDays)) {
@@ -431,7 +439,8 @@ public class DataCollectionServiceImpl implements DataCollectionService {
                 collectionRecordRepository.save(record);
 
                 // 回填采集点表的上次采集时间（对应 collection_time）
-                updateMeterLastCollectionTime(record.getCollectionPointType(), record.getCollectionPointId(), now);
+                updateMeterLastCollectionResult(record.getCollectionPointType(), record.getCollectionPointId(), now,
+                        STATUS_SUCCESS, "AUTO_SUCCESS");
             });
             return true;
         } catch (Exception e) {
@@ -443,6 +452,8 @@ public class DataCollectionServiceImpl implements DataCollectionService {
                     record.setCollectionStatus(STATUS_FAILED);
                     record.setLastFetchTime(LocalDateTime.now());
                     collectionRecordRepository.save(record);
+                    updateMeterLastCollectionResult(record.getCollectionPointType(), record.getCollectionPointId(),
+                            record.getLastFetchTime(), STATUS_FAILED, e.getMessage());
                 });
             } catch (Exception ex) {
                 logger.error("写入采集失败状态异常，记录ID: {}", record.getId(), ex);
@@ -513,12 +524,18 @@ public class DataCollectionServiceImpl implements DataCollectionService {
      * @param pointId   采集点ID
      * @param time      上次采集时间（对应采集记录 collection_time）
      */
-    private void updateMeterLastCollectionTime(int pointType, Long pointId, LocalDateTime time) {
+    private void updateMeterLastCollectionResult(int pointType, Long pointId, LocalDateTime time,
+                                                 int result, String message) {
         switch (pointType) {
-            case TYPE_METER -> meterInfoRepository.updateLastCollectionTime(pointId, time);
-            case TYPE_FOSSIL_FUEL -> fossilFuelMeterInfoRepository.updateLastCollectionTime(pointId, time);
-            case TYPE_PURCHASED_HEAT -> purchasedHeatMeterInfoRepository.updateLastCollectionTime(pointId, time);
+            case TYPE_METER -> meterInfoRepository.updateLastCollectionResult(pointId, time, result, message);
+            case TYPE_FOSSIL_FUEL -> fossilFuelMeterInfoRepository.updateLastCollectionResult(pointId, time, result, message);
+            case TYPE_PURCHASED_HEAT -> purchasedHeatMeterInfoRepository.updateLastCollectionResult(pointId, time, result, message);
             default -> logger.warn("未知采集点类型: {}, 跳过回填 last_collection_time", pointType);
         }
+        jdbcTemplate.update("update emission_node_config set "
+                        + "last_collection_time=case when ?=1 then ? else last_collection_time end, "
+                        + "last_collection_status=?, last_collection_message=? "
+                        + "where collection_point_type=? and collection_point_id=?",
+                result, time, result, message, pointType, pointId);
     }
 }

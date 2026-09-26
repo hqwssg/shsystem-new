@@ -21,7 +21,6 @@
           :props="treeProps"
           :current-node-key="selectedNodeKey"
           node-key="key"
-          default-expand-all
           highlight-current
           @node-click="handleTreeNodeClick"
         >
@@ -306,16 +305,16 @@ export default {
 }
 
 .system-tree {
-  padding: 12px 14px 18px;
-  font-size: 15px;
+  padding: 14px 16px 20px;
+  font-size: 16px;
 
   ::v-deep .el-tree-node__content {
-    height: 38px;
+    height: 42px;
     border-radius: 5px;
   }
 
   ::v-deep .el-tree-node__children .el-tree-node__content {
-    height: 36px;
+    height: 40px;
   }
 
   ::v-deep .el-tree-node.is-current > .el-tree-node__content {
@@ -326,11 +325,11 @@ export default {
 .tree-node {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   min-width: 0;
   color: #344054;
-  font-size: 15px;
+  font-size: 16px;
 
   i {
     flex: 0 0 auto;
@@ -422,11 +421,11 @@ export default {
 
 .system-link {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 20px;
-  column-gap: 12px;
+  grid-template-columns: 48px minmax(0, 1fr) 24px;
+  column-gap: 14px;
   align-items: center;
-  min-height: 92px;
-  padding: 18px;
+  min-height: 108px;
+  padding: 20px;
   border: 1px solid #e5eaf1;
   border-radius: 6px;
   background: #fbfcfe;
@@ -435,14 +434,14 @@ export default {
   transition: border-color .2s, box-shadow .2s, transform .2s;
 
   > i:first-child {
-    width: 42px;
-    height: 42px;
-    line-height: 42px;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
     border-radius: 6px;
     text-align: center;
     color: #2265b4;
     background: #edf5ff;
-    font-size: 22px;
+    font-size: 25px;
   }
 
   .link-copy {
@@ -453,7 +452,7 @@ export default {
     display: block;
     margin-bottom: 6px;
     color: #1f2d3d;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     overflow-wrap: anywhere;
   }
@@ -467,7 +466,7 @@ export default {
 
   .action-icon {
     color: #a5afbd;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   &:hover {
@@ -553,9 +552,15 @@ export default {
 }
 
 .carbon-system ::v-deep .el-button--mini {
-  min-height: 34px;
-  padding: 8px 12px;
-  font-size: 13px;
+  min-height: 40px;
+  padding: 9px 15px;
+  font-size: 14px;
+}
+
+.carbon-system ::v-deep .carbon-toolbar .el-button {
+  min-height: 42px;
+  padding: 10px 16px;
+  font-size: 15px;
 }
 
 @media (max-width: 1100px) {

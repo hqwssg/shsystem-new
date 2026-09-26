@@ -23,6 +23,15 @@ public final class CarbonPermissionResolver {
             return List.of();
         }
         boolean readOnly = "GET".equalsIgnoreCase(method) || "HEAD".equalsIgnoreCase(method);
+        if (path.startsWith("/api/collection-records")) {
+            if (path.endsWith("/approve") || path.endsWith("/reject") || path.endsWith("/pending")) {
+                return List.of("carbon:data:review");
+            }
+            if (path.endsWith("/manual") && !readOnly) {
+                return List.of("carbon:data:edit");
+            }
+            return List.of(readOnly ? "carbon:data:view" : "carbon:data:edit");
+        }
         if (startsWith(path, MODEL_PATHS)) {
             if (path.endsWith("/validate") && !readOnly) {
                 return List.of("carbon:model:validate", "carbon:model:edit");
