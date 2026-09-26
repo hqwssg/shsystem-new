@@ -136,6 +136,12 @@ public class MeterTreeNodeDTO {
      */
     private Integer isCumulative;
 
+    /** 累计表是否允许按显式阈值归零。 */
+    private Integer rolloverEnabled;
+
+    /** 累计表归零阈值/计数周期。 */
+    private java.math.BigDecimal rolloverThreshold;
+
     /**
      * 是否移动源：1-是，0-否（电表节点）
      */

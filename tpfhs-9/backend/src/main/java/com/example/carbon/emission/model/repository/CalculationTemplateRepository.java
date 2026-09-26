@@ -2,6 +2,7 @@ package com.example.carbon.emission.model.repository;
 
 import com.example.carbon.emission.model.entity.CalculationTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.List;
  * 碳排放核算模版数据访问接口
  */
 @Repository
-public interface CalculationTemplateRepository extends JpaRepository<CalculationTemplate, Long> {
+public interface CalculationTemplateRepository extends JpaRepository<CalculationTemplate, Long>, JpaSpecificationExecutor<CalculationTemplate> {
 
     /**
      * 根据模版ID查询核算历史
@@ -51,4 +52,7 @@ public interface CalculationTemplateRepository extends JpaRepository<Calculation
      */
     List<CalculationTemplate> findByCalculationCycleStartDateBetweenAndStatus(
             LocalDate start, LocalDate end, Integer status);
+
+    boolean existsByTemplateIdAndCalculationCycleStartDateAndCalculationCycleEndDate(
+            Long templateId, LocalDate start, LocalDate end);
 }

@@ -63,6 +63,14 @@ public class CalculationNode {
     @Column(name = "node_category", length = 50)
     private String nodeCategory;
 
+    /** 本次任务中是否最终纳入核算（已包含祖先节点的排除规则）。 */
+    @Column(name = "include_in_calculation", nullable = false)
+    private Boolean includeInCalculation = true;
+
+    /** 导致本节点被排除的设计态节点ID；直接排除时为自身ID。 */
+    @Column(name = "excluded_by_node_id")
+    private Long excludedByNodeId;
+
     @Column(name = "created_by")
     private Long createdBy;
 
@@ -79,6 +87,9 @@ public class CalculationNode {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
+        if (includeInCalculation == null) {
+            includeInCalculation = true;
+        }
     }
 
     @PreUpdate

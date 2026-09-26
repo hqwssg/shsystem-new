@@ -404,6 +404,12 @@
                   <el-radio :value="0">否</el-radio>
                 </el-radio-group>
               </el-form-item>
+              <el-form-item v-if="formData.isCumulative === 1" label="允许归零">
+                <el-switch v-model="formData.rolloverEnabled" :active-value="1" :inactive-value="0" />
+              </el-form-item>
+              <el-form-item v-if="formData.isCumulative === 1 && formData.rolloverEnabled === 1" label="归零阈值">
+                <el-input-number v-model="formData.rolloverThreshold" :min="0.000001" :precision="6" style="width:100%" />
+              </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="是否移动源" label-width="100px">
@@ -719,6 +725,8 @@ const formData = reactive({
   purposeDescription: '',
   autoMeterReadingConfig: '',
   isCumulative: 0,
+  rolloverEnabled: 0,
+  rolloverThreshold: null,
   isMobileSource: 0,
   measurementUnit: '',
   dataSourceSystem: '',
@@ -1186,6 +1194,8 @@ const handleEdit = (node) => {
     purposeDescription: node.purposeDescription || '',
     autoMeterReadingConfig: node.autoMeterReadingConfig || '',
     isCumulative: node.isCumulative ?? 0,
+    rolloverEnabled: node.rolloverEnabled ?? 0,
+    rolloverThreshold: node.rolloverThreshold ?? null,
     isMobileSource: node.isMobileSource ?? 0,
     measurementUnit: node.measurementUnit || '',
     dataSourceSystem: node.dataSourceSystem || '',

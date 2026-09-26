@@ -27,6 +27,9 @@ public class EmissionNodeConfig {
     @Column(name = "carbon_emission_factor", precision = 15, scale = 6)
     private BigDecimal carbonEmissionFactor;
 
+    @Column(name = "carbon_emission_factor_unit", length = 100)
+    private String carbonEmissionFactorUnit;
+
     @Column(name = "carbon_emission_factor_description", columnDefinition = "TEXT")
     private String carbonEmissionFactorDescription;
 

@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -54,16 +56,30 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public BigDecimal convert(String subcategoryCode, String fromUnitCode, String toUnitCode, BigDecimal value) {
-        if (value == null) return null;
-        if (fromUnitCode != null && fromUnitCode.equals(toUnitCode)) {
+        String subcategory = trim(subcategoryCode);
+        String from = trim(fromUnitCode);
+        String to = trim(toUnitCode);
+        if (subcategory == null || from == null || to == null || value == null) {
+            throw new IllegalArgumentException("小类、源单位、目标单位和值均不能为空");
+        }
+        UnitStandard fromStandard = unitStandardRepository.findByUnitCode(from)
+                .orElseThrow(() -> new IllegalArgumentException("源单位不存在: " + from));
+        UnitStandard toStandard = unitStandardRepository.findByUnitCode(to)
+                .orElseThrow(() -> new IllegalArgumentException("目标单位不存在: " + to));
+        if (!Objects.equals(fromStandard.getPhysicalQuantity(), toStandard.getPhysicalQuantity())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "源单位与目标单位物理量不兼容: " + from + " -> " + to);
+        }
+        if (from.equals(to)) {
             return value;
         }
         Optional<UnitConversion> opt = unitConversionRepository
-                .findBySubcategoryCodeAndFromUnitCodeAndToUnitCode(subcategoryCode, fromUnitCode, toUnitCode);
+                .findBySubcategoryCodeAndFromUnitCodeAndToUnitCode(subcategory, from, to);
         if (opt.isEmpty()) {
             log.warn("单位换算失败：未找到转换关系 subcategoryCode={}, from={}, to={}",
-                    subcategoryCode, fromUnitCode, toUnitCode);
-            return null;
+                    subcategory, from, to);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "未配置单位换算关系: " + subcategory + ", " + from + " -> " + to);
         }
         BigDecimal factor = opt.get().getConversionFactor();
         return value.multiply(factor).setScale(8, RoundingMode.HALF_UP);

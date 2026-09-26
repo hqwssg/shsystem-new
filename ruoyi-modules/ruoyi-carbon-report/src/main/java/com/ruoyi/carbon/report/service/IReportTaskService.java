@@ -20,6 +20,11 @@ public interface IReportTaskService
 
     ReportTask saveSection(Long id, Long deptId, String section, Integer version, String payloadJson, String username);
 
+    byte[] excelTemplate(String type);
+
+    ReportTask importExcel(Long id, Long deptId, String type, String mode, Integer version, String originalName,
+            InputStream in, String username);
+
     void remove(Long id, Long deptId, String username);
 
     ReportFile uploadImage(Long id, Long deptId, String role, String originalName, String contentType,

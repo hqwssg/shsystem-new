@@ -25,8 +25,25 @@
       </el-table-column>
     </el-table>
     <h4>外购热力</h4>
+    <el-alert
+      title="有核算面积（PH_HA，单位 m²）时会带入供暖面积和耗热量系数；核算已是 GJ 时两列为空，可手填。不填则第 3.3 表对应格留空。填写只进报告表，不改核算 GJ。"
+      type="info"
+      :closable="false"
+      show-icon
+      style="margin-bottom:8px"
+    />
     <el-table :data="draft.heat" size="small">
       <el-table-column prop="site" label="站点" />
+      <el-table-column label="供暖面积 m²" width="150">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.heatingAreaM2" size="mini" placeholder="可手填" />
+        </template>
+      </el-table-column>
+      <el-table-column label="耗热量系数" width="140">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.heatCoefficient" size="mini" placeholder="可手填" />
+        </template>
+      </el-table-column>
       <el-table-column prop="normalizedValue" label="GJ" width="120" />
       <el-table-column prop="dataOrigin" label="来源" width="110">
         <template slot-scope="scope">
@@ -34,6 +51,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button type="primary" size="mini" style="margin-top:8px" @click="saveHeat">保存热力面积/系数</el-button>
+    <excel-import-box
+      :draft="draft"
+      type="heat"
+      title="导入热力面积/系数"
+      filename="热力.xlsx"
+      hint="查表站点与 GJ 保留。追加只填空的面积/系数；覆盖改匹配站点的面积/系数，不改 GJ。Excel 多出的站点会新增（GJ 为空）。"
+      @imported="$emit('saved')"
+    />
     <h4>工作量</h4>
     <el-alert
       title="工作量指标名来自企业档案，数量每年手填。不填数量不会按 0 生成。"
@@ -66,13 +92,23 @@
     </el-table>
     <el-button size="mini" style="margin-top:8px" @click="addWorkload">新增一行</el-button>
     <el-button type="primary" size="mini" style="margin-top:8px;margin-left:8px" @click="saveWorkload">保存工作量</el-button>
+    <excel-import-box
+      :draft="draft"
+      type="workload"
+      title="导入工作量"
+      filename="工作量.xlsx"
+      hint="有档案指标名时先显示档案。追加保留已有名称；覆盖整表换成 Excel。没有正数量的行不会导入。"
+      @imported="$emit('saved')"
+    />
     <p v-if="draft.missingWorkload" class="gap">工作量未填，校验会标缺失，不会按 0 生成。</p>
   </div>
 </template>
 <script>
 import { saveSection, getDeptProfile } from '@/api/carbon/report'
+import ExcelImportBox from './ExcelImportBox'
 export default {
   name: 'ActivityStep',
+  components: { ExcelImportBox },
   props: { draft: { type: Object, required: true } },
   data() {
     return { workload: [] }
@@ -135,6 +171,21 @@ export default {
         data: { workload: this.workload }
       }).then(() => {
         this.$message.success('已保存')
+        this.$emit('saved')
+      })
+    },
+    saveHeat() {
+      saveSection(this.draft.task.id, 'heat', {
+        version: this.draft.task.version,
+        data: {
+          heat: (this.draft.heat || []).map(row => ({
+            id: row.id,
+            heatingAreaM2: row.heatingAreaM2,
+            heatCoefficient: row.heatCoefficient
+          }))
+        }
+      }).then(() => {
+        this.$message.success('已保存热力面积/系数')
         this.$emit('saved')
       })
     }

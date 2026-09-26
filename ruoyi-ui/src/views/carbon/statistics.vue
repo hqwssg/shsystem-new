@@ -1,5 +1,10 @@
 <template>
   <div class="app-container carbon-statistics">
+    <el-tabs v-model="activeTab" class="statistics-tabs" @tab-click="handleTabChange">
+      <el-tab-pane label="业务排放数据" name="business" />
+      <el-tab-pane label="核算结果" name="calculation" />
+    </el-tabs>
+    <div v-show="activeTab === 'business'">
     <div class="carbon-toolbar">
       <div>
         <h2>统计查询</h2>
@@ -108,12 +113,56 @@
         @current-change="loadRecords"
       />
     </section>
+    </div>
+
+    <div v-show="activeTab === 'calculation'">
+      <div class="carbon-toolbar">
+        <div><h2>核算结果</h2><span>分页查看全部成功核算任务及其汇总结果</span></div>
+        <el-button v-if="canExport" icon="el-icon-download" :loading="calcExporting" @click="exportCalculationExcel">导出Excel</el-button>
+      </div>
+      <section class="carbon-panel">
+        <el-form :model="calcQuery" size="small" :inline="true" label-width="82px">
+          <el-form-item label="模板ID"><el-input-number v-model="calcQuery.templateId" :min="1" /></el-form-item>
+          <el-form-item><el-button type="primary" @click="queryCalcTasks">查询</el-button><el-button @click="resetCalcQuery">重置</el-button></el-form-item>
+        </el-form>
+      </section>
+      <section class="carbon-panel">
+        <div class="panel-title">核算任务</div>
+        <el-table v-loading="calcLoading" :data="calcTasks" border highlight-current-row @current-change="selectCalcTask">
+          <el-table-column prop="id" label="任务ID" width="90" />
+          <el-table-column prop="templateId" label="模板ID" width="90" />
+          <el-table-column prop="calculationCycleStartDate" label="周期开始" width="120" />
+          <el-table-column prop="calculationCycleEndDate" label="周期结束" width="120" />
+          <el-table-column prop="status" label="状态" width="90"><template slot-scope="s">{{ calcStatusLabel(s.row.status) }}</template></el-table-column>
+          <el-table-column prop="initiatorName" label="发起人" min-width="120" />
+          <el-table-column prop="calculationStartTime" label="开始时间" min-width="180" />
+          <el-table-column prop="calculationEndTime" label="结束时间" min-width="180" />
+        </el-table>
+        <el-pagination class="table-pagination" background layout="total, sizes, prev, pager, next" :total="calcTotal" :page-size.sync="calcQuery.size" :current-page.sync="calcQuery.page" :page-sizes="[10,20,50,100]" @size-change="loadCalcTasks" @current-change="loadCalcTasks" />
+      </section>
+      <section class="carbon-panel">
+        <div class="panel-title">汇总明细 <span v-if="selectedCalcTask">（任务 {{ selectedCalcTask.id }}）</span></div>
+        <el-table v-loading="calcDetailLoading" :data="calcDetails" border>
+          <el-table-column prop="sourceNodeId" label="源节点" width="100" />
+          <el-table-column prop="emissionSubcategoryName" label="排放小类" min-width="130">
+            <template slot-scope="s">{{ s.row.emissionSubcategoryName || '未知排放小类' }}</template>
+          </el-table-column>
+          <el-table-column prop="energyCategoryL1" label="L1" min-width="110" />
+          <el-table-column prop="directEnergyValue" label="直接活动量" width="130" />
+          <el-table-column prop="subtotalEnergyValue" label="子树活动量" width="130" />
+          <el-table-column prop="calculationUnitCode" label="单位" width="90" />
+          <el-table-column prop="directCarbonEmission" label="直接排放" width="130" />
+          <el-table-column prop="subtotalCarbonEmission" label="子树排放" width="130" />
+        </el-table>
+        <el-pagination class="table-pagination" background layout="total, sizes, prev, pager, next" :total="calcDetailTotal" :page-size.sync="calcDetailQuery.size" :current-page.sync="calcDetailQuery.page" :page-sizes="[10,20,50,100]" @size-change="loadCalcDetails" @current-change="loadCalcDetails" />
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
 import * as echarts from 'echarts'
-import { templateApi, nodeApi, emissionApi, flattenCarbonTree } from '@/api/carbon'
+import { templateApi, nodeApi, emissionApi, calcSummaryApi, flattenCarbonTree } from '@/api/carbon'
 import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
 
 export default {
@@ -126,6 +175,14 @@ export default {
   },
   data() {
     return {
+      activeTab: 'business',
+      calcLoading: false,
+      calcDetailLoading: false,
+      calcExporting: false,
+      calcTasks: [], calcTotal: 0, selectedCalcTask: null,
+      calcDetails: [], calcDetailTotal: 0,
+      calcQuery: { templateId: null, page: 1, size: 20 },
+      calcDetailQuery: { page: 1, size: 20 },
       loading: false,
       templates: [],
       nodeOptions: [],
@@ -165,6 +222,15 @@ export default {
     if (this.sourceChart) this.sourceChart.dispose()
   },
   methods: {
+    handleTabChange() { if (this.activeTab === 'calculation' && !this.calcTasks.length) this.loadCalcTasks() },
+    calcTaskParams() { return { templateId: this.calcQuery.templateId, page: this.calcQuery.page - 1, size: this.calcQuery.size } },
+    async loadCalcTasks() { this.calcLoading = true; try { const page = await calcSummaryApi.tasks(this.calcTaskParams()); this.calcTasks = page.content || []; this.calcTotal = page.totalElements || 0; if (!this.selectedCalcTask && this.calcTasks.length) this.selectCalcTask(this.calcTasks[0]) } finally { this.calcLoading = false } },
+    queryCalcTasks() { this.calcQuery.page = 1; this.selectedCalcTask = null; this.calcDetails = []; this.loadCalcTasks() },
+    resetCalcQuery() { this.calcQuery = { templateId: null, page: 1, size: 20 }; this.queryCalcTasks() },
+    async selectCalcTask(row) { if (!row) return; this.selectedCalcTask = row; this.calcDetailQuery.page = 1; await this.loadCalcDetails() },
+    async loadCalcDetails() { if (!this.selectedCalcTask) return; this.calcDetailLoading = true; try { const page = await calcSummaryApi.details(this.selectedCalcTask.id, { page: this.calcDetailQuery.page - 1, size: this.calcDetailQuery.size }); this.calcDetails = page.content || []; this.calcDetailTotal = page.totalElements || 0 } finally { this.calcDetailLoading = false } },
+    async exportCalculationExcel() { this.calcExporting = true; try { const blob = await calcSummaryApi.exportExcel(this.calcTaskParams()); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `碳排放核算结果_${Date.now()}.xlsx`; link.click(); URL.revokeObjectURL(url) } finally { this.calcExporting = false } },
+    calcStatusLabel(status) { return ({ 0: '未开始', 1: '执行中', 2: '成功', 3: '失败' })[status] || status },
     async loadTemplates() {
       this.templates = await templateApi.list()
       if (this.templates.length) {

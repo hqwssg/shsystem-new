@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -43,7 +43,8 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
 
     private static final Logger logger = LoggerFactory.getLogger(EmissionCalculationServiceImpl.class);
 
-    private static final int SCALE = 6;
+    /** 碳排放结果保留9位小数，支持万Nm³等小量级换算。 */
+    private static final int SCALE = 9;
 
     /** 节点类型ID：根节点 */
     private static final int TYPE_ID_ROOT = 1;
@@ -93,6 +94,17 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
     private ObjectMapper objectMapper;
     @Autowired
     private DefaultFactorRepository defaultFactorRepository;
+    @Autowired
+    private FactorDimensionService factorDimensionService;
+
+    @Autowired
+    private TaskScheduleConfigService taskScheduleConfigService;
+
+    @Autowired
+    private CalculationTaskReservationService taskReservationService;
+
+    @Autowired
+    private NodeInclusionResolver nodeInclusionResolver;
 
     /**
      * 核算节点逐级汇总处理器。
@@ -103,7 +115,6 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
     private CalcNodeSummaryProcessor calcNodeSummaryProcessor;
 
     @Override
-    @Transactional
     public void executeEmissionCalculation(Long templateId) {
         logger.info("***开始执行碳排放核算，模版ID: {}", templateId);
 
@@ -114,25 +125,27 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
             return;
         }
 
-        LocalDate[] cycle = parseCalculationCycle(template.getTaskConfig());
+        LocalDate[] cycle = taskScheduleConfigService.calculateCycle(template.getTaskConfig(), LocalDate.now());
         LocalDate cycleStartDate = cycle[0];
         LocalDate cycleEndDate = cycle[1];
         logger.info("***核算周期: {} ~ {}, 模版ID: {}", cycleStartDate, cycleEndDate, templateId);
 
-        CalculationTemplate calcTemplate = new CalculationTemplate();
-        calcTemplate.setTemplateId(templateId);
-        calcTemplate.setTaskInitiator(1);
-        calcTemplate.setStatus(TEMPLATE_STATUS_RUNNING);
-        calcTemplate.setCalculationCycleStartDate(cycleStartDate);
-        calcTemplate.setCalculationCycleEndDate(cycleEndDate);
-        calcTemplate.setCalculationStartTime(LocalDateTime.now());
-        calcTemplate = calculationTemplateRepository.save(calcTemplate);
+        final CalculationTemplate calcTemplate;
+        try {
+            calcTemplate = taskReservationService.reserve(templateId, cycleStartDate, cycleEndDate);
+        } catch (DataIntegrityViolationException duplicate) {
+            logger.info("***同一模版周期已有核算任务，跳过重复执行，模版ID: {}, 周期: {}~{}",
+                    templateId, cycleStartDate, cycleEndDate);
+            return;
+        }
 
         try {
             // Step 2：先完整创建快照，再把设计态父节点转换为父快照ID。
             // emission_node.parent_id 与 emission_calculation_node.parent_id 的语义不同，不能直接复制。
             List<EmissionNode> nodes = emissionNodeRepository.findByTemplateId(templateId);
             logger.info("***模版下节点数: {}, 模版ID: {}", nodes.size(), templateId);
+            Map<Long, NodeInclusionResolver.InclusionDecision> inclusionDecisions =
+                    nodeInclusionResolver.resolve(nodes);
             Map<Long, CalculationNode> snapshotBySourceId = new HashMap<>();
             for (EmissionNode node : nodes) {
                 CalculationNode calcNode = new CalculationNode();
@@ -141,6 +154,9 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
                 calcNode.setName(node.getName());
                 calcNode.setTypeId(node.getTypeId());
                 calcNode.setParentId(null);
+                NodeInclusionResolver.InclusionDecision inclusion = inclusionDecisions.get(node.getId());
+                calcNode.setIncludeInCalculation(inclusion == null || inclusion.included());
+                calcNode.setExcludedByNodeId(inclusion == null ? null : inclusion.excludedByNodeId());
 
                 // 核算子节点（typeId=2）查询 nodeCategory
                 if (node.getTypeId() != null && node.getTypeId() == TYPE_ID_CALCULATION) {
@@ -173,9 +189,20 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
             for (EmissionNode node : nodes) {
                 if (node.getTypeId() != null && node.getTypeId() == TYPE_ID_COLLECTION) {
                     CalculationNode calcNode = snapshotBySourceId.get(node.getId());
+                    if (Boolean.FALSE.equals(calcNode.getIncludeInCalculation())) {
+                        logger.info("***采集节点因不纳入核算规则跳过，节点ID: {}, 排除来源节点ID: {}",
+                                node.getId(), calcNode.getExcludedByNodeId());
+                        continue;
+                    }
                     try {
                         processCollectionNode(calcNode.getId(), node.getId(), factorTemplateId,
                                 cycleStartDate, cycleEndDate);
+                    } catch (IllegalStateException e) {
+                        // 因子值、单位或换算路径不完整属于核算口径错误，必须使任务失败，
+                        // 不能生成部分成功且量纲不可信的结果。
+                        logger.error("***节点因子量纲核算失败，节点ID: {}, 模版ID: {}",
+                                node.getId(), templateId, e);
+                        throw e;
                     } catch (Exception e) {
                         logger.error("***节点核算失败，节点ID: {}, 模版ID: {}", node.getId(), templateId, e);
                     }
@@ -293,42 +320,62 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
         data.setCollectionRecordEndDate(calcResult.getCollectionRecordEndDate());
         data.setDataMissingDescription(calcResult.getDataMissingDescription());
         data.setAdjustedEnergyValue(calcResult.getAdjustedEnergyValue());
+        data.setRolloverApplied(calcResult.getRolloverApplied());
+        data.setRolloverThreshold(calcResult.getRolloverThreshold());
 
-        // 碳排放量 = 能耗计量值 × 碳排放因子
+        // 碳排放量 = 换算到因子分母单位后的活动量 × 碳排放因子，
+        // 再将因子分子质量单位统一为 tCO2e。
         // 因子回退机制：采集点因子优先使用节点配置（config.getCarbonEmissionFactor()），
         // 为空时回退到因子模版缺省因子（emission_default_factor 表 template_id + 编码/名称匹配）
         BigDecimal factor = config.getCarbonEmissionFactor();
-        if (factor == null && factorTemplateId != null && cpInfo.emissionSubcategory != null) {
-            // 节点未配置因子 -> 按因子模版ID和编码/名称查模版缺省因子。
-            DefaultFactor df = defaultFactorRepository
+        String factorUnit = trimToNull(config.getCarbonEmissionFactorUnit());
+        DefaultFactor matchedDefaultFactor = null;
+        if (factorTemplateId != null && cpInfo.emissionSubcategory != null) {
+            matchedDefaultFactor = defaultFactorRepository
                     .findByTemplateIdAndSubcategoryCode(factorTemplateId, cpInfo.emissionSubcategory)
                     .orElseGet(() -> defaultFactorRepository
                             .findByTemplateIdAndSubcategoryName(factorTemplateId, cpInfo.emissionSubcategory)
                             .orElse(null));
-            // 步骤2：仅当缺省因子记录存在、有值且启用(status=1)时才采用，否则 factor 保持为 null
-            if (df != null && df.getFactorValue() != null && df.getStatus() != null && df.getStatus() == 1) {
-                factor = df.getFactorValue();
+        }
+        if (matchedDefaultFactor != null && matchedDefaultFactor.getStatus() != null
+                && matchedDefaultFactor.getStatus() == 1) {
+            // 节点未配置因子值时整体回退；节点只配置了值但旧数据缺少单位时，
+            // 允许继承同一小类的模板因子单位。
+            if (factor == null && matchedDefaultFactor.getFactorValue() != null) {
+                factor = matchedDefaultFactor.getFactorValue();
                 logger.info("***节点未设置因子，使用模版缺省因子：节点ID={}, 小类={}, 因子值={}",
                         nodeId, cpInfo.emissionSubcategory, factor);
             }
-        }
-        if (factor != null) {
-            data.setCarbonEmissionFactor(factor);
-            BigDecimal energyVal = calcResult.getEnergyMeasurementValue();
-            if (energyVal == null) {
-                energyVal = BigDecimal.ZERO;
+            if (factorUnit == null) {
+                factorUnit = trimToNull(matchedDefaultFactor.getFactorUnit());
             }
-            data.setCarbonEmission(energyVal.multiply(factor).setScale(SCALE, RoundingMode.HALF_UP));
+        }
+        if (factor == null) {
+            throw new IllegalStateException("采集节点没有可用碳排放因子：nodeId=" + nodeId
+                    + ", subcategory=" + cpInfo.emissionSubcategory);
+        }
 
-            BigDecimal adjustedVal = calcResult.getAdjustedEnergyValue();
-            if (adjustedVal == null) {
-                adjustedVal = BigDecimal.ZERO;
-            }
-            data.setAdjustedCarbonEmission(adjustedVal.multiply(factor).setScale(SCALE, RoundingMode.HALF_UP));
-        }
+        FactorDimensionService.CarbonResult rawCarbon = factorDimensionService.calculate(
+                cpInfo.emissionSubcategory, calcResult.getEnergyMeasurementValue(),
+                cpInfo.measurementUnit, factor, factorUnit);
+        FactorDimensionService.CarbonResult adjustedCarbon = factorDimensionService.calculate(
+                cpInfo.emissionSubcategory, calcResult.getAdjustedEnergyValue(),
+                cpInfo.measurementUnit, factor, factorUnit);
+        data.setCarbonEmissionFactor(factor);
+        data.setCarbonEmissionFactorUnit(rawCarbon.normalizedFactorUnit());
+        data.setCarbonEmissionUnit(FactorDimensionService.CARBON_RESULT_UNIT);
+        data.setCarbonEmission(rawCarbon.carbonTco2e().setScale(SCALE, RoundingMode.HALF_UP));
+        data.setAdjustedCarbonEmission(adjustedCarbon.carbonTco2e().setScale(SCALE, RoundingMode.HALF_UP));
 
         calculationNodeDataRepository.save(data);
         logger.debug("***节点核算完成，节点ID: {}, 数据状态: {}", nodeId, calcResult.getDataStatus());
+    }
+
+    private String trimToNull(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value.trim();
     }
 
     /**

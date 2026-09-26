@@ -16,7 +16,7 @@ public interface EmissionFactorTemplateService {
      *
      * @return 模版列表；无数据返回空列表
      */
-    List<EmissionFactorTemplate> findAll();
+    List<EmissionFactorTemplate> findAll(Long userId);
 
     /**
      * 按主键ID查询单条排放因子模版
@@ -24,7 +24,7 @@ public interface EmissionFactorTemplateService {
      * @param id 模版主键ID
      * @return 模版实体；不存在返回 null
      */
-    EmissionFactorTemplate findById(Long id);
+    EmissionFactorTemplate findById(Long id, Long userId);
 
     /**
      * 新增排放因子模版
@@ -34,7 +34,7 @@ public interface EmissionFactorTemplateService {
      * @param req 待新增实体（templateName 必填且唯一）
      * @return 新增后的实体；名称重复返回 null（由 Controller 转 400）
      */
-    EmissionFactorTemplate create(EmissionFactorTemplate req);
+    EmissionFactorTemplate create(EmissionFactorTemplate req, Long userId);
 
     /**
      * 按主键ID更新排放因子模版
@@ -45,7 +45,7 @@ public interface EmissionFactorTemplateService {
      * @param req 待更新字段
      * @return 更新后的实体；记录不存在返回 null
      */
-    EmissionFactorTemplate update(Long id, EmissionFactorTemplate req);
+    EmissionFactorTemplate update(Long id, EmissionFactorTemplate req, Long userId);
 
     /**
      * 按主键ID删除排放因子模版
@@ -53,7 +53,7 @@ public interface EmissionFactorTemplateService {
      * @param id 模版主键ID
      * @return 删除成功返回 true；记录不存在返回 false
      */
-    boolean delete(Long id);
+    boolean delete(Long id, Long userId);
 
     /**
      * 切换模版启停状态（1<->0）
@@ -62,7 +62,7 @@ public interface EmissionFactorTemplateService {
      * @param updatedBy 更新人ID
      * @return 切换成功返回 true；记录不存在返回 false
      */
-    boolean toggleStatus(Long id, Long updatedBy);
+    boolean toggleStatus(Long id, Long userId);
 
     /**
      * 切换模版共享状态（1<->0）
@@ -71,7 +71,7 @@ public interface EmissionFactorTemplateService {
      * @param updatedBy 更新人ID
      * @return 切换成功返回 true；记录不存在返回 false
      */
-    boolean toggleShared(Long id, Long updatedBy);
+    boolean toggleShared(Long id, Long userId);
 
     /**
      * 统计模版被核算模版引用的次数
@@ -96,5 +96,5 @@ public interface EmissionFactorTemplateService {
      * @param createdBy 创建人ID
      * @return 新模版实体；源不存在或名称重复返回 null
      */
-    EmissionFactorTemplate copyTemplate(Long sourceId, String newName, Long createdBy);
+    EmissionFactorTemplate copyTemplate(Long sourceId, String newName, Long userId);
 }

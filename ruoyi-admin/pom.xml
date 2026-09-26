@@ -65,6 +65,12 @@
             <artifactId>ruoyi-modules-carbon-report</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-modules-energy</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

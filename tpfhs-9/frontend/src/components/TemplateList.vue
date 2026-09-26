@@ -212,7 +212,7 @@
 
                 <!-- 执行日期选择已隐藏（固定为计量周期第一天，自动填写）；如需恢复人工选择，将 v-if="false" 移除即可 -->
                 <el-form-item v-if="false && editForm.taskConfig.cycleType === 'WEEKLY'" label="周执行日期">
-                  <el-checkbox-group v-model="editForm.taskConfig.weekDays">
+                  <el-checkbox-group v-model="editForm.taskConfig.weekdays">
                     <el-checkbox label="周一" value="1" />
                     <el-checkbox label="周二" value="2" />
                     <el-checkbox label="周三" value="3" />
@@ -432,7 +432,7 @@ const editForm = ref({
     startDate: null,
     endDate: null,
     cycleType: 'DAILY',
-    weekDays: [],
+    weekdays: [],
     monthDays: [],
     quarterDays: [],
     yearMonths: [],
@@ -456,18 +456,18 @@ const fixedExecutionDateHint = computed(() => {
 
 // 按执行周期类型自动填写执行日期（固定为对应计量周期的第一天），字段格式与后端
 // EmissionScheduler.checkCycle 的解析期望一致（均为JSON数组）：
-// WEEKLY→weekDays[周一=1]；MONTHLY→monthDays[1]；QUARTERLY→quarterDays[1]（1/4/7/10月1日）；
+// WEEKLY→weekdays[周一=1]；MONTHLY→monthDays[1]；QUARTERLY→quarterDays[1]（1/4/7/10月1日）；
 // YEARLY→yearMonths[1]+yearDays[1]（1月1日）。当前固定该策略，后续如需放开人工设置，
 // 恢复隐藏的日期选择输入框（移除 v-if="false"）并调整本方法即可。
 const applyFixedExecutionDates = (taskConfig) => {
-  taskConfig.weekDays = [];
+  taskConfig.weekdays = [];
   taskConfig.monthDays = [];
   taskConfig.quarterDays = [];
   taskConfig.yearMonths = [];
   taskConfig.yearDays = [];
   switch (taskConfig.cycleType) {
     case 'WEEKLY':
-      taskConfig.weekDays = [1];       // 每周周一
+      taskConfig.weekdays = [1];       // 每周周一
       break;
     case 'MONTHLY':
       taskConfig.monthDays = [1];      // 每月1号
@@ -682,7 +682,7 @@ const initEditForm = () => {
       startDate: null,
       endDate: null,
       cycleType: 'DAILY',
-      weekDays: [],
+      weekdays: [],
       monthDays: [],
       quarterDays: [],
       yearMonths: [],
@@ -716,7 +716,7 @@ const handleEditTemplate = (template) => {
         startDate: taskConfig.startDate || null,
         endDate: taskConfig.endDate || null,
         cycleType: taskConfig.cycleType || 'DAILY',
-        weekDays: taskConfig.weekDays || [],
+        weekdays: taskConfig.weekdays || taskConfig.weekDays || [],
         monthDays: taskConfig.monthDays || [],
         quarterDays: taskConfig.quarterDays || [],
         yearMonths: taskConfig.yearMonths || [],

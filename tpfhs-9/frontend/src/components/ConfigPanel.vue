@@ -277,6 +277,7 @@ const formData = ref({
     emissionCategory: '',
     emissionSubcategory: '',
     carbonEmissionFactor: '',
+    carbonEmissionFactorUnit: '',
     carbonEmissionFactorDescription: '',
     collectionDescription: '',
     equipmentCode: ''
@@ -402,48 +403,8 @@ const loadPointInfo = async () => {
   }
 };
 
-/**
- * 碳排放因子单位（只读展示）：根据能耗品种大类与小类映射出对应的因子单位
- * 电力→kgCO₂/kWh；化石燃料按燃料形态→tCO₂/t 或 tCO₂/10⁴Nm³；
- * 热力→tCO₂/GJ 或 tCO₂/t；废弃物处理按处理类型→tGH₄/m³ 或 tCO₂/t；未命中返回空串
- */
-const emissionFactorUnit = computed(() => {
-  const category = formData.value.config.emissionCategory;
-  const subcategory = formData.value.config.emissionSubcategory;
-  
-  if (category === '购入的电力' || category === '输出的电力') {
-    return 'kgCO₂/kWh';
-  }
-  
-  if (category === '化石燃料') {
-    const tUnitFuels = ['烟煤', '褐煤', '焦炭', '石油焦', '原油', '燃料油', '汽油', '柴油', '液化天然气', '液化石油气'];
-    const nm3UnitFuels = ['天然气', '高炉煤气', '转炉煤气', '焦炉煤气'];
-    
-    if (tUnitFuels.includes(subcategory)) {
-      return 'tCO₂/t';
-    } else if (nm3UnitFuels.includes(subcategory)) {
-      return 'tCO₂/10⁴Nm³';
-    }
-  }
-  
-  if (category === '购入的热力') {
-    if (subcategory === '热力数据') {
-      return 'tCO₂/GJ';
-    } else if (subcategory === '质量单位计量的蒸汽' || subcategory === '质量单位计量的热水') {
-      return 'tCO₂/t';
-    }
-  }
-  
-  if (category === '废弃物处理') {
-    if (subcategory === '废水处理排放') {
-      return 'tGH₄/m³';
-    } else if (subcategory === '固体废弃物处理排放') {
-      return 'tCO₂/t';
-    }
-  }
-  
-  return '';
-});
+// 展示并保存实际选择的因子单位，不按大类猜测量纲。
+const emissionFactorUnit = computed(() => formData.value.config.carbonEmissionFactorUnit || '');
 
 /**
  * 初始化表单：用当前节点数据填充表单（配置 + 核算子节点信息），重置编辑模式并快照原始数据
@@ -458,6 +419,7 @@ const initForm = () => {
       emissionCategory: props.node.config?.emissionCategory || '',
       emissionSubcategory: props.node.config?.emissionSubcategory || '',
       carbonEmissionFactor: factorValue,
+      carbonEmissionFactorUnit: props.node.config?.carbonEmissionFactorUnit || '',
       carbonEmissionFactorDescription: props.node.config?.carbonEmissionFactorDescription || '',
       collectionDescription: props.node.config?.collectionDescription || '',
       equipmentCode: props.node.config?.equipmentCode || ''
@@ -489,6 +451,9 @@ watch(() => props.node, () => {
  */
 const handleCategoryChange = () => {
   formData.value.config.emissionSubcategory = '';
+  formData.value.config.carbonEmissionFactor = '';
+  formData.value.config.carbonEmissionFactorUnit = '';
+  formData.value.config.carbonEmissionFactorDescription = '';
 
   if (props.node.typeId === 3 && props.node.id && formData.value.config.emissionCategory) {
     fetch(`/api/nodes/${props.node.id}/equipment-code?emissionCategory=${encodeURIComponent(formData.value.config.emissionCategory)}`)
@@ -504,7 +469,11 @@ const handleCategoryChange = () => {
 /**
  * 能耗品种小类变化处理（预留，当前无需联动逻辑）
  */
-const handleSubcategoryChange = () => {};
+const handleSubcategoryChange = () => {
+  formData.value.config.carbonEmissionFactor = '';
+  formData.value.config.carbonEmissionFactorUnit = '';
+  formData.value.config.carbonEmissionFactorDescription = '';
+};
 
 /**
  * "是否纳入碳排放核算"切换处理：编辑模式下取消勾选时弹出二次确认，
@@ -577,11 +546,12 @@ const openFactorDialog = () => {
 
 /**
  * 排放因子选择弹窗"选择"回调：将所选因子值与描述回填到表单
- * @param {Object} result - 因子选择结果 { factorValue, description }
+ * @param {Object} result - 因子选择结果 { factorValue, factorUnit, description }
  */
 const handleFactorSelect = (result) => {
   if (result.factorValue) {
     formData.value.config.carbonEmissionFactor = result.factorValue;
+    formData.value.config.carbonEmissionFactorUnit = result.factorUnit || '';
     formData.value.config.carbonEmissionFactorDescription = result.description || '';
   }
   showFactorDialog.value = false;

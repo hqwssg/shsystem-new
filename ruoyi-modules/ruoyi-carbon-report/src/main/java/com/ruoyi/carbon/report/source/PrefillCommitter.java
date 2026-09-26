@@ -94,6 +94,8 @@ public class PrefillCommitter
         row.setSourceUnit(line.getSourceUnit());
         row.setNormalizedValue(line.getNormalizedValue());
         row.setNormalizedUnit(line.getNormalizedUnit());
+        row.setHeatingAreaM2(line.getHeatingAreaM2());
+        row.setHeatCoefficient(line.getHeatCoefficient());
         row.setSourceHash(line.getSourceHash());
         row.setOverrideReason(line.getOverrideReason());
         row.setSortOrder(order);

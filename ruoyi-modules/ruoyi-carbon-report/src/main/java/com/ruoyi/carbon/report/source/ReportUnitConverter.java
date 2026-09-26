@@ -3,6 +3,7 @@ package com.ruoyi.carbon.report.source;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -29,6 +30,8 @@ public class ReportUnitConverter
         put("EL", "MWh", UNIT_MWH, BigDecimal.ONE);
         put("EL", "kWh", UNIT_MWH, new BigDecimal("0.001"));
         put("PH_HD", "GJ", UNIT_GJ, BigDecimal.ONE);
+        put("PH_HA", "m2", UNIT_GJ, new BigDecimal("0.08"));
+        put("PH_HA", "m²", UNIT_GJ, new BigDecimal("0.08"));
     }
 
     public void register(String subcategory, String fromUnit, String toUnit, BigDecimal factor)
@@ -45,14 +48,28 @@ public class ReportUnitConverter
         String target = targetUnit(subcategory);
         if (fromUnit != null && fromUnit.equalsIgnoreCase(target))
         {
-            return Conversion.ok(value, fromUnit, value, target);
+            return Conversion.ok(value, fromUnit, value, target, null);
         }
         BigDecimal factor = factors.get(key(subcategory, fromUnit, target));
         if (factor == null)
         {
             return Conversion.missing(fromUnit, target);
         }
-        return Conversion.ok(value, fromUnit, value.multiply(factor).setScale(6, RoundingMode.HALF_UP), target);
+        return Conversion.ok(value, fromUnit, value.multiply(factor).setScale(6, RoundingMode.HALF_UP), target, factor);
+    }
+
+    public static boolean isAreaUnit(String unit)
+    {
+        if (unit == null || unit.isBlank())
+        {
+            return false;
+        }
+        String normalized = unit.trim()
+                .replace("㎡", "m2")
+                .replace("²", "2")
+                .replace(" ", "")
+                .toLowerCase(Locale.ROOT);
+        return "m2".equals(normalized) || "m^2".equals(normalized);
     }
 
     public static String targetUnit(String subcategory)
@@ -106,24 +123,33 @@ public class ReportUnitConverter
         public final String sourceUnit;
         public final BigDecimal normalizedValue;
         public final String normalizedUnit;
+        public final BigDecimal factor;
 
-        private Conversion(boolean ok, BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue, String normalizedUnit)
+        private Conversion(boolean ok, BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue,
+                String normalizedUnit, BigDecimal factor)
         {
             this.ok = ok;
             this.sourceValue = sourceValue;
             this.sourceUnit = sourceUnit;
             this.normalizedValue = normalizedValue;
             this.normalizedUnit = normalizedUnit;
+            this.factor = factor;
         }
 
         public static Conversion ok(BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue, String normalizedUnit)
         {
-            return new Conversion(true, sourceValue, sourceUnit, normalizedValue, normalizedUnit);
+            return ok(sourceValue, sourceUnit, normalizedValue, normalizedUnit, null);
+        }
+
+        public static Conversion ok(BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue,
+                String normalizedUnit, BigDecimal factor)
+        {
+            return new Conversion(true, sourceValue, sourceUnit, normalizedValue, normalizedUnit, factor);
         }
 
         public static Conversion missing(String sourceUnit, String normalizedUnit)
         {
-            return new Conversion(false, null, sourceUnit, null, normalizedUnit);
+            return new Conversion(false, null, sourceUnit, null, normalizedUnit, null);
         }
     }
 }

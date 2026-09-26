@@ -49,7 +49,7 @@ spring:
     job-store-type: memory
 
 mybatis:
-  typeAliasesPackage: com.ruoyi.system,com.ruoyi.gen.domain,com.ruoyi.job.domain,com.ruoyi.carbon.report.domain
+  typeAliasesPackage: com.ruoyi.system,com.ruoyi.gen.domain,com.ruoyi.job.domain,com.ruoyi.carbon.report.domain,com.ruoyi.carbon.energy
   mapperLocations: classpath*:mapper/**/*.xml
 
 carbon:
@@ -61,6 +61,14 @@ carbon:
       artifact-dir: ${CARBON_REPORT_ARTIFACT_DIR:./uploadPath/reports}
       soffice-path: ${CARBON_REPORT_SOFFICE_PATH:}
       timeout-seconds: ${CARBON_REPORT_RENDER_TIMEOUT:300}
+  energy:
+    python-executable: ${ENERGY_PYTHON:python}
+    project-root: ${ENERGY_PROJECT_ROOT:}
+    upload-dir: ${ENERGY_UPLOAD_DIR:./uploadPath/energy}
+    timeout-seconds: ${ENERGY_CLI_TIMEOUT:300}
+    solve-timeout-seconds: ${ENERGY_SOLVE_TIMEOUT:1800}
+    resource-profile: ${ENERGY_RESOURCE_PROFILE:standard}
+    database-url: ${ENERGY_DATABASE_URL:}
 
 pagehelper:
   helperDialect: mysql

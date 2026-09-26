@@ -126,6 +126,30 @@ export const constantRoutes = [
         meta: { title: '碳排放报告生成', icon: 'documentation', permissions: getCarbonModulePermissions('report') }
       },
       {
+        path: 'energy',
+        component: () => import('@/views/carbon/energy/index'),
+        name: 'CarbonEnergy',
+        meta: { title: '重空协同与能量优化', icon: 'chart', permissions: getCarbonModulePermissions('energy') }
+      },
+      {
+        path: 'energy/versions',
+        component: () => import('@/views/carbon/energy/versions'),
+        name: 'CarbonEnergyVersions',
+        meta: { title: '能量数据版本', activeMenu: '/carbon/energy', permissions: getCarbonModulePermissions('energy') }
+      },
+      {
+        path: 'energy/create',
+        component: () => import('@/views/carbon/energy/create'),
+        name: 'CarbonEnergyCreate',
+        meta: { title: '新建能量任务', activeMenu: '/carbon/energy', permissions: getCarbonModulePermissions('energy') }
+      },
+      {
+        path: 'energy/runs/:runId',
+        component: () => import('@/views/carbon/energy/run'),
+        name: 'CarbonEnergyRun',
+        meta: { title: '能量任务详情', activeMenu: '/carbon/energy', permissions: getCarbonModulePermissions('energy') }
+      },
+      {
         path: 'report/create',
         component: () => import('@/views/carbon/report/create'),
         name: 'CarbonReportCreate',

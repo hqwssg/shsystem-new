@@ -85,6 +85,14 @@
       </el-table-column>
     </el-table>
     <el-button size="mini" style="margin-top:8px" @click="addMonitor">新增监测行</el-button>
+    <excel-import-box
+      :draft="draft"
+      type="monitoring"
+      title="导入监测设备"
+      filename="监测设备.xlsx"
+      hint="未保存时先显示计量表建议行。追加保留已有名称；覆盖整表换成 Excel。"
+      @imported="$emit('saved')"
+    />
     <h4>用能设备</h4>
     <el-table :data="equipment" size="mini">
       <el-table-column label="名称" min-width="140">
@@ -130,10 +138,19 @@
     </el-table>
     <el-button size="mini" style="margin-top:8px" @click="addRow">新增一行</el-button>
     <el-button type="primary" size="mini" style="margin-top:8px;margin-left:8px" @click="save">保存设备与监测</el-button>
+    <excel-import-box
+      :draft="draft"
+      type="equipment"
+      title="导入用能设备"
+      filename="用能设备.xlsx"
+      hint="未保存时先显示企业档案设备。追加保留已有名称；覆盖整表换成 Excel。"
+      @imported="$emit('saved')"
+    />
   </div>
 </template>
 <script>
 import { saveSection, getDeptProfile, uploadReportImage, resetReportImage, fetchReportImageBlob } from '@/api/carbon/report'
+import ExcelImportBox from './ExcelImportBox'
 
 const KNOWN_MODELS = {
   '肃宁天然气计量表': 'LWQ-50',
@@ -150,6 +167,7 @@ const IMAGE_SLOTS = [
 
 export default {
   name: 'AssetsStep',
+  components: { ExcelImportBox },
   props: { draft: { type: Object, required: true } },
   data() {
     return { equipment: [], monitoring: [], previews: {}, pendingRole: '', imageSlots: IMAGE_SLOTS }

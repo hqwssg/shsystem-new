@@ -4,10 +4,12 @@ import com.example.carbon.emission.model.dto.CreateTemplateRequest;
 import com.example.carbon.emission.model.dto.TemplateDTO;
 import com.example.carbon.emission.model.entity.EmissionNode;
 import com.example.carbon.emission.model.entity.EmissionNodeConfig;
+import com.example.carbon.emission.model.entity.EmissionNodeInfo;
 import com.example.carbon.emission.model.entity.Template;
 import com.example.carbon.emission.model.entity.User;
 import com.example.carbon.emission.model.repository.EmissionNodeConfigRepository;
 import com.example.carbon.emission.model.repository.EmissionNodeRepository;
+import com.example.carbon.emission.model.repository.EmissionNodeInfoRepository;
 import com.example.carbon.emission.model.repository.TemplateRepository;
 import com.example.carbon.emission.model.repository.UserRepository;
 import com.example.carbon.emission.model.service.TemplateService;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,8 +39,14 @@ public class TemplateServiceImpl implements TemplateService {
     @Autowired
     private EmissionNodeConfigRepository configRepository;
 
+    @Autowired
+    private EmissionNodeInfoRepository nodeInfoRepository;
+
     @Autowired(required = false)
     private CarbonDataScopeService dataScope;
+
+    @Autowired
+    private TaskScheduleConfigService taskScheduleConfigService;
     
     @Override
     public List<TemplateDTO> getAllTemplates() {
@@ -58,6 +67,15 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     @Transactional
     public TemplateDTO createTemplate(CreateTemplateRequest request) {
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "模版名称不能为空");
+        }
+        if (request.getTemplateType() != null
+                && request.getTemplateType() != 1 && request.getTemplateType() != 2) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "模版类型只能为1或2");
+        }
         Template template = new Template();
         template.setName(request.getName());
         template.setDescription(request.getDescription());
@@ -96,6 +114,17 @@ public class TemplateServiceImpl implements TemplateService {
         Template template = templateRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("模版不存在"));
 
+        int effectiveTemplateType = templateType != null ? templateType
+                : (template.getTemplateType() == null ? 1 : template.getTemplateType());
+        if (effectiveTemplateType != 1 && effectiveTemplateType != 2) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "模版类型只能为1或2");
+        }
+        String effectiveTaskConfig = taskConfig != null ? taskConfig : template.getTaskConfig();
+        if (effectiveTemplateType == 2 && (taskConfig != null || Boolean.TRUE.equals(enabled))) {
+            effectiveTaskConfig = taskScheduleConfigService.normalize(effectiveTaskConfig);
+        }
+
         if (description != null) {
             template.setDescription(description);
         }
@@ -104,10 +133,10 @@ public class TemplateServiceImpl implements TemplateService {
         }
         // 模版类型：1-节点模版；2-核算模版
         if (templateType != null) {
-            template.setTemplateType(templateType);
+            template.setTemplateType(effectiveTemplateType);
         }
-        if (taskConfig != null) {
-            template.setTaskConfig(taskConfig);
+        if (taskConfig != null || (effectiveTemplateType == 2 && Boolean.TRUE.equals(enabled))) {
+            template.setTaskConfig(effectiveTaskConfig);
         }
         // factorTemplateId 允许设为 null（清除关联）
         template.setFactorTemplateId(factorTemplateId);
@@ -147,26 +176,39 @@ public class TemplateServiceImpl implements TemplateService {
         copy.setEnabled(source.getEnabled());
         copy.setTemplateType(source.getTemplateType() != null ? source.getTemplateType() : 1);
         copy.setTaskConfig(source.getTaskConfig());
+        // 因子模版是可共享资源；复制核算模版时保留引用，不复制因子模版本身。
+        copy.setFactorTemplateId(source.getFactorTemplateId());
+        resetCheckStatus(copy);
         
         Template saved = templateRepository.save(copy);
         
         List<EmissionNode> sourceNodes = nodeRepository.findByTemplateId(sourceId);
         
         Map<Long, Long> nodeIdMap = new HashMap<>();
-        
-        for (EmissionNode sourceNode : sourceNodes) {
-            EmissionNode newNode = new EmissionNode();
-            newNode.setName(sourceNode.getName());
-            newNode.setTypeId(sourceNode.getTypeId());
-            newNode.setParentId(nodeIdMap.getOrDefault(sourceNode.getParentId(), null));
-            newNode.setTemplateId(saved.getId());
-            newNode.setLocomotiveType(sourceNode.getLocomotiveType());
-            newNode.setSortOrder(sourceNode.getSortOrder());
-            newNode.setCreatedBy(createdBy);
-            newNode.setUpdatedBy(createdBy);
-            
-            EmissionNode savedNode = nodeRepository.save(newNode);
-            nodeIdMap.put(sourceNode.getId(), savedNode.getId());
+        List<EmissionNode> pending = new ArrayList<>(sourceNodes);
+        while (!pending.isEmpty()) {
+            int before = pending.size();
+            pending.removeIf(sourceNode -> {
+                Long sourceParentId = sourceNode.getParentId();
+                if (sourceParentId != null && !nodeIdMap.containsKey(sourceParentId)) {
+                    return false;
+                }
+                EmissionNode newNode = new EmissionNode();
+                newNode.setName(sourceNode.getName());
+                newNode.setTypeId(sourceNode.getTypeId());
+                newNode.setParentId(sourceParentId == null ? null : nodeIdMap.get(sourceParentId));
+                newNode.setTemplateId(saved.getId());
+                newNode.setLocomotiveType(sourceNode.getLocomotiveType());
+                newNode.setSortOrder(sourceNode.getSortOrder());
+                newNode.setCreatedBy(createdBy);
+                newNode.setUpdatedBy(createdBy);
+                EmissionNode savedNode = nodeRepository.save(newNode);
+                nodeIdMap.put(sourceNode.getId(), savedNode.getId());
+                return true;
+            });
+            if (pending.size() == before) {
+                throw new IllegalStateException("源模版节点存在孤儿或循环关系，无法复制");
+            }
         }
         
         for (EmissionNode sourceNode : sourceNodes) {
@@ -176,13 +218,32 @@ public class TemplateServiceImpl implements TemplateService {
                 newConfig.setEmissionCategory(sourceConfig.getEmissionCategory());
                 newConfig.setEmissionSubcategory(sourceConfig.getEmissionSubcategory());
                 newConfig.setCarbonEmissionFactor(sourceConfig.getCarbonEmissionFactor());
+                newConfig.setCarbonEmissionFactorUnit(sourceConfig.getCarbonEmissionFactorUnit());
                 newConfig.setCarbonEmissionFactorDescription(sourceConfig.getCarbonEmissionFactorDescription());
+                newConfig.setCollectionDescription(sourceConfig.getCollectionDescription());
+                newConfig.setEquipmentCode(sourceConfig.getEquipmentCode());
                 newConfig.setCollectionPointType(sourceConfig.getCollectionPointType());
                 newConfig.setCollectionPointId(sourceConfig.getCollectionPointId());
+                newConfig.setCollectionPointStatus(sourceConfig.getCollectionPointStatus());
                 newConfig.setCreatedBy(createdBy);
                 newConfig.setUpdatedBy(createdBy);
                 
                 configRepository.save(newConfig);
+            });
+
+            nodeInfoRepository.findByNodeId(sourceNode.getId()).ifPresent(sourceInfo -> {
+                EmissionNodeInfo newInfo = new EmissionNodeInfo();
+                newInfo.setNodeId(nodeIdMap.get(sourceNode.getId()));
+                newInfo.setNodeCode(sourceInfo.getNodeCode());
+                newInfo.setShortName(sourceInfo.getShortName());
+                newInfo.setIncludeInCalculation(sourceInfo.getIncludeInCalculation());
+                newInfo.setNodeCategory(sourceInfo.getNodeCategory());
+                newInfo.setUnitDescription(sourceInfo.getUnitDescription());
+                newInfo.setOrgBoundaryDescription(sourceInfo.getOrgBoundaryDescription());
+                newInfo.setOperationBoundaryDescription(sourceInfo.getOperationBoundaryDescription());
+                newInfo.setCreatedBy(createdBy);
+                newInfo.setUpdatedBy(createdBy);
+                nodeInfoRepository.save(newInfo);
             });
         }
         

@@ -2,6 +2,7 @@ package com.example.carbon.emission.model.repository;
 
 import com.example.carbon.emission.model.entity.CalcNodeSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -11,7 +12,7 @@ import java.util.List;
  * 碳排放核算节点汇总 Repository
  */
 @Repository
-public interface CalcNodeSummaryRepository extends JpaRepository<CalcNodeSummary, Long> {
+public interface CalcNodeSummaryRepository extends JpaRepository<CalcNodeSummary, Long>, JpaSpecificationExecutor<CalcNodeSummary> {
 
     /**
      * 按核算任务记录ID删除全部汇总数据

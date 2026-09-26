@@ -1,6 +1,8 @@
 package com.example.carbon.emission.model.dto;
 
 import lombok.Data;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,6 +24,8 @@ public class WastewaterTreatmentFactorDTO {
 
     private BigDecimal gwp;
 
+    @NotNull(message = "排放因子不能为空")
+    @DecimalMin(value = "0", inclusive = true, message = "排放因子不能为负数")
     private BigDecimal emissionFactor;
 
     private String unit;

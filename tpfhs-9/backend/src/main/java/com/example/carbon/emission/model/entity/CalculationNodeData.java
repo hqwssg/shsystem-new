@@ -75,6 +75,14 @@ public class CalculationNodeData {
     @Column(name = "carbon_emission_factor", precision = 15, scale = 6)
     private BigDecimal carbonEmissionFactor;
 
+    /** 本次核算实际采用的因子单位快照。 */
+    @Column(name = "carbon_emission_factor_unit", length = 100)
+    private String carbonEmissionFactorUnit;
+
+    /** 碳排放结果的统一单位；新核算固定为 tCO2e。 */
+    @Column(name = "carbon_emission_unit", length = 30)
+    private String carbonEmissionUnit;
+
     /**
      * 是否累加量：1-是，0-否
      * 采集节点时由对应采集点表记录提供
@@ -131,7 +139,7 @@ public class CalculationNodeData {
     /**
      * 折算的碳排放量
      */
-    @Column(name = "carbon_emission", precision = 18, scale = 6)
+    @Column(name = "carbon_emission", precision = 18, scale = 9)
     private BigDecimal carbonEmission;
 
     /**
@@ -140,10 +148,16 @@ public class CalculationNodeData {
     @Column(name = "adjusted_energy_value", precision = 18, scale = 6)
     private BigDecimal adjustedEnergyValue;
 
+    @Column(name = "rollover_applied")
+    private Boolean rolloverApplied = false;
+
+    @Column(name = "rollover_threshold", precision = 18, scale = 6)
+    private BigDecimal rolloverThreshold;
+
     /**
      * 经过计算修正后的碳排放量
      */
-    @Column(name = "adjusted_carbon_emission", precision = 18, scale = 6)
+    @Column(name = "adjusted_carbon_emission", precision = 18, scale = 9)
     private BigDecimal adjustedCarbonEmission;
 
     /**

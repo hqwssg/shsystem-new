@@ -84,6 +84,15 @@ export const carbonModules = [
     permissions: ['carbon:report:list', 'carbon:report:query', 'carbon:report:add']
   },
   {
+    key: 'energy',
+    title: '重空协同与能量优化',
+    icon: 'el-icon-s-marketing',
+    color: 'teal',
+    path: '/carbon/energy',
+    routeName: 'CarbonEnergy',
+    permissions: ['carbon:energy:list', 'carbon:energy:query', 'carbon:energy:run']
+  },
+  {
     key: 'system',
     title: '系统管理',
     icon: 'el-icon-setting',

@@ -20,6 +20,8 @@ public interface ReportActivityMapper
 
     int updateOverride(ReportActivityRow row);
 
+    int updateHeatArea(ReportActivityRow row);
+
     List<ReportActivityRow> selectFuels(@Param("reportId") Long reportId, @Param("deptId") Long deptId);
 
     List<ReportActivityRow> selectElectricity(@Param("reportId") Long reportId, @Param("deptId") Long deptId);

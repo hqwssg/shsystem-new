@@ -16,6 +16,28 @@ export function saveSection(id, section, data) {
   return request({ url: '/carbon/report/tasks/' + id + '/sections/' + section, method: 'put', data })
 }
 
+export function downloadExcelTemplate(id, type) {
+  return request({
+    url: '/carbon/report/tasks/' + id + '/excel-templates/' + type,
+    method: 'get',
+    responseType: 'blob',
+    timeout: 20000
+  })
+}
+
+export function importExcel(id, type, file, mode, version) {
+  const data = new FormData()
+  data.append('file', file)
+  return request({
+    url: '/carbon/report/tasks/' + id + '/excel-import/' + type,
+    method: 'post',
+    params: { mode, version },
+    data,
+    headers: { repeatSubmit: false },
+    timeout: 20000
+  })
+}
+
 export function listCalculations(params) {
   return request({ url: '/carbon/report/source/calculations', method: 'get', params })
 }
@@ -54,6 +76,10 @@ export function getDeptProfile(deptId) {
 
 export function saveDeptProfile(deptId, data) {
   return request({ url: '/carbon/report/dept-profile/' + deptId, method: 'put', data })
+}
+
+export function saveDeptActivityProse(deptId, data) {
+  return request({ url: '/carbon/report/dept-profile/' + deptId + '/activity-prose', method: 'put', data: { data } })
 }
 
 export function removeTask(id) {

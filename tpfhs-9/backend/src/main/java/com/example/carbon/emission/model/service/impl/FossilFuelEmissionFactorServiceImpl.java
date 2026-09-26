@@ -103,6 +103,7 @@ public class FossilFuelEmissionFactorServiceImpl implements FossilFuelEmissionFa
     @Override
     @Transactional
     public FossilFuelEmissionFactorDTO create(FossilFuelEmissionFactorDTO dto) {
+        validateFactor(dto.getEmissionFactor());
         if (repository.existsByFuelType(dto.getFuelType())) {
             throw new RuntimeException("燃料品种已存在: " + dto.getFuelType());
         }
@@ -123,6 +124,7 @@ public class FossilFuelEmissionFactorServiceImpl implements FossilFuelEmissionFa
     @Override
     @Transactional
     public FossilFuelEmissionFactorDTO update(Long id, FossilFuelEmissionFactorDTO dto) {
+        validateFactor(dto.getEmissionFactor());
         FossilFuelEmissionFactor entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("化石燃料排放因子不存在: " + id));
         
@@ -208,5 +210,10 @@ public class FossilFuelEmissionFactorServiceImpl implements FossilFuelEmissionFa
         entity.setCreatedBy(dto.getCreatedBy());
         entity.setUpdatedBy(dto.getUpdatedBy());
         return entity;
+    }
+
+    private void validateFactor(java.math.BigDecimal value) {
+        if (value == null) throw new IllegalArgumentException("排放因子不能为空");
+        if (value.signum() < 0) throw new IllegalArgumentException("排放因子不能为负数");
     }
 }

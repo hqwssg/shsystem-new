@@ -29,6 +29,8 @@ public interface DefaultFactorService {
      */
     List<DefaultFactor> findByTemplateId(Long templateId);
 
+    DefaultFactor findById(Long id);
+
     /**
      * 按排放数据小类编码查询单条记录
      *

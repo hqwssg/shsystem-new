@@ -17,6 +17,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.carbon.report.domain.CalculationCandidate;
 import com.ruoyi.carbon.report.domain.CalculationNodeDataRow;
+import com.ruoyi.carbon.report.domain.ReportActivityRow;
 import com.ruoyi.carbon.report.domain.ReportDeptSubject;
 import com.ruoyi.carbon.report.domain.ReportEquipment;
 import com.ruoyi.carbon.report.domain.ReportFile;
@@ -41,6 +42,9 @@ import com.ruoyi.carbon.report.mapper.ReportTaskMapper;
 import com.ruoyi.carbon.report.mapper.ReportWorkloadMapper;
 import com.ruoyi.carbon.report.service.IReportTaskService;
 import com.ruoyi.carbon.report.service.ReportAccessGuard;
+import com.ruoyi.carbon.report.source.ReportExcelImportService;
+import com.ruoyi.carbon.report.source.ReportExcelParser;
+import com.ruoyi.carbon.report.source.ReportExcelType;
 import com.ruoyi.common.core.constant.HttpStatus;
 import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.datascope.annotation.DataScope;
@@ -68,6 +72,9 @@ public class ReportTaskServiceImpl implements IReportTaskService
 
     @Autowired
     private ReportFileMapper reportFileMapper;
+
+    @Autowired
+    private ReportExcelImportService reportExcelImportService;
 
     @Autowired
     private CarbonReportRendererProperties rendererProperties;
@@ -119,7 +126,7 @@ public class ReportTaskServiceImpl implements IReportTaskService
         }
         draft.setWorkloadCount(filled);
         draft.setMissingWorkload(filled <= 0);
-        if (task.getPriorYearJson() == null || task.getPriorYearJson().isBlank())
+        if (needsPriorLookup(task))
         {
             try
             {
@@ -128,10 +135,14 @@ public class ReportTaskServiceImpl implements IReportTaskService
                 {
                     task.setPriorYearJson(prior);
                 }
+                else if (isMonthTask(task))
+                {
+                    task.setPriorYearJson(null);
+                }
             }
             catch (Exception ignored)
             {
-                // 上年核算或快照缺失时不挡草稿，校验步可手填。
+                // 对比期核算或快照缺失时不挡草稿，校验步可手填。
             }
         }
         ReportGenerationJob latest = latestArtifacts(task.getId(), task.getDeptId());
@@ -200,6 +211,9 @@ public class ReportTaskServiceImpl implements IReportTaskService
             case "workload":
                 replaceWorkload(task, payloadJson, username);
                 break;
+            case "heat":
+                updateHeatArea(task, payloadJson, username);
+                break;
             case "narrative":
                 task.setActivityProseJson(ActivityProseSanitizer.sanitize(payloadJson).toJSONString());
                 break;
@@ -221,6 +235,50 @@ public class ReportTaskServiceImpl implements IReportTaskService
         }
         task.setVersion(task.getVersion() + 1);
         return task;
+    }
+
+    @Override
+    public byte[] excelTemplate(String type)
+    {
+        return ReportExcelParser.templateBytes(ReportExcelType.from(type));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ReportTask importExcel(Long id, Long deptId, String type, String mode, Integer version, String originalName,
+            InputStream in, String username)
+    {
+        ReportTask task = get(id, deptId);
+        ReportAccessGuard.requireVersion(task.getVersion(), version);
+        String filename = originalName == null ? "" : originalName.toLowerCase();
+        if (!filename.endsWith(".xlsx") && !filename.endsWith(".xls"))
+        {
+            throw new ServiceException("只支持 xls 或 xlsx", HttpStatus.BAD_REQUEST);
+        }
+        boolean overwrite = parseOverwrite(mode);
+        String step = reportExcelImportService.apply(task, ReportExcelType.from(type), overwrite, in, username);
+        task.setCurrentStep(step);
+        task.setUpdateBy(username);
+        int rows = reportTaskMapper.updateWithVersion(task);
+        if (rows == 0)
+        {
+            throw new ServiceException("version conflict", HttpStatus.CONFLICT);
+        }
+        task.setVersion(task.getVersion() + 1);
+        return task;
+    }
+
+    private static boolean parseOverwrite(String mode)
+    {
+        if (mode == null || mode.isBlank() || "append".equalsIgnoreCase(mode))
+        {
+            return false;
+        }
+        if ("overwrite".equalsIgnoreCase(mode))
+        {
+            return true;
+        }
+        throw new ServiceException("导入方式只能是追加或覆盖", HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -464,6 +522,60 @@ public class ReportTaskServiceImpl implements IReportTaskService
         }
     }
 
+    private void updateHeatArea(ReportTask task, String payloadJson, String username)
+    {
+        for (ReportActivityRow row : parseHeatAreaPayload(task, payloadJson, username))
+        {
+            reportActivityMapper.updateHeatArea(row);
+        }
+    }
+
+    static List<ReportActivityRow> parseHeatAreaPayload(ReportTask task, String payloadJson, String username)
+    {
+        JSONObject raw = payloadJson == null || payloadJson.isBlank() ? new JSONObject() : JSON.parseObject(payloadJson);
+        JSONArray items = raw.getJSONArray("heat");
+        List<ReportActivityRow> rows = new ArrayList<>();
+        if (items == null)
+        {
+            return rows;
+        }
+        for (int i = 0; i < items.size(); i++)
+        {
+            JSONObject item = items.getJSONObject(i);
+            if (item == null)
+            {
+                continue;
+            }
+            Long id = item.getLong("id");
+            if (id == null)
+            {
+                continue;
+            }
+            ReportActivityRow row = new ReportActivityRow();
+            row.setId(id);
+            row.setDeptId(task.getDeptId());
+            row.setReportId(task.getId());
+            row.setHeatingAreaM2(firstDecimal(item, "heatingAreaM2", "heating_area_m2"));
+            row.setHeatCoefficient(firstDecimal(item, "heatCoefficient", "heat_coefficient"));
+            row.setUpdateBy(username);
+            rows.add(row);
+        }
+        return rows;
+    }
+
+    private static BigDecimal firstDecimal(JSONObject item, String camel, String snake)
+    {
+        if (item.containsKey(camel))
+        {
+            return toDecimalOrNull(item.get(camel));
+        }
+        if (item.containsKey(snake))
+        {
+            return toDecimalOrNull(item.get(snake));
+        }
+        return null;
+    }
+
     static List<ReportWorkload> parseWorkloadPayload(ReportTask task, String payloadJson, String username)
     {
         JSONObject raw = payloadJson == null || payloadJson.isBlank() ? new JSONObject() : JSON.parseObject(payloadJson);
@@ -506,14 +618,133 @@ public class ReportTaskServiceImpl implements IReportTaskService
         return rows;
     }
 
+    static boolean isMonthTask(ReportTask task)
+    {
+        return task != null && "MONTH".equalsIgnoreCase(task.getPeriodType());
+    }
+
+    static boolean isMonthlyComparisonJson(String json)
+    {
+        if (json == null || json.isBlank())
+        {
+            return false;
+        }
+        try
+        {
+            JSONObject raw = JSON.parseObject(json);
+            return raw != null && (raw.getJSONObject("yoy") != null || raw.getJSONObject("mom") != null);
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    static boolean needsPriorLookup(ReportTask task)
+    {
+        String json = task == null ? null : task.getPriorYearJson();
+        if (json == null || json.isBlank())
+        {
+            return true;
+        }
+        return isMonthTask(task) && !isMonthlyComparisonJson(json);
+    }
+
+    static int[] previousMonth(int year, int month)
+    {
+        if (month <= 1)
+        {
+            return new int[] { year - 1, 12 };
+        }
+        return new int[] { year, month - 1 };
+    }
+
+    static Date[] monthRange(int year, int month)
+    {
+        Calendar start = Calendar.getInstance();
+        start.clear();
+        start.set(year, month - 1, 1);
+        Calendar end = (Calendar) start.clone();
+        end.add(Calendar.MONTH, 1);
+        end.add(Calendar.DATE, -1);
+        return new Date[] { start.getTime(), end.getTime() };
+    }
+
+    static Date startOfDay(Date date)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    static boolean cycleContainedIn(Date cycleStart, Date cycleEnd, Date periodStart, Date periodEnd)
+    {
+        if (cycleStart == null || cycleEnd == null || periodStart == null || periodEnd == null)
+        {
+            return false;
+        }
+        return !startOfDay(cycleStart).before(startOfDay(periodStart))
+                && !startOfDay(cycleEnd).after(startOfDay(periodEnd));
+    }
+
+    static CalculationCandidate firstContained(List<CalculationCandidate> candidates, Date periodStart, Date periodEnd)
+    {
+        if (candidates == null)
+        {
+            return null;
+        }
+        for (CalculationCandidate candidate : candidates)
+        {
+            if (candidate != null && cycleContainedIn(candidate.getCycleStart(), candidate.getCycleEnd(), periodStart, periodEnd))
+            {
+                return candidate;
+            }
+        }
+        return null;
+    }
+
     static String applyPriorYearPayload(String payloadJson)
     {
         JSONObject raw = payloadJson == null || payloadJson.isBlank() ? new JSONObject() : JSON.parseObject(payloadJson);
+        if (raw.get("yoy") != null || raw.get("mom") != null)
+        {
+            JSONObject out = new JSONObject();
+            JSONObject yoy = sanitizePeriodPayload(raw.getJSONObject("yoy"));
+            JSONObject mom = sanitizePeriodPayload(raw.getJSONObject("mom"));
+            if (yoy != null)
+            {
+                out.put("yoy", yoy);
+            }
+            if (mom != null)
+            {
+                out.put("mom", mom);
+            }
+            return out.isEmpty() ? null : out.toJSONString();
+        }
+        JSONObject flat = sanitizePeriodPayload(raw);
+        return flat == null ? null : flat.toJSONString();
+    }
+
+    static JSONObject sanitizePeriodPayload(JSONObject raw)
+    {
+        if (raw == null)
+        {
+            return null;
+        }
         JSONObject out = new JSONObject();
         Integer year = raw.getInteger("report_year");
+        Integer month = raw.getInteger("report_month");
         if (year != null)
         {
             out.put("report_year", year);
+        }
+        if (month != null)
+        {
+            out.put("report_month", month);
         }
         putDecimal(out, raw, "total_emissions_tco2");
         putDecimal(out, raw, "fuel_combustion_tco2");
@@ -523,7 +754,7 @@ public class ReportTaskServiceImpl implements IReportTaskService
         {
             return null;
         }
-        return out.toJSONString();
+        return out;
     }
 
     private static void putDecimal(JSONObject out, JSONObject raw, String key)
@@ -538,6 +769,10 @@ public class ReportTaskServiceImpl implements IReportTaskService
 
     String lookupPriorYear(ReportTask task)
     {
+        if (isMonthTask(task))
+        {
+            return lookupMonthlyComparisons(task);
+        }
         if (task.getReportYear() == null || task.getDeptId() == null)
         {
             return null;
@@ -552,25 +787,82 @@ public class ReportTaskServiceImpl implements IReportTaskService
                 return fromSnapshot;
             }
         }
-        ReportDeptSubject subject = reportDeptSubjectMapper.selectByDeptId(task.getDeptId());
-        if (subject == null || subject.getSubjectNodeId() == null || subject.getEnergyAllocation() == null)
-        {
-            return null;
-        }
         Calendar start = Calendar.getInstance();
         start.clear();
         start.set(prevYear, Calendar.JANUARY, 1);
         Calendar end = Calendar.getInstance();
         end.clear();
         end.set(prevYear, Calendar.DECEMBER, 31);
+        JSONObject prior = totalsFromCalculation(task, start.getTime(), end.getTime(), false);
+        if (prior == null)
+        {
+            return null;
+        }
+        prior.put("report_year", prevYear);
+        return prior.toJSONString();
+    }
+
+    String lookupMonthlyComparisons(ReportTask task)
+    {
+        if (task.getReportYear() == null || task.getReportMonth() == null || task.getDeptId() == null)
+        {
+            return null;
+        }
+        JSONObject out = new JSONObject();
+        JSONObject yoy = lookupMonthFromCalculation(task, task.getReportYear() - 1, task.getReportMonth());
+        int[] prev = previousMonth(task.getReportYear(), task.getReportMonth());
+        JSONObject mom = lookupMonthFromCalculation(task, prev[0], prev[1]);
+        if (yoy != null)
+        {
+            out.put("yoy", yoy);
+        }
+        if (mom != null)
+        {
+            out.put("mom", mom);
+        }
+        return out.isEmpty() ? null : out.toJSONString();
+    }
+
+    JSONObject lookupMonthFromCalculation(ReportTask task, int year, int month)
+    {
+        Date[] range = monthRange(year, month);
+        JSONObject prior = totalsFromCalculation(task, range[0], range[1], true);
+        if (prior == null)
+        {
+            return null;
+        }
+        prior.put("report_year", year);
+        prior.put("report_month", month);
+        return prior;
+    }
+
+    JSONObject totalsFromCalculation(ReportTask task, Date periodStart, Date periodEnd, boolean requireContained)
+    {
+        if (emissionCalculationMapper == null || reportDeptSubjectMapper == null)
+        {
+            return null;
+        }
+        ReportDeptSubject subject = reportDeptSubjectMapper.selectByDeptId(task.getDeptId());
+        if (subject == null || subject.getSubjectNodeId() == null || subject.getEnergyAllocation() == null)
+        {
+            return null;
+        }
         List<CalculationCandidate> candidates = emissionCalculationMapper.selectCandidates(
-                subject.getSubjectNodeId(), start.getTime(), end.getTime());
-        if (candidates == null || candidates.isEmpty())
+                subject.getSubjectNodeId(), periodStart, periodEnd);
+        CalculationCandidate chosen = requireContained
+                ? firstContained(candidates, periodStart, periodEnd)
+                : (candidates == null || candidates.isEmpty() ? null : candidates.get(0));
+        if (chosen == null)
         {
             return null;
         }
         List<CalculationNodeDataRow> rows = emissionCalculationMapper.selectNodeData(
-                candidates.get(0).getId(), subject.getEnergyAllocation());
+                chosen.getId(), subject.getEnergyAllocation());
+        return totalsFromRows(rows);
+    }
+
+    static JSONObject totalsFromRows(List<CalculationNodeDataRow> rows)
+    {
         if (rows == null || rows.isEmpty())
         {
             return null;
@@ -600,12 +892,11 @@ public class ReportTaskServiceImpl implements IReportTaskService
             }
         }
         JSONObject prior = new JSONObject();
-        prior.put("report_year", prevYear);
         prior.put("fuel_combustion_tco2", fuel);
         prior.put("electricity_emissions_tco2", electricity);
         prior.put("heat_emissions_tco2", heat);
         prior.put("total_emissions_tco2", fuel.add(electricity).add(heat));
-        return prior.toJSONString();
+        return prior;
     }
 
     static String extractPriorFromSnapshot(String snapshotJson, int prevYear)

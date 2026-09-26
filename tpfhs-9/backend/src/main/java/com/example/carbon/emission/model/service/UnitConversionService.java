@@ -25,6 +25,12 @@ public interface UnitConversionService {
     BigDecimal convert(String subcategoryCode, String fromUnit, String toUnit, BigDecimal value);
 
     /**
+     * 执行核算所需的严格单位换算。缺少小类、单位或换算关系时抛出异常，
+     * 防止把未换算的原值误当成目标单位继续核算。
+     */
+    BigDecimal convertRequired(String subcategoryCode, String fromUnit, String toUnit, BigDecimal value);
+
+    /**
      * 便捷方法：将源单位数值换算为该小类的缺省核算单位
      * <p>
      * 先通过 CalcUnitDefaultRepository 查询该小类的 calculationUnit，
@@ -37,4 +43,7 @@ public interface UnitConversionService {
      * @return 换算为缺省核算单位后的数值；若缺省单位不存在则返回原值
      */
     BigDecimal convertToCalculationUnit(String subcategoryCode, String fromUnit, BigDecimal value);
+
+    /** 严格转换到该小类的缺省核算单位。 */
+    BigDecimal convertToCalculationUnitRequired(String subcategoryCode, String fromUnit, BigDecimal value);
 }

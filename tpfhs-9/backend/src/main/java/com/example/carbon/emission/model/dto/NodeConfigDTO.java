@@ -16,6 +16,12 @@ public class NodeConfigDTO {
     private String emissionSubcategory;
     
     private BigDecimal carbonEmissionFactor;
+
+    /**
+     * 碳排放因子单位（例如 tCO₂/MWh）。因子值和单位必须成对保存，
+     * 否则无法确定采集活动量应换算到哪个分母单位。
+     */
+    private String carbonEmissionFactorUnit;
     
     private String carbonEmissionFactorDescription;
     

@@ -76,6 +76,7 @@ public class PrefillAssembler
             }
             else if ("heat".equals(bucket))
             {
+                applyHeatArea(line, conversion);
                 result.getHeat().add(line);
             }
             else
@@ -92,6 +93,16 @@ public class PrefillAssembler
                 .map(CalculationNodeDataRow::getCarbonEmission)
                 .filter(v -> v != null)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private static void applyHeatArea(PrefillLine line, ReportUnitConverter.Conversion conversion)
+    {
+        if (!"PH_HA".equalsIgnoreCase(line.getSubcategory()) || !ReportUnitConverter.isAreaUnit(conversion.sourceUnit))
+        {
+            return;
+        }
+        line.setHeatingAreaM2(conversion.sourceValue);
+        line.setHeatCoefficient(conversion.factor);
     }
 
     private static String hash(Object... parts)

@@ -5,6 +5,7 @@ import com.example.carbon.emission.model.service.ThermalEmissionFactorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -32,12 +33,12 @@ public class ThermalEmissionFactorController {
     }
 
     @PostMapping
-    public ResponseEntity<ThermalEmissionFactorDTO> create(@RequestBody ThermalEmissionFactorDTO dto) {
+    public ResponseEntity<ThermalEmissionFactorDTO> create(@Valid @RequestBody ThermalEmissionFactorDTO dto) {
         return ResponseEntity.ok(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ThermalEmissionFactorDTO> update(@PathVariable Long id, @RequestBody ThermalEmissionFactorDTO dto) {
+    public ResponseEntity<ThermalEmissionFactorDTO> update(@PathVariable Long id, @Valid @RequestBody ThermalEmissionFactorDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +37,8 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      * @return 模版列表；无数据返回空列表
      */
     @Override
-    public List<EmissionFactorTemplate> findAll() {
-        return repository.findAllByOrderByCreatedAtDesc();
+    public List<EmissionFactorTemplate> findAll(Long userId) {
+        return userId == null ? List.of() : repository.findVisibleTo(userId);
     }
 
     /**
@@ -46,8 +48,13 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      * @return 模版实体；不存在返回 null
      */
     @Override
-    public EmissionFactorTemplate findById(Long id) {
-        return repository.findById(id).orElse(null);
+    public EmissionFactorTemplate findById(Long id, Long userId) {
+        EmissionFactorTemplate entity = repository.findById(id).orElse(null);
+        if (entity == null) return null;
+        if (Integer.valueOf(1).equals(entity.getIsShared()) || java.util.Objects.equals(entity.getCreatedBy(), userId)) {
+            return entity;
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "无权查看私有因子模板");
     }
 
     /**
@@ -60,7 +67,7 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      */
     @Override
     @Transactional
-    public EmissionFactorTemplate create(EmissionFactorTemplate req) {
+    public EmissionFactorTemplate create(EmissionFactorTemplate req, Long userId) {
         if (req.getTemplateName() != null) {
             req.setTemplateName(req.getTemplateName().trim());
         }
@@ -68,6 +75,8 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
             logger.warn("新增排放因子模版失败，模版名称已存在: {}", req.getTemplateName());
             return null;
         }
+        req.setCreatedBy(userId);
+        req.setUpdatedBy(userId);
         EmissionFactorTemplate saved = repository.save(req);
         logger.info("新增排放因子模版成功, id={}, name={}", saved.getId(), saved.getTemplateName());
         return saved;
@@ -84,20 +93,24 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      */
     @Override
     @Transactional
-    public EmissionFactorTemplate update(Long id, EmissionFactorTemplate req) {
+    public EmissionFactorTemplate update(Long id, EmissionFactorTemplate req, Long userId) {
         Optional<EmissionFactorTemplate> optional = repository.findById(id);
         if (optional.isEmpty()) {
             logger.warn("更新排放因子模版失败，记录不存在: id={}", id);
             return null;
         }
         EmissionFactorTemplate entity = optional.get();
+        requireOwner(entity, userId);
+        if (countReferences(id, userId) > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "因子模板已被其他用户的核算模板引用，不能修改");
+        }
         if (req.getTemplateName() != null && !req.getTemplateName().isBlank()) {
             entity.setTemplateName(req.getTemplateName().trim());
         }
         entity.setTemplateDescription(req.getTemplateDescription());
         entity.setIsShared(req.getIsShared());
         entity.setStatus(req.getStatus());
-        entity.setUpdatedBy(req.getUpdatedBy());
+        entity.setUpdatedBy(userId);
         EmissionFactorTemplate saved = repository.save(entity);
         logger.info("更新排放因子模版成功, id={}", id);
         return saved;
@@ -111,11 +124,17 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      */
     @Override
     @Transactional
-    public boolean delete(Long id) {
-        if (!repository.existsById(id)) {
+    public boolean delete(Long id, Long userId) {
+        Optional<EmissionFactorTemplate> optional = repository.findById(id);
+        if (optional.isEmpty()) {
             logger.warn("删除排放因子模版失败，记录不存在: id={}", id);
             return false;
         }
+        requireOwner(optional.get(), userId);
+        if (countReferences(id, null) > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "因子模板仍被核算模板引用，不能删除");
+        }
+        defaultFactorRepository.deleteByTemplateId(id);
         repository.deleteById(id);
         logger.info("删除排放因子模版成功, id={}", id);
         return true;
@@ -132,16 +151,17 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      */
     @Override
     @Transactional
-    public boolean toggleStatus(Long id, Long updatedBy) {
+    public boolean toggleStatus(Long id, Long userId) {
         Optional<EmissionFactorTemplate> optional = repository.findById(id);
         if (optional.isEmpty()) {
             logger.warn("切换排放因子模版状态失败，记录不存在: id={}", id);
             return false;
         }
         EmissionFactorTemplate entity = optional.get();
+        requireOwner(entity, userId);
         int current = entity.getStatus() == null ? 1 : entity.getStatus();
         entity.setStatus(current == 1 ? 0 : 1);
-        entity.setUpdatedBy(updatedBy);
+        entity.setUpdatedBy(userId);
         repository.save(entity);
         logger.info("切换排放因子模版状态成功, id={}", id);
         return true;
@@ -158,16 +178,17 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      */
     @Override
     @Transactional
-    public boolean toggleShared(Long id, Long updatedBy) {
+    public boolean toggleShared(Long id, Long userId) {
         Optional<EmissionFactorTemplate> optional = repository.findById(id);
         if (optional.isEmpty()) {
             logger.warn("切换排放因子模版共享状态失败，记录不存在: id={}", id);
             return false;
         }
         EmissionFactorTemplate entity = optional.get();
+        requireOwner(entity, userId);
         int current = entity.getIsShared() == null ? 1 : entity.getIsShared();
         entity.setIsShared(current == 1 ? 0 : 1);
-        entity.setUpdatedBy(updatedBy);
+        entity.setUpdatedBy(userId);
         repository.save(entity);
         logger.info("切换排放因子模版共享状态成功, id={}", id);
         return true;
@@ -208,7 +229,7 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
      */
     @Override
     @Transactional
-    public EmissionFactorTemplate copyTemplate(Long sourceId, String newName, Long createdBy) {
+    public EmissionFactorTemplate copyTemplate(Long sourceId, String newName, Long userId) {
         Optional<EmissionFactorTemplate> sourceOpt = repository.findById(sourceId);
         if (sourceOpt.isEmpty()) {
             logger.warn("拷贝模版失败，源模版不存在: id={}", sourceId);
@@ -223,11 +244,15 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
             return null;
         }
         EmissionFactorTemplate source = sourceOpt.get();
+        if (!Integer.valueOf(1).equals(source.getIsShared()) && !java.util.Objects.equals(source.getCreatedBy(), userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "无权复制私有因子模板");
+        }
         EmissionFactorTemplate copy = new EmissionFactorTemplate();
         copy.setTemplateName(newName.trim());
         copy.setTemplateDescription(source.getTemplateDescription());
         copy.setIsShared(source.getIsShared());
-        copy.setCreatedBy(createdBy);
+        copy.setCreatedBy(userId);
+        copy.setUpdatedBy(userId);
         EmissionFactorTemplate saved = repository.save(copy);
 
         // 拷贝源模版下的全部缺省因子
@@ -245,10 +270,16 @@ public class EmissionFactorTemplateServiceImpl implements EmissionFactorTemplate
             df.setFactorDescription(sf.getFactorDescription());
             df.setRemark(sf.getRemark());
             df.setStatus(sf.getStatus());
-            df.setCreatedBy(createdBy);
+            df.setCreatedBy(userId);
             defaultFactorRepository.save(df);
         }
         logger.info("拷贝模版成功，源id={}, 新id={}, 因子数={}", sourceId, saved.getId(), sourceFactors.size());
         return saved;
+    }
+
+    private void requireOwner(EmissionFactorTemplate entity, Long userId) {
+        if (userId == null || !java.util.Objects.equals(entity.getCreatedBy(), userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "仅创建人可以管理因子模板");
+        }
     }
 }

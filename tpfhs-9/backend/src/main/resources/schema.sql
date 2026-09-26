@@ -1,3 +1,4 @@
+SET NAMES utf8mb4;
 
 -- 数据字典表：存储系统中使用的数据字典分类
 CREATE TABLE IF NOT EXISTS emission_data_dict (
@@ -187,6 +188,7 @@ CREATE TABLE IF NOT EXISTS emission_node_config (
     emission_category VARCHAR(100) COMMENT '能耗品种大类',
     emission_subcategory VARCHAR(100) COMMENT '能耗品种小类',
     carbon_emission_factor DECIMAL(15,6) COMMENT '碳排放因子',
+    carbon_emission_factor_unit VARCHAR(100) COMMENT '碳排放因子单位（值和单位成对保存，如tCO₂/MWh）',
     carbon_emission_factor_description TEXT COMMENT '碳排放因子说明',
     collection_description TEXT COMMENT '采集描述说明',
     equipment_code VARCHAR(100) COMMENT '设备编码',
@@ -620,6 +622,8 @@ CREATE TABLE IF NOT EXISTS emission_meter_info (
     purpose_description VARCHAR(500) COMMENT '用途描述',
     parent_meter_id BIGINT DEFAULT 0 COMMENT '上级电表ID，缺省为0表示无上级',
     is_cumulative TINYINT DEFAULT 1 COMMENT '是否累加量：1-是，0-否',
+    rollover_enabled TINYINT DEFAULT 0 COMMENT '累计表是否允许按归零阈值修正',
+    rollover_threshold DECIMAL(18,6) COMMENT '归零阈值/计数周期，例如10000',
     is_mobile_source TINYINT DEFAULT 0 COMMENT '是否移动源：1-是，0-否',
     measurement_unit VARCHAR(50) COMMENT '计量单位',
     data_source_system VARCHAR(100) COMMENT '数据来源系统',
@@ -733,6 +737,8 @@ CREATE TABLE IF NOT EXISTS emission_fossil_fuel_meter_info (
     purpose_description VARCHAR(500) COMMENT '用途描述',
     parent_meter_id BIGINT DEFAULT 0 COMMENT '上级计量表ID，缺省为0表示无上级',
     is_cumulative TINYINT DEFAULT 0 COMMENT '是否累加量：1-是，0-否',
+    rollover_enabled TINYINT DEFAULT 0 COMMENT '累计表是否允许按归零阈值修正',
+    rollover_threshold DECIMAL(18,6) COMMENT '归零阈值/计数周期，例如10000',
     is_mobile_source TINYINT DEFAULT 0 COMMENT '是否移动源：1-是，0-否',
     measurement_unit VARCHAR(50) COMMENT '计量单位',
     data_source_system VARCHAR(100) COMMENT '数据来源系统',
@@ -799,6 +805,8 @@ CREATE TABLE IF NOT EXISTS emission_purchased_heat_meter_info (
     purpose_description VARCHAR(500) COMMENT '用途描述',
     parent_meter_id BIGINT DEFAULT 0 COMMENT '上级计量表ID，缺省为0表示无上级',
     is_cumulative TINYINT DEFAULT 0 COMMENT '是否累加量：1-是，0-否',
+    rollover_enabled TINYINT DEFAULT 0 COMMENT '累计表是否允许按归零阈值修正',
+    rollover_threshold DECIMAL(18,6) COMMENT '归零阈值/计数周期，例如10000',
     is_mobile_source TINYINT DEFAULT 0 COMMENT '是否移动源：1-是，0-否',
     measurement_unit VARCHAR(50) COMMENT '计量单位',
     data_source_system VARCHAR(100) COMMENT '数据来源系统',
@@ -837,6 +845,9 @@ CREATE TABLE IF NOT EXISTS emission_collection_record (
     collection_point_type TINYINT NOT NULL COMMENT '采集点类型：1-电力表，2-化石燃料，3-外购热能',
     collection_point_id BIGINT NOT NULL COMMENT '采集点ID，关联emission_meter_info/emission_fossil_fuel_meter_info/emission_purchased_heat_meter_info表的主键（由collection_point_type决定指向）',
     reading_value DECIMAL(18, 6) COMMENT '本次采集读取的数值',
+    external_record_id VARCHAR(128) COMMENT '外部数据源记录ID',
+    external_quality VARCHAR(30) COMMENT '外部数据质量标识',
+    collection_failure_reason VARCHAR(500) COMMENT '采集失败的脱敏原因',
     collection_time TIMESTAMP NULL COMMENT '本次采集时间：指系统从计量表直接采集数据的时刻。该数据可能已由电力系统等外部系统在预设时间完成读取并存储',
     collection_status TINYINT DEFAULT 0 COMMENT '本次采集数据状态：0-还未执行读取操作，1-读取成功，2-读取失败，3-多次读取失败后取消',
     workflow_status VARCHAR(20) NOT NULL DEFAULT 'APPROVED' COMMENT '人工数据审核状态：SUBMITTED-待审核，APPROVED-已通过，REJECTED-已驳回',
@@ -889,8 +900,8 @@ CREATE TABLE IF NOT EXISTS emission_collection_record_audit (
 CREATE TABLE IF NOT EXISTS emission_calculation_template (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
     template_id BIGINT NOT NULL COMMENT '需要核实的碳排放模版ID，外键关联emission_template.id',
-    calculation_cycle_start_date DATE COMMENT '核算周期起始日期（只保留日期部分）',
-    calculation_cycle_end_date DATE COMMENT '核算周期截止日期（只保留日期部分）',
+    calculation_cycle_start_date DATE NOT NULL COMMENT '核算周期起始日期（只保留日期部分）',
+    calculation_cycle_end_date DATE NOT NULL COMMENT '核算周期截止日期（只保留日期部分）',
     calculation_start_time TIMESTAMP NULL COMMENT '核算开始执行时间',
     calculation_end_time TIMESTAMP NULL COMMENT '核算结束时间',
     status TINYINT DEFAULT 0 COMMENT '核算状态：0-还未开始执行，1-正在执行，2-执行成功完成，3-执行出错失败',
@@ -905,6 +916,7 @@ CREATE TABLE IF NOT EXISTS emission_calculation_template (
     INDEX idx_template_id (template_id) COMMENT '模版ID索引，用于按模版查询核算历史',
     INDEX idx_status (status) COMMENT '状态索引，用于查找待执行/失败需重试的核算任务',
     INDEX idx_cycle_dates (calculation_cycle_start_date, calculation_cycle_end_date) COMMENT '核算周期索引，用于按时间范围查询',
+    UNIQUE KEY uk_template_cycle (template_id, calculation_cycle_start_date, calculation_cycle_end_date),
     FOREIGN KEY (template_id) REFERENCES emission_template(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='碳排放核算模版表';
 
@@ -917,6 +929,8 @@ CREATE TABLE IF NOT EXISTS emission_calculation_node (
     type_id INT NOT NULL COMMENT '节点类型ID，关联emission_node_type表',
     parent_id BIGINT COMMENT '父节点ID（对应本表中的id，用于核算节点树层级）',
     node_category VARCHAR(50) COMMENT '节点分类：当type_id对应核算子节点类型时，取值与emission_node_info.node_category一致（总公司/分公司/站点/区域）',
+    include_in_calculation BOOLEAN NOT NULL DEFAULT TRUE COMMENT '本次任务中是否最终纳入核算（包含祖先排除规则）',
+    excluded_by_node_id BIGINT COMMENT '导致本节点被排除的设计态节点ID，正常纳入时为空',
     created_by BIGINT COMMENT '创建人ID',
     updated_by BIGINT COMMENT '更新人ID',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -935,6 +949,8 @@ CREATE TABLE IF NOT EXISTS emission_collection_node_data (
     emission_category VARCHAR(100) COMMENT '能耗品种大类',
     emission_subcategory VARCHAR(100) COMMENT '能耗品种小类：采集节点时由对应采集点表记录提供',
     carbon_emission_factor DECIMAL(15,6) COMMENT '碳排放因子',
+    carbon_emission_factor_unit VARCHAR(100) COMMENT '本次核算实际采用的因子单位快照',
+    carbon_emission_unit VARCHAR(30) COMMENT '碳排放结果统一单位，新核算固定为tCO2e',
     is_cumulative TINYINT DEFAULT 0 COMMENT '是否累加量：1-是，0-否。采集节点时由对应采集点表记录提供',
     is_mobile_source TINYINT DEFAULT 0 COMMENT '是否移动源：1-是，0-否。采集节点时由对应采集点表记录提供',
     measurement_unit VARCHAR(50) COMMENT '计量单位：采集节点时由对应采集点表记录提供',
@@ -943,9 +959,11 @@ CREATE TABLE IF NOT EXISTS emission_collection_node_data (
     energy_category_l3 VARCHAR(50) COMMENT '能耗三级分类编码：采集节点时由对应采集点表记录提供',
     energy_use_category VARCHAR(100) COMMENT '能耗用途分类：采集节点时由对应采集点表记录提供',
     energy_measurement_value DECIMAL(18,6) COMMENT '能耗计量值：从emission_collection_record统计得出的核算周期内能耗值',
-    carbon_emission DECIMAL(18,6) COMMENT '折算的碳排放量',
+    carbon_emission DECIMAL(18,9) COMMENT '折算的碳排放量（统一为tCO2e）',
     adjusted_energy_value DECIMAL(18,6) COMMENT '经过计算修正后的能耗计量值',
-    adjusted_carbon_emission DECIMAL(18,6) COMMENT '经过计算修正后的碳排放量',
+    rollover_applied BOOLEAN DEFAULT FALSE COMMENT '本次活动量是否使用归零修正',
+    rollover_threshold DECIMAL(18,6) COMMENT '本次核算采用的归零阈值快照',
+    adjusted_carbon_emission DECIMAL(18,9) COMMENT '经过计算修正后的碳排放量（统一为tCO2e）',
     total_emission_calc_method TINYINT DEFAULT 1 COMMENT '总排放核算方式：1-缺失情况按修正后的计量值计算，2-缺失情况按计量值计算',
     collection_record_start_date DATE COMMENT '采集记录的起始日期：所选择采集点记录中记录的采集起始日期',
     collection_record_end_date DATE COMMENT '采集记录的截止日期：所选择采集点记录中记录的采集截止日期',
@@ -982,11 +1000,11 @@ CREATE TABLE IF NOT EXISTS emission_calc_node_summary (
     emission_category VARCHAR(100) COMMENT '排放数据大类（冗余：PE/PH/FF/WT，由subcategory反查parent_code）',
     emission_subcategory VARCHAR(100) NOT NULL COMMENT '排放数据小类编码（分组主键维度）',
     direct_energy_value DECIMAL(18,6) DEFAULT 0 COMMENT '本节点直接能耗（本节点挂载采集点贡献，统一到calculation_unit）',
-    direct_carbon_emission DECIMAL(18,6) DEFAULT 0 COMMENT '本节点直接碳排放',
+    direct_carbon_emission DECIMAL(18,9) DEFAULT 0 COMMENT '本节点直接碳排放（tCO2e）',
     subtotal_energy_value DECIMAL(18,6) DEFAULT 0 COMMENT '本节点子树合计能耗（direct+子节点subtotal累加）',
-    subtotal_carbon_emission DECIMAL(18,6) DEFAULT 0 COMMENT '本节点子树合计碳排放',
+    subtotal_carbon_emission DECIMAL(18,9) DEFAULT 0 COMMENT '本节点子树合计碳排放（tCO2e）',
     calculation_unit_code VARCHAR(30) COMMENT '本小类核算单位（冗余 emission_calc_unit_default.calculation_unit）',
-    carbon_emission_factor DECIMAL(15,6) COMMENT '本节点该组使用的加权平均碳因子',
+    carbon_emission_factor DECIMAL(18,9) COMMENT '本节点该组等效碳因子（tCO2e/核算单位）',
     summary_source TINYINT COMMENT '数据来源：1-仅聚合自身采集点, 2-仅汇总子节点, 3=两者都有',
     created_by BIGINT COMMENT '创建人ID',
     updated_by BIGINT COMMENT '更新人ID',
@@ -1024,11 +1042,12 @@ CREATE TABLE IF NOT EXISTS emission_calc_unit_default (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='碳排放核算能耗缺省单位表';
 
--- 初始化 22 条排放数据小类的缺省单位（对应 emission_data_dict_item 中 dict_code=emission_subcategory 的项）
+-- 初始化排放数据小类的缺省单位（对应 emission_data_dict_item 中 dict_code=emission_subcategory 的项）
 INSERT IGNORE INTO emission_calc_unit_default
     (subcategory_code, subcategory_name, calculation_unit, report_unit, remark) VALUES
-    ('PE_PF',  '外购电力',       'kWh', 'MWh', '核算单位与报告单位一致'),
-    ('PE_AS',  '新能源发电（自发自用）',   'kWh', 'MWh', '核算单位与报告单位一致'),
+    ('PE_PF',  '外购电力',       'MWh', 'MWh', '电力活动量统一换算为MWh后汇总'),
+    ('PE_AS',  '新能源发电（自发自用）',   'MWh', 'MWh', '电力活动量统一换算为MWh后汇总'),
+    ('PE_SS',  '电网输送损失',   'MWh', 'MWh', '电力活动量统一换算为MWh后汇总'),
     ('PH_HD',  '热力数据',           'GJ',  'GJ',  '能量单位计量，核算单位与报告单位一致'),
     ('PH_HW',  '质量单位计量的热水', 't',   't',   '质量单位计量，核算单位与报告单位一致'),
     ('PH_HS',  '质量单位计量的蒸汽', 't',   't',   '质量单位计量，核算单位与报告单位一致'),
@@ -1189,10 +1208,13 @@ INSERT IGNORE INTO emission_factor_unit
     (factor_unit_code, factor_unit_name, numerator_ghg_code, denominator_unit_code, subcategory_code, sort_order) VALUES
     ('kgCO2_per_kWh', 'kgCO₂/kWh', 'kgCO2', 'kWh', 'PE_PF', 1),
     ('tCO2_per_MWh',  'tCO₂/MWh',  'tCO2',  'MWh', 'PE_PF', 2),
+    ('tCO2_per_kWh',  'tCO₂/kWh',  'tCO2',  'kWh', 'PE_PF', 3),
     ('kgCO2_per_kWh_AS', 'kgCO₂/kWh', 'kgCO2', 'kWh', 'PE_AS', 1),
     ('tCO2_per_MWh_AS',  'tCO₂/MWh',  'tCO2',  'MWh', 'PE_AS', 2),
+    ('tCO2_per_kWh_AS',  'tCO₂/kWh',  'tCO2',  'kWh', 'PE_AS', 3),
     ('kgCO2_per_kWh_SS', 'kgCO₂/kWh', 'kgCO2', 'kWh', 'PE_SS', 1),
-    ('tCO2_per_MWh_SS',  'tCO₂/MWh',  'tCO2',  'MWh', 'PE_SS', 2);
+    ('tCO2_per_MWh_SS',  'tCO₂/MWh',  'tCO2',  'MWh', 'PE_SS', 2),
+    ('tCO2_per_kWh_SS',  'tCO₂/kWh',  'tCO2',  'kWh', 'PE_SS', 3);
 
 -- 化石燃料（液体/固体按吨）：FF_B/LB/CK/PC/CG/DF/F/LNG/LPG
 INSERT IGNORE INTO emission_factor_unit
@@ -1267,7 +1289,9 @@ INSERT IGNORE INTO emission_unit_conversion
     ('PE_PF', 'kWh', 'MWh', 0.001,  '1 MWh = 1000 kWh'),
     ('PE_PF', 'MWh', 'kWh', 1000,    '反向'),
     ('PE_AS', 'kWh', 'MWh', 0.001,  '1 MWh = 1000 kWh'),
-    ('PE_AS', 'MWh', 'kWh', 1000,    '反向');
+    ('PE_AS', 'MWh', 'kWh', 1000,    '反向'),
+    ('PE_SS', 'kWh', 'MWh', 0.001,  '1 MWh = 1000 kWh'),
+    ('PE_SS', 'MWh', 'kWh', 1000,    '反向');
 
 -- 热力-能量（PH_HD）：GJ ↔ MJ ↔ kJ
 INSERT IGNORE INTO emission_unit_conversion

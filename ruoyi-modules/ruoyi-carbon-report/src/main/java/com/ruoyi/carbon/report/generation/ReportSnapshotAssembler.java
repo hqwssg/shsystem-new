@@ -69,6 +69,10 @@ public class ReportSnapshotAssembler
         }
         metadata.putIfAbsent("entity_name", nvl(task.getTitle()));
         metadata.putIfAbsent("report_year", task.getReportYear());
+        if ("MONTH".equalsIgnoreCase(task.getPeriodType()) && task.getReportMonth() != null)
+        {
+            metadata.putIfAbsent("report_month", task.getReportMonth());
+        }
         metadata.putIfAbsent("report_period", task.getTitle());
         metadata.putIfAbsent("compiler", "");
         metadata.putIfAbsent("compile_date", LocalDate.now().toString());
@@ -93,14 +97,7 @@ public class ReportSnapshotAssembler
         snapshot.put("images", ReportImageSlots.snapshotImages(draft.getImages()));
         snapshot.put("chapter6", chapter6);
         snapshot.put("emission_boundary_notes", notes);
-        if (task.getPriorYearJson() != null && !task.getPriorYearJson().isBlank())
-        {
-            JSONObject prior = parse(task.getPriorYearJson());
-            if (prior.get("total_emissions_tco2") != null)
-            {
-                snapshot.put("prior_year", prior);
-            }
-        }
+        putPriorComparisons(snapshot, task);
         if (factors != null && !factors.isEmpty())
         {
             snapshot.put("factors", factors);
@@ -146,6 +143,14 @@ public class ReportSnapshotAssembler
             Map<String, Object> item = new LinkedHashMap<>();
             item.put("site", row.getSite() == null ? nvl(row.getFacility()) : row.getSite());
             item.put("quantity_gj", row.getNormalizedValue() == null ? 0 : row.getNormalizedValue());
+            if (row.getHeatingAreaM2() != null)
+            {
+                item.put("heating_area_m2", row.getHeatingAreaM2());
+            }
+            if (row.getHeatCoefficient() != null)
+            {
+                item.put("heat_coefficient", row.getHeatCoefficient());
+            }
             item.put("source_name", nvl(row.getSourceName()));
             list.add(item);
         }
@@ -277,6 +282,30 @@ public class ReportSnapshotAssembler
             list.add(item);
         }
         return list;
+    }
+
+    private static void putPriorComparisons(Map<String, Object> snapshot, ReportTask task)
+    {
+        if (task.getPriorYearJson() == null || task.getPriorYearJson().isBlank())
+        {
+            return;
+        }
+        JSONObject prior = parse(task.getPriorYearJson());
+        if ("MONTH".equalsIgnoreCase(task.getPeriodType()))
+        {
+            putIfHasTotal(snapshot, "prior_year", prior.getJSONObject("yoy"));
+            putIfHasTotal(snapshot, "prior_month", prior.getJSONObject("mom"));
+            return;
+        }
+        putIfHasTotal(snapshot, "prior_year", prior);
+    }
+
+    private static void putIfHasTotal(Map<String, Object> snapshot, String key, JSONObject prior)
+    {
+        if (prior != null && prior.get("total_emissions_tco2") != null)
+        {
+            snapshot.put(key, prior);
+        }
     }
 
     private static JSONObject parse(String json)

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 /**
@@ -104,6 +105,7 @@ public class ElectricityCarbonEmissionFactorServiceImpl implements ElectricityCa
     @Override
     @Transactional
     public ElectricityCarbonEmissionFactorDTO create(ElectricityCarbonEmissionFactorDTO dto) {
+        validateFactorValue(dto);
         if (repository.existsByFactorName(dto.getFactorName())) {
             throw new RuntimeException("碳排放因子名称已存在: " + dto.getFactorName());
         }
@@ -127,6 +129,7 @@ public class ElectricityCarbonEmissionFactorServiceImpl implements ElectricityCa
     @Override
     @Transactional
     public ElectricityCarbonEmissionFactorDTO update(Long id, ElectricityCarbonEmissionFactorDTO dto) {
+        validateFactorValue(dto);
         ElectricityCarbonEmissionFactor entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("电力碳排放因子不存在: " + id));
         
@@ -197,5 +200,14 @@ public class ElectricityCarbonEmissionFactorServiceImpl implements ElectricityCa
         entity.setCreatedBy(dto.getCreatedBy());
         entity.setUpdatedBy(dto.getCreatedBy());
         return entity;
+    }
+
+    private void validateFactorValue(ElectricityCarbonEmissionFactorDTO dto) {
+        if (dto == null || dto.getFactorValue() == null) {
+            throw new IllegalArgumentException("碳排放因子值不能为空");
+        }
+        if (dto.getFactorValue().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("碳排放因子值不能为负数");
+        }
     }
 }

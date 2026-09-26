@@ -91,6 +91,8 @@ public class EnergyMeasurementCalculator {
         private LocalDateTime enableTime;
         /** 停用时间 */
         private LocalDateTime disableTime;
+        private Integer rolloverEnabled;
+        private BigDecimal rolloverThreshold;
     }
 
     /**
@@ -112,6 +114,8 @@ public class EnergyMeasurementCalculator {
             info.setCreatedAt(m.getCreatedAt());
             info.setEnableTime(m.getEnableTime());
             info.setDisableTime(m.getDisableTime());
+            info.setRolloverEnabled(m.getRolloverEnabled());
+            info.setRolloverThreshold(m.getRolloverThreshold());
         } else if (collectionPointType == 2) {
             Optional<FossilFuelMeterInfo> opt = fossilFuelMeterInfoRepository.findById(collectionPointId);
             if (opt.isEmpty()) return null;
@@ -119,6 +123,8 @@ public class EnergyMeasurementCalculator {
             info.setCreatedAt(m.getCreatedAt());
             info.setEnableTime(m.getEnableTime());
             info.setDisableTime(m.getDisableTime());
+            info.setRolloverEnabled(m.getRolloverEnabled());
+            info.setRolloverThreshold(m.getRolloverThreshold());
         } else if (collectionPointType == 3) {
             Optional<PurchasedHeatMeterInfo> opt = purchasedHeatMeterInfoRepository.findById(collectionPointId);
             if (opt.isEmpty()) return null;
@@ -126,6 +132,8 @@ public class EnergyMeasurementCalculator {
             info.setCreatedAt(m.getCreatedAt());
             info.setEnableTime(m.getEnableTime());
             info.setDisableTime(m.getDisableTime());
+            info.setRolloverEnabled(m.getRolloverEnabled());
+            info.setRolloverThreshold(m.getRolloverThreshold());
         } else {
             return null;
         }
@@ -149,6 +157,10 @@ public class EnergyMeasurementCalculator {
         private String dataMissingDescription;
         /** 修正后能耗计量值 */
         private BigDecimal adjustedEnergyValue;
+        /** 是否按显式归零阈值修正。 */
+        private Boolean rolloverApplied = false;
+        /** 实际采用的归零阈值。 */
+        private BigDecimal rolloverThreshold;
     }
 
     /**
@@ -248,6 +260,7 @@ public class EnergyMeasurementCalculator {
 
             // 分摊子电表：用电量 = 父电表用电量 × 分摊比例
             if (isAllocation) {
+                validateAllocationGroup(meter.getParentMeterId());
                 BigDecimal ratio = meter.getAllocationRatio() != null
                         ? meter.getAllocationRatio() : BigDecimal.ONE;
                 BigDecimal usage = parentValue.multiply(ratio).setScale(SCALE, RoundingMode.HALF_UP);
@@ -301,6 +314,33 @@ public class EnergyMeasurementCalculator {
             return buildDerivedResult(usage, status, desc);
         } finally {
             visited.remove(meterId);
+        }
+    }
+
+    private void validateAllocationGroup(Long parentMeterId) {
+        List<MeterInfo> activeChildren = meterInfoRepository.findByParentMeterId(parentMeterId).stream()
+                .filter(child -> child.getStatus() == null || child.getStatus() == 1)
+                .toList();
+        List<MeterInfo> allocationChildren = activeChildren.stream()
+                .filter(child -> Integer.valueOf(1).equals(child.getIsAllocationChild()))
+                .toList();
+        BigDecimal sum = BigDecimal.ZERO;
+        for (MeterInfo child : allocationChildren) {
+            BigDecimal ratio = child.getAllocationRatio();
+            if (ratio == null || ratio.compareTo(BigDecimal.ZERO) < 0
+                    || ratio.compareTo(BigDecimal.ONE) > 0) {
+                throw new IllegalStateException("分摊比例必须在0到1之间，meterId=" + child.getId());
+            }
+            sum = sum.add(ratio);
+        }
+        boolean pureAllocationGroup = !allocationChildren.isEmpty()
+                && allocationChildren.size() == activeChildren.size();
+        boolean invalidSum = pureAllocationGroup
+                ? sum.setScale(6, RoundingMode.HALF_UP).compareTo(BigDecimal.ONE.setScale(6)) != 0
+                : sum.compareTo(BigDecimal.ONE) > 0;
+        if (allocationChildren.isEmpty() || invalidSum) {
+            throw new IllegalStateException("启用分摊子表比例配置非法，parentMeterId="
+                    + parentMeterId + ",sum=" + sum.stripTrailingZeros().toPlainString());
         }
     }
 
@@ -491,25 +531,56 @@ public class EnergyMeasurementCalculator {
         int dataStatus = combineStatus(startStatus, endStatus);
 
         // 能耗计量值 = 截止值 - 起始值
-        BigDecimal energyValue = endRecord.getReadingValue()
-                .subtract(startRecord.getReadingValue())
+        BigDecimal startReading = startRecord.getReadingValue();
+        BigDecimal endReading = endRecord.getReadingValue();
+        BigDecimal energyValue = endReading.subtract(startReading)
                 .setScale(SCALE, RoundingMode.HALF_UP);
-        if (energyValue.compareTo(BigDecimal.ZERO) < 0) {
+        boolean readingReversed = energyValue.compareTo(BigDecimal.ZERO) < 0;
+        boolean rolloverApplied = false;
+        BigDecimal rolloverThreshold = pointInfo == null ? null : pointInfo.getRolloverThreshold();
+        if (readingReversed && pointInfo != null && Integer.valueOf(1).equals(pointInfo.getRolloverEnabled())
+                && rolloverThreshold != null && rolloverThreshold.compareTo(BigDecimal.ZERO) > 0
+                && startReading.compareTo(BigDecimal.ZERO) >= 0 && endReading.compareTo(BigDecimal.ZERO) >= 0
+                && startReading.compareTo(rolloverThreshold) < 0 && endReading.compareTo(rolloverThreshold) < 0) {
+            energyValue = rolloverThreshold.subtract(startReading).add(endReading)
+                    .setScale(SCALE, RoundingMode.HALF_UP);
+            rolloverApplied = true;
+            dataStatus = combineStatus(startStatus, endStatus);
+        } else if (readingReversed) {
             energyValue = BigDecimal.ZERO.setScale(SCALE, RoundingMode.HALF_UP);
+            dataStatus = STATUS_INCOMPLETE;
         }
 
         result.setEnergyMeasurementValue(energyValue);
         result.setDataStatus(dataStatus);
+        result.setRolloverApplied(rolloverApplied);
+        result.setRolloverThreshold(rolloverApplied ? rolloverThreshold : null);
         result.setCollectionRecordStartDate(startRecord.getCollectionTime().toLocalDate());
         result.setCollectionRecordEndDate(endRecord.getCollectionTime().toLocalDate());
-        result.setDataMissingDescription(buildCumulativeDescription(
+        String description = buildCumulativeDescription(
                 startStatus, endStatus, startEffectiveDate, endEffectiveDate,
-                cycleStartDate, cycleEndDate));
+                cycleStartDate, cycleEndDate);
+        if (readingReversed && rolloverApplied) {
+            String rollover = "累计表归零(阈值:" + rolloverThreshold.stripTrailingZeros().toPlainString()
+                    + ",起始:" + startReading.stripTrailingZeros().toPlainString()
+                    + ",截止:" + endReading.stripTrailingZeros().toPlainString() + ")";
+            description = description == null || description.isBlank() ? rollover : description + ";" + rollover;
+        } else if (readingReversed) {
+            String reversed = "累计读数倒退(起始:" + startReading.stripTrailingZeros().toPlainString()
+                    + "@" + startRecord.getCollectionTime()
+                    + ",截止:" + endReading.stripTrailingZeros().toPlainString()
+                    + "@" + endRecord.getCollectionTime() + ")";
+            description = description == null || description.isBlank()
+                    ? reversed : description + ";" + reversed;
+        }
+        result.setDataMissingDescription(description);
 
         // 修正值
-        result.setAdjustedEnergyValue(computeCumulativeAdjustedValue(
-                energyValue, startStatus, endStatus, startEffectiveDate, endEffectiveDate,
-                cycleStartDate, cycleEndDate, successRecords));
+        result.setAdjustedEnergyValue(readingReversed && !rolloverApplied
+                ? BigDecimal.ZERO.setScale(SCALE, RoundingMode.HALF_UP)
+                : computeCumulativeAdjustedValue(
+                        energyValue, startStatus, endStatus, startEffectiveDate, endEffectiveDate,
+                        cycleStartDate, cycleEndDate, successRecords));
 
         return result;
     }

@@ -1,14 +1,16 @@
 <template>
   <div class="review-step">
-    <h4>上年对比</h4>
+    <h4>{{ isMonthly ? '同比与环比' : '上年对比' }}</h4>
     <el-alert
-      title="有上年核算或上年报告快照时会自动带入。本地没有上年数据时可手填；不填也可以生成，第6章同比会空。"
+      :title="isMonthly
+        ? '同比为去年同月、环比为上月。有对应月份核算时会自动带入；没有可手填。不填也可以生成，第6章缺哪组就空哪组。'
+        : '有上年核算或上年报告快照时会自动带入。本地没有上年数据时可手填；不填也可以生成，第6章同比会空。'"
       type="info"
       :closable="false"
       show-icon
       style="margin-bottom:8px"
     />
-    <el-form label-width="160px" size="small" class="prior-form">
+    <el-form v-if="!isMonthly" label-width="160px" size="small" class="prior-form">
       <el-form-item label="上年总量 tCO2">
         <el-input v-model="prior.total_emissions_tco2" />
       </el-form-item>
@@ -25,6 +27,41 @@
         <el-button type="primary" size="small" @click="savePrior">保存上年对比</el-button>
       </el-form-item>
     </el-form>
+    <div v-else class="month-compare">
+      <el-form label-width="168px" size="small" class="prior-form">
+        <h5>同比（去年同月{{ yoyLabel }}）</h5>
+        <el-form-item label="同期总量 tCO2">
+          <el-input v-model="yoy.total_emissions_tco2" />
+        </el-form-item>
+        <el-form-item label="同期燃料 tCO2">
+          <el-input v-model="yoy.fuel_combustion_tco2" />
+        </el-form-item>
+        <el-form-item label="同期电力 tCO2">
+          <el-input v-model="yoy.electricity_emissions_tco2" />
+        </el-form-item>
+        <el-form-item label="同期热力 tCO2">
+          <el-input v-model="yoy.heat_emissions_tco2" />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="168px" size="small" class="prior-form">
+        <h5>环比（上月{{ momLabel }}）</h5>
+        <el-form-item label="上月总量 tCO2">
+          <el-input v-model="mom.total_emissions_tco2" />
+        </el-form-item>
+        <el-form-item label="上月燃料 tCO2">
+          <el-input v-model="mom.fuel_combustion_tco2" />
+        </el-form-item>
+        <el-form-item label="上月电力 tCO2">
+          <el-input v-model="mom.electricity_emissions_tco2" />
+        </el-form-item>
+        <el-form-item label="上月热力 tCO2">
+          <el-input v-model="mom.heat_emissions_tco2" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="small" @click="savePrior">保存同比环比</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-button type="primary" :disabled="busy" @click="validate">开始校验</el-button>
     <el-switch v-model="aiEnabled" :disabled="busy" active-text="启用 AI" style="margin-left:16px" />
     <div style="margin-top:16px">
@@ -57,6 +94,24 @@
 <script>
 import { saveAs } from 'file-saver'
 import { validateTask, getFactorPlan, createGenerationJob, getLatestGenerationJob, getGenerationJob, saveSection, downloadReportArtifact } from '@/api/carbon/report'
+
+function emptyPeriod() {
+  return {
+    report_year: null,
+    report_month: null,
+    total_emissions_tco2: '',
+    fuel_combustion_tco2: '',
+    electricity_emissions_tco2: '',
+    heat_emissions_tco2: ''
+  }
+}
+
+function previousMonth(year, month) {
+  if (!year || !month) return { year: null, month: null }
+  if (Number(month) <= 1) return { year: Number(year) - 1, month: 12 }
+  return { year: Number(year), month: Number(month) - 1 }
+}
+
 export default {
   name: 'ReviewStep',
   props: { draft: { type: Object, required: true } },
@@ -66,16 +121,25 @@ export default {
       job: null,
       issues: [],
       timer: null,
-      prior: {
-        report_year: null,
-        total_emissions_tco2: '',
-        fuel_combustion_tco2: '',
-        electricity_emissions_tco2: '',
-        heat_emissions_tco2: ''
-      }
+      prior: emptyPeriod(),
+      yoy: emptyPeriod(),
+      mom: emptyPeriod()
     }
   },
   computed: {
+    isMonthly() {
+      return String((this.draft.task && this.draft.task.periodType) || '').toUpperCase() === 'MONTH'
+    },
+    yoyLabel() {
+      const y = this.yoy.report_year
+      const m = this.yoy.report_month
+      return y && m ? ' ' + y + '年' + m + '月' : ''
+    },
+    momLabel() {
+      const y = this.mom.report_year
+      const m = this.mom.report_month
+      return y && m ? ' ' + y + '年' + m + '月' : ''
+    },
     busy() {
       return this.job && ['queued', 'processing'].includes(this.job.status)
     },
@@ -125,21 +189,33 @@ export default {
         }
       })
     },
+    fillPeriod(target, src, fallbackYear, fallbackMonth) {
+      const data = src || {}
+      target.report_year = data.report_year || fallbackYear || ''
+      target.report_month = data.report_month || fallbackMonth || ''
+      target.total_emissions_tco2 = data.total_emissions_tco2 == null ? '' : data.total_emissions_tco2
+      target.fuel_combustion_tco2 = data.fuel_combustion_tco2 == null ? '' : data.fuel_combustion_tco2
+      target.electricity_emissions_tco2 = data.electricity_emissions_tco2 == null ? '' : data.electricity_emissions_tco2
+      target.heat_emissions_tco2 = data.heat_emissions_tco2 == null ? '' : data.heat_emissions_tco2
+    },
     hydratePrior() {
       const task = this.draft.task || {}
       const data = this.parse(task.priorYearJson)
-      this.prior.report_year = data.report_year || (task.reportYear ? task.reportYear - 1 : '')
-      this.prior.total_emissions_tco2 = data.total_emissions_tco2 == null ? '' : data.total_emissions_tco2
-      this.prior.fuel_combustion_tco2 = data.fuel_combustion_tco2 == null ? '' : data.fuel_combustion_tco2
-      this.prior.electricity_emissions_tco2 = data.electricity_emissions_tco2 == null ? '' : data.electricity_emissions_tco2
-      this.prior.heat_emissions_tco2 = data.heat_emissions_tco2 == null ? '' : data.heat_emissions_tco2
+      if (this.isMonthly) {
+        const prev = previousMonth(task.reportYear, task.reportMonth)
+        this.fillPeriod(this.yoy, data.yoy, task.reportYear ? task.reportYear - 1 : '', task.reportMonth)
+        this.fillPeriod(this.mom, data.mom, prev.year, prev.month)
+        return
+      }
+      this.fillPeriod(this.prior, data, task.reportYear ? task.reportYear - 1 : '', null)
     },
     savePrior() {
+      const data = this.isMonthly ? { yoy: this.yoy, mom: this.mom } : this.prior
       saveSection(this.draft.task.id, 'prior_year', {
         version: this.draft.task.version,
-        data: this.prior
+        data
       }).then(() => {
-        this.$message.success('已保存上年对比')
+        this.$message.success(this.isMonthly ? '已保存同比环比' : '已保存上年对比')
         this.$emit('saved')
       })
     },
@@ -208,6 +284,8 @@ export default {
 <style scoped>
 .review-step { margin-top: 24px; }
 .prior-form { max-width: 480px; margin-bottom: 16px; }
+.month-compare { display: flex; flex-wrap: wrap; gap: 8px 32px; }
 h4 { margin: 0 0 8px; }
+h5 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
 .gen-progress { margin-top: 20px; max-width: 480px; }
 </style>

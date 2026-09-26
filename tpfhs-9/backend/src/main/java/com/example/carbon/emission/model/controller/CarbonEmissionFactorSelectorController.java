@@ -175,7 +175,10 @@ public class CarbonEmissionFactorSelectorController {
                         .id(dto.getId())
                         .name(dto.getEmissionFactorName())
                         .value(dto.getEmissionFactor().toPlainString())
-                        .unit(dto.getUnit())
+                        // 选择器返回的是排放因子的完整量纲，而不是燃料采集单位。
+                        // 对天然气而言二者分别为 tCO₂/万Nm³ 与 万Nm³；混用会使
+                        // 前端把活动量单位保存成因子单位，模板校验也无法解析分子。
+                        .unit(dto.getFactorUnit())
                         .description(String.format("%s：%s，%s，%s", 
                                 dto.getEmissionFactorName(), 
                                 dto.getFuelType(), 

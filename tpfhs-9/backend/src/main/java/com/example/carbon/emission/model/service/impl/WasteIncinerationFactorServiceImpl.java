@@ -41,6 +41,7 @@ public class WasteIncinerationFactorServiceImpl implements WasteIncinerationFact
     @Override
     @Transactional
     public WasteIncinerationFactorDTO create(WasteIncinerationFactorDTO dto) {
+        validateFactor(dto.getEmissionFactor());
         if (repository.existsByEmissionFactorName(dto.getEmissionFactorName())) {
             throw new RuntimeException("排放因子名称已存在: " + dto.getEmissionFactorName());
         }
@@ -53,6 +54,7 @@ public class WasteIncinerationFactorServiceImpl implements WasteIncinerationFact
     @Override
     @Transactional
     public WasteIncinerationFactorDTO update(Long id, WasteIncinerationFactorDTO dto) {
+        validateFactor(dto.getEmissionFactor());
         WasteIncinerationFactor entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("固体废弃物焚烧排放因子不存在: " + id));
 
@@ -117,5 +119,10 @@ public class WasteIncinerationFactorServiceImpl implements WasteIncinerationFact
         entity.setCreatedBy(dto.getCreatedBy());
         entity.setUpdatedBy(dto.getCreatedBy());
         return entity;
+    }
+
+    private void validateFactor(java.math.BigDecimal value) {
+        if (value == null) throw new IllegalArgumentException("排放因子不能为空");
+        if (value.signum() < 0) throw new IllegalArgumentException("排放因子不能为负数");
     }
 }

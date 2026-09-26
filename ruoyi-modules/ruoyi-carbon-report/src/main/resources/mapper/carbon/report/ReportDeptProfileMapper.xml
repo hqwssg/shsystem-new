@@ -67,4 +67,13 @@
             update_time = now()
         where dept_id = #{deptId}
     </update>
+
+    <update id="updateActivityProse">
+        update report_dept_profile
+        set default_activity_prose_json = #{proseJson},
+            version = version + 1,
+            update_by = #{updateBy},
+            update_time = now()
+        where dept_id = #{deptId}
+    </update>
 </mapper>

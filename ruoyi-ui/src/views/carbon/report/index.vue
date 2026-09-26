@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form class="report-toolbar-form" :inline="true">
+    <el-form :inline="true" size="small">
       <el-form-item>
         <el-button type="primary" icon="el-icon-plus" v-hasPermi="['carbon:report:add']" @click="$router.push('/carbon/report/create')">新建报告</el-button>
         <el-button @click="$router.push('/carbon/report/query')">核算结果查询</el-button>
@@ -72,20 +72,5 @@ export default {
 }
 </script>
 <style scoped>
-.report-toolbar-form {
-  margin-bottom: 16px;
-}
-
-.report-toolbar-form ::v-deep .el-button {
-  min-height: 40px;
-  padding: 10px 16px;
-  font-size: 15px;
-}
-
-.el-table ::v-deep .el-button--text {
-  padding: 8px 10px;
-  font-size: 15px;
-}
-
 .danger-text { color: #f56c6c; }
 </style>

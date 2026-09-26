@@ -7,6 +7,7 @@ import com.example.carbon.emission.model.repository.PurchasedHeatCollectionScope
 import com.example.carbon.emission.model.repository.PurchasedHeatCollectionSubScopeRepository;
 import com.example.carbon.emission.model.repository.PurchasedHeatMeterInfoRepository;
 import com.example.carbon.emission.model.security.CarbonSecurityContext;
+import com.example.carbon.emission.model.service.impl.HttpReadingProbe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,9 @@ public class PurchasedHeatCollectionController {
 
     @Autowired
     private PurchasedHeatMeterInfoRepository meterRepository;
+
+    @Autowired
+    private HttpReadingProbe httpReadingProbe;
 
     /**
      * 获取完整的外购热能采集树形结构
@@ -144,6 +148,8 @@ public class PurchasedHeatCollectionController {
         node.put("autoMeterReadingConfig", meter.getAutoMeterReadingConfig());
         // 9个新字段
         node.put("isCumulative", meter.getIsCumulative());
+        node.put("rolloverEnabled", meter.getRolloverEnabled());
+        node.put("rolloverThreshold", meter.getRolloverThreshold());
         node.put("isMobileSource", meter.getIsMobileSource());
         node.put("measurementUnit", meter.getMeasurementUnit());
         node.put("dataSourceSystem", meter.getDataSourceSystem());
@@ -380,6 +386,7 @@ public class PurchasedHeatCollectionController {
         if (meter.getMeterReadingMethod() != null && meter.getMeterReadingMethod() != 1) {
             requireReadingMethodPermission();
         }
+        validateRollover(meter.getIsCumulative(), meter.getRolloverEnabled(), meter.getRolloverThreshold());
         // PurchasedHeatMeterInfoRepository 未提供 findMaxSortOrderBySubScopeId，
         // 通过查询同级采集点列表计算最大排序值
         List<PurchasedHeatMeterInfo> existingMeters = meterRepository.findBySubScopeIdOrderBySortOrderAsc(meter.getSubScopeId());
@@ -395,6 +402,7 @@ public class PurchasedHeatCollectionController {
 
     @PutMapping("/meters/{id}")
     public ResponseEntity<?> updateMeter(@PathVariable Long id, @RequestBody PurchasedHeatMeterInfo meterDetails) {
+        validateRollover(meterDetails.getIsCumulative(), meterDetails.getRolloverEnabled(), meterDetails.getRolloverThreshold());
         PurchasedHeatMeterInfo meter = meterRepository.findById(id)
                 .orElse(null);
         if (meter == null) {
@@ -417,6 +425,8 @@ public class PurchasedHeatCollectionController {
         }
         // 9个新字段
         meter.setIsCumulative(meterDetails.getIsCumulative());
+        meter.setRolloverEnabled(meterDetails.getRolloverEnabled());
+        meter.setRolloverThreshold(meterDetails.getRolloverThreshold());
         meter.setIsMobileSource(meterDetails.getIsMobileSource());
         meter.setMeasurementUnit(meterDetails.getMeasurementUnit());
         meter.setDataSourceSystem(meterDetails.getDataSourceSystem());
@@ -438,6 +448,15 @@ public class PurchasedHeatCollectionController {
     private void requireReadingMethodPermission() {
         if (!CarbonSecurityContext.current().hasPermission("carbon:data:auto:manual")) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "当前账号没有修改采集点抄表方式的权限");
+        }
+    }
+
+    private void validateRollover(Integer cumulative, Integer enabled, java.math.BigDecimal threshold) {
+        if (!Integer.valueOf(1).equals(enabled)) return;
+        if (!Integer.valueOf(1).equals(cumulative) || threshold == null
+                || threshold.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "累计归零要求累计采集点且归零阈值大于0");
         }
     }
 
@@ -815,88 +834,9 @@ public class PurchasedHeatCollectionController {
      * MODBUS_TCP / MQTT：校验配置完整性
      */
     private Map<String, Object> doTestReading(Map<String, Object> config) {
-        Map<String, Object> result = new LinkedHashMap<>();
         if (config == null || config.isEmpty()) {
-            result.put("success", false);
-            result.put("message", "未提供抄表接口配置");
-            return result;
+            return Map.of("success", false, "message", "未提供抄表接口配置");
         }
-        String interfaceType = String.valueOf(config.getOrDefault("interfaceType", ""));
-        String apiUrl = String.valueOf(config.getOrDefault("apiUrl", "")).trim();
-        if (apiUrl.isEmpty() || "null".equals(apiUrl)) {
-            result.put("success", false);
-            result.put("message", "接口地址不能为空");
-            return result;
-        }
-        try {
-            switch (interfaceType) {
-                case "HTTP_API": {
-                    int timeoutSec = toInt(config.get("timeout"), 30);
-                    java.net.http.HttpClient client = java.net.http.HttpClient.newBuilder()
-                            .connectTimeout(java.time.Duration.ofSeconds(timeoutSec))
-                            .build();
-                    java.net.http.HttpRequest.Builder reqBuilder = java.net.http.HttpRequest.newBuilder()
-                            .uri(java.net.URI.create(apiUrl))
-                            .timeout(java.time.Duration.ofSeconds(timeoutSec))
-                            .GET();
-                    String authType = String.valueOf(config.getOrDefault("authType", "NONE"));
-                    if ("BASIC".equals(authType)) {
-                        String user = String.valueOf(config.getOrDefault("username", ""));
-                        String pass = String.valueOf(config.getOrDefault("password", ""));
-                        String token = java.util.Base64.getEncoder()
-                                .encodeToString((user + ":" + pass).getBytes(java.nio.charset.StandardCharsets.UTF_8));
-                        reqBuilder.header("Authorization", "Basic " + token);
-                    } else if ("TOKEN".equals(authType)) {
-                        String token = String.valueOf(config.getOrDefault("token", ""));
-                        reqBuilder.header("Authorization", "Bearer " + token);
-                    }
-                    java.net.http.HttpResponse<String> resp = client.send(
-                            reqBuilder.build(),
-                            java.net.http.HttpResponse.BodyHandlers.ofString());
-                    int code = resp.statusCode();
-                    if (code >= 200 && code < 300) {
-                        result.put("success", true);
-                        result.put("message", "HTTP 接口连通正常，状态码：" + code);
-                        result.put("data", resp.body());
-                    } else {
-                        result.put("success", false);
-                        result.put("message", "HTTP 接口返回非 2xx 状态码：" + code);
-                    }
-                    break;
-                }
-                case "MODBUS_TCP":
-                case "MQTT": {
-                    Object portObj = config.get("port");
-                    if (portObj == null) {
-                        result.put("success", false);
-                        result.put("message", "端口不能为空");
-                        return result;
-                    }
-                    result.put("success", true);
-                    result.put("message", interfaceType + " 配置校验通过，" + apiUrl + ":" + portObj
-                            + "（实际协议连通性测试待接入对应客户端）");
-                    break;
-                }
-                default:
-                    result.put("success", false);
-                    result.put("message", "不支持的接口类型：" + interfaceType);
-            }
-        } catch (IllegalArgumentException e) {
-            result.put("success", false);
-            result.put("message", "接口地址格式无效：" + e.getMessage());
-        } catch (java.io.IOException | InterruptedException e) {
-            result.put("success", false);
-            result.put("message", "接口调用失败：" + e.getClass().getSimpleName() + " - " + e.getMessage());
-        }
-        return result;
-    }
-
-    private int toInt(Object value, int defaultValue) {
-        if (value == null) return defaultValue;
-        try {
-            return Integer.parseInt(String.valueOf(value));
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
+        return httpReadingProbe.probe(config);
     }
 }

@@ -41,6 +41,7 @@ public class ThermalEmissionFactorServiceImpl implements ThermalEmissionFactorSe
     @Override
     @Transactional
     public ThermalEmissionFactorDTO create(ThermalEmissionFactorDTO dto) {
+        validateFactor(dto.getEmissionFactor());
         if (repository.existsByEmissionFactorName(dto.getEmissionFactorName())) {
             throw new RuntimeException("排放因子名称已存在: " + dto.getEmissionFactorName());
         }
@@ -53,6 +54,7 @@ public class ThermalEmissionFactorServiceImpl implements ThermalEmissionFactorSe
     @Override
     @Transactional
     public ThermalEmissionFactorDTO update(Long id, ThermalEmissionFactorDTO dto) {
+        validateFactor(dto.getEmissionFactor());
         ThermalEmissionFactor entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("热力排放因子不存在: " + id));
 
@@ -105,5 +107,10 @@ public class ThermalEmissionFactorServiceImpl implements ThermalEmissionFactorSe
         entity.setCreatedBy(dto.getCreatedBy());
         entity.setUpdatedBy(dto.getCreatedBy());
         return entity;
+    }
+
+    private void validateFactor(java.math.BigDecimal value) {
+        if (value == null) throw new IllegalArgumentException("排放因子不能为空");
+        if (value.signum() < 0) throw new IllegalArgumentException("排放因子不能为负数");
     }
 }

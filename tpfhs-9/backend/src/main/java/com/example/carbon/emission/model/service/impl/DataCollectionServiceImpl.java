@@ -27,6 +27,17 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.Map;
 
 /**
  * 数据采集服务实现
@@ -107,6 +118,9 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /** 每条待采集记录在独立事务中处理，避免单条失败回滚整批 */
     private TransactionTemplate transactionTemplate;
@@ -429,17 +443,20 @@ public class DataCollectionServiceImpl implements DataCollectionService {
         try {
             // 读取 + 成功状态更新在独立事务中
             transactionTemplate.executeWithoutResult(status -> {
-                BigDecimal readingValue = simulateReading(record);
+                HttpReading reading = readFromConfiguredSource(record);
                 LocalDateTime now = LocalDateTime.now();
 
-                record.setReadingValue(readingValue);
-                record.setCollectionTime(now);
+                record.setReadingValue(reading.value());
+                record.setCollectionTime(reading.collectedAt());
                 record.setLastFetchTime(now);
+                record.setExternalRecordId(reading.recordId());
+                record.setExternalQuality(reading.quality());
+                record.setCollectionFailureReason(null);
                 record.setCollectionStatus(STATUS_SUCCESS);
                 collectionRecordRepository.save(record);
 
                 // 回填采集点表的上次采集时间（对应 collection_time）
-                updateMeterLastCollectionResult(record.getCollectionPointType(), record.getCollectionPointId(), now,
+                updateMeterLastCollectionResult(record.getCollectionPointType(), record.getCollectionPointId(), reading.collectedAt(),
                         STATUS_SUCCESS, "AUTO_SUCCESS");
             });
             return true;
@@ -451,6 +468,8 @@ public class DataCollectionServiceImpl implements DataCollectionService {
                 transactionTemplate.executeWithoutResult(status -> {
                     record.setCollectionStatus(STATUS_FAILED);
                     record.setLastFetchTime(LocalDateTime.now());
+                    record.setReadingValue(null);
+                    record.setCollectionFailureReason(safeFailure(e));
                     collectionRecordRepository.save(record);
                     updateMeterLastCollectionResult(record.getCollectionPointType(), record.getCollectionPointId(),
                             record.getLastFetchTime(), STATUS_FAILED, e.getMessage());
@@ -510,11 +529,87 @@ public class DataCollectionServiceImpl implements DataCollectionService {
      * @param record 采集记录
      * @return 读取到的数值
      */
-    private BigDecimal simulateReading(CollectionRecord record) {
-        logger.info("【模拟采集】采集点类型: {}, 采集点ID: {}, 名称: {}, 单位: {}, 累加量: {}",
-                record.getCollectionPointType(), record.getCollectionPointId(),
-                record.getCollectionPointName(), record.getMeasurementUnit(), record.getIsCumulative());
-        return BigDecimal.ZERO;
+    private record HttpReading(BigDecimal value, LocalDateTime collectedAt, String recordId, String quality) {}
+
+    private HttpReading readFromConfiguredSource(CollectionRecord record) {
+        try {
+        String rawConfig = switch (record.getCollectionPointType()) {
+            case TYPE_METER -> meterInfoRepository.findById(record.getCollectionPointId()).map(MeterInfo::getAutoMeterReadingConfig).orElse(null);
+            case TYPE_FOSSIL_FUEL -> fossilFuelMeterInfoRepository.findById(record.getCollectionPointId()).map(FossilFuelMeterInfo::getAutoMeterReadingConfig).orElse(null);
+            case TYPE_PURCHASED_HEAT -> purchasedHeatMeterInfoRepository.findById(record.getCollectionPointId()).map(PurchasedHeatMeterInfo::getAutoMeterReadingConfig).orElse(null);
+            default -> null;
+        };
+        if (rawConfig == null || rawConfig.isBlank()) throw new IllegalStateException("自动抄表接口未配置");
+        @SuppressWarnings("unchecked") Map<String, Object> config = objectMapper.readValue(rawConfig, Map.class);
+        if (!"HTTP_API".equals(String.valueOf(config.getOrDefault("interfaceType", "")))) {
+            throw new IllegalStateException("仅支持HTTP_API自动采集");
+        }
+        String apiUrl = required(config, "apiUrl");
+        String device = required(config, "deviceAddress");
+        int timeout = Math.max(1, Math.min(120, Integer.parseInt(String.valueOf(config.getOrDefault("timeout", 10)))));
+        String separator = apiUrl.contains("?") ? "&" : "?";
+        URI uri = URI.create(apiUrl + separator + "deviceAddress=" + encode(device)
+                + "&requestId=" + encode(String.valueOf(record.getId())));
+        HttpRequest.Builder builder = HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(timeout)).GET();
+        String authType = String.valueOf(config.getOrDefault("authType", "NONE"));
+        if ("BASIC".equals(authType)) {
+            String credentials = String.valueOf(config.getOrDefault("username", "")) + ":" + String.valueOf(config.getOrDefault("password", ""));
+            builder.header("Authorization", "Basic " + java.util.Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8)));
+        } else if ("TOKEN".equals(authType)) {
+            builder.header("Authorization", "Bearer " + required(config, "token"));
+        }
+        HttpResponse<String> response = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(timeout)).build()
+                .send(builder.build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new IllegalStateException("自动抄表HTTP状态异常:" + response.statusCode());
+        }
+        JsonNode root = objectMapper.readTree(response.body());
+        String valuePath = String.valueOf(config.getOrDefault("valuePath", config.getOrDefault("dataPath", "data.readingValue")));
+        BigDecimal value = decimalAt(root, valuePath);
+        if (value == null || value.compareTo(BigDecimal.ZERO) < 0) throw new IllegalStateException("自动抄表读数为空或为负数");
+        String returnedDevice = textAt(root, String.valueOf(config.getOrDefault("devicePath", "data.deviceAddress")));
+        if (returnedDevice != null && !device.equals(returnedDevice)) throw new IllegalStateException("自动抄表设备地址不匹配");
+        String returnedUnit = textAt(root, String.valueOf(config.getOrDefault("unitPath", "data.measurementUnit")));
+        if (returnedUnit != null && record.getMeasurementUnit() != null && !record.getMeasurementUnit().equals(returnedUnit)) {
+            throw new IllegalStateException("自动抄表计量单位不匹配");
+        }
+        String externalId = textAt(root, String.valueOf(config.getOrDefault("recordIdPath", "data.readingId")));
+        if (externalId == null || externalId.isBlank()) throw new IllegalStateException("自动抄表记录ID为空");
+        if (collectionRecordRepository.existsByCollectionPointTypeAndCollectionPointIdAndExternalRecordIdAndCollectionStatus(
+                record.getCollectionPointType(), record.getCollectionPointId(), externalId, STATUS_SUCCESS)) {
+            throw new IllegalStateException("自动抄表记录重复");
+        }
+        String time = textAt(root, String.valueOf(config.getOrDefault("timePath", "data.collectedAt")));
+        LocalDateTime collectedAt = time == null ? null : OffsetDateTime.parse(time).toLocalDateTime();
+        if (collectedAt == null) throw new IllegalStateException("自动抄表采集时间为空");
+        String quality = textAt(root, String.valueOf(config.getOrDefault("qualityPath", "data.quality")));
+        if (quality != null && !"GOOD".equalsIgnoreCase(quality)) throw new IllegalStateException("自动抄表数据质量不可用:" + quality);
+        return new HttpReading(value, collectedAt, externalId, quality);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("自动抄表请求被中断", ex);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException("自动抄表HTTP请求失败:" + ex.getClass().getSimpleName(), ex);
+        }
+    }
+
+    private JsonNode nodeAt(JsonNode root, String path) {
+        JsonNode current = root;
+        for (String part : path.replace("[", ".").replace("]", "").split("\\.")) {
+            if (part.isBlank()) continue;
+            current = part.chars().allMatch(Character::isDigit) ? current.path(Integer.parseInt(part)) : current.path(part);
+        }
+        return current.isMissingNode() || current.isNull() ? null : current;
+    }
+
+    private String textAt(JsonNode root, String path) { JsonNode node = nodeAt(root, path); return node == null ? null : node.asText(); }
+    private BigDecimal decimalAt(JsonNode root, String path) { String value = textAt(root, path); return value == null || value.isBlank() ? null : new BigDecimal(value); }
+    private String encode(String value) { return URLEncoder.encode(value, StandardCharsets.UTF_8); }
+    private String required(Map<String, Object> map, String key) { String value = String.valueOf(map.getOrDefault(key, "")).trim(); if (value.isEmpty()) throw new IllegalStateException(key + "不能为空"); return value; }
+    private String safeFailure(Exception error) {
+        String value = error.getMessage() == null ? error.getClass().getSimpleName() : error.getMessage();
+        String sanitized = value.replaceAll("(?i)(token|password|authorization)=[^,;\\s]+", "$1=***");
+        return sanitized.substring(0, Math.min(500, sanitized.length()));
     }
 
     /**

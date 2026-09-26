@@ -190,6 +190,18 @@ export const collectionApi = {
   }
 }
 
+export const calcSummaryApi = {
+  tasks(params) {
+    return carbonRequest.get('/calc-summary/tasks', { params: cleanParams(params) })
+  },
+  details(taskId, params) {
+    return carbonRequest.get(`/calc-summary/by-template/${taskId}/page`, { params: cleanParams(params) })
+  },
+  exportExcel(params) {
+    return carbonRequest.get('/calc-summary/export', { params: cleanParams(params), responseType: 'blob', timeout: 120000 })
+  }
+}
+
 export function defaultCarbonOptions() {
   return {
     locomotiveTypes: ['HXN3型内燃机车', '国能八轴交流机车', '国能十二轴交流机车'],

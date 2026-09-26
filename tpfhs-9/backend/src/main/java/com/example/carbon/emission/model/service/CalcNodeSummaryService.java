@@ -1,9 +1,13 @@
 package com.example.carbon.emission.model.service;
 
 import com.example.carbon.emission.model.entity.CalcNodeSummary;
+import com.example.carbon.emission.model.dto.CalcNodeSummaryResponse;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.example.carbon.emission.model.entity.CalculationTemplate;
 
 /**
  * 碳排放核算节点汇总 Service
@@ -42,4 +46,12 @@ public interface CalcNodeSummaryService {
      * @return 跨模板合并后的汇总数据列表
      */
     List<CalcNodeSummary> queryBySourceNodeAndCycle(Long sourceNodeId, LocalDate start, LocalDate end);
+
+    /** 只分页返回真实执行成功（status=2）的核算任务。 */
+    Page<CalculationTemplate> querySuccessfulTasks(Long templateId, Integer initiator, Pageable pageable);
+
+    /** 只允许查询成功任务，并为小类编码补充字典中文名称。 */
+    Page<CalcNodeSummaryResponse> querySuccessfulPage(Long taskId, Long nodeId, Long sourceNodeId,
+                                                      String subcategoryCode, String l1, String l2, String l3,
+                                                      Pageable pageable);
 }

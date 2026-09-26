@@ -98,6 +98,10 @@ public class CreateMeterRequest {
      */
     private Integer isCumulative;
 
+    private Integer rolloverEnabled;
+
+    private java.math.BigDecimal rolloverThreshold;
+
     /**
      * 是否移动源：1-是，0-否
      */

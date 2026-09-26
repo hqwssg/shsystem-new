@@ -2,9 +2,11 @@ package com.example.carbon.emission.model.service.impl;
 
 import com.example.carbon.emission.model.entity.CalcNodeSummary;
 import com.example.carbon.emission.model.entity.CalculationTemplate;
+import com.example.carbon.emission.model.dto.CalcNodeSummaryResponse;
 import com.example.carbon.emission.model.repository.CalcNodeSummaryRepository;
 import com.example.carbon.emission.model.repository.CalculationTemplateRepository;
 import com.example.carbon.emission.model.service.CalcNodeSummaryService;
+import com.example.carbon.emission.model.service.DataDictService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import java.util.Map;
 
 /**
  * 碳排放核算节点汇总 Service 实现
@@ -38,6 +46,9 @@ public class CalcNodeSummaryServiceImpl implements CalcNodeSummaryService {
      */
     @Autowired
     private CalculationTemplateRepository calculationTemplateRepository;
+
+    @Autowired
+    private DataDictService dataDictService;
 
     @Override
     public List<CalcNodeSummary> queryByTemplate(Long templateId, Long nodeId, String subcategoryCode,
@@ -107,5 +118,40 @@ public class CalcNodeSummaryServiceImpl implements CalcNodeSummaryService {
         return summaries.stream()
                 .filter(s -> Objects.equals(sourceNodeId, s.getSourceNodeId()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CalculationTemplate> querySuccessfulTasks(Long templateId, Integer initiator, Pageable pageable) {
+        Specification<CalculationTemplate> spec = (r, q, b) -> b.equal(r.get("status"), 2);
+        if (templateId != null) spec = spec.and((r, q, b) -> b.equal(r.get("templateId"), templateId));
+        if (initiator != null) spec = spec.and((r, q, b) -> b.equal(r.get("taskInitiator"), initiator));
+        return calculationTemplateRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<CalcNodeSummaryResponse> querySuccessfulPage(Long taskId, Long nodeId, Long sourceNodeId,
+                                                             String subcategoryCode, String l1, String l2, String l3,
+                                                             Pageable pageable) {
+        CalculationTemplate task = calculationTemplateRepository.findById(taskId)
+                .filter(item -> Integer.valueOf(2).equals(item.getStatus()))
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "未找到可查询的成功核算结果"));
+        Specification<CalcNodeSummary> spec = (r, q, b) -> b.equal(r.get("calculationTemplateId"), taskId);
+        if (nodeId != null) spec = spec.and((r, q, b) -> b.equal(r.get("calculationNodeId"), nodeId));
+        if (sourceNodeId != null) spec = spec.and((r, q, b) -> b.equal(r.get("sourceNodeId"), sourceNodeId));
+        if (subcategoryCode != null && !subcategoryCode.isBlank()) spec = spec.and((r, q, b) -> b.equal(r.get("emissionSubcategory"), subcategoryCode));
+        if (l1 != null && !l1.isBlank()) spec = spec.and((r, q, b) -> b.equal(r.get("energyCategoryL1"), l1));
+        if (l2 != null && !l2.isBlank()) spec = spec.and((r, q, b) -> b.equal(r.get("energyCategoryL2"), l2));
+        if (l3 != null && !l3.isBlank()) spec = spec.and((r, q, b) -> b.equal(r.get("energyCategoryL3"), l3));
+        Map<String, String> subcategories = dataDictService.getDictItems("emission_subcategory");
+        return calcNodeSummaryRepository.findAll(spec, pageable).map(item -> {
+            String code = item.getEmissionSubcategory();
+            String name = subcategories.get(code);
+            if (name == null || name.isBlank()) {
+                log.warn("核算结果中的排放小类编码无法映射到字典：taskId={}, code={}", task.getId(), code);
+                name = "未知排放小类";
+            }
+            return CalcNodeSummaryResponse.from(item, name);
+        });
     }
 }

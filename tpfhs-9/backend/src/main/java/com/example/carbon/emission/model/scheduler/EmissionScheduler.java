@@ -5,8 +5,10 @@ import com.example.carbon.emission.model.entity.SystemConfig;
 import com.example.carbon.emission.model.entity.Template;
 import com.example.carbon.emission.model.repository.SystemConfigRepository;
 import com.example.carbon.emission.model.repository.TemplateRepository;
+import com.example.carbon.emission.model.repository.CalculationTemplateRepository;
 import com.example.carbon.emission.model.service.DataCollectionService;
 import com.example.carbon.emission.model.service.impl.AsyncTaskService;
+import com.example.carbon.emission.model.service.impl.TaskScheduleConfigService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -63,6 +65,12 @@ public class EmissionScheduler {
 
     @Autowired
     private AsyncTaskService asyncTaskService;
+
+    @Autowired
+    private CalculationTemplateRepository calculationTemplateRepository;
+
+    @Autowired
+    private TaskScheduleConfigService taskScheduleConfigService;
 
     @Autowired
     private DataCollectionService dataCollectionService;
@@ -173,6 +181,15 @@ public class EmissionScheduler {
         for (Template template : enabledTemplates) {
             try {
                 if (shouldExecute(template, checkTime)) {
+                    LocalDate[] cycle = taskScheduleConfigService.calculateCycle(
+                            template.getTaskConfig(), checkTime.toLocalDate());
+                    if (calculationTemplateRepository
+                            .existsByTemplateIdAndCalculationCycleStartDateAndCalculationCycleEndDate(
+                                    template.getId(), cycle[0], cycle[1])) {
+                        logger.info("****同一模版周期已有核算任务，跳过重复提交，模板ID: {}, 周期: {}~{}",
+                                template.getId(), cycle[0], cycle[1]);
+                        continue;
+                    }
                     logger.info("****检测到需要执行的任务，模板ID: {}, 名称: {}", template.getId(), template.getName());
                     // 提交异步任务执行
                     asyncTaskService.executeEmissionCalculationAsync(template.getId(), template.getName());
@@ -262,7 +279,7 @@ public class EmissionScheduler {
         }
 
         try {
-            JsonNode taskConfig = objectMapper.readTree(taskConfigJson);
+            JsonNode taskConfig = taskScheduleConfigService.validate(taskConfigJson);
 
             // 提取配置参数
             String cycleType = getTextOrNull(taskConfig, "cycleType");
@@ -273,9 +290,6 @@ public class EmissionScheduler {
             // 延迟核算日期（天）：统计周期结束后宽限期，实际触发日期 = 配置的执行日期 + delayDays
             // 后端默认 0（兼容旧数据，立即执行）；前端编辑模版时缺省 3 天
             int delayDays = taskConfig.has("delayDays") ? taskConfig.get("delayDays").asInt(0) : 0;
-            if (delayDays < 0) {
-                delayDays = 0;
-            }
             // adjustedTime 用于判断统计周期（年/月/日/星期）及起止日期是否匹配
             LocalDateTime adjustedTime = delayDays > 0 ? checkTime.minusDays(delayDays) : checkTime;
 

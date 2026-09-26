@@ -572,6 +572,7 @@ const addForm = reactive({
     emissionCategory: '',
     emissionSubcategory: '',
     carbonEmissionFactor: '',
+    carbonEmissionFactorUnit: '',
     carbonEmissionFactorDescription: '',
     collectionDescription: '',
     equipmentCode: '',
@@ -599,43 +600,8 @@ const currentSubcategories = computed(() => {
   return options.emissionSubcategories[category] || [];
 });
 
-const addEmissionFactorUnit = computed(() => {
-  const category = addForm.config.emissionCategory;
-  const subcategory = addForm.config.emissionSubcategory;
-  
-  if (category === '购入的电力' || category === '输出的电力') {
-    return 'kgCO₂/kWh';
-  }
-  
-  if (category === '化石燃料') {
-    const tUnitFuels = ['烟煤', '褐煤', '焦炭', '石油焦', '原油', '燃料油', '汽油', '柴油', '液化天然气', '液化石油气'];
-    const nm3UnitFuels = ['天然气', '高炉煤气', '转炉煤气', '焦炉煤气'];
-    
-    if (tUnitFuels.includes(subcategory)) {
-      return 'tCO₂/t';
-    } else if (nm3UnitFuels.includes(subcategory)) {
-      return 'tCO₂/10⁴Nm³';
-    }
-  }
-  
-  if (category === '购入的热力') {
-    if (subcategory === '热力数据') {
-      return 'tCO₂/GJ';
-    } else if (subcategory === '质量单位计量的蒸汽' || subcategory === '质量单位计量的热水') {
-      return 'tCO₂/t';
-    }
-  }
-  
-  if (category === '废弃物处理') {
-    if (subcategory === '废水处理排放') {
-      return 'tGH₄/m³';
-    } else if (subcategory === '固体废弃物处理排放') {
-      return 'tCO₂/t';
-    }
-  }
-  
-  return '';
-});
+// 因子单位必须和选择的因子快照一起保存，不能仅按大类猜测。
+const addEmissionFactorUnit = computed(() => addForm.config.carbonEmissionFactorUnit || '');
 
 const loadTree = () => {
   if (props.currentTemplate) {
@@ -685,6 +651,7 @@ const handleAddNode = (parentNode) => {
   addForm.config.emissionCategory = '';
   addForm.config.emissionSubcategory = '';
   addForm.config.carbonEmissionFactor = '';
+  addForm.config.carbonEmissionFactorUnit = '';
   addForm.config.carbonEmissionFactorDescription = '';
   addForm.config.collectionPointType = null;
   addForm.config.collectionPointId = null;
@@ -730,6 +697,7 @@ const handleEditNode = (node) => {
   addForm.config.emissionCategory = cfg.emissionCategory || '';
   addForm.config.emissionSubcategory = cfg.emissionSubcategory || '';
   addForm.config.carbonEmissionFactor = cfg.carbonEmissionFactor ?? '';
+  addForm.config.carbonEmissionFactorUnit = cfg.carbonEmissionFactorUnit || '';
   addForm.config.carbonEmissionFactorDescription = cfg.carbonEmissionFactorDescription || '';
   addForm.config.collectionDescription = cfg.collectionDescription || '';
   addForm.config.equipmentCode = cfg.equipmentCode || '';
@@ -817,6 +785,9 @@ const moveNode = (node, direction) => {
  */
 const handleCategoryChange = () => {
   addForm.config.emissionSubcategory = '';
+  addForm.config.carbonEmissionFactor = '';
+  addForm.config.carbonEmissionFactorUnit = '';
+  addForm.config.carbonEmissionFactorDescription = '';
   // 大类变化后原关联采集点不再匹配，清除采集点关联与展示信息
   addForm.config.collectionPointType = null;
   addForm.config.collectionPointId = null;
@@ -831,7 +802,11 @@ const handleCategoryChange = () => {
 /**
  * 排放数据小类变化事件处理函数
  */
-const handleSubcategoryChange = () => {};
+const handleSubcategoryChange = () => {
+  addForm.config.carbonEmissionFactor = '';
+  addForm.config.carbonEmissionFactorUnit = '';
+  addForm.config.carbonEmissionFactorDescription = '';
+};
 
 const generateEquipmentCode = () => {
   if (!addForm.config.emissionCategory) return;
@@ -951,6 +926,7 @@ const confirmAddNode = () => {
       emissionCategory: addForm.config.emissionCategory,
       emissionSubcategory: addForm.config.emissionSubcategory,
       carbonEmissionFactor: addForm.config.carbonEmissionFactor ? parseFloat(addForm.config.carbonEmissionFactor) : null,
+      carbonEmissionFactorUnit: addForm.config.carbonEmissionFactorUnit || null,
       carbonEmissionFactorDescription: addForm.config.carbonEmissionFactorDescription,
       collectionDescription: addForm.config.collectionDescription,
       equipmentCode: addForm.config.equipmentCode,
@@ -1329,6 +1305,7 @@ const handleBatchCreateCollectionNodes = async (points, factorInfo = {}) => {
     ? parseFloat(factorInfo.carbonEmissionFactor)
     : null;
   const factorDesc = factorInfo.carbonEmissionFactorDescription || '';
+  const factorUnit = factorInfo.carbonEmissionFactorUnit || '';
   let successCount = 0;
   for (const point of points) {
     try {
@@ -1354,6 +1331,7 @@ const handleBatchCreateCollectionNodes = async (points, factorInfo = {}) => {
           emissionCategory: point.categoryName || '',
           emissionSubcategory: point.emissionSubcategory || '',
           carbonEmissionFactor: factorValue,
+          carbonEmissionFactorUnit: factorUnit,
           carbonEmissionFactorDescription: factorDesc,
           collectionDescription: '',
           equipmentCode,
@@ -1438,11 +1416,12 @@ const handleCollectionPointCancel = () => {
 
 /**
  * 排放因子选择弹窗"选择"回调：将所选因子值与描述回填到新增表单
- * @param {Object} result - 因子选择结果 { factorValue, description }
+ * @param {Object} result - 因子选择结果 { factorValue, factorUnit, description }
  */
 const handleAddFactorSelect = (result) => {
   if (result.factorValue) {
     addForm.config.carbonEmissionFactor = result.factorValue;
+    addForm.config.carbonEmissionFactorUnit = result.factorUnit || '';
     addForm.config.carbonEmissionFactorDescription = result.description || '';
   }
   showAddFactorDialog.value = false;

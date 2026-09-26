@@ -39,6 +39,9 @@ public final class CarbonPermissionResolver {
             return List.of(readOnly ? "carbon:model:view" : "carbon:model:edit");
         }
         if (path.startsWith("/api/calc-summary")) {
+            if (path.startsWith("/api/calc-summary/export")) {
+                return List.of("carbon:statistics:export");
+            }
             return List.of("carbon:statistics:view", "carbon:model:view");
         }
         if (startsWith(path, COLLECTION_PATHS)) {

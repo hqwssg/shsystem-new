@@ -71,4 +71,7 @@ public interface CollectionRecordRepository extends JpaRepository<CollectionReco
      */
     List<CollectionRecord> findByCollectionPointTypeAndCollectionPointIdAndCollectionStatus(
             Integer collectionPointType, Long collectionPointId, Integer collectionStatus);
+
+    boolean existsByCollectionPointTypeAndCollectionPointIdAndExternalRecordIdAndCollectionStatus(
+            Integer collectionPointType, Long collectionPointId, String externalRecordId, Integer collectionStatus);
 }

@@ -2,6 +2,10 @@ package com.example.carbon.emission.model.controller;
 
 import com.example.carbon.emission.model.entity.DefaultFactor;
 import com.example.carbon.emission.model.service.DefaultFactorService;
+import com.example.carbon.emission.model.service.EmissionFactorTemplateService;
+import com.example.carbon.emission.model.entity.EmissionFactorTemplate;
+import com.example.carbon.emission.model.security.CarbonSecurityContext;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,9 @@ public class DefaultFactorController {
     @Autowired
     private DefaultFactorService defaultFactorService;
 
+    @Autowired
+    private EmissionFactorTemplateService factorTemplateService;
+
     /**
      * 查询全部启用的缺省因子（status=1，按排放数据小类编码升序）
      *
@@ -57,7 +64,9 @@ public class DefaultFactorController {
      * @return 该模版下的缺省因子列表；无数据返回 200 + 空列表
      */
     @GetMapping("/by-template/{templateId}")
-    public ResponseEntity<List<DefaultFactor>> listByTemplate(@PathVariable Long templateId) {
+    public ResponseEntity<List<DefaultFactor>> listByTemplate(@PathVariable Long templateId,
+                                                               HttpServletRequest request) {
+        factorTemplateService.findById(templateId, currentUserId(request));
         return ResponseEntity.ok(defaultFactorService.findByTemplateId(templateId));
     }
 
@@ -68,7 +77,9 @@ public class DefaultFactorController {
      * @return 200 + {success, message}
      */
     @DeleteMapping("/by-template/{templateId}")
-    public ResponseEntity<Map<String, Object>> deleteByTemplate(@PathVariable Long templateId) {
+    public ResponseEntity<Map<String, Object>> deleteByTemplate(@PathVariable Long templateId,
+                                                                 HttpServletRequest request) {
+        requireOwner(templateId, currentUserId(request));
         defaultFactorService.deleteByTemplateId(templateId);
         Map<String, Object> resp = new HashMap<>();
         resp.put("success", true);
@@ -110,7 +121,8 @@ public class DefaultFactorController {
      * @return 200 + {success, message, data}；校验失败或重复返回 400 + {success, message}
      */
     @PostMapping
-    public ResponseEntity<Map<String, Object>> create(@RequestBody DefaultFactorRequest req) {
+    public ResponseEntity<Map<String, Object>> create(@RequestBody DefaultFactorRequest req,
+                                                       HttpServletRequest request) {
         Map<String, Object> resp = new HashMap<>();
         if (req.getSubcategoryCode() == null || req.getSubcategoryCode().isBlank()) {
             resp.put("success", false);
@@ -128,6 +140,8 @@ public class DefaultFactorController {
             resp.put("message", "因子库来源非法，必须为 ELECTRICITY/FOSSIL/THERMAL/WASTE_INCINERATION/WASTEWATER 之一");
             return ResponseEntity.badRequest().body(resp);
         }
+        Long userId = currentUserId(request);
+        requireOwner(req.getTemplateId(), userId);
         DefaultFactor entity = new DefaultFactor();
         entity.setTemplateId(req.getTemplateId());
         entity.setSubcategoryCode(req.getSubcategoryCode().trim());
@@ -139,7 +153,7 @@ public class DefaultFactorController {
         entity.setFactorUnit(req.getFactorUnit());
         entity.setFactorDescription(req.getFactorDescription());
         entity.setRemark(req.getRemark());
-        entity.setCreatedBy(req.getCreatedBy());
+        entity.setCreatedBy(userId);
         DefaultFactor saved = defaultFactorService.create(entity);
         if (saved == null) {
             resp.put("success", false);
@@ -164,7 +178,8 @@ public class DefaultFactorController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> update(@PathVariable Long id,
-                                                      @RequestBody DefaultFactorRequest req) {
+                                                      @RequestBody DefaultFactorRequest req,
+                                                      HttpServletRequest request) {
         Map<String, Object> resp = new HashMap<>();
         if (req.getFactorSource() != null && !req.getFactorSource().isBlank()
                 && !VALID_FACTOR_SOURCES.contains(req.getFactorSource().trim())) {
@@ -172,6 +187,10 @@ public class DefaultFactorController {
             resp.put("message", "因子库来源非法，必须为 ELECTRICITY/FOSSIL/THERMAL/WASTE_INCINERATION/WASTEWATER 之一");
             return ResponseEntity.badRequest().body(resp);
         }
+        DefaultFactor existing = defaultFactorService.findById(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+        Long userId = currentUserId(request);
+        requireOwner(existing.getTemplateId(), userId);
         DefaultFactor entity = new DefaultFactor();
         entity.setSubcategoryName(req.getSubcategoryName());
         if (req.getFactorSource() != null && !req.getFactorSource().isBlank()) {
@@ -184,7 +203,7 @@ public class DefaultFactorController {
         entity.setFactorDescription(req.getFactorDescription());
         entity.setRemark(req.getRemark());
         entity.setStatus(req.getStatus());
-        entity.setUpdatedBy(req.getUpdatedBy());
+        entity.setUpdatedBy(userId);
         DefaultFactor saved = defaultFactorService.update(id, entity);
         if (saved == null) {
             resp.put("success", false);
@@ -204,8 +223,11 @@ public class DefaultFactorController {
      * @return 200 + {success, message}；记录不存在时 success=false + "记录不存在"
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id, HttpServletRequest request) {
         Map<String, Object> resp = new HashMap<>();
+        DefaultFactor existing = defaultFactorService.findById(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+        requireOwner(existing.getTemplateId(), currentUserId(request));
         boolean ok = defaultFactorService.delete(id);
         if (!ok) {
             resp.put("success", false);
@@ -215,6 +237,21 @@ public class DefaultFactorController {
         resp.put("success", true);
         resp.put("message", "删除成功");
         return ResponseEntity.ok(resp);
+    }
+
+    private Long currentUserId(HttpServletRequest request) {
+        Object value = request.getAttribute(CarbonSecurityContext.REQUEST_ATTRIBUTE);
+        if (value instanceof CarbonSecurityContext context && context.userId() != null) return context.userId();
+        throw new org.springframework.web.server.ResponseStatusException(HttpStatus.UNAUTHORIZED, "未取得登录用户身份");
+    }
+
+    private void requireOwner(Long templateId, Long userId) {
+        if (templateId == null || templateId == 0) return;
+        EmissionFactorTemplate template = factorTemplateService.findById(templateId, userId);
+        if (template == null) throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND, "因子模板不存在");
+        if (!java.util.Objects.equals(template.getCreatedBy(), userId)) {
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.FORBIDDEN, "仅创建人可以维护因子模板缺省因子");
+        }
     }
 
     /**

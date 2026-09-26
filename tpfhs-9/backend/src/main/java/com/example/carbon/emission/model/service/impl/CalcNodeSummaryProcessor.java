@@ -49,7 +49,7 @@ public class CalcNodeSummaryProcessor {
     private static final Logger log = LoggerFactory.getLogger(CalcNodeSummaryProcessor.class);
 
     /** 小数精度 */
-    private static final int SCALE = 6;
+    private static final int SCALE = 9;
 
     /** 节点类型ID：根节点 */
     private static final int TYPE_ID_ROOT = 1;
@@ -101,6 +101,7 @@ public class CalcNodeSummaryProcessor {
 
         // 过滤汇总目标：type=1(root)、2(calc)、4(transport) 都走同一算法
         List<CalculationNode> targetNodes = allNodes.stream()
+                .filter(n -> !Boolean.FALSE.equals(n.getIncludeInCalculation()))
                 .filter(n -> n.getTypeId() != null && (n.getTypeId() == TYPE_ID_ROOT
                         || n.getTypeId() == TYPE_ID_CALCULATION
                         || n.getTypeId() == TYPE_ID_TRANSPORT))
@@ -116,6 +117,7 @@ public class CalcNodeSummaryProcessor {
 
         // 3.1 按 parent 分组（子节点列表）：key=parentId，value=直属子节点
         Map<Long, List<CalculationNode>> childrenByParent = allNodes.stream()
+                .filter(n -> !Boolean.FALSE.equals(n.getIncludeInCalculation()))
                 .filter(n -> n.getParentId() != null)
                 .collect(Collectors.groupingBy(CalculationNode::getParentId));
 
@@ -284,44 +286,13 @@ public class CalcNodeSummaryProcessor {
                         r.getAdjustedCarbonEmission() : BigDecimal.ZERO;
                 String mu = r.getMeasurementUnit();
 
-                try {
-                    // 先查该小类的核算单位，用于后续计算换算系数
-                    String calcUnit = lookupCalcUnit(sub);
-
-                    // 1) energy 换算到核算单位
-                    BigDecimal convertedEnergy = unitConversionService.convertToCalculationUnit(sub, mu, energy);
-                    if (convertedEnergy != null) {
-                        energy = convertedEnergy;
-                    }
-
-                    // 2) 对 carbon 乘同换算系数：
-                    //    carbon_old = energy_old × factor
-                    //    carbon_new = energy_new × factor = carbon_old × (energy_new / energy_old)
-                    //    系数 = convert(sub, fromUnit, calcUnit, 1)
-                    if (mu != null && calcUnit != null && !mu.equals(calcUnit)) {
-                        BigDecimal conversionFactor = unitConversionService.convert(
-                                sub, mu, calcUnit, BigDecimal.ONE);
-                        if (conversionFactor != null
-                                && conversionFactor.compareTo(BigDecimal.ONE) != 0
-                                && carbon != null) {
-                            carbon = carbon.multiply(conversionFactor)
-                                    .setScale(SCALE, RoundingMode.HALF_UP);
-                        }
-                    }
-                } catch (Exception ignore) {
-                    // 不中断，保持原值；UnitConversionService 内部已有 WARN
-                }
-
-                BigDecimal factorVal = (r.getCarbonEmissionFactor() != null) ?
-                        r.getCarbonEmissionFactor() : BigDecimal.ZERO;
+                // 活动量严格换算到该小类的核算单位。碳排放量在采集节点阶段已经
+                // 统一为 tCO2e，只能累加，不能再乘活动量换算系数。
+                energy = unitConversionService.convertToCalculationUnitRequired(sub, mu, energy);
 
                 Agg agg = directAggMap.computeIfAbsent(g, k -> new Agg());
                 agg.directEnergy = agg.directEnergy.add(energy == null ? BigDecimal.ZERO : energy);
                 agg.directCarbon = agg.directCarbon.add(carbon == null ? BigDecimal.ZERO : carbon);
-                // factor 按 energy 加权累加
-                BigDecimal w = energy == null ? BigDecimal.ZERO : energy;
-                agg.factorWeighted = agg.factorWeighted.add(w.multiply(factorVal));
-                agg.energyWeight = agg.energyWeight.add(w);
             }
         }
 
@@ -381,11 +352,11 @@ public class CalcNodeSummaryProcessor {
             BigDecimal subtotalEnergy = directEnergy.add(c.subtotalEnergyChildren);
             BigDecimal subtotalCarbon = directCarbon.add(c.subtotalCarbonChildren);
 
-            // 加权平均因子
+            // 汇总等效因子：统一碳排放量 / 统一核算活动量。
+            // 不直接平均原始因子，因为原始因子可能使用不同的分子/分母单位。
             BigDecimal factorAvg = BigDecimal.ZERO;
-            BigDecimal ew = d.energyWeight;
-            if (ew != null && ew.compareTo(BigDecimal.ZERO) > 0 && d.factorWeighted != null) {
-                factorAvg = d.factorWeighted.divide(ew, SCALE, RoundingMode.HALF_UP);
+            if (subtotalEnergy.compareTo(BigDecimal.ZERO) > 0) {
+                factorAvg = subtotalCarbon.divide(subtotalEnergy, SCALE, RoundingMode.HALF_UP);
             }
 
             CalcNodeSummary s = new CalcNodeSummary();
@@ -492,8 +463,6 @@ public class CalcNodeSummaryProcessor {
 
         BigDecimal directEnergy = BigDecimal.ZERO;
         BigDecimal directCarbon = BigDecimal.ZERO;
-        BigDecimal factorWeighted = BigDecimal.ZERO;
-        BigDecimal energyWeight = BigDecimal.ZERO;
         BigDecimal subtotalEnergyChildren = BigDecimal.ZERO;
         BigDecimal subtotalCarbonChildren = BigDecimal.ZERO;
     }

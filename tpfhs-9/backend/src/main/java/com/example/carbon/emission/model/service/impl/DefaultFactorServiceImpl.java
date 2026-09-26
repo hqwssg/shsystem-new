@@ -41,6 +41,11 @@ public class DefaultFactorServiceImpl implements DefaultFactorService {
         return defaultFactorRepository.findByTemplateIdOrderBySubcategoryCodeAsc(templateId);
     }
 
+    @Override
+    public DefaultFactor findById(Long id) {
+        return defaultFactorRepository.findById(id).orElse(null);
+    }
+
     /**
      * 按排放数据小类编码查询单条记录
      *

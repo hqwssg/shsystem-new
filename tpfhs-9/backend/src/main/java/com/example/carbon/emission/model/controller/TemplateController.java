@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,14 +39,14 @@ public class TemplateController {
     }
     
     @PostMapping("/create")
-    public ResponseEntity<TemplateDTO> createTemplate(@RequestBody CreateTemplateRequest request) {
+    public ResponseEntity<TemplateDTO> createTemplate(@Valid @RequestBody CreateTemplateRequest request) {
         return ResponseEntity.ok(templateService.createTemplate(request));
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<TemplateDTO> updateTemplate(@PathVariable Long id, @RequestBody Map<String, Object> request) {
         String name = (String) request.get("name");
-        Long updatedBy = ((Number) request.get("updatedBy")).longValue();
+        Long updatedBy = requiredLong(request, "updatedBy");
         return ResponseEntity.ok(templateService.updateTemplate(id, name, updatedBy));
     }
     
@@ -71,12 +74,12 @@ public class TemplateController {
                 try {
                     taskConfig = objectMapper.writeValueAsString(taskConfigObj);
                 } catch (JsonProcessingException e) {
-                    taskConfig = taskConfigObj.toString();
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "任务配置必须是合法JSON对象", e);
                 }
             }
         }
 
-        Long updatedBy = ((Number) request.get("updatedBy")).longValue();
+        Long updatedBy = requiredLong(request, "updatedBy");
 
         Long factorTemplateId = null;
         Object factorTemplateIdObj = request.get("factorTemplateId");
@@ -124,5 +127,13 @@ public class TemplateController {
     @GetMapping("/{id}/validation-result")
     public ResponseEntity<TemplateValidationResultVO> getValidationResult(@PathVariable Long id) {
         return ResponseEntity.ok(templateValidationService.getValidationResult(id));
+    }
+
+    private Long requiredLong(Map<String, Object> request, String field) {
+        Object value = request.get(field);
+        if (!(value instanceof Number)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, field + "不能为空且必须为数字");
+        }
+        return ((Number) value).longValue();
     }
 }

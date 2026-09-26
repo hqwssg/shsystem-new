@@ -31,6 +31,7 @@ import com.ruoyi.carbon.report.service.IReportDeptProfileService;
 import com.ruoyi.carbon.report.service.IReportGenerationService;
 import com.ruoyi.carbon.report.service.IReportSourceService;
 import com.ruoyi.carbon.report.service.IReportTaskService;
+import com.ruoyi.carbon.report.source.ReportExcelType;
 import com.ruoyi.carbon.report.source.ReportValidator;
 import com.ruoyi.common.core.constant.HttpStatus;
 import com.ruoyi.common.core.exception.ServiceException;
@@ -112,7 +113,6 @@ public class ReportTaskController extends BaseController
     }
 
     @RequiresPermissions("carbon:report:edit")
-    @Log(title = "碳排放报告章节", businessType = BusinessType.UPDATE)
     @PutMapping("/tasks/{id}/sections/{section}")
     public AjaxResult saveSection(@PathVariable Long id, @PathVariable String section, @RequestBody Map<String, Object> body)
     {
@@ -120,6 +120,48 @@ public class ReportTaskController extends BaseController
         Object data = body.get("data");
         String payload = data == null ? "{}" : JSON.toJSONString(data);
         return success(reportTaskService.saveSection(id, currentDept(null), section, version, payload, SecurityUtils.getUsername()));
+    }
+
+    @RequiresPermissions("carbon:report:edit")
+    @GetMapping("/tasks/{id}/excel-templates/{type}")
+    public ResponseEntity<byte[]> excelTemplate(@PathVariable Long id, @PathVariable String type)
+    {
+        reportTaskService.get(id, currentDept(null));
+        ReportExcelType excelType = ReportExcelType.from(type);
+        byte[] data = reportTaskService.excelTemplate(type);
+        String filename = excelType.label + ".xlsx";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"; filename*=UTF-8''"
+                        + java.net.URLEncoder.encode(filename, java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20"))
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .contentLength(data.length)
+                .body(data);
+    }
+
+    @RequiresPermissions("carbon:report:edit")
+    @Log(title = "碳排放报告", businessType = BusinessType.IMPORT)
+    @PostMapping(value = "/tasks/{id}/excel-import/{type}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public AjaxResult importExcel(@PathVariable Long id, @PathVariable String type,
+            @RequestParam("mode") String mode, @RequestParam("version") Integer version,
+            @RequestParam("file") MultipartFile file)
+    {
+        if (file == null || file.isEmpty())
+        {
+            throw new ServiceException("请选择 Excel 文件", HttpStatus.BAD_REQUEST);
+        }
+        try
+        {
+            return success(reportTaskService.importExcel(id, currentDept(null), type, mode, version,
+                    file.getOriginalFilename(), file.getInputStream(), SecurityUtils.getUsername()));
+        }
+        catch (ServiceException ex)
+        {
+            throw ex;
+        }
+        catch (Exception ex)
+        {
+            throw new ServiceException("导入失败: " + ex.getMessage());
+        }
     }
 
     @RequiresPermissions("carbon:report:query")
@@ -138,7 +180,6 @@ public class ReportTaskController extends BaseController
     }
 
     @RequiresPermissions("carbon:report:edit")
-    @Log(title = "碳排放报告数据预填", businessType = BusinessType.IMPORT)
     @PostMapping("/tasks/{id}/prefill/commit")
     public AjaxResult prefillCommit(@PathVariable Long id, @RequestBody(required = false) CreateReportRequest body)
     {
@@ -155,7 +196,6 @@ public class ReportTaskController extends BaseController
     }
 
     @RequiresPermissions("carbon:report:generate")
-    @Log(title = "碳排放报告生成", businessType = BusinessType.EXPORT)
     @PostMapping("/tasks/{id}/generation-jobs")
     public AjaxResult generate(@PathVariable Long id, @RequestBody Map<String, Object> body)
     {
@@ -206,11 +246,20 @@ public class ReportTaskController extends BaseController
     }
 
     @RequiresPermissions("carbon:report:profile:edit")
-    @Log(title = "碳排放报告部门配置", businessType = BusinessType.UPDATE)
     @PutMapping("/dept-profile/{deptId}")
     public AjaxResult saveProfile(@PathVariable Long deptId, @RequestBody ReportDeptProfile profile)
     {
         return success(reportDeptProfileService.save(profile, currentDept(deptId), SecurityUtils.getUsername()));
+    }
+
+    @RequiresPermissions("carbon:report:profile:edit")
+    @Log(title = "碳排放报告档案", businessType = BusinessType.UPDATE)
+    @PutMapping("/dept-profile/{deptId}/activity-prose")
+    public AjaxResult saveActivityProse(@PathVariable Long deptId, @RequestBody Map<String, Object> body)
+    {
+        Object data = body == null ? null : body.getOrDefault("data", body);
+        String payload = data == null ? "{}" : JSON.toJSONString(data);
+        return success(reportDeptProfileService.saveActivityProse(currentDept(deptId), payload, SecurityUtils.getUsername()));
     }
 
     @RequiresPermissions("carbon:report:query")
@@ -254,7 +303,6 @@ public class ReportTaskController extends BaseController
     }
 
     @RequiresPermissions("carbon:report:edit")
-    @Log(title = "碳排放报告图片", businessType = BusinessType.DELETE)
     @DeleteMapping("/tasks/{id}/images/{role}")
     public AjaxResult resetImage(@PathVariable Long id, @PathVariable String role)
     {

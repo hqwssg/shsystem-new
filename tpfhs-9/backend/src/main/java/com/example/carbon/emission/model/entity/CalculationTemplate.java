@@ -35,13 +35,13 @@ public class CalculationTemplate {
     /**
      * 核算周期起始日期（只保留日期部分）
      */
-    @Column(name = "calculation_cycle_start_date")
+    @Column(name = "calculation_cycle_start_date", nullable = false)
     private LocalDate calculationCycleStartDate;
 
     /**
      * 核算周期截止日期（只保留日期部分）
      */
-    @Column(name = "calculation_cycle_end_date")
+    @Column(name = "calculation_cycle_end_date", nullable = false)
     private LocalDate calculationCycleEndDate;
 
     /**

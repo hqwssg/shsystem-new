@@ -7,4 +7,6 @@ public interface IReportDeptProfileService
     ReportDeptProfile get(Long deptId);
 
     ReportDeptProfile save(ReportDeptProfile profile, Long deptId, String username);
+
+    ReportDeptProfile saveActivityProse(Long deptId, String proseJson, String username);
 }

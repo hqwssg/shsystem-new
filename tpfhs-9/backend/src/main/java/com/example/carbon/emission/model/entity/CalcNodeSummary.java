@@ -100,7 +100,7 @@ public class CalcNodeSummary {
     /**
      * 直接碳排放量（本节点自身产生的碳排放，不含子节点）
      */
-    @Column(name = "direct_carbon_emission", precision = 18, scale = 6)
+    @Column(name = "direct_carbon_emission", precision = 18, scale = 9)
     private BigDecimal directCarbonEmission = BigDecimal.ZERO;
 
     /**
@@ -112,7 +112,7 @@ public class CalcNodeSummary {
     /**
      * 碳排放小计值（本节点 + 所有子节点汇总后的碳排放）
      */
-    @Column(name = "subtotal_carbon_emission", precision = 18, scale = 6)
+    @Column(name = "subtotal_carbon_emission", precision = 18, scale = 9)
     private BigDecimal subtotalCarbonEmission = BigDecimal.ZERO;
 
     /**
@@ -124,7 +124,7 @@ public class CalcNodeSummary {
     /**
      * 碳排放因子（用于本次核算的实际因子值）
      */
-    @Column(name = "carbon_emission_factor", precision = 18, scale = 6)
+    @Column(name = "carbon_emission_factor", precision = 18, scale = 9)
     private BigDecimal carbonEmissionFactor;
 
     /**

@@ -52,6 +52,15 @@ public class CollectionRecord {
     @Column(name = "reading_value", precision = 18, scale = 6)
     private BigDecimal readingValue;
 
+    @Column(name = "external_record_id", length = 128)
+    private String externalRecordId;
+
+    @Column(name = "external_quality", length = 30)
+    private String externalQuality;
+
+    @Column(name = "collection_failure_reason", length = 500)
+    private String collectionFailureReason;
+
     /**
      * 本次采集时间：指系统从计量表直接采集数据的时刻。
      * 该数据可能已由电力系统等外部系统在预设时间完成读取并存储。

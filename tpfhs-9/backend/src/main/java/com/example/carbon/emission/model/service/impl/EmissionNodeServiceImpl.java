@@ -14,13 +14,18 @@ import com.example.carbon.emission.model.entity.Template;
 import com.example.carbon.emission.model.repository.EmissionNodeConfigRepository;
 import com.example.carbon.emission.model.repository.EmissionNodeInfoRepository;
 import com.example.carbon.emission.model.repository.EmissionNodeRepository;
+import com.example.carbon.emission.model.repository.FossilFuelMeterInfoRepository;
+import com.example.carbon.emission.model.repository.MeterInfoRepository;
 import com.example.carbon.emission.model.repository.NodeTypeRepository;
+import com.example.carbon.emission.model.repository.PurchasedHeatMeterInfoRepository;
 import com.example.carbon.emission.model.repository.SystemConfigRepository;
 import com.example.carbon.emission.model.repository.TemplateRepository;
 import com.example.carbon.emission.model.service.EmissionNodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +59,18 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
     
     @Autowired
     private SystemConfigRepository systemConfigRepository;
+
+    @Autowired
+    private MeterInfoRepository meterInfoRepository;
+
+    @Autowired
+    private FossilFuelMeterInfoRepository fossilFuelMeterInfoRepository;
+
+    @Autowired
+    private PurchasedHeatMeterInfoRepository purchasedHeatMeterInfoRepository;
+
+    @Autowired
+    private FactorDimensionService factorDimensionService;
     
     /**
      * 排放类别与子类别的映射关系
@@ -257,15 +274,39 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
     @Override
     @Transactional
     public NodeDTO createNode(CreateNodeRequest request) {
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "节点请求不能为空");
+        }
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "节点名称不能为空");
+        }
+        if (request.getTypeId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "节点类型不能为空");
+        }
+        if (request.getCreatedBy() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "创建人不能为空");
+        }
         NodeType type = typeRepository.findById(request.getTypeId())
-            .orElseThrow(() -> new RuntimeException("节点类型不存在: " + request.getTypeId()));
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.UNPROCESSABLE_ENTITY, "节点类型不存在: " + request.getTypeId()));
         
         EmissionNode parent = null;
         Long templateId = request.getTemplateId();
         if (request.getParentId() != null) {
             parent = nodeRepository.findById(request.getParentId())
-                .orElseThrow(() -> new RuntimeException("父节点不存在: " + request.getParentId()));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNPROCESSABLE_ENTITY, "父节点不存在或形成自引用: " + request.getParentId()));
+            if (request.getTemplateId() != null
+                    && !java.util.Objects.equals(request.getTemplateId(), parent.getTemplateId())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "父节点与新节点不属于同一模版");
+            }
             templateId = parent.getTemplateId();
+        }
+        if (templateId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "节点必须关联模版");
+        }
+        if (!templateRepository.existsById(templateId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "模版不存在: " + templateId);
         }
         
         EmissionNode node = new EmissionNode();
@@ -380,6 +421,7 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
      * @param userId 操作用户ID（可选），用于记录创建人和更新人
      */
     private void saveConfig(Long nodeId, NodeConfigDTO configDTO, Long userId) {
+        validateCollectionPoint(configDTO);
         EmissionNodeConfig config = configRepository.findByNodeId(nodeId)
             .orElse(new EmissionNodeConfig());
         
@@ -387,6 +429,7 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         config.setEmissionCategory(configDTO.getEmissionCategory());
         config.setEmissionSubcategory(configDTO.getEmissionSubcategory());
         config.setCarbonEmissionFactor(configDTO.getCarbonEmissionFactor());
+        config.setCarbonEmissionFactorUnit(configDTO.getCarbonEmissionFactorUnit());
         config.setCarbonEmissionFactorDescription(configDTO.getCarbonEmissionFactorDescription());
         
         config.setCollectionDescription(configDTO.getCollectionDescription());
@@ -404,6 +447,82 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         }
         
         configRepository.save(config);
+    }
+
+    /**
+     * 校验采集点类型、主键及排放分类的一致性。未选择采集点时允许二者同时为空；
+     * 一旦选择采集点，分类以采集点主数据为准，空值自动补齐，冲突值受控拒绝。
+     */
+    private void validateCollectionPoint(NodeConfigDTO configDTO) {
+        Integer type = configDTO.getCollectionPointType();
+        Long pointId = configDTO.getCollectionPointId();
+        if (type == null && pointId == null) {
+            return;
+        }
+        if (type == null || pointId == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "采集点类型和采集点ID必须同时设置");
+        }
+
+        String expectedCategory;
+        String pointSubcategory;
+        switch (type) {
+            case 1 -> {
+                expectedCategory = "购入的电力";
+                pointSubcategory = meterInfoRepository.findById(pointId)
+                        .orElseThrow(() -> invalidCollectionPoint(type, pointId))
+                        .getEmissionSubcategory();
+            }
+            case 2 -> {
+                expectedCategory = "化石燃料";
+                pointSubcategory = fossilFuelMeterInfoRepository.findById(pointId)
+                        .orElseThrow(() -> invalidCollectionPoint(type, pointId))
+                        .getFuelType();
+            }
+            case 3 -> {
+                expectedCategory = "购入的热力";
+                pointSubcategory = purchasedHeatMeterInfoRepository.findById(pointId)
+                        .orElseThrow(() -> invalidCollectionPoint(type, pointId))
+                        .getHeatType();
+            }
+            default -> throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "不支持的采集点类型: " + type);
+        }
+
+        String requestedCategory = configDTO.getEmissionCategory();
+        if (requestedCategory == null || requestedCategory.isBlank()) {
+            configDTO.setEmissionCategory(expectedCategory);
+        } else if (!expectedCategory.equals(requestedCategory.trim())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "排放大类与采集点类型不匹配");
+        }
+        if (pointSubcategory == null || pointSubcategory.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "采集点未配置排放数据小类");
+        }
+
+        String requestedSubcategory = configDTO.getEmissionSubcategory();
+        if (requestedSubcategory == null || requestedSubcategory.isBlank()) {
+            configDTO.setEmissionSubcategory(pointSubcategory);
+            return;
+        }
+        try {
+            String requestedCode = factorDimensionService.resolveSubcategoryCode(requestedSubcategory);
+            String pointCode = factorDimensionService.resolveSubcategoryCode(pointSubcategory);
+            if (!requestedCode.equals(pointCode)) {
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                        "排放数据小类与采集点不匹配");
+            }
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+    }
+
+    private ResponseStatusException invalidCollectionPoint(Integer type, Long pointId) {
+        return new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                "采集点不存在: type=" + type + ", id=" + pointId);
     }
     
     /**
@@ -498,6 +617,7 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         dto.setEmissionCategory(config.getEmissionCategory());
         dto.setEmissionSubcategory(config.getEmissionSubcategory());
         dto.setCarbonEmissionFactor(config.getCarbonEmissionFactor());
+        dto.setCarbonEmissionFactorUnit(config.getCarbonEmissionFactorUnit());
         dto.setCarbonEmissionFactorDescription(config.getCarbonEmissionFactorDescription());
         
         dto.setCollectionDescription(config.getCollectionDescription());
@@ -1042,6 +1162,7 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
             newConfig.setEmissionCategory(sourceConfig.getEmissionCategory());
             newConfig.setEmissionSubcategory(sourceConfig.getEmissionSubcategory());
             newConfig.setCarbonEmissionFactor(sourceConfig.getCarbonEmissionFactor());
+            newConfig.setCarbonEmissionFactorUnit(sourceConfig.getCarbonEmissionFactorUnit());
             newConfig.setCarbonEmissionFactorDescription(sourceConfig.getCarbonEmissionFactorDescription());
             newConfig.setCollectionDescription(sourceConfig.getCollectionDescription());
             newConfig.setEquipmentCode(sourceConfig.getEquipmentCode());

@@ -23,6 +23,8 @@ public class ReportActivityRow extends BaseEntity
     private String sourceUnit;
     private BigDecimal normalizedValue;
     private String normalizedUnit;
+    private BigDecimal heatingAreaM2;
+    private BigDecimal heatCoefficient;
     private String sourceHash;
     private String overrideReason;
     private Integer sortOrder;
@@ -63,6 +65,10 @@ public class ReportActivityRow extends BaseEntity
     public void setNormalizedValue(BigDecimal normalizedValue) { this.normalizedValue = normalizedValue; }
     public String getNormalizedUnit() { return normalizedUnit; }
     public void setNormalizedUnit(String normalizedUnit) { this.normalizedUnit = normalizedUnit; }
+    public BigDecimal getHeatingAreaM2() { return heatingAreaM2; }
+    public void setHeatingAreaM2(BigDecimal heatingAreaM2) { this.heatingAreaM2 = heatingAreaM2; }
+    public BigDecimal getHeatCoefficient() { return heatCoefficient; }
+    public void setHeatCoefficient(BigDecimal heatCoefficient) { this.heatCoefficient = heatCoefficient; }
     public String getSourceHash() { return sourceHash; }
     public void setSourceHash(String sourceHash) { this.sourceHash = sourceHash; }
     public String getOverrideReason() { return overrideReason; }

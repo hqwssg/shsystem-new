@@ -2,6 +2,8 @@ package com.example.carbon.emission.model.controller;
 
 import com.example.carbon.emission.model.entity.EmissionFactorTemplate;
 import com.example.carbon.emission.model.service.EmissionFactorTemplateService;
+import com.example.carbon.emission.model.security.CarbonSecurityContext;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,8 @@ public class EmissionFactorTemplateController {
      * @return 模版列表；空列表返回 200 + 空 body
      */
     @GetMapping
-    public ResponseEntity<List<EmissionFactorTemplate>> listAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<EmissionFactorTemplate>> listAll(HttpServletRequest request) {
+        return ResponseEntity.ok(service.findAll(currentUserId(request)));
     }
 
     /**
@@ -35,8 +37,8 @@ public class EmissionFactorTemplateController {
      * @return 找到时返回 200 + 模版实体；不存在时返回 404
      */
     @GetMapping("/{id}")
-    public ResponseEntity<EmissionFactorTemplate> getById(@PathVariable Long id) {
-        EmissionFactorTemplate template = service.findById(id);
+    public ResponseEntity<EmissionFactorTemplate> getById(@PathVariable Long id, HttpServletRequest request) {
+        EmissionFactorTemplate template = service.findById(id, currentUserId(request));
         if (template == null) {
             return ResponseEntity.notFound().build();
         }
@@ -53,7 +55,7 @@ public class EmissionFactorTemplateController {
      * @return 200 + {success, message, data}；校验失败返回 400 + {success, message}
      */
     @PostMapping
-    public ResponseEntity<Map<String, Object>> create(@RequestBody TemplateRequest req) {
+    public ResponseEntity<Map<String, Object>> create(@RequestBody TemplateRequest req, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         if (req.getTemplateName() == null || req.getTemplateName().isBlank()) {
             response.put("success", false);
@@ -65,7 +67,7 @@ public class EmissionFactorTemplateController {
         entity.setTemplateDescription(req.getTemplateDescription());
         entity.setIsShared(req.getIsShared());
         entity.setCreatedBy(req.getCreatedBy());
-        EmissionFactorTemplate saved = service.create(entity);
+        EmissionFactorTemplate saved = service.create(entity, currentUserId(request));
         if (saved == null) {
             response.put("success", false);
             response.put("message", "模版名称已存在");
@@ -87,7 +89,8 @@ public class EmissionFactorTemplateController {
      * @return 200 + {success, message, data}；记录不存在返回 400 + {success, message}
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @RequestBody TemplateRequest req) {
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @RequestBody TemplateRequest req,
+                                                       HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         EmissionFactorTemplate entity = new EmissionFactorTemplate();
         entity.setTemplateName(req.getTemplateName());
@@ -95,7 +98,7 @@ public class EmissionFactorTemplateController {
         entity.setIsShared(req.getIsShared());
         entity.setStatus(req.getStatus());
         entity.setUpdatedBy(req.getUpdatedBy());
-        EmissionFactorTemplate saved = service.update(id, entity);
+        EmissionFactorTemplate saved = service.update(id, entity, currentUserId(request));
         if (saved == null) {
             response.put("success", false);
             response.put("message", "记录不存在");
@@ -114,9 +117,9 @@ public class EmissionFactorTemplateController {
      * @return 200 + {success, message}；记录不存在时 success=false + "记录不存在"
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
-        boolean ok = service.delete(id);
+        boolean ok = service.delete(id, currentUserId(request));
         if (ok) {
             response.put("success", true);
             response.put("message", "删除成功");
@@ -135,15 +138,17 @@ public class EmissionFactorTemplateController {
      * @return 200 + {success, message, data}；记录不存在时 success=false
      */
     @PutMapping("/{id}/toggle-status")
-    public ResponseEntity<Map<String, Object>> toggleStatus(@PathVariable Long id, @RequestBody TemplateRequest req) {
+    public ResponseEntity<Map<String, Object>> toggleStatus(@PathVariable Long id, @RequestBody TemplateRequest req,
+                                                             HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
-        boolean ok = service.toggleStatus(id, req.getUpdatedBy());
+        Long userId = currentUserId(request);
+        boolean ok = service.toggleStatus(id, userId);
         if (!ok) {
             response.put("success", false);
             response.put("message", "记录不存在");
             return ResponseEntity.ok(response);
         }
-        EmissionFactorTemplate saved = service.findById(id);
+        EmissionFactorTemplate saved = service.findById(id, userId);
         response.put("success", true);
         response.put("message", "状态已切换");
         response.put("data", saved);
@@ -158,15 +163,17 @@ public class EmissionFactorTemplateController {
      * @return 200 + {success, message, data}；记录不存在时 success=false
      */
     @PutMapping("/{id}/toggle-shared")
-    public ResponseEntity<Map<String, Object>> toggleShared(@PathVariable Long id, @RequestBody TemplateRequest req) {
+    public ResponseEntity<Map<String, Object>> toggleShared(@PathVariable Long id, @RequestBody TemplateRequest req,
+                                                             HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
-        boolean ok = service.toggleShared(id, req.getUpdatedBy());
+        Long userId = currentUserId(request);
+        boolean ok = service.toggleShared(id, userId);
         if (!ok) {
             response.put("success", false);
             response.put("message", "记录不存在");
             return ResponseEntity.ok(response);
         }
-        EmissionFactorTemplate saved = service.findById(id);
+        EmissionFactorTemplate saved = service.findById(id, userId);
         response.put("success", true);
         response.put("message", "共享状态已切换");
         response.put("data", saved);
@@ -203,7 +210,7 @@ public class EmissionFactorTemplateController {
      * @return 200 + {success, message, data}；校验失败或源不存在返回 400 + {success, message}
      */
     @PostMapping("/copy")
-    public ResponseEntity<Map<String, Object>> copyTemplate(@RequestBody CopyRequest req) {
+    public ResponseEntity<Map<String, Object>> copyTemplate(@RequestBody CopyRequest req, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         if (req.getSourceId() == null) {
             response.put("success", false);
@@ -215,7 +222,7 @@ public class EmissionFactorTemplateController {
             response.put("message", "新模版名称不能为空");
             return ResponseEntity.badRequest().body(response);
         }
-        EmissionFactorTemplate saved = service.copyTemplate(req.getSourceId(), req.getNewName(), req.getCreatedBy());
+        EmissionFactorTemplate saved = service.copyTemplate(req.getSourceId(), req.getNewName(), currentUserId(request));
         if (saved == null) {
             response.put("success", false);
             response.put("message", "拷贝失败：源模版不存在或名称已存在");
@@ -225,6 +232,15 @@ public class EmissionFactorTemplateController {
         response.put("message", "拷贝成功");
         response.put("data", saved);
         return ResponseEntity.ok(response);
+    }
+
+    private Long currentUserId(HttpServletRequest request) {
+        Object value = request.getAttribute(CarbonSecurityContext.REQUEST_ATTRIBUTE);
+        if (value instanceof CarbonSecurityContext context && context.userId() != null) {
+            return context.userId();
+        }
+        throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.UNAUTHORIZED, "未取得登录用户身份");
     }
 
     public static class CopyRequest {

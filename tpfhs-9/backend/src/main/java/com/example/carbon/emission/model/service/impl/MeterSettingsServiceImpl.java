@@ -49,6 +49,9 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private HttpReadingProbe httpReadingProbe;
     
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
@@ -253,6 +256,8 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
         dto.setLastCollectionTime(m.getLastCollectionTime() != null ? m.getLastCollectionTime().format(formatter) : null);
         dto.setAutoMeterReadingConfig(m.getAutoMeterReadingConfig());
         dto.setIsCumulative(m.getIsCumulative());
+        dto.setRolloverEnabled(m.getRolloverEnabled());
+        dto.setRolloverThreshold(m.getRolloverThreshold());
         dto.setIsMobileSource(m.getIsMobileSource());
         dto.setMeasurementUnit(m.getMeasurementUnit());
         dto.setDataSourceSystem(m.getDataSourceSystem());
@@ -356,6 +361,8 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
     @Override
     @Transactional
     public MeterTreeNodeDTO createMeter(CreateMeterRequest request) {
+        validateAllocationRatio(request.getIsAllocationChild(), request.getAllocationRatio());
+        validateRollover(request.getIsCumulative(), request.getRolloverEnabled(), request.getRolloverThreshold());
         Point point = pointRepository.findById(request.getPointId())
             .orElseThrow(() -> new RuntimeException("集中器不存在: " + request.getPointId()));
         if (meterRepository.existsByName(request.getName())) {
@@ -392,6 +399,8 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
         m.setAllocationRatio(request.getAllocationRatio() != null ? request.getAllocationRatio() : java.math.BigDecimal.ONE);
         m.setAutoMeterReadingConfig(request.getAutoMeterReadingConfig());
         m.setIsCumulative(request.getIsCumulative() != null ? request.getIsCumulative() : 0);
+        m.setRolloverEnabled(request.getRolloverEnabled() != null ? request.getRolloverEnabled() : 0);
+        m.setRolloverThreshold(request.getRolloverThreshold());
         m.setIsMobileSource(request.getIsMobileSource() != null ? request.getIsMobileSource() : 0);
         m.setMeasurementUnit(request.getMeasurementUnit());
         m.setDataSourceSystem(request.getDataSourceSystem());
@@ -470,6 +479,16 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
                 CreateMeterRequest req = objectMapper.convertValue(request, CreateMeterRequest.class);
                 MeterInfo m = meterRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("电表不存在: " + id));
+                Integer effectiveAllocationChild = req.getIsAllocationChild() != null
+                        ? req.getIsAllocationChild() : m.getIsAllocationChild();
+                java.math.BigDecimal effectiveAllocationRatio = req.getAllocationRatio() != null
+                        ? req.getAllocationRatio() : m.getAllocationRatio();
+                validateAllocationRatio(effectiveAllocationChild, effectiveAllocationRatio);
+                Integer effectiveCumulative = req.getIsCumulative() != null ? req.getIsCumulative() : m.getIsCumulative();
+                Integer effectiveRollover = req.getRolloverEnabled() != null ? req.getRolloverEnabled() : m.getRolloverEnabled();
+                java.math.BigDecimal effectiveThreshold = req.getRolloverThreshold() != null
+                        ? req.getRolloverThreshold() : m.getRolloverThreshold();
+                validateRollover(effectiveCumulative, effectiveRollover, effectiveThreshold);
                 if (!m.getName().equals(req.getName()) && meterRepository.existsByName(req.getName())) {
                     throw new RuntimeException("电表名称已存在: " + req.getName());
                 }
@@ -493,6 +512,10 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
                 }
                 if (req.getAutoMeterReadingConfig() != null) m.setAutoMeterReadingConfig(req.getAutoMeterReadingConfig());
                 if (req.getIsCumulative() != null) m.setIsCumulative(req.getIsCumulative());
+                if (req.getRolloverEnabled() != null) m.setRolloverEnabled(req.getRolloverEnabled());
+                if (req.getRolloverThreshold() != null || Integer.valueOf(0).equals(req.getRolloverEnabled())) {
+                    m.setRolloverThreshold(req.getRolloverThreshold());
+                }
                 if (req.getIsMobileSource() != null) m.setIsMobileSource(req.getIsMobileSource());
                 if (req.getMeasurementUnit() != null) m.setMeasurementUnit(req.getMeasurementUnit());
                 if (req.getDataSourceSystem() != null) m.setDataSourceSystem(req.getDataSourceSystem());
@@ -515,6 +538,31 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
             }
             default:
                 throw new RuntimeException("未知的节点类型: " + nodeType);
+        }
+    }
+
+    private void validateAllocationRatio(Integer isAllocationChild, java.math.BigDecimal ratio) {
+        if (!Integer.valueOf(1).equals(isAllocationChild)) {
+            return;
+        }
+        if (ratio == null) {
+            throw new IllegalArgumentException("分摊子电表的分摊比例不能为空");
+        }
+        if (ratio.compareTo(java.math.BigDecimal.ZERO) < 0
+                || ratio.compareTo(java.math.BigDecimal.ONE) > 0) {
+            throw new IllegalArgumentException("分摊比例必须在0到1之间");
+        }
+    }
+
+    private void validateRollover(Integer cumulative, Integer enabled, java.math.BigDecimal threshold) {
+        if (!Integer.valueOf(1).equals(enabled)) return;
+        if (!Integer.valueOf(1).equals(cumulative)) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "只有累计采集点可以启用归零");
+        }
+        if (threshold == null || threshold.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "归零阈值必须大于0");
         }
     }
     
@@ -1228,14 +1276,12 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
     @Override
     public Map<String, Object> testMeterReading(Long meterId, Map<String, Object> config) {
         Map<String, Object> result = new LinkedHashMap<>();
-
         // 编辑模式下校验电表是否存在
         if (meterId != null) {
             meterRepository.findById(meterId)
                 .orElseThrow(() -> new RuntimeException("电表不存在: " + meterId));
         }
 
-        // 1. 基础校验
         if (config == null || config.isEmpty()) {
             result.put("success", false);
             result.put("message", "未提供抄表接口配置");

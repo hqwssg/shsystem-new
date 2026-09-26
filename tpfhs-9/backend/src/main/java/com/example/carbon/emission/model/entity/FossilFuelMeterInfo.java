@@ -71,6 +71,14 @@ public class FossilFuelMeterInfo {
     @JsonProperty("isCumulative")
     private Integer isCumulative = 0;
 
+    @Column(name = "rollover_enabled")
+    @JsonProperty("rolloverEnabled")
+    private Integer rolloverEnabled = 0;
+
+    @Column(name = "rollover_threshold", precision = 18, scale = 6)
+    @JsonProperty("rolloverThreshold")
+    private java.math.BigDecimal rolloverThreshold;
+
     /**
      * 是否移动源：1-是，0-否
      */

@@ -92,6 +92,12 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
     @Autowired
     private EmissionFactorTemplateRepository factorTemplateRepository;
 
+    @Autowired
+    private FactorDimensionService factorDimensionService;
+
+    @Autowired
+    private NodeInclusionResolver nodeInclusionResolver;
+
     /**
      * 执行模版校验并保存结果
      * <p>
@@ -141,9 +147,19 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
             items.add(new TemplateValidationResultVO.Item(LEVEL_WARNING, "模版中没有任何节点"));
         }
 
-        // parentId → 子节点索引（用于空核算节点检查）
-        Map<Long, List<EmissionNode>> childrenMap = nodes.stream()
+        Map<Long, NodeInclusionResolver.InclusionDecision> inclusionDecisions = new HashMap<>();
+        try {
+            inclusionDecisions = nodeInclusionResolver.resolve(nodes);
+        } catch (IllegalStateException ex) {
+            items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR, ex.getMessage()));
+        }
+        final Map<Long, NodeInclusionResolver.InclusionDecision> resolvedInclusions = inclusionDecisions;
+        Map<Long, List<EmissionNode>> includedChildrenMap = nodes.stream()
                 .filter(n -> n.getParentId() != null)
+                .filter(n -> {
+                    NodeInclusionResolver.InclusionDecision decision = resolvedInclusions.get(n.getId());
+                    return decision == null || decision.included();
+                })
                 .collect(Collectors.groupingBy(EmissionNode::getParentId));
 
         // ---------- 检查2/3/4：遍历采集节点 ----------
@@ -151,9 +167,14 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
         Map<String, List<String>> uncoveredMap = new LinkedHashMap<>();
         // 已在告警/提示中报告过的小类（避免重复输出）
         Set<String> reportedSubcategories = new HashSet<>();
+        Set<Long> referencedElectricMeterIds = new HashSet<>();
 
         for (EmissionNode node : nodes) {
             if (node.getTypeId() == null || node.getTypeId() != NODE_TYPE_COLLECTION) {
+                continue;
+            }
+            NodeInclusionResolver.InclusionDecision inclusion = inclusionDecisions.get(node.getId());
+            if (inclusion != null && !inclusion.included()) {
                 continue;
             }
             String nodeName = node.getName();
@@ -168,6 +189,7 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
             // ---------- 检查2：采集点是否存在且启用 ----------
             String meterName = null;
             String meterSubcategory = null;
+            String meterMeasurementUnit = null;
             if (config.getCollectionPointType() != null && config.getCollectionPointId() != null) {
                 Integer type = config.getCollectionPointType();
                 Long pointId = config.getCollectionPointId();
@@ -179,8 +201,10 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
                                     "采集节点「" + nodeName + "」引用的电力表不存在（采集点ID=" + pointId + "）"));
                         } else {
                             MeterInfo meter = m.get();
+                            referencedElectricMeterIds.add(meter.getId());
                             meterName = meter.getName();
                             meterSubcategory = meter.getEmissionSubcategory();
+                            meterMeasurementUnit = meter.getMeasurementUnit();
                             if (meter.getStatus() != null && meter.getStatus() == 0) {
                                 items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
                                         "采集节点「" + nodeName + "」引用的电力表「" + meterName + "」处于停用状态"));
@@ -197,6 +221,7 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
                             FossilFuelMeterInfo meter = m.get();
                             meterName = meter.getName();
                             meterSubcategory = meter.getFuelType(); // 列emission_subcategory：化石燃料种类
+                            meterMeasurementUnit = meter.getMeasurementUnit();
                             if (meter.getStatus() != null && meter.getStatus() == 0) {
                                 items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
                                         "采集节点「" + nodeName + "」引用的化石燃料采集点「" + meterName + "」处于停用状态"));
@@ -213,6 +238,7 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
                             PurchasedHeatMeterInfo meter = m.get();
                             meterName = meter.getName();
                             meterSubcategory = meter.getHeatType(); // 列emission_subcategory：热力种类
+                            meterMeasurementUnit = meter.getMeasurementUnit();
                             if (meter.getStatus() != null && meter.getStatus() == 0) {
                                 items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
                                         "采集节点「" + nodeName + "」引用的外购热能采集点「" + meterName + "」处于停用状态"));
@@ -226,15 +252,16 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
                 }
             }
 
-            // 节点小类：优先取节点配置，缺省回退采集点表中的小类
-            String nodeSubcategory = trimToNull(config.getEmissionSubcategory());
+            // 核算实际使用采集点的小类；只有未成功加载采集点时才回退节点配置。
+            String nodeSubcategory = trimToNull(meterSubcategory);
             if (nodeSubcategory == null) {
-                nodeSubcategory = trimToNull(meterSubcategory);
+                nodeSubcategory = trimToNull(config.getEmissionSubcategory());
             }
 
             // ---------- 检查3：因子模版能耗小类覆盖检查 ----------
-            if (nodeSubcategory != null && !factorTemplateFactors.isEmpty()) {
-                DefaultFactor matched = findMatchedFactor(factorTemplateFactors, nodeSubcategory);
+            if (nodeSubcategory != null) {
+                DefaultFactor matched = factorTemplateFactors.isEmpty()
+                        ? null : findMatchedFactor(factorTemplateFactors, nodeSubcategory);
                 if (matched == null) {
                     uncoveredMap.computeIfAbsent(nodeSubcategory, k -> new ArrayList<>()).add(nodeName);
                 }
@@ -248,8 +275,35 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
                                     + "）与因子模版中小类「" + nodeSubcategory + "」的因子值（"
                                     + matched.getFactorValue().stripTrailingZeros().toPlainString() + "）不一致，请确认"));
                 }
+
+                BigDecimal effectiveFactor = nodeFactor != null ? nodeFactor
+                        : (matched == null ? null : matched.getFactorValue());
+                String effectiveFactorUnit = trimToNull(config.getCarbonEmissionFactorUnit());
+                if (effectiveFactorUnit == null && matched != null) {
+                    effectiveFactorUnit = trimToNull(matched.getFactorUnit());
+                }
+                if (effectiveFactor == null) {
+                    items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
+                            "采集节点「" + nodeName + "」没有可用的碳排放因子"));
+                } else if (effectiveFactorUnit == null) {
+                    items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
+                            "采集节点「" + nodeName + "」的碳排放因子缺少单位"));
+                } else if (meterMeasurementUnit == null || meterMeasurementUnit.isBlank()) {
+                    items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
+                            "采集节点「" + nodeName + "」引用的采集点缺少计量单位"));
+                } else {
+                    try {
+                        factorDimensionService.validateConversion(
+                                nodeSubcategory, meterMeasurementUnit, effectiveFactorUnit);
+                    } catch (IllegalStateException ex) {
+                        items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
+                                "采集节点「" + nodeName + "」因子量纲不可用：" + ex.getMessage()));
+                    }
+                }
             }
         }
+
+        validateAllocationGroups(referencedElectricMeterIds, items);
 
         // 输出未覆盖小类的聚合告警
         for (Map.Entry<String, List<String>> entry : uncoveredMap.entrySet()) {
@@ -266,7 +320,11 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
             if (node.getTypeId() == null || node.getTypeId() != NODE_TYPE_CALC) {
                 continue;
             }
-            if (!hasCollectionDescendant(node.getId(), childrenMap, new HashSet<>())) {
+            NodeInclusionResolver.InclusionDecision inclusion = inclusionDecisions.get(node.getId());
+            if (inclusion != null && !inclusion.included()) {
+                continue;
+            }
+            if (!hasCollectionDescendant(node.getId(), includedChildrenMap, new HashSet<>())) {
                 items.add(new TemplateValidationResultVO.Item(LEVEL_WARNING,
                         "核算节点「" + node.getName() + "」下没有任何下属采集节点"));
             }
@@ -371,6 +429,49 @@ public class TemplateValidationServiceImpl implements TemplateValidationService 
             }
         }
         return false;
+    }
+
+    private void validateAllocationGroups(Set<Long> referencedMeterIds,
+                                          List<TemplateValidationResultVO.Item> items) {
+        Set<Long> checkedParents = new HashSet<>();
+        for (Long meterId : referencedMeterIds) {
+            MeterInfo meter = meterInfoRepository.findById(meterId).orElse(null);
+            if (meter == null || !Integer.valueOf(1).equals(meter.getIsAllocationChild())) {
+                continue;
+            }
+            Long parentId = meter.getParentMeterId();
+            if (parentId == null || parentId <= 0 || !checkedParents.add(parentId)) {
+                continue;
+            }
+            List<MeterInfo> activeChildren = meterInfoRepository.findByParentMeterId(parentId).stream()
+                    .filter(child -> child.getStatus() == null || child.getStatus() == 1)
+                    .toList();
+            List<MeterInfo> allocationChildren = activeChildren.stream()
+                    .filter(child -> Integer.valueOf(1).equals(child.getIsAllocationChild()))
+                    .toList();
+            BigDecimal sum = BigDecimal.ZERO;
+            boolean invalid = allocationChildren.isEmpty();
+            for (MeterInfo child : allocationChildren) {
+                BigDecimal ratio = child.getAllocationRatio();
+                if (ratio == null || ratio.compareTo(BigDecimal.ZERO) < 0
+                        || ratio.compareTo(BigDecimal.ONE) > 0) {
+                    invalid = true;
+                } else {
+                    sum = sum.add(ratio);
+                }
+            }
+            boolean pureAllocationGroup = !allocationChildren.isEmpty()
+                    && allocationChildren.size() == activeChildren.size();
+            boolean invalidSum = pureAllocationGroup
+                    ? sum.setScale(6, java.math.RoundingMode.HALF_UP)
+                            .compareTo(BigDecimal.ONE.setScale(6)) != 0
+                    : sum.compareTo(BigDecimal.ONE) > 0;
+            if (invalid || invalidSum) {
+                items.add(new TemplateValidationResultVO.Item(LEVEL_ERROR,
+                        "父采集点(ID=" + parentId + ")的启用分摊子表比例配置非法，当前比例和为"
+                                + sum.stripTrailingZeros().toPlainString()));
+            }
+        }
     }
 
     /**
