@@ -131,7 +131,16 @@ import_file() {
     'mysql --protocol=TCP -h127.0.0.1 -P3306 -uroot --default-character-set=utf8mb4 carbon_emissions < "$1"' sh "/tmp/$base" \
     > "$BACKUP_DIR/$base.log" 2>&1 || { cat "$BACKUP_DIR/$base.log" >&2; return 1; }
 }
-for file in "$PACKAGE_ROOT"/mysql/migrations/*.sql; do import_file "$file"; done
+for file in "$PACKAGE_ROOT"/mysql/migrations/*.sql; do
+  if [ "$(basename "$file")" = "45_energy_tables.sql" ]; then
+    energy_tables=$(mysql_query "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'energy_run';")
+    if [ "$energy_tables" = 1 ]; then
+      echo 'Skipping 45_energy_tables.sql: energy_run already exists.'
+      continue
+    fi
+  fi
+  import_file "$file"
+done
 if [ "$APPLY_PERMISSION_RESET" = true ]; then
   import_file "$PACKAGE_ROOT/mysql/optional/60_cleanup_and_test_users.sql"
 else

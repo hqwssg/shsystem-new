@@ -1,31 +1,43 @@
-# 当前版本服务器增量更新
+# 当前版本服务器增量更新（Xftp/Xshell）
 
-## 本地生成内容
+本文件对应 `tools/server-update/build-update.ps1` 生成的增量包。它适用于已有三容器环境的升级，不是空服务器首次安装包。服务器不需要重新下载源码、JAR、前端依赖或 SQL；所有内容在本地构建后通过 Xftp 上传。
 
-运行 `powershell -ExecutionPolicy Bypass -File tools/server-update/build-update.ps1`。
-脚本构建三个后端（执行 Maven 测试）和三个生产前端，生成：
+## 1. 本地生成更新包
 
-- `deploy-package/server-update-TIMESTAMP.tar.gz`：可上传增量包。
-- 同名 `.tar.gz.sha256`：压缩包 SHA256 校验。
-- `deploy-package/server-update-TIMESTAMP/`：展开目录，含脚本、SQL、程序及逐文件校验。
-- `deploy-package/build-logs-TIMESTAMP/`：六个构建日志。
-
-包含主系统、报告模块/Python 渲染器、模型系统、GoView，以及统一权限和日志更新。
-不包含本地 `goview.db`、上传文件、数据库全量初始化、报告输出及演示核算数据。
-这是已有三容器的更新包，不是空服务器首次安装包。
-
-## 1. 上传（本机 PowerShell）
-
-将下方包名替换为已生成的实际包名，端口替换为**宿主机** SSH 端口。
-端口 53220 是 Web 容器 SSH，通常不能在其中管理另外两个容器。
+在 Windows PowerShell 的仓库根目录执行：
 
 ```powershell
-$Archive = "D:\idea库\RuoYi-Cloud\deploy-package\server-update-TIMESTAMP.tar.gz"
-scp -P <宿主机SSH端口> $Archive "$Archive.sha256" root@202.115.17.253:/opt/
-ssh -p <宿主机SSH端口> root@202.115.17.253
+powershell -ExecutionPolicy Bypass -File tools/server-update/build-update.ps1
 ```
 
-## 2. 检查（宿主机 Bash）
+如果已经完成本地构建、只需要重新打包：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/server-update/build-update.ps1 -SkipBuild
+```
+
+生成结果位于 `deploy-package/`：
+
+```text
+server-update-TIMESTAMP.tar.gz
+server-update-TIMESTAMP.tar.gz.sha256
+server-update-TIMESTAMP/
+build-logs-TIMESTAMP/
+```
+
+上传 `.tar.gz` 和同名 `.sha256` 即可。不要上传本地 `goview.db`、`logs` 或全量数据库初始化脚本。
+
+## 2. 用 Xftp 上传
+
+1. 使用 Xftp 连接服务器的宿主机 SSH 端口。
+2. 将更新包和校验文件上传到服务器 `/opt/`。
+3. 使用 Xshell 登录同一台宿主机，继续执行下面的命令。
+
+Xftp 只负责传输文件，不要把文件上传到 `ruoyi-web` 容器内部；更新脚本需要在 Docker 宿主机执行并通过 `docker cp` 更新业务容器。
+
+## 3. 服务器预检查
+
+在 Xshell 中执行：
 
 ```bash
 cd /opt
@@ -33,80 +45,69 @@ sha256sum -c server-update-TIMESTAMP.tar.gz.sha256
 tar -xzf server-update-TIMESTAMP.tar.gz
 cd /opt/server-update-TIMESTAMP
 docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
-export DB_CONTAINER=ruoyi-db WEB_CONTAINER=ruoyi-web SCREEN_CONTAINER=ruoyi-screen
-export WEB_HOST_PORT=53221 SCREEN_HOST_PORT=53231
-export WEB_PUBLIC_URL=http://202.115.17.253:53221
-export SCREEN_PUBLIC_URL=http://202.115.17.253:53231
-read -rsp 'MariaDB root密码: ' MYSQL_ROOT_PASSWORD; echo
+export DB_CONTAINER=ruoyi-db
+export WEB_CONTAINER=ruoyi-web
+export SCREEN_CONTAINER=ruoyi-screen
+export WEB_HOST_PORT=53221
+export SCREEN_HOST_PORT=53231
+export WEB_PUBLIC_URL=http://服务器公网地址:53221
+export SCREEN_PUBLIC_URL=http://服务器公网地址:53231
+read -rsp 'MariaDB/MySQL root密码: ' MYSQL_ROOT_PASSWORD; echo
 export MYSQL_ROOT_PASSWORD
 bash deploy-update.sh --check
 ```
 
-如果容器名称/映射不同，以 `docker ps` 的实际结果为准修改环境变量。
-本次前端包使用公网大屏端口 53231；如果实际大屏端口不同，还需要用实际
-`VUE_APP_GOVIEW_URL` 重新构建主前端，不能只改服务器启动环境变量。
-多网络容器可显式指定 `DB_HOST` 与 `WEB_INTERNAL_HOST` 为互通的容器内网 IP。
+容器名称和端口必须以 `docker ps` 的实际结果为准。`--check` 只检查，不会修改程序或数据库。
 
-## 3. 执行更新
+## 4. 执行更新
 
-先保证 Web 容器有 Java 17+、Redis、Nginx、Python 3.10+。
-报告需要 Python venv/pip、LibreOffice 和中文字体；脚本尝试安装缺少的运行依赖，
-容器必须能够访问软件源和 Python 包源。默认 Python 太旧时，先安装新版，再指定：
+默认不重排角色、不删除旧示例数据，适合普通版本更新：
 
 ```bash
-# 仅在已经安装 python3.11 时使用
-export REPORT_PYTHON=python3.11
-```
-
-权限清理会重排角色、清除旧示例部门/用户、设置账号 2–9 为权限测试账号。
-测试账号的密码沿用管理员当前密码（不是固定的 admin123）。
-**只有确认要同步这项历史变更时才启用以下开关**，并在更新后立即重设/禁用测试账号。
-脚本发现真实用户/角色/岗位占用了这些编号、旧部门仍被真实用户使用，或清理会删除非示例通知，会停止。
-这时必须重新规划可用编号，不能绕过检查。
-
-```bash
-export APPLY_PERMISSION_RESET=true
 set -o pipefail
-bash deploy-update.sh 2>&1 | tee /opt/server-update-执行日志.txt
+APPLY_PERMISSION_RESET=false bash deploy-update.sh 2>&1 | tee /opt/server-update-execution.log
 ```
 
-不启用重置时执行 `APPLY_PERMISSION_RESET=false bash deploy-update.sh`。
-此模式仍更新程序和功能权限，但不完成角色编号重排、旧示例清理和测试账号同步。
-
-脚本自动执行：压缩包内容核验、TCP 数据库认证、生产库/程序备份、SQLite 全目录一致性备份、
-运行环境检查、按顺序迁移、应用替换、双方一致的审计密钥配置、启动和 HTTP 健康检查。
-环境准备完成后暂停业务 Java 进程，再进行备份和迁移；请在维护窗口执行。
-不会重建容器、修改映射端口或 SSH 密码，不会初始化/覆盖生产数据库。
-备份位于 `/opt/ruoyi-backups/执行时间戳/`；现有上传文件与 GoView 项目保留。
-GoView 新增 `dept_id` 由新版后端启动迁移；历史 NULL 部门项目沿用代码的兼容规则。
-新角色权限会按最新方案重新分配；请事先记录自定义授权。
-
-## 4. 联调验收
-
-浏览器 Ctrl+F5 后访问主系统，退出并重新登录刷新权限缓存。
-
-1. 首页模型/参数/报告/日志入口显示正确，模型原模板可以打开，资源无 404。
-2. 修改一个模型或参数，检查日志中的操作人、变动详情及 `sys_oper_log` 记录。
-3. 建立报告、选择核算数据、校验并下载 Word/PDF；检查精度及中文字体。
-4. 从主系统进入 GoView，无需再次登录；修改项目后统一日志能够查询。
-5. 用不同角色测试允许/拒绝操作，尤其地区隔离与只读角色。
+只有明确需要同步历史权限测试账号和角色编号时，才使用：
 
 ```bash
-docker exec ruoyi-web tail -100 /home/ruoyi/logs/ruoyi-admin.log
-docker exec ruoyi-web tail -100 /home/ruoyi/logs/carbon-emission-model.log
-docker exec ruoyi-screen tail -100 /home/goview/logs/goview.log
-docker exec -e MYSQL_PWD="$MYSQL_ROOT_PASSWORD" ruoyi-db mysql --protocol=TCP -h127.0.0.1 -P3306 -uroot carbon_emissions -e 'SELECT COUNT(*) FROM sys_oper_log; SELECT COUNT(*) FROM sys_logininfor;'
+APPLY_PERMISSION_RESET=true bash deploy-update.sh 2>&1 | tee /opt/server-update-permission-reset.log
 ```
 
-HTTP 健康检查不等于完整业务验收；保护接口返回 401/403 仅表示认证限制在生效。
-禁止在已有数据库重新运行 `carbon_emissions.sql`、`schema.sql`、`schema_1.sql`。
-本地观测用 V12 不自动导入；不能用本地 SQLite 文件替换服务器数据库。
+执行脚本会自动完成包校验、数据库和程序备份、增量 SQL、JAR/WAR 和前端替换、服务重启以及 HTTP/Nginx 检查。
 
-## 故障与恢复
+备份默认位于：
 
-失败先保留日志和备份，不要重复初始化数据库。迁移失败可能已发生部分 DDL，不能假定自动回滚。
-恢复前停止 Web/Screen Java，按实际备份目录将 `web.tgz`、`screen.tgz` 复制入对应容器并解压到 `/`，
-恢复完整 `goview-sqllite` 目录（连同 WAL 文件），用 TCP 将 `database.sql` 导回数据库。
-恢复原启动脚本/环境文件后重启并验收。不要只回滚 JAR 而忽略已经改变的表结构。
-容器重启后若原容器入口不负责拉起业务，手动运行对应 `/usr/local/bin/start-ruoyi-web.sh`
-和 `/usr/local/bin/start-ruoyi-screen.sh`；本次更新不更换现有容器的入口命令。
+```text
+/opt/ruoyi-backups/时间戳/
+```
+
+## 5. 避免服务器联网下载
+
+更新包已经携带后端程序、前端静态资源、SQL、报表 Python 源码和 GoView 资源。首次部署时应在服务器镜像中预装 Java、Python、LibreOffice、中文字体和报表 Python 依赖；更新时不要重新构建镜像。
+
+执行更新前确认 Web 容器已有：
+
+```bash
+docker exec ruoyi-web /opt/carbon-report-venv/bin/python -c 'import pydantic,docx,PIL,matplotlib,jinja2,httpx'
+docker exec ruoyi-web command -v libreoffice
+docker exec ruoyi-web java -version
+```
+
+如果这些依赖已存在，更新只通过 Xftp 上传包，不需要服务器下载源码或 Node/Maven 依赖。若更新脚本发现 Python venv 缺少依赖，会尝试执行 pip 安装；完全离线环境应先把同版本 Python venv 或依赖 wheelhouse 做进服务器镜像。
+
+## 6. 验收
+
+```bash
+docker exec ruoyi-web pgrep -x java
+docker exec ruoyi-screen pgrep -x java
+docker exec ruoyi-web nginx -t
+docker exec ruoyi-screen nginx -t
+docker exec -e MYSQL_PWD="$MYSQL_ROOT_PASSWORD" ruoyi-db mysql --protocol=TCP -h127.0.0.1 -P3306 -uroot carbon_emissions -e "SELECT COUNT(*) FROM sys_oper_log; SHOW TABLES LIKE 'energy_run';"
+```
+
+浏览器执行 Ctrl+F5，退出后重新登录，检查主系统、采集点、人工录入/审核、报表、能量页面和 GoView。受保护的 `/carbon/energy/runs` 未登录返回 401 属于正常鉴权结果，不应返回 `No static resource carbon/energy/runs`。
+
+## 7. 故障处理
+
+失败时保留日志和 `/opt/ruoyi-backups/时间戳/`，不要重复初始化数据库。恢复前停止 Web/Screen 中的 Java 进程，再按备份恢复 `database.sql`、`web.tgz`、`screen.tgz` 和 `goview-sqllite`（包括 WAL 文件）。不要只回滚 JAR 而忽略已执行的数据库迁移。
