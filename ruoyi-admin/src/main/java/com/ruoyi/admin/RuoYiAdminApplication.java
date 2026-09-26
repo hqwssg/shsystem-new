@@ -17,7 +17,8 @@ import org.springframework.context.annotation.ComponentScan;
         "com.ruoyi.gen",
         "com.ruoyi.job",
         "com.ruoyi.file",
-        "com.ruoyi.carbon.report" })
+        "com.ruoyi.carbon.report",
+        "com.ruoyi.carbon.energy" })
 public class RuoYiAdminApplication
 {
     public static void main(String[] args)
