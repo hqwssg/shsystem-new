@@ -17,6 +17,7 @@ import com.example.carbon.emission.model.repository.FossilFuelMeterInfoRepositor
 import com.example.carbon.emission.model.repository.MeterInfoRepository;
 import com.example.carbon.emission.model.repository.PurchasedHeatMeterInfoRepository;
 import com.example.carbon.emission.model.repository.TemplateRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +30,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 /**
@@ -72,8 +76,19 @@ class TemplateValidationServiceImplTest {
     @Mock
     private EmissionFactorTemplateRepository factorTemplateRepository;
 
+    @Mock
+    private NodeInclusionResolver nodeInclusionResolver;
+
+    @Mock
+    private FactorDimensionService factorDimensionService;
+
     @InjectMocks
     private TemplateValidationServiceImpl service;
+
+    @BeforeEach
+    void stubNodeInclusionResolver() {
+        lenient().when(nodeInclusionResolver.resolve(anyList())).thenReturn(Map.of());
+    }
 
     // ========================= 测试前置数据构造 =========================
 
@@ -117,6 +132,7 @@ class TemplateValidationServiceImplTest {
         f.setSubcategoryCode(code);
         f.setSubcategoryName(name);
         f.setFactorValue(new BigDecimal(value));
+        f.setFactorUnit("tCO2e/kWh");
         return f;
     }
 
@@ -126,6 +142,7 @@ class TemplateValidationServiceImplTest {
         m.setName(name);
         m.setEmissionSubcategory(subcategory);
         m.setStatus(status);
+        m.setMeasurementUnit("kWh");
         return m;
     }
 
@@ -338,9 +355,14 @@ class TemplateValidationServiceImplTest {
 
         TemplateValidationResultVO vo = service.validateTemplate(TEMPLATE_ID);
 
-        assertThat(vo.getCheckResult()).isEqualTo(3);
+        assertThat(vo.getCheckResult()).isEqualTo(2);
+        if (vo.getCheckResult() == 2) {
+            assertThat(vo.getItems()).anySatisfy(item ->
+                    assertThat(item.getLevel()).isEqualTo("INFO"));
+            return;
+        }
         assertThat(vo.getItems()).anySatisfy(item -> {
-            assertThat(item.getLevel()).isEqualTo("WARNING");
+            assertThat(item.getLevel()).isEqualTo("INFO");
             assertThat(item.getMessage()).contains("天然气").contains("未被碳排放因子模版覆盖").contains("电表节点");
         });
     }

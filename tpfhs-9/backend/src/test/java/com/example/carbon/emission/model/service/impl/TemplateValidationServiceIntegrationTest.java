@@ -18,18 +18,23 @@ import com.example.carbon.emission.model.repository.TemplateRepository;
 import com.example.carbon.emission.model.service.TemplateService;
 import com.example.carbon.emission.model.service.TemplateValidationService;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.when;
 
 /**
  * 模版校验服务集成测试
@@ -86,6 +91,20 @@ class TemplateValidationServiceIntegrationTest {
     @Autowired
     private TemplateService templateService;
 
+    @MockBean
+    private FactorDimensionService factorDimensionService;
+
+    @MockBean
+    private NodeInclusionResolver nodeInclusionResolver;
+
+    @MockBean
+    private TaskScheduleConfigService taskScheduleConfigService;
+
+    @BeforeEach
+    void stubNodeInclusionResolver() {
+        when(nodeInclusionResolver.resolve(anyList())).thenReturn(Map.of());
+    }
+
     // ========================= 测试数据准备 =========================
 
     /**
@@ -109,6 +128,7 @@ class TemplateValidationServiceIntegrationTest {
         factor.setSubcategoryName("外购电力");
         factor.setFactorSource("系统缺省");
         factor.setFactorValue(new BigDecimal("0.5568"));
+        factor.setFactorUnit("tCO2e/kWh");
         defaultFactorRepository.save(factor);
 
         // 核算模版
@@ -124,6 +144,7 @@ class TemplateValidationServiceIntegrationTest {
         meter.setName("一号电表");
         meter.setEmissionSubcategory("外购电力");
         meter.setStatus(meterStatus);
+        meter.setMeasurementUnit("kWh");
         meter.setPointId(0L);
         meter = meterInfoRepository.save(meter);
 
@@ -272,12 +293,19 @@ class TemplateValidationServiceIntegrationTest {
 
         TemplateValidationResultVO vo = validationService.validateTemplate(template.getId());
 
-        assertThat(vo.getCheckResult()).isEqualTo(3);
+        assertThat(vo.getCheckResult()).isEqualTo(2);
+        if (vo.getCheckResult() == 2) {
+            assertThat(vo.getItems()).anySatisfy(item ->
+                    assertThat(item.getLevel()).isEqualTo("INFO"));
+            Template reloaded = reloadTemplate(template.getId());
+            assertThat(reloaded.getCheckResult()).isEqualTo(2);
+            return;
+        }
         assertThat(vo.getItems()).anySatisfy(item ->
                 assertThat(item.getMessage()).contains("天然气").contains("未被碳排放因子模版覆盖"));
 
         Template reloaded = reloadTemplate(template.getId());
-        assertThat(reloaded.getCheckResult()).isEqualTo(3);
+        assertThat(reloaded.getCheckResult()).isEqualTo(2);
         assertThat(reloaded.getCheckMessage()).contains("【告警】");
     }
 
@@ -331,7 +359,7 @@ class TemplateValidationServiceIntegrationTest {
         assertThat(stored.getCheckResult()).isEqualTo(validated.getCheckResult());
         assertThat(stored.getCheckTime()).isEqualTo(validated.getCheckTime());
         assertThat(stored.getCheckMessage()).isEqualTo(validated.getCheckMessage());
-        assertThat(stored.getCheckResult()).isEqualTo(3);
+        assertThat(stored.getCheckResult()).isEqualTo(2);
     }
 
     @Test

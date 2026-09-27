@@ -532,6 +532,8 @@ class EnergyMeasurementCalculatorTest {
         MeterInfo parent = normalMeter(200L, 1);
         when(meterInfoRepository.findById(100L)).thenReturn(java.util.Optional.of(child));
         when(meterInfoRepository.findById(200L)).thenReturn(java.util.Optional.of(parent));
+        when(meterInfoRepository.findByParentMeterId(200L))
+                .thenReturn(List.of(child, normalMeter(201L, 1)));
         stubRecords(200L, List.of(
                 rec("2026-04-01", 6, "100"),
                 rec("2026-04-30", 6, "500")));
@@ -693,10 +695,10 @@ class EnergyMeasurementCalculatorTest {
         EnergyMeasurementCalculator.Result r =
                 calculator.calculate(1, METER_ID, 1, CYCLE_START, CYCLE_END);
 
-        assertThat(r.getDataStatus()).isEqualTo(1);
+        assertThat(r.getDataStatus()).isEqualTo(3);
         assertThat(r.getEnergyMeasurementValue()).isEqualByComparingTo("0");
         assertThat(r.getAdjustedEnergyValue()).isEqualByComparingTo("0");
-        assertThat(r.getDataMissingDescription()).isNull();
+        assertThat(r.getDataMissingDescription()).contains("累计读数倒退");
     }
 
     @Test
@@ -974,6 +976,8 @@ class EnergyMeasurementCalculatorTest {
         MeterInfo parent = normalMeter(200L, 1);
         when(meterInfoRepository.findById(100L)).thenReturn(java.util.Optional.of(child));
         when(meterInfoRepository.findById(200L)).thenReturn(java.util.Optional.of(parent));
+        when(meterInfoRepository.findByParentMeterId(200L))
+                .thenReturn(List.of(child, normalMeter(201L, 1)));
         stubRecords(200L, List.of(
                 rec("2026-04-01", 6, "100"),
                 rec("2026-04-30", 6, "500")));
@@ -997,6 +1001,8 @@ class EnergyMeasurementCalculatorTest {
         MeterInfo parent = normalMeter(200L, 1);
         when(meterInfoRepository.findById(100L)).thenReturn(java.util.Optional.of(child));
         when(meterInfoRepository.findById(200L)).thenReturn(java.util.Optional.of(parent));
+        when(meterInfoRepository.findByParentMeterId(200L))
+                .thenReturn(List.of(child, normalMeter(201L, 1)));
         // 父表起始记录晚于核算起始日 → 状态3；父表能耗=400-100=300
         stubRecords(200L, List.of(
                 rec("2026-04-05", 6, "100"),

@@ -326,8 +326,9 @@ public class EnergyMeasurementCalculator {
                 .toList();
         BigDecimal sum = BigDecimal.ZERO;
         for (MeterInfo child : allocationChildren) {
-            BigDecimal ratio = child.getAllocationRatio();
-            if (ratio == null || ratio.compareTo(BigDecimal.ZERO) < 0
+            BigDecimal ratio = child.getAllocationRatio() != null
+                    ? child.getAllocationRatio() : BigDecimal.ONE;
+            if (ratio.compareTo(BigDecimal.ZERO) < 0
                     || ratio.compareTo(BigDecimal.ONE) > 0) {
                 throw new IllegalStateException("分摊比例必须在0到1之间，meterId=" + child.getId());
             }
