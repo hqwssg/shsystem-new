@@ -3,6 +3,7 @@ package com.example.carbon.emission.model.service.impl;
 import com.example.carbon.emission.model.entity.SystemConfig;
 import com.example.carbon.emission.model.repository.SystemConfigRepository;
 import com.example.carbon.emission.model.service.SystemConfigService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +16,34 @@ import java.util.Map;
  */
 @Service
 public class SystemConfigServiceImpl implements SystemConfigService {
+    /** The switch is deliberately off until an administrator enables it. */
+    private static final String MANUAL_REVIEW_AUTO_APPROVE_KEY = "carbon.collection.manual.auto-approve";
+    private static final String MANUAL_REVIEW_AUTO_APPROVE_NAME = "人工采集-审核人员自动审核";
+    private static final String MANUAL_REVIEW_AUTO_APPROVE_REMARK =
+            "开启后，具有数据审核权限的人员提交人工采集数据时自动审核通过；关闭后进入待审核状态";
     
     @Autowired
     private SystemConfigRepository configRepository;
+
+    /**
+     * Upgrade existing installations without requiring a separate SQL migration.
+     * The insert is idempotent and keeps the feature disabled by default.
+     */
+    @PostConstruct
+    public void ensureManualReviewAutoApproveConfig() {
+        if (configRepository.existsByConfigKey(MANUAL_REVIEW_AUTO_APPROVE_KEY)) {
+            return;
+        }
+        SystemConfig config = new SystemConfig();
+        config.setConfigKey(MANUAL_REVIEW_AUTO_APPROVE_KEY);
+        config.setConfigValue("false");
+        config.setConfigName(MANUAL_REVIEW_AUTO_APPROVE_NAME);
+        config.setRemark(MANUAL_REVIEW_AUTO_APPROVE_REMARK);
+        config.setConfigType("Y");
+        config.setCreateBy("system");
+        config.setUpdateBy("system");
+        configRepository.save(config);
+    }
     
     @Override
     public Map<String, String> getAllConfigs() {

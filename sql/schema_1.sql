@@ -158,6 +158,16 @@ WHERE NOT EXISTS (
     SELECT 1 FROM sys_config WHERE config_key = 'Auto_coding_rules'
 );
 
+INSERT INTO sys_config (config_key, config_value, config_name, remark)
+SELECT
+    'carbon.collection.manual.auto-approve',
+    'false',
+    '人工采集-审核人员自动审核',
+    '开启后，具有数据审核权限的人员提交人工采集数据时自动审核通过；关闭后进入待审核状态'
+WHERE NOT EXISTS (
+    SELECT 1 FROM sys_config WHERE config_key = 'carbon.collection.manual.auto-approve'
+);
+
 
 
 -- 初始化数据字典

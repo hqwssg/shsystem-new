@@ -561,6 +561,7 @@ insert into sys_config values(4, '账号自助-是否开启用户注册功能', 
 insert into sys_config values(5, '用户登录-黑名单列表',           'sys.login.blackIPList',            '',              'Y', 'admin', sysdate(), '', null, '设置登录IP黑名单限制，多个匹配项以;分隔，支持匹配（*通配、网段）');
 insert into sys_config values(6, '用户管理-初始密码修改策略',     'sys.account.initPasswordModify',   '1',             'Y', 'admin', sysdate(), '', null, '0：初始密码修改策略关闭，没有任何提示，1：提醒用户，如果未修改初始密码，则在登录时就会提醒修改密码对话框');
 insert into sys_config values(7, '用户管理-账号密码更新周期',     'sys.account.passwordValidateDays', '0',             'Y', 'admin', sysdate(), '', null, '密码更新周期（填写数字，数据初始化值为0不限制，若修改必须为大于0小于365的正整数），如果超过这个周期登录系统时，则在登录时就会提醒修改密码对话框');
+insert into sys_config values(8, '人工采集-审核人员自动审核',     'carbon.collection.manual.auto-approve', 'false',       'Y', 'admin', sysdate(), '', null, '开启后，具有数据审核权限的人员提交人工采集数据时自动审核通过；关闭后进入待审核状态');
 
 
 -- ----------------------------
