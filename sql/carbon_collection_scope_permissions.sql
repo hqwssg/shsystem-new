@@ -1,7 +1,8 @@
 -- Incremental migration; existing emission_* table names and station data are preserved.
 -- Execute this file with a UTF-8 MySQL client (--default-character-set=utf8mb4).
 -- In PowerShell, do not pipe Get-Content into mysql: that can convert Chinese text to '?'.
-SET NAMES utf8mb4;
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci;
+SET collation_connection = 'utf8mb4_general_ci';
 CREATE TABLE IF NOT EXISTS sys_carbon_company (
   dept_id BIGINT NOT NULL PRIMARY KEY,
   created_by BIGINT COMMENT '创建人ID', updated_by BIGINT COMMENT '更新人ID',
@@ -96,8 +97,8 @@ DROP TEMPORARY TABLE sys_scope_dept_seed;
 
 -- A subordinate maintenance crew demonstrates department-level delegation.
 INSERT INTO sys_dept(parent_id,ancestors,dept_name,order_num,status,del_flag,create_by,create_time)
-SELECT 3035,'0,3000,3020,3021,3035',CONVERT(0xE7BABFE8B7AFE7BBB4E68AA4E5B7A5E9989F USING utf8mb4),20,'0','0','admin',NOW()
-WHERE NOT EXISTS(SELECT 1 FROM sys_dept WHERE parent_id=3035 AND dept_name=CONVERT(0xE7BABFE8B7AFE7BBB4E68AA4E5B7A5E9989F USING utf8mb4) AND del_flag='0');
+SELECT 3035,'0,3000,3020,3021,3035',CONVERT(0xE7BABFE8B7AFE7BBB4E68AA4E5B7A5E9989F USING utf8mb4) COLLATE utf8mb4_general_ci,20,'0','0','admin',NOW()
+WHERE NOT EXISTS(SELECT 1 FROM sys_dept WHERE parent_id=3035 AND dept_name=CONVERT(0xE7BABFE8B7AFE7BBB4E68AA4E5B7A5E9989F USING utf8mb4) COLLATE utf8mb4_general_ci AND del_flag='0');
 
 INSERT INTO emission_fossil_fuel_collection_scope(scope_name,sort_order,description,created_by,updated_by)
 SELECT d.dept_name,d.order_num,'按分公司划分，部门维护范围由管理员授权',1,1
@@ -158,24 +159,24 @@ WHERE g.scope_type='heat';
 
 -- Example second-level fossil categories for the Suning company.
 INSERT INTO emission_fossil_fuel_collection_sub_scope(sub_scope_name,collection_scope_id,sort_order,description,created_by,updated_by)
-SELECT CONVERT(0xE6B1BDE8BDA6E794A8E6B1BDE6B2B9 USING utf8mb4),s.id,1,'汽车用汽油',1,1
-FROM emission_fossil_fuel_collection_scope s WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4)
-  AND NOT EXISTS(SELECT 1 FROM emission_fossil_fuel_collection_sub_scope x WHERE x.collection_scope_id=s.id AND x.sub_scope_name=CONVERT(0xE6B1BDE8BDA6E794A8E6B1BDE6B2B9 USING utf8mb4));
+SELECT CONVERT(0xE6B1BDE8BDA6E794A8E6B1BDE6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci,s.id,1,'汽车用汽油',1,1
+FROM emission_fossil_fuel_collection_scope s WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4) COLLATE utf8mb4_general_ci
+  AND NOT EXISTS(SELECT 1 FROM emission_fossil_fuel_collection_sub_scope x WHERE x.collection_scope_id=s.id AND x.sub_scope_name=CONVERT(0xE6B1BDE8BDA6E794A8E6B1BDE6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci);
 INSERT INTO emission_fossil_fuel_collection_sub_scope(sub_scope_name,collection_scope_id,sort_order,description,created_by,updated_by)
-SELECT CONVERT(0xE6B1BDE8BDA6E794A8E69FB4E6B2B9 USING utf8mb4),s.id,2,'汽车用柴油',1,1
-FROM emission_fossil_fuel_collection_scope s WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4)
-  AND NOT EXISTS(SELECT 1 FROM emission_fossil_fuel_collection_sub_scope x WHERE x.collection_scope_id=s.id AND x.sub_scope_name=CONVERT(0xE6B1BDE8BDA6E794A8E69FB4E6B2B9 USING utf8mb4));
+SELECT CONVERT(0xE6B1BDE8BDA6E794A8E69FB4E6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci,s.id,2,'汽车用柴油',1,1
+FROM emission_fossil_fuel_collection_scope s WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4) COLLATE utf8mb4_general_ci
+  AND NOT EXISTS(SELECT 1 FROM emission_fossil_fuel_collection_sub_scope x WHERE x.collection_scope_id=s.id AND x.sub_scope_name=CONVERT(0xE6B1BDE8BDA6E794A8E69FB4E6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci);
 INSERT INTO emission_fossil_fuel_collection_sub_scope(sub_scope_name,collection_scope_id,sort_order,description,created_by,updated_by)
-SELECT CONVERT(0xE8BDA8E98193E8BDA6E794A8E69FB4E6B2B9 USING utf8mb4),s.id,3,'轨道车用柴油',1,1
-FROM emission_fossil_fuel_collection_scope s WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4)
-  AND NOT EXISTS(SELECT 1 FROM emission_fossil_fuel_collection_sub_scope x WHERE x.collection_scope_id=s.id AND x.sub_scope_name=CONVERT(0xE8BDA8E98193E8BDA6E794A8E69FB4E6B2B9 USING utf8mb4));
+SELECT CONVERT(0xE8BDA8E98193E8BDA6E794A8E69FB4E6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci,s.id,3,'轨道车用柴油',1,1
+FROM emission_fossil_fuel_collection_scope s WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4) COLLATE utf8mb4_general_ci
+  AND NOT EXISTS(SELECT 1 FROM emission_fossil_fuel_collection_sub_scope x WHERE x.collection_scope_id=s.id AND x.sub_scope_name=CONVERT(0xE8BDA8E98193E8BDA6E794A8E69FB4E6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci);
 INSERT IGNORE INTO sys_carbon_scope_grant
   (scope_type,scope_id,node_type,node_id,node_name,dept_id,can_read,can_write,can_delegate,granted_by_dept_id,created_by,updated_by)
 SELECT 'fossil',s.id,'sub_scope',ss.id,ss.sub_scope_name,d.dept_id,1,1,0,3035,1,1
 FROM emission_fossil_fuel_collection_scope s
 JOIN emission_fossil_fuel_collection_sub_scope ss ON ss.collection_scope_id=s.id
-JOIN sys_dept d ON d.parent_id=3035 AND d.dept_name=CONVERT(0xE7BABFE8B7AFE7BBB4E68AA4E5B7A5E9989F USING utf8mb4)
-WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4) AND ss.sub_scope_name=CONVERT(0xE8BDA8E98193E8BDA6E794A8E69FB4E6B2B9 USING utf8mb4);
+JOIN sys_dept d ON d.parent_id=3035 AND d.dept_name=CONVERT(0xE7BABFE8B7AFE7BBB4E68AA4E5B7A5E9989F USING utf8mb4) COLLATE utf8mb4_general_ci
+WHERE s.scope_name=CONVERT(0xE88283E5AE81E58886E585ACE58FB8 USING utf8mb4) COLLATE utf8mb4_general_ci AND ss.sub_scope_name=CONVERT(0xE8BDA8E98193E8BDA6E794A8E69FB4E6B2B9 USING utf8mb4) COLLATE utf8mb4_general_ci;
 
 INSERT INTO sys_menu(menu_name,parent_id,order_num,path,menu_type,visible,status,perms,icon,create_by,create_time)
 SELECT '采集范围分配',2000,66,'','F','1','0','carbon:scope:view','#','admin',NOW()
