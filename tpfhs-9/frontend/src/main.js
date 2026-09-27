@@ -4,22 +4,28 @@ import axios from 'axios'
 import 'element-plus/dist/index.css'
 import './style.css'
 import RootApp from './RootApp.vue'
+import { getAuthToken } from './auth-token'
 
-const token = document.cookie
-  .split('; ')
-  .find(item => item.startsWith('Admin-Token='))
-  ?.split('=')
-  .slice(1)
-  .join('=')
-
-if (token) axios.defaults.headers.common.Authorization = `Bearer ${decodeURIComponent(token)}`
+axios.interceptors.request.use(config => {
+  const token = getAuthToken()
+  if (token) {
+    config.headers = config.headers || {}
+    if (typeof config.headers.set === 'function') {
+      config.headers.set('Authorization', `Bearer ${token}`)
+    } else {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+  }
+  return config
+})
 
 const nativeFetch = window.fetch.bind(window)
 window.fetch = (input, init = {}) => {
   const inheritedHeaders = input instanceof Request ? input.headers : undefined
   const headers = new Headers(init.headers || inheritedHeaders)
+  const token = getAuthToken()
   if (token && !headers.has('Authorization')) {
-    headers.set('Authorization', `Bearer ${decodeURIComponent(token)}`)
+    headers.set('Authorization', `Bearer ${token}`)
   }
   return nativeFetch(input, { ...init, headers })
 }
