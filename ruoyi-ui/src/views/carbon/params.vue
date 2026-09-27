@@ -19,7 +19,7 @@
         :src="paramsFrameUrl"
         frameborder="0"
         title="碳排放核算参数设置"
-        @load="loading = false"
+        @load="handleFrameLoad"
       ></iframe>
     </div>
   </div>
@@ -27,6 +27,7 @@
 
 <script>
 import { resolveServiceUrl } from '@/utils/serviceUrl'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'CarbonParams',
@@ -55,7 +56,22 @@ export default {
     handleFrameMessage(event) {
       if (event.data && event.data.type === 'carbon:navigate-home') {
         this.$router.push('/carbon/index')
+        return
       }
+      if (event.data && event.data.type === 'carbon:request-auth-token') {
+        this.sendAuthToken(event.source, event.origin)
+      }
+    },
+    sendAuthToken(target, origin) {
+      const token = getToken()
+      if (!token || !target || typeof target.postMessage !== 'function') return
+      const allowedOrigin = new URL(this.paramsFrameUrl).origin
+      if (origin !== allowedOrigin) return
+      target.postMessage({ type: 'carbon:set-auth-token', token }, origin)
+    },
+    handleFrameLoad(event) {
+      this.loading = false
+      this.sendAuthToken(event.target.contentWindow, new URL(this.paramsFrameUrl).origin)
     },
     reloadFrame() {
       this.loading = true

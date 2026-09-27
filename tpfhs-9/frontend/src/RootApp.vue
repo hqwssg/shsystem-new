@@ -35,6 +35,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { getAuthToken, requestAuthToken } from './auth-token'
 import Login from './components/Login.vue'
 import HomePage from './components/HomePage.vue'
 import TemplateList from './components/TemplateList.vue'
@@ -53,6 +54,7 @@ onMounted(async () => {
   embedded.value = params.get('embedded') === '1'
 
   try {
+    if (embedded.value && !getAuthToken()) await requestAuthToken()
     const { data } = await axios.get('/api/security/me')
     currentUser.value = data
     localStorage.setItem('user', JSON.stringify(data))

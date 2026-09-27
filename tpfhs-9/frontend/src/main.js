@@ -4,7 +4,18 @@ import axios from 'axios'
 import 'element-plus/dist/index.css'
 import './style.css'
 import RootApp from './RootApp.vue'
-import { getAuthToken } from './auth-token'
+import { getAuthToken, setAuthToken } from './auth-token'
+
+window.addEventListener('message', event => {
+  if (event.data?.type !== 'carbon:set-auth-token' || !event.data.token) return
+  if (event.source !== window.parent) return
+  setAuthToken(event.data.token)
+})
+
+if (window.parent !== window) {
+  const parentOrigin = document.referrer ? new URL(document.referrer).origin : '*'
+  window.parent.postMessage({ type: 'carbon:request-auth-token' }, parentOrigin)
+}
 
 axios.interceptors.request.use(config => {
   const token = getAuthToken()
