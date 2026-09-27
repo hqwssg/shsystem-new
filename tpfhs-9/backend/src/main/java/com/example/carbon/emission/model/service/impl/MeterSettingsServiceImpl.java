@@ -1275,91 +1275,13 @@ public class MeterSettingsServiceImpl implements MeterSettingsService {
      */
     @Override
     public Map<String, Object> testMeterReading(Long meterId, Map<String, Object> config) {
-        Map<String, Object> result = new LinkedHashMap<>();
-        // 编辑模式下校验电表是否存在
+        requireReadingMethodPermission();
         if (meterId != null) {
             meterRepository.findById(meterId)
-                .orElseThrow(() -> new RuntimeException("电表不存在: " + meterId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "电表不存在: " + meterId));
         }
-
-        if (config == null || config.isEmpty()) {
-            result.put("success", false);
-            result.put("message", "未提供抄表接口配置");
-            return result;
-        }
-        String interfaceType = String.valueOf(config.getOrDefault("interfaceType", ""));
-        String apiUrl = String.valueOf(config.getOrDefault("apiUrl", "")).trim();
-        if (apiUrl.isEmpty() || "null".equals(apiUrl)) {
-            result.put("success", false);
-            result.put("message", "接口地址不能为空");
-            return result;
-        }
-
-        // 2. 按协议分支处理
-        try {
-            switch (interfaceType) {
-                case "HTTP_API": {
-                    int timeoutSec = toInt(config.get("timeout"), 30);
-                    java.net.http.HttpClient client = java.net.http.HttpClient.newBuilder()
-                            .connectTimeout(java.time.Duration.ofSeconds(timeoutSec))
-                            .build();
-                    java.net.http.HttpRequest.Builder reqBuilder = java.net.http.HttpRequest.newBuilder()
-                            .uri(java.net.URI.create(apiUrl))
-                            .timeout(java.time.Duration.ofSeconds(timeoutSec))
-                            .GET();
-                    // 认证
-                    String authType = String.valueOf(config.getOrDefault("authType", "NONE"));
-                    if ("BASIC".equals(authType)) {
-                        String user = String.valueOf(config.getOrDefault("username", ""));
-                        String pass = String.valueOf(config.getOrDefault("password", ""));
-                        String token = java.util.Base64.getEncoder()
-                                .encodeToString((user + ":" + pass).getBytes(java.nio.charset.StandardCharsets.UTF_8));
-                        reqBuilder.header("Authorization", "Basic " + token);
-                    } else if ("TOKEN".equals(authType)) {
-                        String token = String.valueOf(config.getOrDefault("token", ""));
-                        reqBuilder.header("Authorization", "Bearer " + token);
-                    }
-                    java.net.http.HttpResponse<String> resp = client.send(
-                            reqBuilder.build(),
-                            java.net.http.HttpResponse.BodyHandlers.ofString());
-                    int code = resp.statusCode();
-                    if (code >= 200 && code < 300) {
-                        result.put("success", true);
-                        result.put("message", "HTTP 接口连通正常，状态码：" + code);
-                        result.put("data", resp.body());
-                    } else {
-                        result.put("success", false);
-                        result.put("message", "HTTP 接口返回非 2xx 状态码：" + code);
-                    }
-                    break;
-                }
-                case "MODBUS_TCP":
-                case "MQTT": {
-                    // 仅校验关键字段，实际协议连通性测试待接入对应客户端库
-                    Object portObj = config.get("port");
-                    if (portObj == null) {
-                        result.put("success", false);
-                        result.put("message", "端口不能为空");
-                        return result;
-                    }
-                    result.put("success", true);
-                    result.put("message", interfaceType + " 配置校验通过，" + apiUrl + ":" + portObj
-                            + "（实际协议连通性测试待接入对应客户端）");
-                    break;
-                }
-                default: {
-                    result.put("success", false);
-                    result.put("message", "不支持的接口类型：" + interfaceType);
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            result.put("success", false);
-            result.put("message", "接口地址格式无效：" + e.getMessage());
-        } catch (java.io.IOException | InterruptedException e) {
-            result.put("success", false);
-            result.put("message", "接口调用失败：" + e.getClass().getSimpleName() + " - " + e.getMessage());
-        }
-        return result;
+        return httpReadingProbe.probe(config);
     }
 
     /**
