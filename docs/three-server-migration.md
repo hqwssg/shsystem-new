@@ -87,3 +87,10 @@ Java 调用链已恢复为 Python 内部 HTTP 任务 API：报告渲染、Markdo
 
 本地验证结果：Python `compileall` 通过；数据集 SQL 生成校验通过（28 个文件、33 个车站、1390 个区间等）；`ruoyi-admin -am package -DskipTests` 通过。由于本机不执行容器流程，镜像构建和数据库初始化未作为本次完成条件。
 
+
+## 12. 2026-11-14 GitHub 同步结果
+
+- 本地拆分提交：`fc9c4e5625f7ece8b767dbb1f036202ea0aa1fda`。
+- 因目标仓库旧历史存在缺失对象，GitHub 接收增量 pack 时返回 `did not receive expected object d1da62a...`；为确保目标仓库可完整拉取，基于已验证的当前工作树创建独立根提交：`41bb4959e36e2e8c91d97c3f9354e198c4276024`。
+- 已使用 `git push --force --no-thin origin main` 覆盖同步至 `hqwssg/shsystem-new.git`，远端 `main` 已指向 `41bb4959e36e2e8c91d97c3f9354e198c4276024`。
+- 本次仅调整本地代码并同步 GitHub，未创建或启动容器。
