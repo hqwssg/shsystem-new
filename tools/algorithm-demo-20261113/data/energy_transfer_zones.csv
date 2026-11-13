@@ -1,0 +1,3 @@
+﻿zone_id,start_km,end_km,max_transfer_power_kW,efficiency,implementation_status,active_in_operational_baseline,data_status,source_document,source_sha256,note
+FLEX-IMPLEMENTED-001,108.0,219.0,12000.0,0.95,implemented,true,provided_document,shuohuang_data/6.柔性供电能量协同区间.doc,b23dba45cd1950b3fccf84ba4b10d7767a1c3d57087f841c02c6c00b8b11bef8,已实施区间，进入当前运行基线。
+FLEX-PLANNED-001,16.0,139.0,12000.0,0.95,planned,false,provided_document,shuohuang_data/6.柔性供电能量协同区间.doc,b23dba45cd1950b3fccf84ba4b10d7767a1c3d57087f841c02c6c00b8b11bef8,规划区间，仅用于规划情景。

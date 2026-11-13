@@ -1,0 +1,121 @@
+{
+  "review_date": "2026-10-18",
+  "policy": "变化大、每期需确认或不确定的内容不设默认，空字段由用户本次填写。历史报告仅作来源，不导入原文档或年度结果。",
+  "companies": [
+    {
+      "company_key": "suning",
+      "source_report": "2024年度/运输-2024-005-朔黄铁路发展有限责任公司肃宁分公司-温室气体排放报告-02版.docx",
+      "source_sha256": "65b03b13f1ce691dace1470e5300e4efc6be1b83804edf0f4b6daac84ec71461",
+      "source_report_year": 2024,
+      "stable_text_blocks": [
+        71,
+        78
+      ],
+      "text_processing": "仅摘编公司沿革及通用业务/工艺，删去员工、部门、车站、设备数量、具体里程和年度断言。",
+      "method_source": "第二章 核算方法：仅保留指南名称，不复制年度排放因子、阈值和计算值。",
+      "images": [
+        {
+          "role": "cover_logo",
+          "document_member": "word/media/image1.png",
+          "description": "封面标识"
+        },
+        {
+          "role": "office_location",
+          "document_member": "word/media/image3.jpeg",
+          "description": "肃宁分公司机关所在地"
+        }
+      ],
+      "excluded": [
+        "编制单位和签核人员",
+        "碳排放主管部门",
+        "员工/部门/站点/设备数量及设备型号清单",
+        "组织机构图",
+        "具体边界及排除断言",
+        "工作量及年度消耗量",
+        "活动数据计量及采购现状说明",
+        "年度结论及强度适用性",
+        "报告编号/日期/年度",
+        "年度因子/排放量/同比分析"
+      ],
+      "not_imported_images": [
+        "组织机构图"
+      ]
+    },
+    {
+      "company_key": "yuanping",
+      "source_report": "2024年度/运输-2024-006-国能朔黄铁路发展有限责任公司原平分公司-温室气体排放报告-V1.docx",
+      "source_sha256": "968a867b0a19e5eb4086d9e38e85eb3a4dd19a81066088ceecba70c3f83f8fdc",
+      "source_report_year": 2024,
+      "stable_text_blocks": [
+        66,
+        73
+      ],
+      "text_processing": "仅摘编公司沿革及通用业务/工艺，删去员工、部门、车站、设备数量、具体里程和年度断言。",
+      "method_source": "第二章 核算方法：仅保留指南名称，不复制年度排放因子、阈值和计算值。",
+      "images": [
+        {
+          "role": "cover_logo",
+          "document_member": "word/media/image1.png",
+          "description": "封面标识"
+        },
+        {
+          "role": "office_location",
+          "document_member": "word/media/image2.jpeg",
+          "description": "原平分公司场所外观照片"
+        }
+      ],
+      "excluded": [
+        "编制单位和签核人员",
+        "碳排放主管部门",
+        "员工/部门/站点/设备数量及设备型号清单",
+        "组织机构图",
+        "具体边界及排除断言",
+        "工作量及年度消耗量",
+        "活动数据计量及采购现状说明",
+        "年度结论及强度适用性",
+        "报告编号/日期/年度",
+        "年度因子/排放量/同比分析"
+      ],
+      "not_imported_images": [
+        "组织机构图",
+        "线路及站点图"
+      ]
+    },
+    {
+      "company_key": "jiliang",
+      "source_report": "2025年度/运输-2025-007-朔黄铁路发展有限责任公司机辆分公司-温室气体排放报告-V1.docx",
+      "source_sha256": "ff86f9d31e31a20675d87ab877aab9f281b6a70d98b6f7b01e182c900ac8966c",
+      "source_report_year": 2025,
+      "stable_text_blocks": [
+        69,
+        78
+      ],
+      "text_processing": "仅摘编公司沿革及通用业务/工艺，删去员工、部门、车站、设备数量、具体里程和年度断言。",
+      "method_source": "第二章 核算方法：仅保留指南名称，不复制年度排放因子、阈值和计算值。",
+      "images": [
+        {
+          "role": "cover_logo",
+          "document_member": "word/media/image1.png",
+          "description": "封面标识"
+        }
+      ],
+      "excluded": [
+        "编制单位和签核人员",
+        "碳排放主管部门",
+        "员工/部门/站点/设备数量及设备型号清单",
+        "组织机构图",
+        "具体边界及排除断言",
+        "工作量及年度消耗量",
+        "活动数据计量及采购现状说明",
+        "年度结论及强度适用性",
+        "报告编号/日期/年度",
+        "年度因子/排放量/同比分析"
+      ],
+      "not_imported_images": [
+        "组织机构图",
+        "现场图（无法确认机关所在地）",
+        "平面布置图"
+      ]
+    }
+  ]
+}

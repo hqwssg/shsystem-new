@@ -1,0 +1,77 @@
+铁路全景大屏：本地样式对齐与演示/正式切换（2026-10-29）
+
+一、范围和版本
+整合基线：origin/main 4b3f777854d52ab83c37f059ae3fd466eb0189bd。
+本次只改GoView铁路全景前端、演示快照及画布工具。不改管理版大屏、不改核算/报告/统计后端、不新增业务表，不覆盖任何环境配置。
+首次打开使用正式数据；选择仅在当前页面运行期间有效，刷新页面恢复正式模式。模式切换自动返回“总数据”。
+正式模式仍请求 /carbon-screen/carbon/screen/dashboard，遵循现有登录、权限及核算任务口径。
+本轮没有把正式大屏改为读取 emission_collection_node_data_month，也没有创建核算点到地理站点的业务映射。
+正式接口失败显示原有错误，不回退演示值；正式模式切换时立即清空演示内容。
+
+二、先整合代码
+同事在仓库根目录备份/提交自己的改动，新建整合分支；保留.env、application.yml、端口和鉴权设置。
+交付包中的panorama-demo.patch基于上述远程SHA，只包含本次范围内的增量。
+  git -c core.whitespace=cr-at-eol apply --check /解压目录/panorama-demo.patch
+  git -c core.whitespace=cr-at-eol apply /解压目录/panorama-demo.patch
+若已包含部分改动，不要强制重复应用；按source-files.json、source-reference逐文件合并。
+不使用整个本地仓库覆盖远程；尤其不要覆盖现有axios.ts统一登录与Authorization逻辑。
+包里的canonical-template是现有本地与远程相同的标准模板参考，不是额外业务数据初始化SQL。
+
+三、演示数据初始化（无MySQL操作）
+演示数据使用内置JSON快照，由前端打包，独立于业务数据库。补丁已经包含生成好的JSON，不初始化数据库也能展示。
+需要重建/校验演示数据时，在整合后的仓库执行（Node18+，使用已有项目依赖）：
+  cd goview/go-view-master-fetch
+  npm run dashboard:panorama:demo:init
+  node scripts/init-panorama-demo.mjs --check
+  npm run dashboard:panorama:test
+  npm run dashboard:management:test
+  npm run build
+回仓库根目录：
+  node tools/dashboard/test-repair-panorama.mjs
+生成结果：src/assets/dashboard/panorama-demo.json。重复执行生成内容一致，不追加记录。
+内容为35个地图站点、2024/2025/2026三个完整年度，每年12个月；当前展示2026年度。
+年合计、月份、三维图、三种结构、排行及地图站点来自同一份合成数据。
+总排放32373.1009 tCO2e（页面按3位小数显示32373.101）；模拟强度只在演示模式使用，不是实测或正式核算。
+缺少依赖时按项目现有锁文件和整合规范安装；本次未增加依赖，无需更换包管理器或锁文件。
+初始化必须在构建前执行，生成文件不会自动替换已部署的dist。
+
+四、部署前端产物
+按现有部署流程备份当前GoView静态产物，并用本次构建的完整dist替换实际提供服务的目录。
+保留现有Nginx接口代理及统一鉴权，不需要重新打包或重启核算后端。
+不要覆盖goview.db、业务数据库、上传目录或.env。
+部署后清理浏览器旧静态缓存，检查左下角是否出现“数据模式”选择器。
+演示模式始终显示“模拟生成，非实际核算，不写入业务数据库”，报告期也带“演示数据”。
+
+五、关键：单独对齐旧项目铁路画布
+更新代码/模板文件不会自动改写数据库中保存的旧项目。截图项目ID是2066429772333690882。
+本地标准：lineDisplayMode=monitorGradient，lineWidth=8，labelFontSize=15，stationLabelScope=important，geoZoom=1.3。
+本次工具增加 --map-only，只恢复地图的标准显示选项，不改变其他组件、布局、线路几何、已保存dataset及发布状态。
+先从有该项目编辑权限的现有账号取得会话，通过进程环境传入；不把凭据放入补丁、Git或聊天。
+统一登录设置GOVIEW_AUTHORIZATION（完整Bearer值）；独立登录则设置GOVIEW_TOKEN_NAME和GOVIEW_TOKEN_VALUE。
+GOVIEW_API_BASE设置为目标GoView接口根地址，例如：http://202.115.17.253:53231/api/goview。
+若内网代理路径不同，请按现场实际路径设置。
+
+仓库根目录只读检查：
+  node tools/dashboard/repair-panorama.mjs --project-id 2066429772333690882 --map-only
+应返回READ_ONLY，changes为空或仅包含dash-map-001；工具不会按名称猜测其他项目。
+确认是原项目后，执行带备份的更新：
+  node tools/dashboard/repair-panorama.mjs --project-id 2066429772333690882 --map-only --apply --backup-dir /opt/ruoyi-backups/panorama-20261029
+Windows整合环境将backup-dir换成本机私有目录。不要加--restore-layout，本次不改变布局。
+工具先备份项目、检查并发修改，再保存并回读核对；报错时停止并检查备份，不反复强制覆盖。
+若接口或会话暂时不便使用，也可以在GoView编辑器选中铁路地图，按上述参数调整，保存原项目；不修改排放值。
+完成后重新加载编辑页和预览页，点击“总数据”。若仍显示旧配置，检查当前浏览器sessionStorage里的GO_CHART_STORAGE_LIST是否保存旧预览草稿；仅清理该预览缓存或在无旧编辑缓存的新标签打开，勿清除登录凭据。
+
+六、验收顺序
+1. 正式模式能看到真实总量；点击总数据后不应被无匹配数据的巡游站点清空。
+2. 铁路为本地监测渐变样式；该模式不执行流光巡游自动切换。
+3. 切换演示模式：看到演示标记，35站排行、12月曲线、三年曲面及结构图有值，地图颜色和站点值随演示快照联动。
+4. 手动点击有演示数据的站点，再切换模式：应返回总数据。
+5. 切回正式模式：不能保留演示数字；401/403或连接异常应显示正式接口错误。正式接口迟到响应不能覆盖演示模式。
+6. 演示刷新不请求碳核算数据接口、不产生数据库写入；页面首次正式加载产生的接口请求不算演示请求。
+7. 正式模式地理站点名称和核算节点不同仍可能无站点数据；本次不推测归属、不将演示数值充当真实排放。强度暂无正式来源仍按现有0值展示。
+
+七、回退
+源码在独立整合提交后用git revert该提交；前端产物恢复部署前备份。
+画布与代码分开回退：使用上述工具生成的项目JSON备份，将content恢复到同一项目，不导入整个goview.db。
+演示数据不进数据库，无需执行删除SQL。删除/回退本次前端改动即可恢复原页面。
+本地源码回退点：pre-sync-50-panorama-demo-20261029，私有配置快照仅存本地.git，不随包交付。

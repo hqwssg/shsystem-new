@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "bidirectional_dcdc_placeholder",
+  "label": "双向 DC-DC 升降压变换器（T1/T2 双开关平均模型）",
+  "data_status": "placeholder",
+  "field_data_status": {
+    "inductance_h": "placeholder",
+    "input_capacitance_f": "placeholder",
+    "output_capacitance_f": "placeholder",
+    "switching_frequency_hz": "placeholder",
+    "inductor_resistance_ohm": "assumed",
+    "converter_efficiency": "assumed",
+    "power_rating_w": "derived",
+    "duty_limit": "official",
+    "dc_bus_source": "placeholder",
+    "max_input_current_a": "derived",
+    "max_output_current_a": "assumed",
+    "input_voltage_window": "placeholder",
+    "output_voltage_window": "placeholder"
+  },
+  "provenance": {
+    "duty_limit": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+    "power_rating_w": "变流器额定 24000 kW，与电机再生功率上限同源：按 trains.csv:locomotive_consist 的编组逐型取 continuous_power_kW 求和（12 轴 14400 + 8 轴 9600）。装配时由共享数据重算并校验，禁止在此另立常数。",
+    "inductance_h": "滤波电感 0.5 mH：决定电感电流纹波与电流环增益（∂i_L/∂d1 ∝ 1/L），并进入 B_target 解析式；工程预设，待变流器硬件资料确认",
+    "switching_frequency_hz": "开关频率 5 kHz：平均模型不显式使用（B_target 与闭环结果对 fs 不敏感），用于纹波核算与器件选型口径；工程预设",
+    "converter_efficiency": "工程预设 0.97（非实测）",
+    "inductor_resistance_ohm": "电感绕阻直流电阻 0.002 Ω，用于电感铜损 P = i_L²·R 的核算；工程预设，非器件手册值",
+    "input_capacitance_f": "母线侧输入电容 0.02 F，与源阻抗共同决定母线电压在功率突变时的动态过程；工程预设",
+    "output_capacitance_f": "储能侧输出电容 0.02 F，同时进入控制通道增益先验 B_target 的分母（∂v_out/∂d2 ∝ 1/C_out）；工程预设",
+    "dc_bus_source": "母线按「刚性电压源 + 源阻抗 + 输入电容」建模：开路电压 1500 V 取额定网压量级，源阻抗 0.01 Ω 承担母线电压偏差下的功率交换，是再生能量经母线回馈牵引网的物理通道；工程预设",
+    "max_input_current_a": "变流器输入侧额定电流 16000 A = 全列功率上限 24000 kW ÷ 直流母线 1500 V，与 power_rating_w 同源，随编组（12 轴 14400 + 8 轴 9600 kW）联动。该值只用于**报告**输入侧电流越限比（converter_input_current_over_limit_ratio），不截断；实测再生电流峰值远低于此（s1 约 3.4 kA）。此前按 1 台口径登记为 9600 A（= 14.4 MW ÷ 1500 V），两万吨 1+1 编组下已不成立。",
+    "max_output_current_a": "储能侧输出电流上限 3000 A，同时作为 NSMC 的电感电流硬上限 i_L,max；工程预设",
+    "input_voltage_window": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+    "output_voltage_window": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设"
+  },
+  "control_channel_gain_prior_dependency": {
+    "note": "问题 18 落地的『控制通道增益先验』B_target 由本文件的硬件参数解析给出，因此闭环控制增益挂在这两个 placeholder 上——这是 2026-09-25 引入的新依赖，此前 B 由 EKF/UKF 从数据学出、不直接依赖硬件参数。",
+    "formula": "B_target = [[(1-d2)*v_in*dt^2/(2*L*C_out), -i_L*dt/C_out], [v_in*dt/L, v_out*dt/L]]",
+    "depends_on": {
+      "inductance_h": "placeholder（代码字段 DCConverterParameters.inductance_h / L）",
+      "output_capacitance_f": "placeholder（代码字段 DCConverterParameters.output_capacitance_f / C_out）"
+    },
+    "independent_of": {
+      "switching_frequency_hz": "平均模型不含开关频率，fs 不进入 B_target（探针实测 fs x 2 对 B_target 与闭环结果均无影响）"
+    },
+    "measured_sensitivity": {
+      "probe": "tools/probe_gain_prior_placeholder_sensitivity.py",
+      "scenario": "族 7（强非线性触发 UKF），dt = 4e-4",
+      "structure": "稳健：B_target 按解析式精确缩放（L x 0.5 -> di_L/dd1 与 dv_out/dd1 恰 2.0x，dv_out/dd2 不含 L 恰 1.0x；C_out 反之），五个变体闭环全部留在物理包络内，先验残差恒定 2.16e-16",
+      "magnitude": "敏感：C_out x 0.5 -> 回收能量 +62.0%；L x 2.0 -> +29.8%；C_out x 2.0 -> +2.3%；L x 0.5 -> +10.3%",
+      "conclusion": "『回收能量』的具体数字在硬件资料到位前不可作为工程结论（与 simulation result / not engineering conclusion 免责声明一致）；已固化为回归测试 tests/test_control_channel.py 的缩放律断言 + tests/test_validation.py 的包络断言，硬件参数升级后重跑即可发现结论漂移"
+    }
+  },
+  "note": "本模型为平均模型（averaged model），用于控制层仿真；不做开关级（switching-level）仿真。",
+  "topology": "non_inverting_bidirectional_buck_boost",
+  "control_inputs": [
+    "duty_cycle_T1",
+    "duty_cycle_T2"
+  ],
+  "modes": {
+    "regen_charge": "能量由直流母线流向储能（T1 为主控，T2 置 0）",
+    "discharge_support": "能量由储能流向直流母线（T2 为主控，T1 置 1，预留）"
+  },
+  "duty_limit": {
+    "u0_max": 0.9,
+    "min": 0.0,
+    "max": 1.0,
+    "note": "u0_max 来自技术方案；[0,1] 为物理 PWM 硬边界，任何输出都必须被限幅。"
+  },
+  "inductance_h": 0.0005,
+  "inductor_resistance_ohm": 0.002,
+  "input_capacitance_f": 0.02,
+  "output_capacitance_f": 0.02,
+  "switching_frequency_hz": 5000.0,
+  "dc_bus_source": {
+    "open_circuit_voltage_v": 1500.0,
+    "resistance_ohm": 0.01,
+    "note": "placeholder：直流母线按『刚性电压源 + 源阻抗 + 输入电容』建模。源阻抗承担母线电压偏差下的功率交换，是『再生能量经母线回馈牵引网』的物理通道。该通道使得占空比为 0 时再生能量不会凭空消失，而是如实记为 grid_export。"
+  },
+  "converter_efficiency": 0.97,
+  "power_rating_w": 24000000.0,
+  "max_input_current_a": 16000.0,
+  "max_output_current_a": 3000.0,
+  "rating_consumers": {
+    "note": "问题 32（2026-09-26）落地前，power_rating_w 被读入却全仓无消费点——只在 DCConverterParameters.__post_init__ 被校验为正数、在 from_parameters 被读出，没有任何计算使用它，导致『变流器是否越额定功率』在代码里无法判定；同时 DCConverterStepResult.power_limited_by_rating 的名字承诺按功率判定，实现却是 abs(i_src) > max_input_current_a + 1e-9，与 input_current_over_limit 逐位相同。",
+    "consumers": {
+      "judgement": "dynamics/dc_dc_converter.py::BidirectionalDCDCConverter.step → power_limited_by_rating = abs(p_in) > power_rating_w + 1e-9（p_in 严格等于 source_power_w，即电机侧电功率）",
+      "statistics": "simulation/regenerative_simulator.py::run → 备注『越额定拍数 = k / n（只报告不截断，问题 32）』",
+      "metric": "metrics/regenerative_metrics.py::converter_limit_ratios → converter_over_rating_ratio（越限拍占比），经 build_scenario_metrics(extra_ratios=…) 并入 ScenarioMetrics.extra",
+      "passthrough": "simulation/regenerative_simulator.py::run → SimulationResult.converter_limits = (power_rating_w, max_input_current_a)"
+    },
+    "evidence": "tools/probe_converter_rating_audit.py（只读，A/B/C/D 四组，D 组为活体回归守卫）；官方套件配置 dt=2e-4、逐步记录 record_stride=1 实测 max|p_in| = 25.92 MW = 额定的 90.00%（s1_flat_braking / s4_power_step），全部官方场景越额定拍 / 越限拍均为 0 ⟹ 本条修复对交付数字零影响",
+    "tolerance": "两条限值都只报告、不截断：超出部分抬高母线电压并经 i_grid 回馈牵引网，是真实物理去向；钳位等于把能量凭空抹掉"
+  },
+  "input_voltage_window": {
+    "min_v": 1200.0,
+    "nominal_v": 1500.0,
+    "max_v": 1800.0
+  },
+  "output_voltage_window": {
+    "min_v": 600.0,
+    "nominal_v": 1100.0,
+    "max_v": 1500.0,
+    "note": "placeholder：储能侧母线电压窗口占位，待储能系统电气资料替换。"
+  }
+}

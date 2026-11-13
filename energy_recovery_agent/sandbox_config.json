@@ -1,0 +1,4376 @@
+{
+  "route": {
+    "total_length_km": 594.0,
+    "max_speed_kmh": 120.0,
+    "stations": [
+      {
+        "name": "Shenchi South",
+        "position_km": 0.0
+      },
+      {
+        "name": "Virtual Station 02",
+        "position_km": 18.6
+      },
+      {
+        "name": "Virtual Station 03",
+        "position_km": 37.1
+      },
+      {
+        "name": "Virtual Station 04",
+        "position_km": 55.7
+      },
+      {
+        "name": "Virtual Station 05",
+        "position_km": 74.2
+      },
+      {
+        "name": "Virtual Station 06",
+        "position_km": 92.8
+      },
+      {
+        "name": "Virtual Station 07",
+        "position_km": 111.4
+      },
+      {
+        "name": "Yinshanzhuang",
+        "position_km": 118.0
+      },
+      {
+        "name": "Virtual Station 08",
+        "position_km": 129.9
+      },
+      {
+        "name": "Dongye",
+        "position_km": 145.0
+      },
+      {
+        "name": "Virtual Station 09",
+        "position_km": 148.5
+      },
+      {
+        "name": "Diliudeng",
+        "position_km": 164.0
+      },
+      {
+        "name": "Virtual Station 10",
+        "position_km": 167.1
+      },
+      {
+        "name": "Virtual Station 11",
+        "position_km": 185.6
+      },
+      {
+        "name": "Xiaojue",
+        "position_km": 200.7
+      },
+      {
+        "name": "Virtual Station 12",
+        "position_km": 204.2
+      },
+      {
+        "name": "Virtual Station 13",
+        "position_km": 222.8
+      },
+      {
+        "name": "Virtual Station 14",
+        "position_km": 241.3
+      },
+      {
+        "name": "Virtual Station 15",
+        "position_km": 259.9
+      },
+      {
+        "name": "Virtual Station 16",
+        "position_km": 278.4
+      },
+      {
+        "name": "Virtual Station 17",
+        "position_km": 297.0
+      },
+      {
+        "name": "Virtual Station 18",
+        "position_km": 315.6
+      },
+      {
+        "name": "Virtual Station 19",
+        "position_km": 334.1
+      },
+      {
+        "name": "Virtual Station 20",
+        "position_km": 352.7
+      },
+      {
+        "name": "Suning North",
+        "position_km": 362.0
+      },
+      {
+        "name": "Virtual Station 21",
+        "position_km": 371.2
+      },
+      {
+        "name": "Virtual Station 22",
+        "position_km": 389.8
+      },
+      {
+        "name": "Virtual Station 23",
+        "position_km": 408.4
+      },
+      {
+        "name": "Virtual Station 24",
+        "position_km": 426.9
+      },
+      {
+        "name": "Virtual Station 25",
+        "position_km": 445.5
+      },
+      {
+        "name": "Virtual Station 26",
+        "position_km": 464.1
+      },
+      {
+        "name": "Virtual Station 27",
+        "position_km": 482.6
+      },
+      {
+        "name": "Huanghua Port",
+        "position_km": 594.0
+      }
+    ],
+    "segments": [
+      {
+        "start_km": 0.0,
+        "end_km": 1.0,
+        "gradient_per_mille": -0.048024821589628175,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 1.0,
+        "end_km": 2.0,
+        "gradient_per_mille": -5.571514046751333,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 2.0,
+        "end_km": 3.0,
+        "gradient_per_mille": 0.4737928239207587,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 3.0,
+        "end_km": 4.0,
+        "gradient_per_mille": -7.782856343188174,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 4.0,
+        "end_km": 5.0,
+        "gradient_per_mille": -7.688266641937705,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 5.0,
+        "end_km": 6.0,
+        "gradient_per_mille": -8.62849642442591,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 6.0,
+        "end_km": 7.0,
+        "gradient_per_mille": -3.126722506536778,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 7.0,
+        "end_km": 8.0,
+        "gradient_per_mille": 2.3320263934895724,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 8.0,
+        "end_km": 9.0,
+        "gradient_per_mille": 0.7739515298351769,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 9.0,
+        "end_km": 10.0,
+        "gradient_per_mille": -5.985607330493757,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 10.0,
+        "end_km": 11.0,
+        "gradient_per_mille": -7.569056128722118,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 11.0,
+        "end_km": 12.0,
+        "gradient_per_mille": 2.8649211288644363,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 12.0,
+        "end_km": 13.0,
+        "gradient_per_mille": 2.299795825841322,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 13.0,
+        "end_km": 14.0,
+        "gradient_per_mille": -1.4928067196341894,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 14.0,
+        "end_km": 15.0,
+        "gradient_per_mille": -3.7005187190830515,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 15.0,
+        "end_km": 16.0,
+        "gradient_per_mille": 2.6116652995419276,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 16.0,
+        "end_km": 17.0,
+        "gradient_per_mille": 3.063896604350882,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 17.0,
+        "end_km": 18.0,
+        "gradient_per_mille": 0.8640057070089284,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 18.0,
+        "end_km": 19.0,
+        "gradient_per_mille": 1.822956771041687,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 19.0,
+        "end_km": 20.0,
+        "gradient_per_mille": 2.9744480942120575,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 20.0,
+        "end_km": 21.0,
+        "gradient_per_mille": -3.678232849451674,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 21.0,
+        "end_km": 22.0,
+        "gradient_per_mille": -6.722842639814813,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 22.0,
+        "end_km": 23.0,
+        "gradient_per_mille": 0.8254843884197189,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 23.0,
+        "end_km": 24.0,
+        "gradient_per_mille": -8.000364865900323,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 24.0,
+        "end_km": 25.0,
+        "gradient_per_mille": -1.5220417215840882,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 25.0,
+        "end_km": 26.0,
+        "gradient_per_mille": -3.6876238153929313,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 26.0,
+        "end_km": 27.0,
+        "gradient_per_mille": -0.040003362042700275,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 27.0,
+        "end_km": 28.0,
+        "gradient_per_mille": 0.5845995138582438,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 28.0,
+        "end_km": 29.0,
+        "gradient_per_mille": 1.8639987616474265,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 29.0,
+        "end_km": 30.0,
+        "gradient_per_mille": 2.2706412107970007,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 30.0,
+        "end_km": 31.0,
+        "gradient_per_mille": -6.04624018979143,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 31.0,
+        "end_km": 32.0,
+        "gradient_per_mille": 3.2691467706173647,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 32.0,
+        "end_km": 33.0,
+        "gradient_per_mille": -3.4611533851507,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 33.0,
+        "end_km": 34.0,
+        "gradient_per_mille": -2.5760740637764172,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 34.0,
+        "end_km": 35.0,
+        "gradient_per_mille": 1.4298457492824923,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 35.0,
+        "end_km": 36.0,
+        "gradient_per_mille": 1.4581933631316097,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 36.0,
+        "end_km": 37.0,
+        "gradient_per_mille": -3.408392928034438,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 37.0,
+        "end_km": 38.0,
+        "gradient_per_mille": -1.866631888529497,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 38.0,
+        "end_km": 39.0,
+        "gradient_per_mille": 3.0554407353333204,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 39.0,
+        "end_km": 40.0,
+        "gradient_per_mille": 2.089111101081498,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 40.0,
+        "end_km": 41.0,
+        "gradient_per_mille": -3.613257636556999,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 41.0,
+        "end_km": 42.0,
+        "gradient_per_mille": -2.4473015710145187,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 42.0,
+        "end_km": 43.0,
+        "gradient_per_mille": 3.050915831282973,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 43.0,
+        "end_km": 44.0,
+        "gradient_per_mille": 0.5439451663720476,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 44.0,
+        "end_km": 45.0,
+        "gradient_per_mille": -5.264447340664401,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 45.0,
+        "end_km": 46.0,
+        "gradient_per_mille": -7.43826956965773,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 46.0,
+        "end_km": 47.0,
+        "gradient_per_mille": -8.95456557457579,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 47.0,
+        "end_km": 48.0,
+        "gradient_per_mille": 1.0755293644029393,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 48.0,
+        "end_km": 49.0,
+        "gradient_per_mille": 1.6674707867289058,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 49.0,
+        "end_km": 50.0,
+        "gradient_per_mille": -7.51024848083213,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 50.0,
+        "end_km": 51.0,
+        "gradient_per_mille": 2.7833708744145387,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 51.0,
+        "end_km": 52.0,
+        "gradient_per_mille": -6.215244575293737,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 52.0,
+        "end_km": 53.0,
+        "gradient_per_mille": -1.4486935783252397,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 53.0,
+        "end_km": 54.0,
+        "gradient_per_mille": -1.5750485892675155,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 54.0,
+        "end_km": 55.0,
+        "gradient_per_mille": -2.1595200875947302,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 55.0,
+        "end_km": 56.0,
+        "gradient_per_mille": 3.3021062895245787,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 56.0,
+        "end_km": 57.0,
+        "gradient_per_mille": -4.69480224436274,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 57.0,
+        "end_km": 58.0,
+        "gradient_per_mille": 4.257292234171917,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 58.0,
+        "end_km": 59.0,
+        "gradient_per_mille": 2.4243255478812387,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 59.0,
+        "end_km": 60.0,
+        "gradient_per_mille": -1.5421136265867812,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 60.0,
+        "end_km": 61.0,
+        "gradient_per_mille": 4.255881515869872,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 61.0,
+        "end_km": 62.0,
+        "gradient_per_mille": 3.214062575193605,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 62.0,
+        "end_km": 63.0,
+        "gradient_per_mille": -9.836310488746905,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 63.0,
+        "end_km": 64.0,
+        "gradient_per_mille": -10.762620020006684,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 64.0,
+        "end_km": 65.0,
+        "gradient_per_mille": -9.461003379928341,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 65.0,
+        "end_km": 66.0,
+        "gradient_per_mille": -10.920977538416617,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 66.0,
+        "end_km": 67.0,
+        "gradient_per_mille": -11.227434800425947,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 67.0,
+        "end_km": 68.0,
+        "gradient_per_mille": -9.445907966184066,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 68.0,
+        "end_km": 69.0,
+        "gradient_per_mille": -11.181187950640613,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 69.0,
+        "end_km": 70.0,
+        "gradient_per_mille": -11.455989193314936,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 70.0,
+        "end_km": 71.0,
+        "gradient_per_mille": -10.571055331589335,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 71.0,
+        "end_km": 72.0,
+        "gradient_per_mille": -11.304934222659119,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 72.0,
+        "end_km": 73.0,
+        "gradient_per_mille": -10.731134082270682,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 73.0,
+        "end_km": 74.0,
+        "gradient_per_mille": -10.10101573050894,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 74.0,
+        "end_km": 75.0,
+        "gradient_per_mille": -9.906644670052925,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 75.0,
+        "end_km": 76.0,
+        "gradient_per_mille": -11.3018658124317,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 76.0,
+        "end_km": 77.0,
+        "gradient_per_mille": -11.322931106953193,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 77.0,
+        "end_km": 78.0,
+        "gradient_per_mille": -11.603999290226849,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 78.0,
+        "end_km": 79.0,
+        "gradient_per_mille": -11.54543730667584,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 79.0,
+        "end_km": 80.0,
+        "gradient_per_mille": -11.761629573111309,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 80.0,
+        "end_km": 81.0,
+        "gradient_per_mille": -10.537333073828131,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 81.0,
+        "end_km": 82.0,
+        "gradient_per_mille": -11.37194348435603,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 82.0,
+        "end_km": 83.0,
+        "gradient_per_mille": -9.76141643493372,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 83.0,
+        "end_km": 84.0,
+        "gradient_per_mille": -9.900686174719787,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 84.0,
+        "end_km": 85.0,
+        "gradient_per_mille": -10.534654329698743,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 85.0,
+        "end_km": 86.0,
+        "gradient_per_mille": -10.294131243877734,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 86.0,
+        "end_km": 87.0,
+        "gradient_per_mille": -11.651370290440545,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 87.0,
+        "end_km": 88.0,
+        "gradient_per_mille": -9.582928280674459,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 88.0,
+        "end_km": 89.0,
+        "gradient_per_mille": -11.31685510145012,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 89.0,
+        "end_km": 90.0,
+        "gradient_per_mille": -11.18846987299758,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 90.0,
+        "end_km": 91.0,
+        "gradient_per_mille": -10.254250200813052,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 91.0,
+        "end_km": 92.0,
+        "gradient_per_mille": -10.282452047842815,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 92.0,
+        "end_km": 93.0,
+        "gradient_per_mille": -11.268926081498806,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 93.0,
+        "end_km": 94.0,
+        "gradient_per_mille": -10.770956798342738,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 94.0,
+        "end_km": 95.0,
+        "gradient_per_mille": -10.977939289693179,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 95.0,
+        "end_km": 96.0,
+        "gradient_per_mille": -10.608457641191677,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 96.0,
+        "end_km": 97.0,
+        "gradient_per_mille": -11.609522125140955,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 97.0,
+        "end_km": 98.0,
+        "gradient_per_mille": -10.89257702909226,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 98.0,
+        "end_km": 99.0,
+        "gradient_per_mille": -11.389858235871197,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 99.0,
+        "end_km": 100.0,
+        "gradient_per_mille": -10.209637809112529,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 100.0,
+        "end_km": 101.0,
+        "gradient_per_mille": -11.77965992140439,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 101.0,
+        "end_km": 102.0,
+        "gradient_per_mille": -10.0751893410882,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 102.0,
+        "end_km": 103.0,
+        "gradient_per_mille": -11.499885456910334,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 103.0,
+        "end_km": 104.0,
+        "gradient_per_mille": -11.067433694209475,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 104.0,
+        "end_km": 105.0,
+        "gradient_per_mille": -10.150981306898792,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 105.0,
+        "end_km": 106.0,
+        "gradient_per_mille": -9.438786479831712,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 106.0,
+        "end_km": 107.0,
+        "gradient_per_mille": -10.632470305163611,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 107.0,
+        "end_km": 108.0,
+        "gradient_per_mille": -9.804570002749477,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 108.0,
+        "end_km": 109.0,
+        "gradient_per_mille": -9.174789707873419,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 109.0,
+        "end_km": 110.0,
+        "gradient_per_mille": -8.17412542972767,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 110.0,
+        "end_km": 111.0,
+        "gradient_per_mille": -8.586463647338784,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 111.0,
+        "end_km": 112.0,
+        "gradient_per_mille": -9.414324241756427,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 112.0,
+        "end_km": 113.0,
+        "gradient_per_mille": -10.648399463177372,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 113.0,
+        "end_km": 114.0,
+        "gradient_per_mille": -9.456021188464451,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 114.0,
+        "end_km": 115.0,
+        "gradient_per_mille": -7.099419313978302,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 115.0,
+        "end_km": 116.0,
+        "gradient_per_mille": -9.900398137528438,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 116.0,
+        "end_km": 117.0,
+        "gradient_per_mille": -10.705811824786883,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 117.0,
+        "end_km": 118.0,
+        "gradient_per_mille": -7.262899633016363,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 118.0,
+        "end_km": 119.0,
+        "gradient_per_mille": -7.719152597017322,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 119.0,
+        "end_km": 120.0,
+        "gradient_per_mille": -10.652846490870012,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 120.0,
+        "end_km": 121.0,
+        "gradient_per_mille": -7.309882775327919,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 121.0,
+        "end_km": 122.0,
+        "gradient_per_mille": -8.29187390555521,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 122.0,
+        "end_km": 123.0,
+        "gradient_per_mille": -7.125821404616228,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 123.0,
+        "end_km": 124.0,
+        "gradient_per_mille": -7.071631188646611,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 124.0,
+        "end_km": 125.0,
+        "gradient_per_mille": -10.361701342964576,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 125.0,
+        "end_km": 126.0,
+        "gradient_per_mille": -7.14236960010609,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 126.0,
+        "end_km": 127.0,
+        "gradient_per_mille": -9.486388975616759,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 127.0,
+        "end_km": 128.0,
+        "gradient_per_mille": -7.059903772596958,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 128.0,
+        "end_km": 129.0,
+        "gradient_per_mille": -10.631331171889723,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 129.0,
+        "end_km": 130.0,
+        "gradient_per_mille": -8.75388241104739,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 130.0,
+        "end_km": 131.0,
+        "gradient_per_mille": -8.251611683154602,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 131.0,
+        "end_km": 132.0,
+        "gradient_per_mille": -7.3010707463714475,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 132.0,
+        "end_km": 133.0,
+        "gradient_per_mille": -10.326423800475403,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 133.0,
+        "end_km": 134.0,
+        "gradient_per_mille": -8.265806964398227,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 134.0,
+        "end_km": 135.0,
+        "gradient_per_mille": -10.07100764663744,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 135.0,
+        "end_km": 136.0,
+        "gradient_per_mille": -7.957088671396218,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 136.0,
+        "end_km": 137.0,
+        "gradient_per_mille": -8.717838590084348,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 137.0,
+        "end_km": 138.0,
+        "gradient_per_mille": -7.814116455585196,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 138.0,
+        "end_km": 139.0,
+        "gradient_per_mille": -9.121213136015779,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 139.0,
+        "end_km": 140.0,
+        "gradient_per_mille": -7.783805483397193,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 140.0,
+        "end_km": 141.0,
+        "gradient_per_mille": -8.296367169005997,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 141.0,
+        "end_km": 142.0,
+        "gradient_per_mille": -7.6899908347606765,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 142.0,
+        "end_km": 143.0,
+        "gradient_per_mille": -9.946365469210305,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 143.0,
+        "end_km": 144.0,
+        "gradient_per_mille": -7.061043113428965,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 144.0,
+        "end_km": 145.0,
+        "gradient_per_mille": -9.069418560155661,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 145.0,
+        "end_km": 146.0,
+        "gradient_per_mille": -8.070285521103843,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 146.0,
+        "end_km": 147.0,
+        "gradient_per_mille": -8.306979557775222,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 147.0,
+        "end_km": 148.0,
+        "gradient_per_mille": -9.968403680113187,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 148.0,
+        "end_km": 149.0,
+        "gradient_per_mille": -9.034710438617843,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 149.0,
+        "end_km": 150.0,
+        "gradient_per_mille": -10.33883732308034,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 150.0,
+        "end_km": 151.0,
+        "gradient_per_mille": -7.046008678347498,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 151.0,
+        "end_km": 152.0,
+        "gradient_per_mille": -7.4125814819203395,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 152.0,
+        "end_km": 153.0,
+        "gradient_per_mille": -8.881842973667272,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 153.0,
+        "end_km": 154.0,
+        "gradient_per_mille": -7.390609207713604,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 154.0,
+        "end_km": 155.0,
+        "gradient_per_mille": -9.815072115832926,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 155.0,
+        "end_km": 156.0,
+        "gradient_per_mille": -8.819060711253668,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 156.0,
+        "end_km": 157.0,
+        "gradient_per_mille": -10.505563255314005,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 157.0,
+        "end_km": 158.0,
+        "gradient_per_mille": -7.406498035396796,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 158.0,
+        "end_km": 159.0,
+        "gradient_per_mille": -8.162990713263602,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 159.0,
+        "end_km": 160.0,
+        "gradient_per_mille": -9.251122395266972,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 160.0,
+        "end_km": 161.0,
+        "gradient_per_mille": -10.01402931984524,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 161.0,
+        "end_km": 162.0,
+        "gradient_per_mille": -10.725778564396638,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 162.0,
+        "end_km": 163.0,
+        "gradient_per_mille": -8.987477016282044,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 163.0,
+        "end_km": 164.0,
+        "gradient_per_mille": -9.318050737357868,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 164.0,
+        "end_km": 165.0,
+        "gradient_per_mille": -8.75476184308112,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 165.0,
+        "end_km": 166.0,
+        "gradient_per_mille": -7.3883168798830585,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 166.0,
+        "end_km": 167.0,
+        "gradient_per_mille": -8.954560423565699,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 167.0,
+        "end_km": 168.0,
+        "gradient_per_mille": -7.606078480362278,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 168.0,
+        "end_km": 169.0,
+        "gradient_per_mille": -8.770330207776484,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 169.0,
+        "end_km": 170.0,
+        "gradient_per_mille": -8.280600924022586,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 170.0,
+        "end_km": 171.0,
+        "gradient_per_mille": -9.045545912604256,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 171.0,
+        "end_km": 172.0,
+        "gradient_per_mille": -9.07214256493737,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 172.0,
+        "end_km": 173.0,
+        "gradient_per_mille": -7.185424344529865,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 173.0,
+        "end_km": 174.0,
+        "gradient_per_mille": -7.953707807885168,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 174.0,
+        "end_km": 175.0,
+        "gradient_per_mille": -10.539250192279477,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 175.0,
+        "end_km": 176.0,
+        "gradient_per_mille": -10.682086004253295,
+        "curve_radius_m": 450.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 176.0,
+        "end_km": 177.0,
+        "gradient_per_mille": -9.893529220822158,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 177.0,
+        "end_km": 178.0,
+        "gradient_per_mille": -7.198523315576724,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 178.0,
+        "end_km": 179.0,
+        "gradient_per_mille": -9.398198337572824,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 179.0,
+        "end_km": 180.0,
+        "gradient_per_mille": -8.070242531335168,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 180.0,
+        "end_km": 181.0,
+        "gradient_per_mille": -9.61805210552532,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 181.0,
+        "end_km": 182.0,
+        "gradient_per_mille": -8.611972432032827,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 182.0,
+        "end_km": 183.0,
+        "gradient_per_mille": -7.222411725543023,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 183.0,
+        "end_km": 184.0,
+        "gradient_per_mille": -8.416478896716031,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 184.0,
+        "end_km": 185.0,
+        "gradient_per_mille": -8.518435863695993,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 185.0,
+        "end_km": 186.0,
+        "gradient_per_mille": -9.480625691827894,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 186.0,
+        "end_km": 187.0,
+        "gradient_per_mille": -8.339335634584142,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 187.0,
+        "end_km": 188.0,
+        "gradient_per_mille": -10.398952291552806,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 188.0,
+        "end_km": 189.0,
+        "gradient_per_mille": -7.650912218190658,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 189.0,
+        "end_km": 190.0,
+        "gradient_per_mille": -8.01157784474911,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 190.0,
+        "end_km": 191.0,
+        "gradient_per_mille": -7.728842968534328,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 191.0,
+        "end_km": 192.0,
+        "gradient_per_mille": -9.144816926585202,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 192.0,
+        "end_km": 193.0,
+        "gradient_per_mille": -7.56348999192654,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 193.0,
+        "end_km": 194.0,
+        "gradient_per_mille": -7.449801500789467,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 194.0,
+        "end_km": 195.0,
+        "gradient_per_mille": -8.260883812307124,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 195.0,
+        "end_km": 196.0,
+        "gradient_per_mille": -10.109008542800773,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 196.0,
+        "end_km": 197.0,
+        "gradient_per_mille": -7.4547840769187435,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 197.0,
+        "end_km": 198.0,
+        "gradient_per_mille": -10.761425765133028,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 198.0,
+        "end_km": 199.0,
+        "gradient_per_mille": -8.063716276404062,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 199.0,
+        "end_km": 200.0,
+        "gradient_per_mille": -8.175684510103213,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 200.0,
+        "end_km": 201.0,
+        "gradient_per_mille": -7.786855101097194,
+        "curve_radius_m": 500.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 201.0,
+        "end_km": 202.0,
+        "gradient_per_mille": -9.875440377268323,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 202.0,
+        "end_km": 203.0,
+        "gradient_per_mille": -8.696802770961051,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 203.0,
+        "end_km": 204.0,
+        "gradient_per_mille": -8.129151219694078,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 204.0,
+        "end_km": 205.0,
+        "gradient_per_mille": -8.059119540960936,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 205.0,
+        "end_km": 206.0,
+        "gradient_per_mille": -8.177378494265904,
+        "curve_radius_m": 800.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 206.0,
+        "end_km": 207.0,
+        "gradient_per_mille": -8.559569757348996,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 207.0,
+        "end_km": 208.0,
+        "gradient_per_mille": -7.07405960424245,
+        "curve_radius_m": null,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 208.0,
+        "end_km": 209.0,
+        "gradient_per_mille": -9.428651937232331,
+        "curve_radius_m": 1000.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 209.0,
+        "end_km": 210.0,
+        "gradient_per_mille": -10.627040336263772,
+        "curve_radius_m": 600.0,
+        "terrain": "mountain"
+      },
+      {
+        "start_km": 210.0,
+        "end_km": 211.0,
+        "gradient_per_mille": -10.320137926758047,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 211.0,
+        "end_km": 212.0,
+        "gradient_per_mille": -7.483665007005568,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 212.0,
+        "end_km": 213.0,
+        "gradient_per_mille": -9.12621856708316,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 213.0,
+        "end_km": 214.0,
+        "gradient_per_mille": -7.52545273441545,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 214.0,
+        "end_km": 215.0,
+        "gradient_per_mille": -10.51848775302857,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 215.0,
+        "end_km": 216.0,
+        "gradient_per_mille": -10.233049179000112,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 216.0,
+        "end_km": 217.0,
+        "gradient_per_mille": -7.023111133701163,
+        "curve_radius_m": 1600.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 217.0,
+        "end_km": 218.0,
+        "gradient_per_mille": -7.795184846595006,
+        "curve_radius_m": 1600.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 218.0,
+        "end_km": 219.0,
+        "gradient_per_mille": -9.117660184726553,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 219.0,
+        "end_km": 220.0,
+        "gradient_per_mille": -9.63955507158643,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 220.0,
+        "end_km": 221.0,
+        "gradient_per_mille": -7.9876606391587295,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 221.0,
+        "end_km": 222.0,
+        "gradient_per_mille": -9.998104257839508,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 222.0,
+        "end_km": 223.0,
+        "gradient_per_mille": -10.13950851635955,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 223.0,
+        "end_km": 224.0,
+        "gradient_per_mille": -8.180389684017879,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 224.0,
+        "end_km": 225.0,
+        "gradient_per_mille": -9.70520141954398,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 225.0,
+        "end_km": 226.0,
+        "gradient_per_mille": -10.52951691141678,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 226.0,
+        "end_km": 227.0,
+        "gradient_per_mille": -8.424779572775957,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 227.0,
+        "end_km": 228.0,
+        "gradient_per_mille": -9.184471928803996,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 228.0,
+        "end_km": 229.0,
+        "gradient_per_mille": -7.348036508192097,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 229.0,
+        "end_km": 230.0,
+        "gradient_per_mille": -10.169493400961247,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 230.0,
+        "end_km": 231.0,
+        "gradient_per_mille": -8.63701321258745,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 231.0,
+        "end_km": 232.0,
+        "gradient_per_mille": -8.183023633394043,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 232.0,
+        "end_km": 233.0,
+        "gradient_per_mille": -8.898205726951883,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 233.0,
+        "end_km": 234.0,
+        "gradient_per_mille": -10.648529020102272,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 234.0,
+        "end_km": 235.0,
+        "gradient_per_mille": -9.848601970834386,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 235.0,
+        "end_km": 236.0,
+        "gradient_per_mille": -4.810873662787043,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 236.0,
+        "end_km": 237.0,
+        "gradient_per_mille": -4.474924678349772,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 237.0,
+        "end_km": 238.0,
+        "gradient_per_mille": -3.83570884829293,
+        "curve_radius_m": 1600.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 238.0,
+        "end_km": 239.0,
+        "gradient_per_mille": -5.5330967912359466,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 239.0,
+        "end_km": 240.0,
+        "gradient_per_mille": -6.215766976173714,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 240.0,
+        "end_km": 241.0,
+        "gradient_per_mille": -4.72530530406627,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 241.0,
+        "end_km": 242.0,
+        "gradient_per_mille": -4.245735861048109,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 242.0,
+        "end_km": 243.0,
+        "gradient_per_mille": -6.241931371319328,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 243.0,
+        "end_km": 244.0,
+        "gradient_per_mille": -5.8832997719970175,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 244.0,
+        "end_km": 245.0,
+        "gradient_per_mille": -4.869358454067484,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 245.0,
+        "end_km": 246.0,
+        "gradient_per_mille": -6.7496698344218915,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 246.0,
+        "end_km": 247.0,
+        "gradient_per_mille": -4.998365031419964,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 247.0,
+        "end_km": 248.0,
+        "gradient_per_mille": -5.303121443658673,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 248.0,
+        "end_km": 249.0,
+        "gradient_per_mille": -4.706999883511311,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 249.0,
+        "end_km": 250.0,
+        "gradient_per_mille": -6.25699944642666,
+        "curve_radius_m": 1600.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 250.0,
+        "end_km": 251.0,
+        "gradient_per_mille": -3.5309714424191214,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 251.0,
+        "end_km": 252.0,
+        "gradient_per_mille": -7.03013540364177,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 252.0,
+        "end_km": 253.0,
+        "gradient_per_mille": -4.633586696032836,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 253.0,
+        "end_km": 254.0,
+        "gradient_per_mille": -4.1611042176932225,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 254.0,
+        "end_km": 255.0,
+        "gradient_per_mille": -5.294939692478121,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 255.0,
+        "end_km": 256.0,
+        "gradient_per_mille": -5.467036433628424,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 256.0,
+        "end_km": 257.0,
+        "gradient_per_mille": -6.395010388711836,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 257.0,
+        "end_km": 258.0,
+        "gradient_per_mille": -3.7630064252699196,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 258.0,
+        "end_km": 259.0,
+        "gradient_per_mille": -6.368644066868693,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 259.0,
+        "end_km": 260.0,
+        "gradient_per_mille": -3.504390667082645,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 260.0,
+        "end_km": 261.0,
+        "gradient_per_mille": -5.345677689184505,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 261.0,
+        "end_km": 262.0,
+        "gradient_per_mille": -5.326279748165308,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 262.0,
+        "end_km": 263.0,
+        "gradient_per_mille": -6.745390505171578,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 263.0,
+        "end_km": 264.0,
+        "gradient_per_mille": -6.5657502157684275,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 264.0,
+        "end_km": 265.0,
+        "gradient_per_mille": -4.521179393739216,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 265.0,
+        "end_km": 266.0,
+        "gradient_per_mille": -5.955684990036071,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 266.0,
+        "end_km": 267.0,
+        "gradient_per_mille": -3.5767274453608597,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 267.0,
+        "end_km": 268.0,
+        "gradient_per_mille": -5.4908353994681365,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 268.0,
+        "end_km": 269.0,
+        "gradient_per_mille": -4.003238503782766,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 269.0,
+        "end_km": 270.0,
+        "gradient_per_mille": -5.672287702103031,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 270.0,
+        "end_km": 271.0,
+        "gradient_per_mille": -4.880874694289065,
+        "curve_radius_m": 1600.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 271.0,
+        "end_km": 272.0,
+        "gradient_per_mille": -6.439908881826364,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 272.0,
+        "end_km": 273.0,
+        "gradient_per_mille": -7.178738717682204,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 273.0,
+        "end_km": 274.0,
+        "gradient_per_mille": -5.365510750412661,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 274.0,
+        "end_km": 275.0,
+        "gradient_per_mille": -3.950245268362707,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 275.0,
+        "end_km": 276.0,
+        "gradient_per_mille": -5.0301621535891075,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 276.0,
+        "end_km": 277.0,
+        "gradient_per_mille": -4.512934533048292,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 277.0,
+        "end_km": 278.0,
+        "gradient_per_mille": -4.965008684876835,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 278.0,
+        "end_km": 279.0,
+        "gradient_per_mille": -4.723995348827062,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 279.0,
+        "end_km": 280.0,
+        "gradient_per_mille": -4.315426139351153,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 280.0,
+        "end_km": 281.0,
+        "gradient_per_mille": -6.917720817202406,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 281.0,
+        "end_km": 282.0,
+        "gradient_per_mille": -4.3299221044761875,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 282.0,
+        "end_km": 283.0,
+        "gradient_per_mille": -5.969822805532504,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 283.0,
+        "end_km": 284.0,
+        "gradient_per_mille": -5.167371477391788,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 284.0,
+        "end_km": 285.0,
+        "gradient_per_mille": -4.832637130934077,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 285.0,
+        "end_km": 286.0,
+        "gradient_per_mille": -6.349473337006245,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 286.0,
+        "end_km": 287.0,
+        "gradient_per_mille": -3.719057460261416,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 287.0,
+        "end_km": 288.0,
+        "gradient_per_mille": -3.651883708706232,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 288.0,
+        "end_km": 289.0,
+        "gradient_per_mille": -6.2915133178467455,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 289.0,
+        "end_km": 290.0,
+        "gradient_per_mille": -7.073386930310557,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 290.0,
+        "end_km": 291.0,
+        "gradient_per_mille": -6.316510439136861,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 291.0,
+        "end_km": 292.0,
+        "gradient_per_mille": -4.1798497540286235,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 292.0,
+        "end_km": 293.0,
+        "gradient_per_mille": -4.039730409210936,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 293.0,
+        "end_km": 294.0,
+        "gradient_per_mille": -3.857532185125158,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 294.0,
+        "end_km": 295.0,
+        "gradient_per_mille": -3.888260326200898,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 295.0,
+        "end_km": 296.0,
+        "gradient_per_mille": -4.292272169818849,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 296.0,
+        "end_km": 297.0,
+        "gradient_per_mille": -4.788942165506562,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 297.0,
+        "end_km": 298.0,
+        "gradient_per_mille": -4.146651532149933,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 298.0,
+        "end_km": 299.0,
+        "gradient_per_mille": -4.914637564437909,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 299.0,
+        "end_km": 300.0,
+        "gradient_per_mille": -5.181704778526389,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 300.0,
+        "end_km": 301.0,
+        "gradient_per_mille": -6.319558193483379,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 301.0,
+        "end_km": 302.0,
+        "gradient_per_mille": -6.971360809012866,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 302.0,
+        "end_km": 303.0,
+        "gradient_per_mille": 3.7434062309020586,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 303.0,
+        "end_km": 304.0,
+        "gradient_per_mille": 3.2213827703352713,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 304.0,
+        "end_km": 305.0,
+        "gradient_per_mille": -2.6872692389306394,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 305.0,
+        "end_km": 306.0,
+        "gradient_per_mille": -0.663369531136329,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 306.0,
+        "end_km": 307.0,
+        "gradient_per_mille": 1.7190341564534055,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 307.0,
+        "end_km": 308.0,
+        "gradient_per_mille": -3.9634726329521652,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 308.0,
+        "end_km": 309.0,
+        "gradient_per_mille": -3.733186864947056,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 309.0,
+        "end_km": 310.0,
+        "gradient_per_mille": 2.741265372089396,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 310.0,
+        "end_km": 311.0,
+        "gradient_per_mille": 3.819480185037131,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 311.0,
+        "end_km": 312.0,
+        "gradient_per_mille": 2.2412887961850574,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 312.0,
+        "end_km": 313.0,
+        "gradient_per_mille": 2.116137717300437,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 313.0,
+        "end_km": 314.0,
+        "gradient_per_mille": -0.9069257503951285,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 314.0,
+        "end_km": 315.0,
+        "gradient_per_mille": 1.0510671761591182,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 315.0,
+        "end_km": 316.0,
+        "gradient_per_mille": 2.401755711040968,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 316.0,
+        "end_km": 317.0,
+        "gradient_per_mille": -4.024885080206924,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 317.0,
+        "end_km": 318.0,
+        "gradient_per_mille": 0.5759218034007656,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 318.0,
+        "end_km": 319.0,
+        "gradient_per_mille": -2.047943463643617,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 319.0,
+        "end_km": 320.0,
+        "gradient_per_mille": 0.8288714257549739,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 320.0,
+        "end_km": 321.0,
+        "gradient_per_mille": -0.8215921730958771,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 321.0,
+        "end_km": 322.0,
+        "gradient_per_mille": 0.8431550165613197,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 322.0,
+        "end_km": 323.0,
+        "gradient_per_mille": 3.5163537959375155,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 323.0,
+        "end_km": 324.0,
+        "gradient_per_mille": -0.5663784291961473,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 324.0,
+        "end_km": 325.0,
+        "gradient_per_mille": -1.5021875196487176,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 325.0,
+        "end_km": 326.0,
+        "gradient_per_mille": 3.544426915707149,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 326.0,
+        "end_km": 327.0,
+        "gradient_per_mille": -0.1382675411392693,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 327.0,
+        "end_km": 328.0,
+        "gradient_per_mille": 1.539392355015174,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 328.0,
+        "end_km": 329.0,
+        "gradient_per_mille": 0.894297077441176,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 329.0,
+        "end_km": 330.0,
+        "gradient_per_mille": 0.5408699264604069,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 330.0,
+        "end_km": 331.0,
+        "gradient_per_mille": -2.4823387392279024,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 331.0,
+        "end_km": 332.0,
+        "gradient_per_mille": -3.0445728377219456,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 332.0,
+        "end_km": 333.0,
+        "gradient_per_mille": -2.874986255921039,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 333.0,
+        "end_km": 334.0,
+        "gradient_per_mille": 3.828349464916604,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 334.0,
+        "end_km": 335.0,
+        "gradient_per_mille": 3.1152659118218917,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 335.0,
+        "end_km": 336.0,
+        "gradient_per_mille": -4.4550491975005215,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 336.0,
+        "end_km": 337.0,
+        "gradient_per_mille": 3.71386188342748,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 337.0,
+        "end_km": 338.0,
+        "gradient_per_mille": 2.417719737384143,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 338.0,
+        "end_km": 339.0,
+        "gradient_per_mille": 0.7753402050989582,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 339.0,
+        "end_km": 340.0,
+        "gradient_per_mille": -4.807782907372665,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 340.0,
+        "end_km": 341.0,
+        "gradient_per_mille": -2.807879925523787,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 341.0,
+        "end_km": 342.0,
+        "gradient_per_mille": -4.382508624580797,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 342.0,
+        "end_km": 343.0,
+        "gradient_per_mille": -3.1355836668800734,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 343.0,
+        "end_km": 344.0,
+        "gradient_per_mille": -2.042964019109926,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 344.0,
+        "end_km": 345.0,
+        "gradient_per_mille": -2.504526386218853,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 345.0,
+        "end_km": 346.0,
+        "gradient_per_mille": 3.88774573929555,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 346.0,
+        "end_km": 347.0,
+        "gradient_per_mille": 2.1866244120186122,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 347.0,
+        "end_km": 348.0,
+        "gradient_per_mille": -3.8137709339429224,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 348.0,
+        "end_km": 349.0,
+        "gradient_per_mille": 2.0958838100834516,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 349.0,
+        "end_km": 350.0,
+        "gradient_per_mille": -4.857970248399558,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 350.0,
+        "end_km": 351.0,
+        "gradient_per_mille": -3.8591731065849775,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 351.0,
+        "end_km": 352.0,
+        "gradient_per_mille": -3.9771562389210806,
+        "curve_radius_m": 1600.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 352.0,
+        "end_km": 353.0,
+        "gradient_per_mille": 2.0021533538278247,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 353.0,
+        "end_km": 354.0,
+        "gradient_per_mille": -4.018513909965391,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 354.0,
+        "end_km": 355.0,
+        "gradient_per_mille": 3.5087407867309572,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 355.0,
+        "end_km": 356.0,
+        "gradient_per_mille": -0.8776173011208614,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 356.0,
+        "end_km": 357.0,
+        "gradient_per_mille": -4.452571332549447,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 357.0,
+        "end_km": 358.0,
+        "gradient_per_mille": -1.385444709386956,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 358.0,
+        "end_km": 359.0,
+        "gradient_per_mille": -0.5875803127019728,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 359.0,
+        "end_km": 360.0,
+        "gradient_per_mille": -4.338583558101946,
+        "curve_radius_m": 1000.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 360.0,
+        "end_km": 361.0,
+        "gradient_per_mille": -4.4088599001189746,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 361.0,
+        "end_km": 362.0,
+        "gradient_per_mille": 0.6976905187091393,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 362.0,
+        "end_km": 363.0,
+        "gradient_per_mille": -2.0733310101319886,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 363.0,
+        "end_km": 364.0,
+        "gradient_per_mille": -0.22498846311807874,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 364.0,
+        "end_km": 365.0,
+        "gradient_per_mille": 0.44884112381781627,
+        "curve_radius_m": 800.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 365.0,
+        "end_km": 366.0,
+        "gradient_per_mille": 2.675134635660175,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 366.0,
+        "end_km": 367.0,
+        "gradient_per_mille": 1.9206645709426473,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 367.0,
+        "end_km": 368.0,
+        "gradient_per_mille": -3.064792403052528,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 368.0,
+        "end_km": 369.0,
+        "gradient_per_mille": -2.94355783071874,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 369.0,
+        "end_km": 370.0,
+        "gradient_per_mille": -0.9185098738329742,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 370.0,
+        "end_km": 371.0,
+        "gradient_per_mille": -4.144227446519322,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 371.0,
+        "end_km": 372.0,
+        "gradient_per_mille": 0.9859707675427796,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 372.0,
+        "end_km": 373.0,
+        "gradient_per_mille": -3.626249677081486,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 373.0,
+        "end_km": 374.0,
+        "gradient_per_mille": -4.39580022677017,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 374.0,
+        "end_km": 375.0,
+        "gradient_per_mille": -4.160929084666903,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 375.0,
+        "end_km": 376.0,
+        "gradient_per_mille": 2.3059235674965315,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 376.0,
+        "end_km": 377.0,
+        "gradient_per_mille": 0.27818574465529267,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 377.0,
+        "end_km": 378.0,
+        "gradient_per_mille": -2.0331861672541547,
+        "curve_radius_m": 1200.0,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 378.0,
+        "end_km": 379.0,
+        "gradient_per_mille": 2.8624663501088667,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 379.0,
+        "end_km": 380.0,
+        "gradient_per_mille": -1.1935682981250495,
+        "curve_radius_m": null,
+        "terrain": "hill"
+      },
+      {
+        "start_km": 380.0,
+        "end_km": 381.0,
+        "gradient_per_mille": -1.819938720096684,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 381.0,
+        "end_km": 382.0,
+        "gradient_per_mille": -0.9064288531932112,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 382.0,
+        "end_km": 383.0,
+        "gradient_per_mille": -0.22405608561198576,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 383.0,
+        "end_km": 384.0,
+        "gradient_per_mille": -0.31233711328463976,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 384.0,
+        "end_km": 385.0,
+        "gradient_per_mille": -0.7746010202258309,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 385.0,
+        "end_km": 386.0,
+        "gradient_per_mille": -1.5979014026439213,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 386.0,
+        "end_km": 387.0,
+        "gradient_per_mille": -1.208443169852534,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 387.0,
+        "end_km": 388.0,
+        "gradient_per_mille": -0.03662004388188511,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 388.0,
+        "end_km": 389.0,
+        "gradient_per_mille": 0.17603331914176357,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 389.0,
+        "end_km": 390.0,
+        "gradient_per_mille": -0.05141085690343106,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 390.0,
+        "end_km": 391.0,
+        "gradient_per_mille": 0.3024092979961095,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 391.0,
+        "end_km": 392.0,
+        "gradient_per_mille": -1.8986638662855608,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 392.0,
+        "end_km": 393.0,
+        "gradient_per_mille": 0.6684333129334927,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 393.0,
+        "end_km": 394.0,
+        "gradient_per_mille": -0.7714180274205638,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 394.0,
+        "end_km": 395.0,
+        "gradient_per_mille": -1.498619783802898,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 395.0,
+        "end_km": 396.0,
+        "gradient_per_mille": -1.7564510256308226,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 396.0,
+        "end_km": 397.0,
+        "gradient_per_mille": 1.4013361156530668,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 397.0,
+        "end_km": 398.0,
+        "gradient_per_mille": -0.143310589693747,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 398.0,
+        "end_km": 399.0,
+        "gradient_per_mille": -0.41223973264443936,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 399.0,
+        "end_km": 400.0,
+        "gradient_per_mille": -0.9092692060352425,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 400.0,
+        "end_km": 401.0,
+        "gradient_per_mille": 1.294925983895193,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 401.0,
+        "end_km": 402.0,
+        "gradient_per_mille": 1.0916976458142016,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 402.0,
+        "end_km": 403.0,
+        "gradient_per_mille": 0.6405255769374492,
+        "curve_radius_m": 1600.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 403.0,
+        "end_km": 404.0,
+        "gradient_per_mille": -1.0476400475882337,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 404.0,
+        "end_km": 405.0,
+        "gradient_per_mille": -0.3001840328815131,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 405.0,
+        "end_km": 406.0,
+        "gradient_per_mille": -1.043916044723307,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 406.0,
+        "end_km": 407.0,
+        "gradient_per_mille": -1.601638721614294,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 407.0,
+        "end_km": 408.0,
+        "gradient_per_mille": -1.0086373547184273,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 408.0,
+        "end_km": 409.0,
+        "gradient_per_mille": -0.29678536322512206,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 409.0,
+        "end_km": 410.0,
+        "gradient_per_mille": -1.8410392308845036,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 410.0,
+        "end_km": 411.0,
+        "gradient_per_mille": 0.09763734930557666,
+        "curve_radius_m": 2000.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 411.0,
+        "end_km": 412.0,
+        "gradient_per_mille": 1.3086343052932539,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 412.0,
+        "end_km": 413.0,
+        "gradient_per_mille": 0.6745631351643668,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 413.0,
+        "end_km": 414.0,
+        "gradient_per_mille": -1.580054797030578,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 414.0,
+        "end_km": 415.0,
+        "gradient_per_mille": -0.49270746026238976,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 415.0,
+        "end_km": 416.0,
+        "gradient_per_mille": -0.1359617824640169,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 416.0,
+        "end_km": 417.0,
+        "gradient_per_mille": -0.04446751313850528,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 417.0,
+        "end_km": 418.0,
+        "gradient_per_mille": -0.7604149002413139,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 418.0,
+        "end_km": 419.0,
+        "gradient_per_mille": 0.5971446458105585,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 419.0,
+        "end_km": 420.0,
+        "gradient_per_mille": -0.39086012375303736,
+        "curve_radius_m": 2000.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 420.0,
+        "end_km": 421.0,
+        "gradient_per_mille": 0.015157062578908587,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 421.0,
+        "end_km": 422.0,
+        "gradient_per_mille": 0.48324636549126954,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 422.0,
+        "end_km": 423.0,
+        "gradient_per_mille": -1.596893195676706,
+        "curve_radius_m": 2000.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 423.0,
+        "end_km": 424.0,
+        "gradient_per_mille": -1.3984438679767586,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 424.0,
+        "end_km": 425.0,
+        "gradient_per_mille": -0.3896608433716695,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 425.0,
+        "end_km": 426.0,
+        "gradient_per_mille": -0.7335155806805598,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 426.0,
+        "end_km": 427.0,
+        "gradient_per_mille": -1.6294790331154492,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 427.0,
+        "end_km": 428.0,
+        "gradient_per_mille": -0.5984256428936952,
+        "curve_radius_m": 2000.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 428.0,
+        "end_km": 429.0,
+        "gradient_per_mille": 0.61031689262611,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 429.0,
+        "end_km": 430.0,
+        "gradient_per_mille": 0.7269125401114263,
+        "curve_radius_m": 2500.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 430.0,
+        "end_km": 431.0,
+        "gradient_per_mille": -1.6009067605650662,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 431.0,
+        "end_km": 432.0,
+        "gradient_per_mille": 1.1707295605301766,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 432.0,
+        "end_km": 433.0,
+        "gradient_per_mille": 0.545826869858665,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 433.0,
+        "end_km": 434.0,
+        "gradient_per_mille": 0.8526295201250496,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 434.0,
+        "end_km": 435.0,
+        "gradient_per_mille": -1.4874452360280697,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 435.0,
+        "end_km": 436.0,
+        "gradient_per_mille": 0.10839644845608021,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 436.0,
+        "end_km": 437.0,
+        "gradient_per_mille": 0.2942815368155869,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 437.0,
+        "end_km": 438.0,
+        "gradient_per_mille": 0.7049683123664607,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 438.0,
+        "end_km": 439.0,
+        "gradient_per_mille": 0.6405603883644502,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 439.0,
+        "end_km": 440.0,
+        "gradient_per_mille": -0.4288316005172794,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 440.0,
+        "end_km": 441.0,
+        "gradient_per_mille": -0.024278758090202635,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 441.0,
+        "end_km": 442.0,
+        "gradient_per_mille": 0.18582622804663185,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 442.0,
+        "end_km": 443.0,
+        "gradient_per_mille": 0.19526092414920138,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 443.0,
+        "end_km": 444.0,
+        "gradient_per_mille": -1.7609980952648536,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 444.0,
+        "end_km": 445.0,
+        "gradient_per_mille": -0.9401284770134548,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 445.0,
+        "end_km": 446.0,
+        "gradient_per_mille": -1.8033975792542267,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 446.0,
+        "end_km": 447.0,
+        "gradient_per_mille": -0.9135725228779117,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 447.0,
+        "end_km": 448.0,
+        "gradient_per_mille": -1.8008848220811666,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 448.0,
+        "end_km": 449.0,
+        "gradient_per_mille": -1.7314414958929074,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 449.0,
+        "end_km": 450.0,
+        "gradient_per_mille": 0.993526800096316,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 450.0,
+        "end_km": 451.0,
+        "gradient_per_mille": -0.2252626393311572,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 451.0,
+        "end_km": 452.0,
+        "gradient_per_mille": -0.05989270031593641,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 452.0,
+        "end_km": 453.0,
+        "gradient_per_mille": 1.1355686794488093,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 453.0,
+        "end_km": 454.0,
+        "gradient_per_mille": 0.8343557119428988,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 454.0,
+        "end_km": 455.0,
+        "gradient_per_mille": -0.8746563299185008,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 455.0,
+        "end_km": 456.0,
+        "gradient_per_mille": -1.4719862315652652,
+        "curve_radius_m": 1600.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 456.0,
+        "end_km": 457.0,
+        "gradient_per_mille": 0.8383838396291727,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 457.0,
+        "end_km": 458.0,
+        "gradient_per_mille": 1.4383495338268908,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 458.0,
+        "end_km": 459.0,
+        "gradient_per_mille": 0.26144481900301697,
+        "curve_radius_m": 2500.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 459.0,
+        "end_km": 460.0,
+        "gradient_per_mille": -0.4678460399176845,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 460.0,
+        "end_km": 461.0,
+        "gradient_per_mille": -0.17038187657059045,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 461.0,
+        "end_km": 462.0,
+        "gradient_per_mille": -0.6950180626453553,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 462.0,
+        "end_km": 463.0,
+        "gradient_per_mille": -0.5693071096343789,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 463.0,
+        "end_km": 464.0,
+        "gradient_per_mille": 0.09260051834046301,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 464.0,
+        "end_km": 465.0,
+        "gradient_per_mille": 0.26556874939257424,
+        "curve_radius_m": 1600.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 465.0,
+        "end_km": 466.0,
+        "gradient_per_mille": -0.04712875653559201,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 466.0,
+        "end_km": 467.0,
+        "gradient_per_mille": -1.1180147526184636,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 467.0,
+        "end_km": 468.0,
+        "gradient_per_mille": 1.3754351002886844,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 468.0,
+        "end_km": 469.0,
+        "gradient_per_mille": -1.473693354675419,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 469.0,
+        "end_km": 470.0,
+        "gradient_per_mille": 0.32264237102120585,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 470.0,
+        "end_km": 471.0,
+        "gradient_per_mille": -0.9141889185686576,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 471.0,
+        "end_km": 472.0,
+        "gradient_per_mille": 0.3174730492521296,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 472.0,
+        "end_km": 473.0,
+        "gradient_per_mille": 0.4809190502986884,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 473.0,
+        "end_km": 474.0,
+        "gradient_per_mille": -0.043772754681277615,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 474.0,
+        "end_km": 475.0,
+        "gradient_per_mille": -0.850332060112456,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 475.0,
+        "end_km": 476.0,
+        "gradient_per_mille": 0.4599080525439705,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 476.0,
+        "end_km": 477.0,
+        "gradient_per_mille": 1.4900743953805455,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 477.0,
+        "end_km": 478.0,
+        "gradient_per_mille": -1.672914622268924,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 478.0,
+        "end_km": 479.0,
+        "gradient_per_mille": -0.22029029752017326,
+        "curve_radius_m": 2000.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 479.0,
+        "end_km": 480.0,
+        "gradient_per_mille": -1.3690797699310437,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 480.0,
+        "end_km": 481.0,
+        "gradient_per_mille": 1.316838936370214,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 481.0,
+        "end_km": 482.0,
+        "gradient_per_mille": -1.2070993371313947,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 482.0,
+        "end_km": 483.0,
+        "gradient_per_mille": -1.729922204946933,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 483.0,
+        "end_km": 484.0,
+        "gradient_per_mille": -1.6460073271623705,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 484.0,
+        "end_km": 485.0,
+        "gradient_per_mille": 0.9229193932209458,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 485.0,
+        "end_km": 486.0,
+        "gradient_per_mille": -1.8678837767485357,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 486.0,
+        "end_km": 487.0,
+        "gradient_per_mille": 0.6820766155653453,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 487.0,
+        "end_km": 488.0,
+        "gradient_per_mille": -0.6814804521211637,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 488.0,
+        "end_km": 489.0,
+        "gradient_per_mille": 0.9097076984119394,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 489.0,
+        "end_km": 490.0,
+        "gradient_per_mille": 0.8316530187375539,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 490.0,
+        "end_km": 491.0,
+        "gradient_per_mille": -0.46814308201578636,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 491.0,
+        "end_km": 492.0,
+        "gradient_per_mille": 0.36727022765986517,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 492.0,
+        "end_km": 493.0,
+        "gradient_per_mille": -0.4453045156815352,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 493.0,
+        "end_km": 494.0,
+        "gradient_per_mille": 0.619877813334027,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 494.0,
+        "end_km": 495.0,
+        "gradient_per_mille": -0.13096097605608614,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 495.0,
+        "end_km": 496.0,
+        "gradient_per_mille": 0.8301835488177525,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 496.0,
+        "end_km": 497.0,
+        "gradient_per_mille": 0.9228968745399757,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 497.0,
+        "end_km": 498.0,
+        "gradient_per_mille": 1.3149555958544301,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 498.0,
+        "end_km": 499.0,
+        "gradient_per_mille": -0.3841200754565379,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 499.0,
+        "end_km": 500.0,
+        "gradient_per_mille": -0.6634464803325133,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 500.0,
+        "end_km": 501.0,
+        "gradient_per_mille": 1.3819385362208156,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 501.0,
+        "end_km": 502.0,
+        "gradient_per_mille": 0.8044072845304164,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 502.0,
+        "end_km": 503.0,
+        "gradient_per_mille": -1.1249887594384753,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 503.0,
+        "end_km": 504.0,
+        "gradient_per_mille": 1.0594093076828295,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 504.0,
+        "end_km": 505.0,
+        "gradient_per_mille": -1.6409359388805673,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 505.0,
+        "end_km": 506.0,
+        "gradient_per_mille": 0.9790811682967258,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 506.0,
+        "end_km": 507.0,
+        "gradient_per_mille": 0.6709089060209181,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 507.0,
+        "end_km": 508.0,
+        "gradient_per_mille": 1.1685717314238442,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 508.0,
+        "end_km": 509.0,
+        "gradient_per_mille": -0.4688460393175671,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 509.0,
+        "end_km": 510.0,
+        "gradient_per_mille": -1.222866975825568,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 510.0,
+        "end_km": 511.0,
+        "gradient_per_mille": -0.7764522265147287,
+        "curve_radius_m": 1600.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 511.0,
+        "end_km": 512.0,
+        "gradient_per_mille": -0.6124111208541327,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 512.0,
+        "end_km": 513.0,
+        "gradient_per_mille": -0.6484185868439174,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 513.0,
+        "end_km": 514.0,
+        "gradient_per_mille": -1.2141143448750942,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 514.0,
+        "end_km": 515.0,
+        "gradient_per_mille": -1.653209064624332,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 515.0,
+        "end_km": 516.0,
+        "gradient_per_mille": -0.8264837542933807,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 516.0,
+        "end_km": 517.0,
+        "gradient_per_mille": -1.865938831090347,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 517.0,
+        "end_km": 518.0,
+        "gradient_per_mille": -0.34640773433259175,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 518.0,
+        "end_km": 519.0,
+        "gradient_per_mille": 0.6559440416796254,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 519.0,
+        "end_km": 520.0,
+        "gradient_per_mille": 0.15371890007241928,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 520.0,
+        "end_km": 521.0,
+        "gradient_per_mille": -1.9334864028116037,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 521.0,
+        "end_km": 522.0,
+        "gradient_per_mille": -1.476681333625206,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 522.0,
+        "end_km": 523.0,
+        "gradient_per_mille": 0.1310803469061872,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 523.0,
+        "end_km": 524.0,
+        "gradient_per_mille": 0.7166042142238878,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 524.0,
+        "end_km": 525.0,
+        "gradient_per_mille": -1.5735307919448387,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 525.0,
+        "end_km": 526.0,
+        "gradient_per_mille": 0.23633106260483627,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 526.0,
+        "end_km": 527.0,
+        "gradient_per_mille": -1.7801749714612767,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 527.0,
+        "end_km": 528.0,
+        "gradient_per_mille": -0.2505977221683664,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 528.0,
+        "end_km": 529.0,
+        "gradient_per_mille": 0.21184229704599833,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 529.0,
+        "end_km": 530.0,
+        "gradient_per_mille": 0.5149051472732342,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 530.0,
+        "end_km": 531.0,
+        "gradient_per_mille": -1.9945248242331035,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 531.0,
+        "end_km": 532.0,
+        "gradient_per_mille": -0.0026769939214990046,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 532.0,
+        "end_km": 533.0,
+        "gradient_per_mille": 0.3387521602187218,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 533.0,
+        "end_km": 534.0,
+        "gradient_per_mille": -0.7378868480259357,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 534.0,
+        "end_km": 535.0,
+        "gradient_per_mille": -0.09571314025188293,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 535.0,
+        "end_km": 536.0,
+        "gradient_per_mille": -0.22332093909731632,
+        "curve_radius_m": 2000.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 536.0,
+        "end_km": 537.0,
+        "gradient_per_mille": -1.8476295119162818,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 537.0,
+        "end_km": 538.0,
+        "gradient_per_mille": -0.6934416451470862,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 538.0,
+        "end_km": 539.0,
+        "gradient_per_mille": -0.7501714321984347,
+        "curve_radius_m": 1600.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 539.0,
+        "end_km": 540.0,
+        "gradient_per_mille": 0.5652935750772459,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 540.0,
+        "end_km": 541.0,
+        "gradient_per_mille": 0.7002548093845067,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 541.0,
+        "end_km": 542.0,
+        "gradient_per_mille": -0.836184870698053,
+        "curve_radius_m": 2500.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 542.0,
+        "end_km": 543.0,
+        "gradient_per_mille": -0.8150845963710474,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 543.0,
+        "end_km": 544.0,
+        "gradient_per_mille": 0.9063427986726094,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 544.0,
+        "end_km": 545.0,
+        "gradient_per_mille": 1.4328671502609724,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 545.0,
+        "end_km": 546.0,
+        "gradient_per_mille": -1.3620270055514436,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 546.0,
+        "end_km": 547.0,
+        "gradient_per_mille": 0.5061577015866812,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 547.0,
+        "end_km": 548.0,
+        "gradient_per_mille": -1.870556734300785,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 548.0,
+        "end_km": 549.0,
+        "gradient_per_mille": 0.7688822463016538,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 549.0,
+        "end_km": 550.0,
+        "gradient_per_mille": -0.8954146298259613,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 550.0,
+        "end_km": 551.0,
+        "gradient_per_mille": -0.6062158050989404,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 551.0,
+        "end_km": 552.0,
+        "gradient_per_mille": -0.343100813131048,
+        "curve_radius_m": 2500.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 552.0,
+        "end_km": 553.0,
+        "gradient_per_mille": -1.3311379924313118,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 553.0,
+        "end_km": 554.0,
+        "gradient_per_mille": 0.7329454844244876,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 554.0,
+        "end_km": 555.0,
+        "gradient_per_mille": -0.8382635976652941,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 555.0,
+        "end_km": 556.0,
+        "gradient_per_mille": -0.7119328898986446,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 556.0,
+        "end_km": 557.0,
+        "gradient_per_mille": 0.6015769693186743,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 557.0,
+        "end_km": 558.0,
+        "gradient_per_mille": -0.6467433110875773,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 558.0,
+        "end_km": 559.0,
+        "gradient_per_mille": -0.26328870712042063,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 559.0,
+        "end_km": 560.0,
+        "gradient_per_mille": 1.2350866331943724,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 560.0,
+        "end_km": 561.0,
+        "gradient_per_mille": 0.804018305906208,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 561.0,
+        "end_km": 562.0,
+        "gradient_per_mille": -1.7237554788058624,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 562.0,
+        "end_km": 563.0,
+        "gradient_per_mille": 0.8781944783896032,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 563.0,
+        "end_km": 564.0,
+        "gradient_per_mille": -0.8757600012489208,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 564.0,
+        "end_km": 565.0,
+        "gradient_per_mille": 0.3132172751034781,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 565.0,
+        "end_km": 566.0,
+        "gradient_per_mille": 0.10917569705709917,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 566.0,
+        "end_km": 567.0,
+        "gradient_per_mille": 0.4141768295592021,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 567.0,
+        "end_km": 568.0,
+        "gradient_per_mille": -1.8517569300245467,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 568.0,
+        "end_km": 569.0,
+        "gradient_per_mille": -0.7660424139203119,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 569.0,
+        "end_km": 570.0,
+        "gradient_per_mille": -1.0390562397379983,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 570.0,
+        "end_km": 571.0,
+        "gradient_per_mille": 1.3176653251108021,
+        "curve_radius_m": 2500.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 571.0,
+        "end_km": 572.0,
+        "gradient_per_mille": -0.5782641897232164,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 572.0,
+        "end_km": 573.0,
+        "gradient_per_mille": 0.6246429449166144,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 573.0,
+        "end_km": 574.0,
+        "gradient_per_mille": -1.8910078331848377,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 574.0,
+        "end_km": 575.0,
+        "gradient_per_mille": 0.37331105198407055,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 575.0,
+        "end_km": 576.0,
+        "gradient_per_mille": -1.55819491494211,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 576.0,
+        "end_km": 577.0,
+        "gradient_per_mille": 0.2580700649481238,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 577.0,
+        "end_km": 578.0,
+        "gradient_per_mille": 1.323134891579719,
+        "curve_radius_m": 1600.0,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 578.0,
+        "end_km": 579.0,
+        "gradient_per_mille": 0.3767171991968823,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 579.0,
+        "end_km": 580.0,
+        "gradient_per_mille": -0.6979531753526069,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 580.0,
+        "end_km": 581.0,
+        "gradient_per_mille": 0.008726224168635,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 581.0,
+        "end_km": 582.0,
+        "gradient_per_mille": -0.6068808391664251,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 582.0,
+        "end_km": 583.0,
+        "gradient_per_mille": -1.1263592141731071,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 583.0,
+        "end_km": 584.0,
+        "gradient_per_mille": 0.5748620081779969,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 584.0,
+        "end_km": 585.0,
+        "gradient_per_mille": -0.6455441698625779,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 585.0,
+        "end_km": 586.0,
+        "gradient_per_mille": -1.0837816319437645,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 586.0,
+        "end_km": 587.0,
+        "gradient_per_mille": -0.4380441065803433,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 587.0,
+        "end_km": 588.0,
+        "gradient_per_mille": -1.000480928056447,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 588.0,
+        "end_km": 589.0,
+        "gradient_per_mille": -0.2807993166102156,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 589.0,
+        "end_km": 590.0,
+        "gradient_per_mille": 0.9848920163451291,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 590.0,
+        "end_km": 591.0,
+        "gradient_per_mille": 1.1453766077518064,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 591.0,
+        "end_km": 592.0,
+        "gradient_per_mille": -1.6927324061334412,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 592.0,
+        "end_km": 593.0,
+        "gradient_per_mille": 0.9593242664114481,
+        "curve_radius_m": null,
+        "terrain": "plain"
+      },
+      {
+        "start_km": 593.0,
+        "end_km": 594.0,
+        "gradient_per_mille": -0.7840114684150241,
+        "curve_radius_m": 2500.0,
+        "terrain": "plain"
+      }
+    ],
+    "long_downhill_range_km": [
+      62.0,
+      302.0
+    ],
+    "energy_transfer_ranges_km": [
+      [
+        145.0,
+        164.0
+      ],
+      [
+        164.0,
+        200.7
+      ]
+    ],
+    "signaling_system": {
+      "mode": "hybrid",
+      "fixed_block_length_km": 2.0,
+      "fixed_block_protection_blocks": 2,
+      "moving_block_base_buffer_m": 500.0,
+      "moving_block_reaction_time_s": 30.0,
+      "moving_block_follower_service_decel_mps2": 0.28,
+      "moving_block_lead_emergency_decel_mps2": 0.5,
+      "check_step_s": 5
+    },
+    "operating_conditions": {
+      "default_adhesion_coefficient": 0.28,
+      "traction_adhesion_safety_factor": 0.85,
+      "braking_adhesion_safety_factor": 0.65,
+      "weather_conditions": [],
+      "adhesion_zones": [],
+      "speed_restrictions": []
+    }
+  },
+  "trains": [
+    {
+      "name": "Heavy",
+      "mass_tons": 10000.0,
+      "max_traction_kN": 6000.0,
+      "max_brake_kN": 7000.0,
+      "rotational_mass_factor": 1.08,
+      "davis": {
+        "a": 6.5,
+        "b": 0.12,
+        "c": 0.003
+      },
+      "length_km": 2.7,
+      "longitudinal_segments": 20,
+      "direction": "forward",
+      "traction_adhesion_weight_fraction": 0.22,
+      "brake_adhesion_weight_fraction": 1.0
+    },
+    {
+      "name": "Empty",
+      "mass_tons": 2000.0,
+      "max_traction_kN": 3000.0,
+      "max_brake_kN": 3500.0,
+      "rotational_mass_factor": 1.05,
+      "davis": {
+        "a": 5.0,
+        "b": 0.1,
+        "c": 0.0025
+      },
+      "length_km": 2.7,
+      "longitudinal_segments": 20,
+      "direction": "reverse",
+      "traction_adhesion_weight_fraction": 0.55,
+      "brake_adhesion_weight_fraction": 1.0
+    }
+  ],
+  "battery": {
+    "capacity_kwh": 20000.0,
+    "max_charge_power_kW": 20000.0,
+    "max_discharge_power_kW": 20000.0,
+    "round_trip_efficiency": 0.9,
+    "depreciation_cost_per_kwh": 0.15,
+    "grid_price_per_kwh": 0.55
+  }
+}

@@ -1,0 +1,31 @@
+# 说明：当前实现以环境变量/.env 为准；本文件供平台配置中心映射参考。
+database:
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: "123456"
+  name: carbon_emissions
+
+api:
+  prefix: /api/v1/prediction
+  key: dev-key
+  host: 0.0.0.0
+  port: 8000
+
+model:
+  seed: 20260928
+  horizon: 12
+  w_grid: [6, 9, 12]
+  lstm_hidden_grid: [32, 64]
+  lstm_epochs: 220
+  lstm_patience: 25
+  lstm_batch: 16
+  lstm_lr: 0.001
+  gra_rho: 0.5
+  gra_threshold: 0.70
+  anomaly_contamination: 0.03
+
+caliber:
+  base_grid_factor: 0.5306
+  base_heat_factor: 0.11
+  base_heat_area_factor: 0.9224

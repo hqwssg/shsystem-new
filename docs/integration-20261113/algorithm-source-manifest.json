@@ -1,0 +1,393 @@
+{
+  "package": "algorithm-core-upgrade-20261113",
+  "baseline": "c56aaf01002049c1e24a2f96cbe220efbc4f144e",
+  "target": "bdb53d29d059921b44a3b74b79e93b1d0397dfc5",
+  "scope": "November 12 heavy/single cores, eco-driving adapter and existing task pages",
+  "files": [
+    {
+      "path": "docs/algorithm-upgrade-20261112.txt",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "4ff8b3496707384748d7095fe1421d3a648738c7af2831bc9f98b15e1a7b8a4f"
+    },
+    {
+      "path": "energy_recovery_agent/data_ingestion.py",
+      "status": "modified",
+      "beforeSha256": "04471e057c71e90b3266bedbcc1b0ef0d86d97cabcb9af455a4b0870d2390bd9",
+      "sha256": "1b58a88e69b12bf4ba3a55f6c2eba7f25a820dd9f6891a1befa1072b0c4ec2ad"
+    },
+    {
+      "path": "energy_recovery_agent/database/storage_planning_platform_contract.json",
+      "status": "modified",
+      "beforeSha256": "68a7e5d594da7ad9d88d22f580f47f81064cde651734e5e5051d914f839aaf7f",
+      "sha256": "1aafa80263203ec146de6fdacfcd1e9c6e15bf8d6ae65986cdefc258ada34519"
+    },
+    {
+      "path": "energy_recovery_agent/database/worker.py",
+      "status": "modified",
+      "beforeSha256": "5e110c81aaf750dcb1343a5c43b10fb4ee690a7ae3d1addd03d4d43bb1f67948",
+      "sha256": "fac45d8ca8c3e4445f236898826e0d037a84e674f633390a6384b007a0554281"
+    },
+    {
+      "path": "energy_recovery_agent/energy_settlement.py",
+      "status": "modified",
+      "beforeSha256": "50ca92edc003a9bc6f22bf49bf70ec7f44717c89674a78445330d707f278fba4",
+      "sha256": "74b0007e052393bdddea2d5055403a1f7a101ef1d51b8a1ed131f12dfdb0802c"
+    },
+    {
+      "path": "energy_recovery_agent/locomotive_curves.py",
+      "status": "modified",
+      "beforeSha256": "8ee298d3991ba8a045733dbcc8654189259a9e8917b05cd8aca0f17997d4d485",
+      "sha256": "4111b4b5430f5f9b81c5ffa2a540255229438908f6c26580d9958813feb002b5"
+    },
+    {
+      "path": "energy_recovery_agent/operating_conditions.py",
+      "status": "modified",
+      "beforeSha256": "8b41af685aefa063222220ab5c8f50b902ee052a2484a19c7f4ed3f1859a2dd4",
+      "sha256": "61eda1d063337db117f06ff1e933f6547fd5e01738904d6ee3a50ead338a8863"
+    },
+    {
+      "path": "energy_recovery_agent/rolling_optimizer.py",
+      "status": "modified",
+      "beforeSha256": "1a5862cd4ac3fe79a25ad04964193df4743b2054e7504f71a8f42380d7d123f3",
+      "sha256": "a6ad7078503eaa6cd0b76f208d21a5ee76bdd3ec32a546cf5b1062cf2b076c79"
+    },
+    {
+      "path": "energy_recovery_agent/run_dispatch_case.py",
+      "status": "modified",
+      "beforeSha256": "996a7b10e589da64922f7e584ea4863b2fa6823e0dafa218f79cdb2f1f84f58e",
+      "sha256": "4e13d1762038ff66e6e7b38f0f74520045f2f297130539d5a3353a1cfea7ec29"
+    },
+    {
+      "path": "energy_recovery_agent/run_project.py",
+      "status": "modified",
+      "beforeSha256": "6d83b1803b3b4d94f5bfe1b5b9d6a5d89084c10bea90a497389299426bf6df6a",
+      "sha256": "3b69a87b37b91273d01017bf23021bbecd371bad262094ccc4d6bcc1703f4e5d"
+    },
+    {
+      "path": "energy_recovery_agent/scheduler_nsga2.py",
+      "status": "modified",
+      "beforeSha256": "bd15a07502bf03a24f967d65bfbe35ed2979082a1f544e649e1eef27d12b9f16",
+      "sha256": "c1d73745687f8d582a011bf969052c04ac8ebf0a48801ed31c33da7ba3604045"
+    },
+    {
+      "path": "energy_recovery_agent/storage_planning_contract.py",
+      "status": "modified",
+      "beforeSha256": "b2ff507ad1f727daf6926c7e9da193a77a3af598c3143baca803efc019218f94",
+      "sha256": "0debda69e0e88008f68c68ca46a5d1b09ed5611ce67597f42451f615d2f91dba"
+    },
+    {
+      "path": "energy_recovery_agent/storage_planning_mixed.py",
+      "status": "modified",
+      "beforeSha256": "6145fdbb9263389bbec7200a4507a4fa0b19de3be643ff847861073a32bb50f5",
+      "sha256": "9acd52cf279aa645aae936ec019e09255d228c7c38ca9cfc7aea8909a5f7bea0"
+    },
+    {
+      "path": "energy_recovery_agent/storage_planning_mvp.py",
+      "status": "modified",
+      "beforeSha256": "4a6a279882721f8346cea393f032f9deeb1f8ba15322a3f6b17ed0a1c5f5cb02",
+      "sha256": "8adb6d5f1b906a09cc5062ed905866cbf25af11f98777bf95e5ab305be2f8b67"
+    },
+    {
+      "path": "energy_recovery_agent/tests/test_storage_planning_platform.py",
+      "status": "modified",
+      "beforeSha256": "faed941580ecb220fd9f206306479ed60ef81dcee3c271fbbf15e110dabb19e0",
+      "sha256": "96334682f3f14efd63a9067ec3850ad1d825d4234f8a0dd32d9414c465de500e"
+    },
+    {
+      "path": "energy_recovery_agent/train_simulator.py",
+      "status": "modified",
+      "beforeSha256": "607e62119f54b4a349f11f980749595284d123c4103dd33531f38bf542e05f9e",
+      "sha256": "173ea5a9bec377ab0d127dcdc1cf7215eb05c4f51c6c39ce83b178b4e8a13a8d"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "87519e803b6c284813348506644e793a84e176fe9767d49c5f900ee9b00df9ed"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "4b853f15ca97b69b1ca64d6bfccacc8673cdd6ac0c093dd0895d245daf7f7102"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/energy_model.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "a536bec0662fdb8b0f9fe116ddbdcc5e4fb96d740c68e24cc0d88b60bd73161a"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/resistance_model.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "884ac4a9a6f64001e018ee18196f02bc640346d52f40e2c6956f1ecd3af27792"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/train_longitudinal_model.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "2fae33356049d7baec8371e90d2231e03911c12af98cf0eca6961026d19329e3"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/integration/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "25b9dab8d871615103da9bb453ab286c3cfa9d0ddfcee6db4713cc19ede5a637"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/integration/regenerative_interface.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "6892680019a1aa46f37c51cdd6a36e14d6bd7da0473288a96057dbe12f42a371"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/io/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "5209ab9367fe8a345be07a823c3372f478a53efaca44a0dda8003c75c9ed08b3"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/io/data_loader.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "24879982f05ef8b380855728a7fd857d68ca9605bb2e866e33871eb32508bade"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/io/heavy_empty_interface.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "f7ae94a95cc6a721eabefca2838f9440b0212517a15c95b208870bd0c6bd2627"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/io/output_contract.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "4f91392815315c91cd33aa6afa4cc5127303cafa4378ea36dadabb52c113c2e8"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/io/profile_writer.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "0971fdddbcc2f31c8c610830086b2408368867cf6f202abd683b988b32068265"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/metrics/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "1d1b5298d4f7e681b8696cae47e7be01058af7eb16162182d63f346121b2dd6f"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/metrics/eco_driving_metrics.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "871dae644ec8bbf7cd018ae4c1f7514bfe44b10ca0404805cc1e670c04246084"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/models.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "211bf710f06228ba17195410f288f217aada4ede04bfab7e640ce6562739b09f"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/optimizer/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "870d61d56485bf203c712e3f115f6fa19987105acc17f7c774e43a2ca57a36b8"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/optimizer/baseline.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "5cb1dc90250ab67363adbf003713ba644a294317927fa3668190d2f9843f0be4"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/optimizer/eco_driving_optimizer.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "1893f7aeebc3f92d9367ca8f530423e9a1d6e65e7f33d102a273a6d0a593a20e"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/simulation/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "5d1db4d622ca402ac1616dc9b0c6b80e16fc2ffd911b3c1050a03a068e913e3c"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/simulation/train_run_simulator.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "95ecaccf86644b7fc6f14ee4d37af1404467b0d7e5938dca934b00925957aed9"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/speed_profile/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "9e22a1f1095df5beebd1f800d05dbeceb8de8e7d14d95d7ab3e52e5f7791be98"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/speed_profile/profile_validator.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "0fcfdc19ca34589bdb64abe58934547e83b994d8cb4886725041e1907b4ceb06"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/__init__.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "17be34a23c0a65185ed02e28ab35003032071d72b68f3559b46bb0ab3f826748"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/comparison.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "d4f307bd924ab160eb8cdf10e2b0db3419536c6614a6accb4f27a06e4a5ec739"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/delivery.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "0a65b36fa5c1a447449eb4b4cbb0da8ae84a8cae367c01776bacfaf1e885abfd"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/end_to_end.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "994fb8bec5e17c493dce915576c04a60a0e336cfbb360643cad140b2ca58becc"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/scenario_runner.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "ecec6579947e0cf197cdd05f11edd855468dfa7a74bfc2f75817c06a33749f5a"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/scenarios.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "b1fd8ba20d330f2596ae3638af7a79ebbc8d07dde354659533a1b3001bb73972"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/regenerative_braking/control/nsmc.py",
+      "status": "modified",
+      "beforeSha256": "95baeec62667f6c044ec5743fe67f7c78d8565cef3113999d0982cc01e440dbf",
+      "sha256": "5f0002d8f2bf422d92d3a36ae170fe62b16aef71b2e26645972e1568c8a56168"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/regenerative_braking/dynamics/motor_model.py",
+      "status": "modified",
+      "beforeSha256": "35ba3f187d3b5931727f389fe7484c366b57a8c856b55efb83abbc960dc44d8d",
+      "sha256": "0ce852a4de28196675e6e1a2cf1535778309e09877e87e9565b9b6b25d55c66f"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/regenerative_braking/identification/storage_resistance.py",
+      "status": "modified",
+      "beforeSha256": "f3a379a945d46c8e641f9ce8415d453ec304c6e36ffd6a693b0ce3be16e55095",
+      "sha256": "ef69af3ee2aa14a2f7b6f16745085fb480417915b6fe66d10dd06d9bf3188ad1"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/regenerative_braking/simulation/closed_loop.py",
+      "status": "modified",
+      "beforeSha256": "0cc37f879b4dcf7c459fdbbcf066cd9bb228fb63adb1a45ceed1d917ae0006cb",
+      "sha256": "715ae4709336889ef7553b8161d36f3c7f59e37782fc6da695a96f14866836bf"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/regenerative_braking/simulation/projected_current_reference.py",
+      "status": "modified",
+      "beforeSha256": "5d88e69ac0b9a6ce2d7f2703f2a7960800f2fd654a2a5efc606486228fc4a184",
+      "sha256": "068724697d176de0cae7c83aff1e4d5a91e4bd266513f10d452ff5138224820d"
+    },
+    {
+      "path": "new_function/single_train_energy_optimization-f6d1797/regenerative_braking/simulation/sink_current_filter.py",
+      "status": "modified",
+      "beforeSha256": "ecba98f83e4a110b2f4d59a35a052072f979595ad5d09784dff5e4245a3751de",
+      "sha256": "392e44a653cf803f886dcd798744b28000b2f5423aa8039c752ee734ca85b031"
+    },
+    {
+      "path": "ruoyi-ui/src/api/carbon/singleTrain.js",
+      "status": "modified",
+      "beforeSha256": "5647393fb8f5d94ea1acdd16073bfc18bab6db8b9aa7f89b7c3872880aa6e708",
+      "sha256": "fbae161ee72b752cf21d90116f66cc955e1ef50aa520446a984346d9722ed768"
+    },
+    {
+      "path": "ruoyi-ui/src/utils/energyParameters.js",
+      "status": "modified",
+      "beforeSha256": "399692995b253ca6caa9c7e6ef7ccbb2401ad1f65ef566daba2c088efbfe2a8d",
+      "sha256": "8fd746482e5297988317ed6be10afb5d42a120c19a6b777e2cf04cefab6e7e45"
+    },
+    {
+      "path": "ruoyi-ui/src/utils/singleTrainScenarios.js",
+      "status": "modified",
+      "beforeSha256": "36115ab59db227b56e3f788684e2f111d3bc7b09fc74575d465af5e9fecc7f4d",
+      "sha256": "147049598940d4bd93900e84d5b9cfded674aeb588b8223079d11c17eca10412"
+    },
+    {
+      "path": "ruoyi-ui/src/views/carbon/energy/StoragePlanningResults.vue",
+      "status": "modified",
+      "beforeSha256": "adf571b544fc2ff0c4688b544a5862df0c6e52296e7dc5f04404dadf75f58ada",
+      "sha256": "beed816c95414564a9d8c1a024e81e0a7d169bf51dfe5e6e4cc33c9c55a45737"
+    },
+    {
+      "path": "ruoyi-ui/src/views/carbon/singleTrain/create.vue",
+      "status": "modified",
+      "beforeSha256": "70c2479c5ad60a77df133572b8db920b8f0fb47a0197776320d0ce30934a5d12",
+      "sha256": "7de18426db0d677fe9e7f609adde4a8a8bb8b08aeda7960d30d481ea9eeede1e"
+    },
+    {
+      "path": "ruoyi-ui/src/views/carbon/singleTrain/run.vue",
+      "status": "modified",
+      "beforeSha256": "f829978c4bb4ae280e0d1fbeb32e6651e69c2e164ab86cdb2bba131adedb9302",
+      "sha256": "7e6d1acc15c512b7e7ae77b46d4968e9533ee03b18b24bf537f4dc89f53ab88b"
+    },
+    {
+      "path": "scripts/test-single-upgrade-20261109.cjs",
+      "status": "modified",
+      "beforeSha256": "8dfc328380167cc1bff61900f10e5d3087c4cfba1cb993d941482fb3992435ed",
+      "sha256": "961f01a0c9d25344b8054d6e32366c1c16671c47d0621ea9ce89d91b11693e62"
+    },
+    {
+      "path": "single_train_recovery_agent/core.py",
+      "status": "modified",
+      "beforeSha256": "8035a0822c6e3df9cc0c52afc1cfe68ff2ab481b5d7f129d4f68e6e953332de5",
+      "sha256": "76d30cc5dbf48a7dae5eff781ce713bd25e7c26ce33067b2c4b0c300c55a3d69"
+    },
+    {
+      "path": "single_train_recovery_agent/eco.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "53398d5a14a2d2668e5c32958aee6c3eef7d1030cd47acfc88475245022efab4"
+    },
+    {
+      "path": "single_train_recovery_agent/repository.py",
+      "status": "modified",
+      "beforeSha256": "e3f6d6a6c2be41d1459e3976e1976ccfe39d9d9e8267ae4b43c061615c4a7077",
+      "sha256": "32e3397dd1ab21eda153eeea4d35db83e98ee65045b126a67cb5605817c88d7f"
+    },
+    {
+      "path": "single_train_recovery_agent/tests/test_algorithm_refresh.py",
+      "status": "modified",
+      "beforeSha256": "6934e3fc97dd431c0468e45485907ccb32996d29d6d9e876918e07b8e9e43dc1",
+      "sha256": "197b32965f27b93f9080e3f1a15b7b10ee1d86bd17c1cc45a81832be8852bb10"
+    },
+    {
+      "path": "single_train_recovery_agent/tests/test_eco_platform.py",
+      "status": "added",
+      "beforeSha256": null,
+      "sha256": "d2c1bc49e733c911ccbdbc26c12e56d2564de13f32e5bc6230fbe99ee5da0ce7"
+    },
+    {
+      "path": "single_train_recovery_agent/worker.py",
+      "status": "modified",
+      "beforeSha256": "ffad8daffc76cbceb483cd08266ee507757c46e2d3221d14c9b351e825137f2d",
+      "sha256": "3e3c76898011e9ef34e7807e5c075f49725401ed92ef67b4d3cb60aa6189c069"
+    }
+  ],
+  "patches": {
+    "code.patch": "08d7568843bc142803ec5ba0b869b590f7b1f01707f2859bd43f1c4c13fd2725",
+    "rollback.patch": "25be8e90ff9909d89e36369f2672c4eff72efb2cc6967354245f0413ae3cb4a8"
+  },
+  "noDatabaseInitialization": true,
+  "noPrivateConfig": true,
+  "noJarOrDist": true
+}

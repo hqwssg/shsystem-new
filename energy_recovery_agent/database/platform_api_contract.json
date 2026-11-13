@@ -1,0 +1,137 @@
+{
+  "contract_version": "1.11",
+  "module": "energy_recovery_simulation",
+  "database": "carbon_emissions",
+  "schema": "energy_recovery",
+  "worker_resource_policy": {
+    "profiles": ["quick", "standard", "fine"],
+    "default": "standard",
+    "scope": "deployment_configuration_not_business_request_parameter",
+    "timeout_semantics": "budget_exhausted_not_model_infeasible",
+    "success_artifact": "solver_resource_report.json"
+  },
+  "operations": {
+    "validate_disturbance_replay": {
+      "purpose": "在创建滚动求解任务前校验历史回放合同并返回逐事件受理或阻断状态",
+      "implementation": "HistoricalDisturbanceReplay.preflight()",
+      "returns": ["valid", "execution_allowed", "manifest", "events"]
+    },
+    "publish_dataset_version": {
+      "purpose": "保存并发布一次不可变算法输入版本",
+      "writes": ["simulation_project", "simulation_project_version", "simulation_dataset_file"],
+      "required": ["project_code", "project_name", "route_name", "version_code", "data_status", "files"],
+      "rule": "同一版本发布后禁止覆盖；修改数据必须创建新version_code",
+      "storage_device_authority": "simulation_storage_device保存每台设备额定容量、充放电功率、双向效率、初始SOC、SOC上下限和静态可用状态；工作进程将其写入不可变运行快照并由算法直接加载",
+      "storage_override_policy": "数据库任务禁止使用聚合容量、功率和效率参数覆盖版本化设备行"
+    },
+    "create_run": {
+      "purpose": "提交算法任务",
+      "writes": ["simulation_run", "simulation_run_parameter"],
+      "required": ["project_code", "version_code", "run_type", "parameters", "requested_by", "idempotency_key"],
+      "returns": ["run_id", "status"],
+      "rolling_runtime_state": {
+        "storage": "parameters.storage_devices",
+        "required_device_fields": ["storage_section_id", "soc_kwh"],
+        "optional_device_fields": ["available", "max_charge_power_kw", "max_discharge_power_kw"],
+        "rule": "提供时必须完整覆盖当前储能预设中的全部设备；不可与汇总SOC同时使用；实时功率只能收紧simulation_storage_device中的额定功率"
+      },
+      "historical_disturbance_replay": {
+        "parameter": "parameters.disturbance_history_relative_path",
+        "storage": "simulation_dataset_file",
+        "schema_version": "1.3",
+        "directly_applied_events": ["train_delay", "train_cancelled", "train_added", "temporary_speed_restriction", "resource_unavailable", "power_arm_limit", "storage_device_state"],
+        "directional_speed_restriction": "1.3按forward/reverse方向执行；兼容down/up/heavy/empty别名；1.2及以下保持阻断",
+        "template": "data_templates/historical_disturbance_replay_template.json",
+        "rule": "回放文件必须属于指定已发布版本并进入冻结运行快照；与parameters.storage_devices互斥"
+      },
+      "joint_parameter_robustness": {
+        "run_type": "joint_parameter_robustness",
+        "parameter": "parameters.parameter_ranges_relative_path",
+        "schema_version": "1.0",
+        "template": "data_templates/joint_parameter_ranges_template.json",
+        "rule": "区间文件必须属于已发布版本并进入冻结快照；结论仅覆盖已测试离散联合场景"
+      }
+    },
+    "heartbeat_run": {
+      "purpose": "由当前工作进程租约令牌续期，防止长任务被并发回收",
+      "writes": ["simulation_run"],
+      "required": ["run_id", "worker_id", "lease_token"]
+    },
+    "recover_expired_runs": {
+      "purpose": "将租约过期任务重新排队，达到最大尝试次数后标记失败",
+      "writes": ["simulation_run", "simulation_run_state_event"]
+    },
+    "cancel_run": {
+      "purpose": "原子取消非终态任务并使已有工作进程租约失效",
+      "writes": ["simulation_run", "simulation_run_state_event"],
+      "required": ["run_id", "reason"]
+    },
+    "get_run": {
+      "purpose": "轮询任务状态和失败原因",
+      "reads": ["simulation_run", "simulation_run_log", "simulation_run_state_event"],
+      "returns": ["status", "queued_at", "started_at", "finished_at", "attempt_count", "lease_expires_at", "heartbeat_at", "state_version", "error_count", "warning_count", "error_message", "input_sha256", "result_sha256", "state_events"]
+    },
+    "get_summary": {
+      "purpose": "结果总览和是否采用优化方案",
+      "reads": ["simulation_timetable_audit_summary", "simulation_optimization_decision", "simulation_result_kpi", "simulation_rolling_control_event"]
+    },
+    "get_timetable_detail": {
+      "purpose": "运行图、能量时间线和供电臂图表",
+      "reads": ["simulation_timetable_running_arc", "simulation_energy_time_slice", "simulation_power_arm_settlement"]
+    },
+    "get_optimization_detail": {
+      "purpose": "候选排序、逐车调整、收益归因、瓶颈、筛选漏斗和场景稳健性",
+      "reads": ["simulation_optimization_decision", "simulation_result_kpi", "simulation_optimization_candidate", "simulation_candidate_train_adjustment", "simulation_audit_issue", "simulation_optimization_suggestion", "simulation_scenario_result", "simulation_resource_conflict", "simulation_result_artifact"],
+      "artifacts": ["optimization_attribution_summary.json", "optimization_kpi_attribution.csv", "optimization_candidate_decisions.csv", "optimization_candidate_funnel.csv", "optimization_bottlenecks.csv", "optimization_dimension_attribution.csv", "OPTIMIZATION_ATTRIBUTION_REPORT.md"],
+      "decision_rule": "action=optimize才表示建议采用；keep_baseline表示没有实质改善或需要固定储能复核；no_feasible_solution表示没有通过核心稳健可行门禁的方案",
+      "attribution_rule": "improvement为正表示改善；储能预设变化时禁止解释为纯调度收益；共享储能系统收益不无依据分摊到单列车"
+    },
+    "get_rolling_control_timeline": {
+      "purpose": "查询滚动优化每轮提交门禁、安全状态、重试和人工升级记录",
+      "reads": ["simulation_rolling_control_event"],
+      "event_json_sections": ["observation", "storage_runtime"],
+      "required": ["run_id"]
+    },
+    "get_disturbance_replay_result": {
+      "purpose": "读取历史扰动源摘要、逐周期输入、提交状态和求解结果",
+      "reads": ["simulation_rolling_control_event", "simulation_result_artifact"],
+      "artifacts": ["disturbance_replay_manifest.json", "disturbance_replay_cycles.csv"],
+      "required": ["run_id"]
+    },
+    "get_joint_parameter_robustness_result": {
+      "purpose": "读取联合参数区间覆盖、逐扰动组合结果、最差场景和稳健结论",
+      "reads": ["simulation_timetable_audit_summary", "simulation_optimization_decision", "simulation_result_artifact"],
+      "artifacts": ["joint_robustness_summary.json", "joint_parameter_scenarios.csv", "joint_robustness_results.csv"],
+      "required": ["run_id"]
+    },
+    "download_artifact": {
+      "purpose": "下载报告、CSV、JSON和图片原件",
+      "reads": ["simulation_result_artifact"],
+      "required": ["run_id", "relative_path"]
+    }
+  },
+  "run_states": {
+    "initial": "pending",
+    "transitions": [
+      "pending->validating",
+      "validating->running",
+      "running->succeeded",
+      "validating->pending (lease expired)",
+      "running->pending (lease expired)",
+      "pending->cancelled",
+      "validating->cancelled",
+      "running->cancelled",
+      "validating->failed",
+      "running->failed",
+      "validating->failed (lease attempt limit)",
+      "running->failed (lease attempt limit)"
+    ],
+    "terminal": ["succeeded", "failed", "cancelled"]
+  },
+  "security": {
+    "credential_transport": "SIMULATION_DATABASE_URL",
+    "parameter_policy": "allowlist_only",
+    "sql_policy": "parameterized_queries_only",
+    "production_tls": "required"
+  }
+}

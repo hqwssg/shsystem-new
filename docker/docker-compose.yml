@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  ruoyi-db:
+    container_name: ruoyi-db
+    image: mysql:5.7
+    restart: always
+    build:
+      context: ./mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d
+      - ./mysql/logs:/logs
+      - ./mysql/data:/var/lib/mysql
+    command:
+      - mysqld
+      - --innodb-buffer-pool-size=80M
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+8:00
+      - --lower-case-table-names=1
+    environment:
+      MYSQL_DATABASE: carbon_emissions
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-password}"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  ruoyi-web:
+    container_name: ruoyi-web
+    restart: always
+    build:
+      context: ./web-main
+      dockerfile: dockerfile
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_URL: "jdbc:mysql://ruoyi-db:3306/carbon_emissions?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_USERNAME: root
+      SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_PASSWORD: "${MYSQL_ROOT_PASSWORD:-password}"
+      CARBON_SERVER_PORT: 8082
+      CARBON_DB_URL: "jdbc:mysql://ruoyi-db:3306/carbon_emissions?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci"
+      CARBON_DB_USERNAME: root
+      CARBON_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-password}"
+      UNCERTAINTY_SERVER_PORT: 8085
+      UNCERTAINTY_DB_URL: "jdbc:mysql://ruoyi-db:3306/carbon_emissions?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci&tinyInt1isBit=false"
+      UNCERTAINTY_DB_USERNAME: root
+      UNCERTAINTY_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-password}"
+      PREDICTION_API_KEY: "${PREDICTION_API_KEY:-change-me-prediction-internal-key}"
+      DB_HOST: ruoyi-db
+      RUOYI_SECURITY_ENABLED: "true"
+      RUOYI_SECURITY_ENDPOINT: "http://127.0.0.1:8081/internal/security/context"
+      RUOYI_AUDIT_ENABLED: "true"
+      RUOYI_AUDIT_ENDPOINT: "http://127.0.0.1:8081/internal/carbon/audit/operation"
+      GOVIEW_AUDIT_SECRET: "${GOVIEW_AUDIT_SECRET}"
+      FILE_DOMAIN: "${WEB_PUBLIC_URL:-http://localhost}/prod-api"
+      FILE_PATH: /home/ruoyi/uploadPath
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: utf-8
+    ports:
+      - "80:80"
+    volumes:
+      - ./web-main/uploadPath:/home/ruoyi/uploadPath
+      - ./web-main/redis-data:/data
+    depends_on:
+      ruoyi-db:
+        condition: service_healthy
+
+  ruoyi-screen:
+    container_name: ruoyi-screen
+    restart: always
+    build:
+      context: ./web-screen
+      dockerfile: dockerfile
+    environment:
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: "jdbc:sqlite:/home/goview/sqllite/goview.db"
+      V2_XNLJMAP_OSS: file:/home/goview/upload/
+      V2_FILEURL: /home/goview/upload
+      V2_HTTPURL: "${SCREEN_PUBLIC_URL:-http://localhost:3000}/"
+      RUOYI_AUDIT_ENABLED: "true"
+      RUOYI_AUDIT_URL: "http://ruoyi-web:8081/internal/goview/audit"
+      CARBON_STATISTICS_URL: "http://ruoyi-web:8082/api/emission-data"
+      GOVIEW_AUDIT_SECRET: "${GOVIEW_AUDIT_SECRET}"
+    ports:
+      - "3000:80"
+    volumes:
+      - ./web-screen/upload:/home/goview/upload
+      - ./web-screen/sqllite:/home/goview/sqllite
+    depends_on:
+      - ruoyi-web

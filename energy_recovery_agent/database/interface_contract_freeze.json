@@ -1,0 +1,115 @@
+{
+  "freeze_version": "1.3.1",
+  "status": "frozen",
+  "effective_date": "2026-09-09",
+  "module": "energy_recovery_simulation",
+  "scope": "平台后端与算法数据库工作进程之间的逻辑接口；不规定REST/RPC传输路径和前端页面实现",
+  "authority": {
+    "database": "carbon_emissions",
+    "schema": "energy_recovery",
+    "table_prefix": "simulation_",
+    "minimum_postgresql_major": 16,
+    "input_mode": "immutable_version_and_run_snapshot",
+    "output_mode": "transactional_relational_results_and_lossless_artifacts"
+  },
+  "public_surface": {
+    "run_types": [
+      "dispatch",
+      "timetable_audit",
+      "timetable_optimization",
+      "rolling_rescheduling",
+      "joint_parameter_robustness"
+    ],
+    "run_states": ["pending", "validating", "running", "succeeded", "failed", "cancelled"],
+    "terminal_states": ["succeeded", "failed", "cancelled"],
+    "decision_actions": ["optimize", "keep_baseline", "no_feasible_solution"],
+    "rolling_commit_statuses": [
+      "committed_robust_feasible",
+      "withheld_infeasible",
+      "committed_infeasible_experiment_only"
+    ],
+    "operations": [
+      "validate_disturbance_replay",
+      "publish_dataset_version",
+      "create_run",
+      "heartbeat_run",
+      "recover_expired_runs",
+      "cancel_run",
+      "get_run",
+      "get_summary",
+      "get_timetable_detail",
+      "get_optimization_detail",
+      "get_rolling_control_timeline",
+      "get_disturbance_replay_result",
+      "get_joint_parameter_robustness_result",
+      "download_artifact"
+    ]
+  },
+  "versioned_components": [
+    {
+      "path": "database/database_contract.json",
+      "version_field": "contract_version",
+      "version": "1.8",
+      "sha256": "d81185cfcf2b98bd7851b5af4c928961e6b674e772639a09d1aa5b2d87f3090c"
+    },
+    {
+      "path": "database/platform_api_contract.json",
+      "version_field": "contract_version",
+      "version": "1.11",
+      "sha256": "c63d3f47429ace9b1af9ad1238912d8bd3145e836535fc20a650176293efe2c7"
+    },
+    {
+      "path": "database/io_mapping.json",
+      "version_field": "mapping_version",
+      "version": "1.12",
+      "sha256": "6f3c9796f554a881a08cdbf8df93d2f95be5a141536c2464667f4d19b1aee7ab"
+    },
+    {
+      "path": "docs/prototype_backend_contract.json",
+      "version_field": "schema_version",
+      "version": "1.0",
+      "sha256": "0ea8cfa081574f8633763bf29e26a6bfeaca678c4cd60a4e5f72b8fdd257e5da"
+    },
+    {
+      "path": "database/delivery_package_manifest.json",
+      "version_field": "package_version",
+      "version": "2026.09.10.3",
+      "sha256": "cfc31cfa3698a4c48087a8134e5b4bb170ee1b9b4cfb5dff432ca5a2c8974b3e"
+    }
+  ],
+  "immutable_files": [
+    {"path": "database/solver_budget.py", "sha256": "744f6fa44fa7a1393015a37d341583be1418bd7e751814e24c3997faa36a2e01"},
+    {"path": "docs/solver_resource_budget_and_degradation.md", "sha256": "812c7a82514b4dcb9b4fe1d7c034972227411a410eba7cb93d1a067cea844888"},
+    {"path": "database/migrations/001_core.sql", "sha256": "4585bb046e3d0c01c2afebf57e4a076ceea417cade8b63ec8e469e8a0ac96201"},
+    {"path": "database/migrations/002_inputs.sql", "sha256": "f326463b0a8f45c08bb0ee98438777376d38c1b09d594f5badd7a8f92c5c8054"},
+    {"path": "database/migrations/003_runs.sql", "sha256": "830cbfeb04ca2385ab4515066fd3740312e0f9226b78adba656b56d4f78cc381"},
+    {"path": "database/migrations/004_outputs.sql", "sha256": "b679161cd37f5cf2f932bc443fd0d6cc7ebf719a17764de92684e97b0ebe575a"},
+    {"path": "database/migrations/005_rolling_control.sql", "sha256": "fe87d3fa48ba28e2ae75c7d80d468d97bdca4158718ab9acd4cbb4667dd5538d"},
+    {"path": "database/migrations/006_run_transaction_idempotency.sql", "sha256": "8aa6d4d1ada5150cf7236a52d8e2a4e3fc8bd11039a0a827e24ff2e1ae94f64a"},
+    {"path": "database/migrations/007_joint_parameter_robustness.sql", "sha256": "84dfcaf60243f42050a948b3e1541a7a102f6ff5168e6afc2f77890ab8f5bd72"},
+    {"path": "database/examples/dispatch_parameters.json", "sha256": "cda96ad6567fc9656a5316882220f9c7e01a2189c23fe6f63f57bca27e9cbff8"},
+    {"path": "database/examples/five_run_acceptance_manifest.json", "sha256": "daa64a467fd98add6dd4a682a192298ee8dbf249dafca39f87a5c4eaef7b17f7"},
+    {"path": "database/examples/historical_disturbance_replay_parameters.json", "sha256": "5629f5b2568c04afe9cf47b94ad160d1ca8d45dbe696c573ebec5e94e97a31fb"},
+    {"path": "database/examples/joint_parameter_robustness_parameters.json", "sha256": "d35a5b2b59813c4910057382bb851ac390a7a8e150482aff21494e02f83cdfef"},
+    {"path": "database/examples/rolling_rescheduling_parameters.json", "sha256": "01aa11f81517a6dae3f8dfcaf746a2a7682609febccd34c305544dbda28b3113"},
+    {"path": "database/examples/timetable_audit_parameters.json", "sha256": "cccd62bc4412bc1a5b47de2110db499fe412b0dfba06f4ef04e58659b2a21077"},
+    {"path": "database/examples/timetable_optimization_parameters.json", "sha256": "2a874873422e9997bac578b27f721263b76fdf5eeb3918335793308205adf9a1"},
+    {"path": "data_templates/historical_disturbance_replay_template.json", "sha256": "17bbddfea1c83c49c5378ed6393f3e6deca247ae2d9e1ff85239f4561a934fdb"},
+    {"path": "data_templates/joint_parameter_ranges_template.json", "sha256": "ac3c0c9dd3011320dd0054eeb950280b2e2cc68f99886a6732c49c402eba51e6"}
+  ],
+  "compatibility_policy": {
+    "versioning": "semantic_versioning",
+    "patch": "仅澄清说明或修复不改变字段、枚举、约束和语义的缺陷",
+    "minor": "只允许向后兼容地增加可选字段、查询或结果工件",
+    "major": "删除或重命名字段、收紧输入、改变单位/默认值/状态语义/结果含义",
+    "unknown_request_fields": "reject",
+    "unknown_enum_values": "reject",
+    "change_process": [
+      "记录变更原因和受影响调用方",
+      "更新权威机器契约及版本",
+      "提供兼容期或迁移说明",
+      "重新生成冻结哈希",
+      "通过契约、数据库集成和五类任务验收"
+    ]
+  }
+}

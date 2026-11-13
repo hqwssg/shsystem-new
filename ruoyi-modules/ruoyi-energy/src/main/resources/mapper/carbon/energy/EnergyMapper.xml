@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.energy.mapper.EnergyMapper">
+    <select id="countDeptProject" resultType="int">
+        select count(1) from energy_dept_project
+        where dept_id = #{deptId} and project_code = #{projectCode} and enabled = '1'
+    </select>
+
+    <select id="selectDeptProjects" resultType="java.util.Map">
+        select id, dept_id as deptId, project_code as projectCode, enabled
+        from energy_dept_project
+        where dept_id = #{deptId}
+        order by id desc
+    </select>
+
+    <insert id="insertDeptProject">
+        insert into energy_dept_project (dept_id, project_code, enabled, create_by, create_time)
+        values (#{deptId}, #{projectCode}, #{enabled}, #{createBy}, now())
+        on duplicate key update enabled = '1', update_by = #{createBy}, update_time = now()
+    </insert>
+
+    <select id="selectVersions" resultType="java.util.Map">
+        select p.project_code as projectCode, p.project_name as projectName, p.route_name as routeName,
+               v.version_code as versionCode, v.version_name as versionName, v.data_status as dataStatus, v.lifecycle_status as lifecycleStatus,
+               v.content_sha256 as contentSha256, v.published_at as publishedAt
+        from energy_project p
+        join energy_project_version v on v.project_id = p.project_id
+        <if test="deptId != null">
+        join energy_dept_project d on d.project_code = p.project_code and d.dept_id = #{deptId} and d.enabled = '1'
+        </if>
+        order by v.published_at desc
+    </select>
+
+    <select id="selectVersionFiles" resultType="java.util.Map">
+        select f.relative_path as relativePath, f.content_size_bytes as contentSizeBytes
+        from energy_dataset_file f
+        join energy_project_version v on v.version_id = f.version_id
+        join energy_project p on p.project_id = v.project_id
+        <if test="deptId != null">
+        join energy_dept_project d on d.project_code = p.project_code and d.dept_id = #{deptId} and d.enabled = '1'
+        </if>
+        where p.project_code = #{projectCode} and v.version_code = #{versionCode}
+        order by f.relative_path
+    </select>
+
+    <select id="selectPendingRunIds" resultType="string">
+        select run_id from energy_run where status = 'pending' order by queued_at, run_id
+    </select>
+
+    <select id="selectRuns" resultType="java.util.Map">
+        select r.run_id as runId, r.run_type as runType, r.status, r.requested_by as requestedBy,
+               r.error_message as errorMessage,
+               DATE_FORMAT(r.queued_at, '%Y-%m-%d %H:%i:%s') as queuedAt,
+               DATE_FORMAT(r.started_at, '%Y-%m-%d %H:%i:%s') as startedAt,
+               DATE_FORMAT(r.finished_at, '%Y-%m-%d %H:%i:%s') as finishedAt,
+               r.attempt_count as attemptCount, r.state_version as stateVersion,
+               p.project_code as projectCode, v.version_code as versionCode
+        from energy_run r
+        join energy_project p on p.project_id = r.project_id
+        join energy_project_version v on v.version_id = r.version_id
+        <if test="deptId != null">
+        join energy_dept_project d on d.project_code = p.project_code and d.dept_id = #{deptId} and d.enabled = '1'
+        </if>
+        <if test="runType != null and runType != ''">and r.run_type = #{runType}</if>
+        <if test="status != null and status != ''">and r.status = #{status}</if>
+        order by r.queued_at desc
+    </select>
+
+    <select id="selectRun" resultType="java.util.Map">
+        select r.run_id as runId, r.run_type as runType, r.status, r.requested_by as requestedBy,
+               r.code_version as codeVersion, r.input_sha256 as inputSha256, r.result_sha256 as resultSha256,
+               r.error_count as errorCount, r.warning_count as warningCount, r.error_message as errorMessage,
+               DATE_FORMAT(r.queued_at, '%Y-%m-%d %H:%i:%s') as queuedAt,
+               DATE_FORMAT(r.started_at, '%Y-%m-%d %H:%i:%s') as startedAt,
+               DATE_FORMAT(r.finished_at, '%Y-%m-%d %H:%i:%s') as finishedAt,
+               r.idempotency_key as idempotencyKey, r.attempt_count as attemptCount,
+               DATE_FORMAT(r.lease_expires_at, '%Y-%m-%d %H:%i:%s') as leaseExpiresAt,
+               DATE_FORMAT(r.heartbeat_at, '%Y-%m-%d %H:%i:%s') as heartbeatAt,
+               r.state_version as stateVersion,
+               p.project_code as projectCode, v.version_code as versionCode
+        from energy_run r
+        join energy_project p on p.project_id = r.project_id
+        join energy_project_version v on v.version_id = r.version_id
+        where r.run_id = #{runId}
+    </select>
+
+    <select id="selectRunProjectCode" resultType="string">
+        select p.project_code
+        from energy_run r
+        join energy_project p on p.project_id = r.project_id
+        where r.run_id = #{runId}
+    </select>
+
+    <select id="selectStateEvents" resultType="java.util.Map">
+        select event_id as eventId, state_version as stateVersion, from_status as fromStatus,
+               to_status as toStatus, reason,
+               DATE_FORMAT(occurred_at, '%Y-%m-%d %H:%i:%s') as occurredAt
+        from energy_run_state_event where run_id = #{runId} order by state_version
+    </select>
+
+    <select id="selectAuditSummary" resultType="java.util.Map">
+        select * from energy_timetable_audit_summary where run_id = #{runId}
+    </select>
+    <select id="selectDecision" resultType="java.util.Map">
+        select * from energy_optimization_decision where run_id = #{runId}
+    </select>
+    <select id="selectKpis" resultType="java.util.Map">
+        select result_kpi_id as resultKpiId, run_id as runId, candidate_id as candidateId, case_name as caseName,
+               feasible, total_gen_kwh as totalGenKwh, wasted_kwh as wastedKwh, grid_kwh as gridKwh,
+               recovered_energy_kwh as recoveredEnergyKwh, recovery_rate as recoveryRate,
+               constraint_violation as constraintViolation, resource_conflict_count as resourceConflictCount
+        from energy_result_kpi where run_id = #{runId} order by case_name
+    </select>
+    <select id="selectRunningArcs" resultType="java.util.Map">
+        select running_arc_id as runningArcId, train_id as trainId, train_type as trainType, direction,
+               from_station_code as fromStationCode, to_station_code as toStationCode,
+               start_time_s as startTimeS, end_time_s as endTimeS,
+               traction_energy_kwh as tractionEnergyKwh, regen_energy_kwh as regenEnergyKwh
+        from energy_timetable_running_arc where run_id = #{runId} order by start_time_s limit 500
+    </select>
+    <select id="selectTimeSlices" resultType="java.util.Map">
+        select time_slice_id as timeSliceId, case_name as caseName, slice_start_s as sliceStartS, slice_end_s as sliceEndS,
+               traction_kwh as tractionKwh, regen_kwh as regenKwh, wasted_kwh as wastedKwh, grid_kwh as gridKwh
+        from energy_time_slice where run_id = #{runId} order by slice_start_s limit 500
+    </select>
+    <select id="selectSettlements" resultType="java.util.Map">
+        select settlement_id as settlementId, power_arm_code as powerArmCode, window_start_s as windowStartS,
+               window_end_s as windowEndS, wasted_kwh as wastedKwh, grid_kwh as gridKwh
+        from energy_power_arm_settlement where run_id = #{runId} order by window_start_s limit 500
+    </select>
+    <select id="selectIssues" resultType="java.util.Map">
+        select issue_id as issueId, issue_type as issueType, severity, reason from energy_audit_issue where run_id = #{runId}
+    </select>
+    <select id="selectSuggestions" resultType="java.util.Map">
+        select suggestion_id as suggestionId, suggestion_type as suggestionType, reason, status
+        from energy_optimization_suggestion where run_id = #{runId}
+    </select>
+    <select id="selectCandidates" resultType="java.util.Map">
+        select candidate_id as candidateId, source_candidate_code as sourceCandidateCode, `rank`, feasible, pareto,
+               wasted_kwh as wastedKwh, grid_kwh as gridKwh
+        from energy_optimization_candidate where run_id = #{runId} order by `rank`
+    </select>
+    <select id="selectAdjustments" resultType="java.util.Map">
+        select a.train_id as trainId, a.train_type as trainType, a.adjustment_s as adjustmentS,
+               a.baseline_departure_s as baselineDepartureS, a.optimized_departure_s as optimizedDepartureS
+        from energy_candidate_train_adjustment a
+        join energy_optimization_candidate c on c.candidate_id = a.candidate_id
+        where c.run_id = #{runId}
+        limit 500
+    </select>
+    <select id="selectConflicts" resultType="java.util.Map">
+        select conflict_type as conflictType, severity, train_a as trainA, train_b as trainB, message
+        from energy_resource_conflict where run_id = #{runId} limit 200
+    </select>
+    <select id="selectScenarioResults" resultType="java.util.Map">
+        select scenario_name as scenarioName, feasible, blocking, constraint_violation as constraintViolation
+        from energy_scenario_result where run_id = #{runId}
+    </select>
+    <select id="selectRollingEvents" resultType="java.util.Map">
+        select event_id as eventId, cycle_index as cycleIndex, current_time_s as currentTimeS,
+               commit_status as commitStatus, safety_state as safetyState, safety_action as safetyAction,
+               core_robust_feasible as coreRobustFeasible, operational_intervention_required as operationalInterventionRequired
+        from energy_rolling_control_event where run_id = #{runId} order by cycle_index
+    </select>
+    <select id="selectArtifactMeta" resultType="java.util.Map">
+        select relative_path as relativePath, artifact_type as artifactType, media_type as mediaType,
+               content_size_bytes as contentSizeBytes, content_sha256 as contentSha256
+        from energy_result_artifact where run_id = #{runId} order by relative_path
+    </select>
+    <select id="selectArtifact" resultType="java.util.Map">
+        select relative_path as relativePath, media_type as mediaType, content, content_sha256 as contentSha256
+        from energy_result_artifact where run_id = #{runId} and relative_path = #{relativePath}
+    </select>
+
+    <select id="selectLatestRunParameters" resultType="java.util.Map">
+        select r.run_id as runId,
+               DATE_FORMAT(r.queued_at, '%Y-%m-%d %H:%i:%s') as queuedAt,
+               p.parameters_json as parametersJson
+        from energy_run r
+        join energy_run_parameter p on p.run_id = r.run_id
+        join energy_project proj on proj.project_id = r.project_id
+        join energy_project_version v on v.version_id = r.version_id
+        <if test="deptId != null">
+        join energy_dept_project d on d.project_code = proj.project_code and d.dept_id = #{deptId} and d.enabled = '1'
+        </if>
+        where proj.project_code = #{projectCode}
+          and v.version_code = #{versionCode}
+          and r.run_type = #{runType}
+        order by r.queued_at desc, r.run_id desc
+        limit 1
+    </select>
+
+    <select id="selectStorageDevices" resultType="java.util.Map">
+        select d.storage_code as storageSectionId,
+               d.initial_soc_kwh as socKwh,
+               d.available as available,
+               d.max_charge_power_kw as maxChargePowerKw,
+               d.max_discharge_power_kw as maxDischargePowerKw
+        from energy_storage_device d
+        join energy_project_version v on v.version_id = d.version_id
+        join energy_project p on p.project_id = v.project_id
+        <if test="deptId != null">
+        join energy_dept_project dep on dep.project_code = p.project_code and dep.dept_id = #{deptId} and dep.enabled = '1'
+        </if>
+        where p.project_code = #{projectCode} and v.version_code = #{versionCode}
+        order by d.storage_code
+    </select>
+
+    <sql id="storagePlanColumns">storage_plan_id as storagePlanId, source_plan_code as sourcePlanCode, `rank` as `rank`,
+        selected, feasible, within_budget as withinBudget, meets_business_thresholds as meetsBusinessThresholds,
+        site_count as siteCount, site_codes as siteCodes, total_capacity_kwh as totalCapacityKwh,
+        total_charge_power_kw as totalChargePowerKw, total_discharge_power_kw as totalDischargePowerKw,
+        capex_cny as capexCny, annual_total_cost_cny as annualTotalCostCny,
+        annual_saving_vs_no_build_cny as annualSavingVsNoBuildCny,
+        grid_reduction_vs_no_build_kwh_per_year as gridReductionVsNoBuildKwhPerYear,
+        rejection_reasons as rejectionReasons, metrics_json as metricsJson</sql>
+    <select id="selectStoragePlanningDecision" resultType="map">
+        SELECT decision, selected_storage_plan_id as selectedStoragePlanId, best_build_storage_plan_id as bestBuildStoragePlanId,
+            decision_reason as decisionReason, recommendation_level as recommendationLevel,
+            formal_engineering_conclusion_allowed as formalEngineeringConclusionAllowed,
+            complete_for_declared_domain as completeForDeclaredDomain, decision_json as decisionJson
+        FROM energy_storage_plan_decision WHERE run_id = #{runId}
+    </select>
+    <select id="countStoragePlans" resultType="long">
+        SELECT COUNT(*) FROM energy_storage_plan WHERE run_id = #{runId}
+    </select>
+    <select id="selectNoBuildStoragePlanId" resultType="string">
+        SELECT storage_plan_id FROM energy_storage_plan WHERE run_id = #{runId} AND site_count = 0 ORDER BY `rank` LIMIT 1
+    </select>
+    <select id="selectStoragePlans" resultType="map">
+        SELECT <include refid="storagePlanColumns"/> FROM energy_storage_plan WHERE run_id = #{runId}
+        ORDER BY `rank`, source_plan_code LIMIT #{offset}, #{pageSize}
+    </select>
+    <select id="selectStoragePlan" resultType="map">
+        SELECT <include refid="storagePlanColumns"/> FROM energy_storage_plan
+        WHERE run_id = #{runId} AND storage_plan_id = #{planId}
+    </select>
+    <select id="selectStoragePlanDevices" resultType="map">
+        SELECT device_index as deviceIndex, site_code as siteCode, technology_code as technologyCode,
+            capacity_kwh as capacityKwh, charge_power_kw as chargePowerKw, discharge_power_kw as dischargePowerKw, capex_cny as capexCny, device_json as deviceJson
+        FROM energy_storage_plan_device WHERE storage_plan_id = #{planId} ORDER BY device_index
+    </select>
+    <select id="selectStoragePlanScenarios" resultType="map">
+        SELECT scenario_code as scenarioCode, core_for_feasibility as coreForFeasibility, feasible,
+            grid_kwh as gridKwh, wasted_kwh as wastedKwh, storage_charge_kwh as storageChargeKwh,
+            storage_discharge_kwh as storageDischargeKwh, final_soc_kwh as finalSocKwh,
+            annual_operating_cost_cny as annualOperatingCostCny, result_json as resultJson
+        FROM energy_storage_plan_scenario_result WHERE storage_plan_id = #{planId} ORDER BY scenario_code
+    </select>
+
+</mapper>

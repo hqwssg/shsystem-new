@@ -1,0 +1,4 @@
+numpy>=2.4,<3
+PyYAML>=6,<7
+PyMySQL>=1.1,<2
+openpyxl>=3.1,<4

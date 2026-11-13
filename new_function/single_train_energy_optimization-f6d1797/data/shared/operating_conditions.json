@@ -1,0 +1,18 @@
+{
+  "default_adhesion_coefficient": 0.28,
+  "traction_adhesion_safety_factor": 0.85,
+  "braking_adhesion_safety_factor": 0.65,
+  "weather_conditions": [],
+  "adhesion_zones": [],
+  "speed_restrictions": [
+    {
+      "name": "pdf_shuohuang_freight_speed_shenchi_south_to_k76_293",
+      "start_km": 0.0,
+      "end_km": 76.293,
+      "speed_limit_kmh": 75.0,
+      "start_time_s": 0,
+      "end_time_s": 1000000000,
+      "reason": "PDF page 12: Shuohuang line Shenchi South-K76+293 heavy/empty freight speed 75 km/h"
+    }
+  ]
+}

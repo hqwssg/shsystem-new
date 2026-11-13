@@ -1,0 +1,3 @@
+﻿name,mass_tons,max_traction_kN,max_brake_kN,rotational_mass_factor,davis_a,davis_b,davis_c,length_km,longitudinal_segments,direction,traction_adhesion_weight_fraction,brake_adhesion_weight_fraction
+Heavy,10000.0,6000.0,7000.0,1.08,6.5,0.12,0.003,2.7,20,forward,0.22,1.0
+Empty,2000.0,3000.0,3500.0,1.05,5.0,0.1,0.0025,2.7,20,reverse,0.55,1.0

@@ -1,0 +1,8 @@
+{
+  "timetable_relative_path": "platform/running_diagram.xlsx",
+  "mode": "nsga2",
+  "population_size": 30,
+  "generations": 10,
+  "seed": 42,
+  "strict_visualizations": false
+}

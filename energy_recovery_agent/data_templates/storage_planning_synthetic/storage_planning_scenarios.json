@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "scenario_set_code": "synthetic_typical_days_v1",
+  "scenarios": [
+    {
+      "scenario_code": "normal_operation",
+      "scenario_name": "合成正常运量",
+      "weight": 0.6,
+      "core_for_feasibility": true,
+      "schedule_template": {
+        "heavy_count": 3,
+        "empty_count": 3,
+        "heavy_headway_s": 3300,
+        "empty_headway_s": 2700,
+        "heavy_empty_phase_s": 2600
+      },
+      "grid_price_per_kwh": 0.65,
+      "demand_charge_per_kw_year": 260,
+      "wasted_energy_penalty_per_kwh": 0.05,
+      "parameter_overrides": {},
+      "data_status": "synthetic",
+      "source_note": "沿用当前合成调度基线，仅用于阶段A和后续MVP测试"
+    },
+    {
+      "scenario_code": "high_transport",
+      "scenario_name": "合成高运量",
+      "weight": 0.25,
+      "core_for_feasibility": true,
+      "schedule_template": {
+        "heavy_count": 4,
+        "empty_count": 4,
+        "heavy_headway_s": 3300,
+        "empty_headway_s": 3300,
+        "heavy_empty_phase_s": 840
+      },
+      "grid_price_per_kwh": 0.72,
+      "demand_charge_per_kw_year": 300,
+      "wasted_energy_penalty_per_kwh": 0.05,
+      "parameter_overrides": {
+        "heavy_mass_factor": 1.05,
+        "power_arm_capacity_factor": 0.9
+      },
+      "data_status": "synthetic",
+      "source_note": "用于验证高运量和电气能力降额下的共享规划变量"
+    },
+    {
+      "scenario_code": "low_transport",
+      "scenario_name": "合成低运量",
+      "weight": 0.15,
+      "core_for_feasibility": false,
+      "schedule_template": {
+        "heavy_count": 2,
+        "empty_count": 2,
+        "heavy_headway_s": 3900,
+        "empty_headway_s": 3600,
+        "heavy_empty_phase_s": 2200
+      },
+      "grid_price_per_kwh": 0.58,
+      "demand_charge_per_kw_year": 220,
+      "wasted_energy_penalty_per_kwh": 0.05,
+      "parameter_overrides": {
+        "storage_efficiency_factor": 0.95
+      },
+      "data_status": "synthetic",
+      "source_note": "用于验证低利用率对投资经济性的影响"
+    }
+  ]
+}
+

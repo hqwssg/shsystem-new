@@ -1,0 +1,86 @@
+"""动力学子包：列车制动 / 电机 / 双向 DC-DC / 储能。
+
+阶段 1（物理仿真底座）实现，对应技术方案 4.2.1.3 的物理层。
+"""
+
+from .dc_dc_converter import (
+    BidirectionalDCDCConverter,
+    ConverterError,
+    ConverterNumericalError,
+    DCConverterParameters,
+    DCConverterState,
+    DCConverterStepResult,
+    DutyLimits,
+    SCHEME_ISSUE_RATING_FLAG_CONFLATED,
+    StorageBusRequest,
+    boost_steady_state_duty,
+    buck_steady_state_duty,
+)
+from .motor_model import (
+    DCLinkWindow,
+    MotorModelError,
+    MotorParameters,
+    MotorRegenResult,
+    RegenEfficiencyModel,
+    convert_wheel_regen,
+    regen_envelope_curve,
+)
+from .storage_model import (
+    StorageModelError,
+    StorageParameters,
+    StorageState,
+    StorageStepResult,
+    StorageSystem,
+    soc_trajectory_is_bounded,
+)
+from .train_braking_model import (
+    AdhesionLimit,
+    BasicResistanceModel,
+    BrakingInput,
+    BrakingPowerBreakdown,
+    TrainBrakingProfile,
+    TrainModelError,
+    brake_force_ceiling_n,
+    coasting_deceleration,
+    evaluate_braking,
+    max_achievable_deceleration,
+    total_resistance_n,
+)
+
+__all__ = [
+    "AdhesionLimit",
+    "BasicResistanceModel",
+    "BidirectionalDCDCConverter",
+    "BrakingInput",
+    "BrakingPowerBreakdown",
+    "ConverterError",
+    "ConverterNumericalError",
+    "DCConverterParameters",
+    "DCConverterState",
+    "DCConverterStepResult",
+    "DCLinkWindow",
+    "DutyLimits",
+    "MotorModelError",
+    "MotorParameters",
+    "MotorRegenResult",
+    "RegenEfficiencyModel",
+    "SCHEME_ISSUE_RATING_FLAG_CONFLATED",
+    "StorageModelError",
+    "StorageParameters",
+    "StorageState",
+    "StorageStepResult",
+    "StorageSystem",
+    "StorageBusRequest",
+    "TrainBrakingProfile",
+    "TrainModelError",
+    "boost_steady_state_duty",
+    "brake_force_ceiling_n",
+    "buck_steady_state_duty",
+    "coasting_deceleration",
+    "convert_wheel_regen",
+    "evaluate_braking",
+    "max_achievable_deceleration",
+    "regen_envelope_curve",
+    "soc_trajectory_is_bounded",
+    "total_resistance_n",
+]

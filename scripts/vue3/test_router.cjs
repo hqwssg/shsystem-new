@@ -1,0 +1,20 @@
+const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path'), vm = require('node:vm')
+const root = path.resolve(__dirname, '../..'), VueRouter = require(path.join(root, 'ruoyi-ui/node_modules/vue-router'))
+let source = fs.readFileSync(path.join(root, 'ruoyi-ui/src/router/index.js'), 'utf8').replace(/^import .*$/gm, '').replaceAll('import.meta.env.BASE_URL', "'/'").replace(/export (const|function) /g, '$1 ').replace('export default router', 'module.exports={router,normalizeRoute,addDynamicRoutes,resetRouter}')
+const context = { module: { exports: {} }, createRouter: VueRouter.createRouter, createWebHistory: VueRouter.createMemoryHistory, getCarbonModulePermissions: () => [] }
+vm.runInNewContext(source, context)
+const { router, normalizeRoute, addDynamicRoutes, resetRouter } = context.module.exports
+const before = router.getRoutes().length
+const normalized = normalizeRoute({ path: '/parent', permissions: ['example:view'], roles: ['example'], meta: { title: 'kept' }, children: [{ path: 'child' }, { path: 'https://example.com' }] })
+assert.equal(normalized.meta.permissions[0], 'example:view')
+assert.equal(normalized.meta.roles[0], 'example')
+assert.equal(normalized.meta.title, 'kept')
+assert.equal(normalized.children.length, 1)
+addDynamicRoutes([{ path: '/migration-test', name: 'MigrationTest', component: { render: () => null }, permissions: ['test:view'] }, { path: 'https://example.com', name: 'External' }])
+assert.equal(router.hasRoute('MigrationTest'), true)
+assert.equal(router.hasRoute('External'), false)
+assert.equal(router.resolve('/migration-test').meta.permissions[0], 'test:view')
+resetRouter(); resetRouter()
+assert.equal(router.hasRoute('MigrationTest'), false)
+assert.equal(router.getRoutes().length, before)
+console.log('PASS: Router 4 permission metadata, external links, dynamic routes and idempotent logout cleanup')

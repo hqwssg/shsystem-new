@@ -1,0 +1,12 @@
+{
+  "capacity_kwh": 20000.0,
+  "round_trip_efficiency": 0.9,
+  "depreciation_cost_per_kwh": 0.15,
+  "grid_price_per_kwh": 0.55,
+  "max_charge_power_kW": 20000.0,
+  "max_discharge_power_kW": 20000.0,
+  "data_status": "unknown",
+  "scenario_name": "",
+  "planning_assumption": false,
+  "note": ""
+}

@@ -1,0 +1,6 @@
+site_code,technology_code,min_capacity_kwh,max_capacity_kwh,max_charge_power_kw,max_discharge_power_kw,max_unit_count,available,source_note
+SYN-SITE-145,SYN-LFP,5000,30000,12000,12000,2,true,合成站点接入功率限制
+SYN-SITE-145,SYN-HIGH-POWER,2000,16000,12000,12000,2,true,合成高功率技术选项
+SYN-SITE-180,SYN-LFP,10000,40000,18000,18000,2,true,合成较大容量站点选项
+SYN-SITE-330,SYN-LFP,5000,40000,15000,15000,2,false,站点不可建设因此关联也不可用
+

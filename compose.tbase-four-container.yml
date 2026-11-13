@@ -1,0 +1,112 @@
+services:
+  sh-app:
+    image: ${APP_IMAGE:?Set APP_IMAGE}
+    container_name: sh-app
+    restart: unless-stopped
+    environment:
+      CERDB_JDBC_DRIVER: ${CERDB_JDBC_DRIVER:?Set vendor-confirmed JDBC driver}
+      CERDB_JDBC_URL: ${CERDB_JDBC_URL:?Set vendor-confirmed JDBC URL}
+      CERDB_APP_USER: ${CERDB_APP_USER:?Set application user}
+      CERDB_APP_PASSWORD: ${CERDB_APP_PASSWORD:?Set application password}
+      PYTHON_SERVICE_URL: http://sh-python:8091
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN:?Set Python token}
+      PYTHON_SERVICE_REQUIRED: "true"
+      PREDICTION_BASE_URL: http://sh-python:8090
+      PREDICTION_API_KEY: ${PREDICTION_API_KEY:?Set prediction API key}
+    ports:
+      - "${WEB_PORT:-80}:80"
+    volumes:
+      - ${SHARED_DATA_HOST_PATH:?Set shared data path}:/srv/shared
+    depends_on:
+      sh-python:
+        condition: service_started
+      tbase-node1:
+        condition: service_started
+    networks: [shsystem]
+
+  sh-python:
+    image: ${PYTHON_IMAGE:?Set PYTHON_IMAGE}
+    container_name: sh-python
+    restart: unless-stopped
+    environment:
+      CERDB_HOST: tbase-node1
+      CERDB_PORT: ${TBASE_COORDINATOR_PORT:?Set vendor-confirmed coordinator port}
+      CERDB_DB: ${CERDB_DB:?Set database name}
+      CERDB_APP_USER: ${CERDB_APP_USER:?Set application user}
+      CERDB_APP_PASSWORD: ${CERDB_APP_PASSWORD:?Set application password}
+      CERDB_DSN: ${CERDB_DSN:?Set vendor-supported Python DSN}
+      ENERGY_DATABASE_URL: ${ENERGY_DATABASE_URL:?Set energy database URL}
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN:?Set Python token}
+      API_KEY: ${PREDICTION_API_KEY:?Set prediction API key}
+      PREDICTION_API_PORT: "8090"
+      SHARED_ROOT: /srv/shared
+    expose: ["8090", "8091"]
+    volumes:
+      - ${SHARED_DATA_HOST_PATH:?Set shared data path}:/srv/shared
+    depends_on:
+      tbase-node1:
+        condition: service_started
+    networks: [shsystem]
+
+  tbase-node1:
+    image: ${TBASE_NODE_IMAGE:?Set vendor-confirmed TBase node image}
+    container_name: tbase-node1
+    hostname: tbase-node1
+    restart: unless-stopped
+    # Replace with the vendor-confirmed roles, command, privileges and healthcheck.
+    environment:
+      TBASE_NODE_NAME: ${TBASE_NODE1_NAME:-node1}
+      TBASE_NODE_ROLES: ${TBASE_NODE1_ROLES:?Set roles from vendor-approved role.info}
+      TBASE_NODE2_HOST: tbase-node2
+      TBASE_NODE3_HOST: tbase-node3
+    volumes:
+      - ${TBASE_NODE1_DATA:?Set node1 data path}:/vendor-confirmed/tbase-data
+      - ${TBASE_PACKAGE_HOST_PATH:?Set vendor package path}:/vendor-confirmed/packages:ro
+    expose:
+      - "${TBASE_COORDINATOR_PORT:?Set coordinator port}"
+      - "${TBASE_GTM_PORT:?Set GTM port}"
+    depends_on:
+      - tbase-node2
+    networks: [shsystem]
+
+  tbase-node2:
+    image: ${TBASE_NODE_IMAGE:?Set vendor-confirmed TBase node image}
+    container_name: tbase-node2
+    hostname: tbase-node2
+    restart: unless-stopped
+    # Replace with the vendor-confirmed roles, command, privileges and healthcheck.
+    environment:
+      TBASE_NODE_NAME: ${TBASE_NODE2_NAME:-node2}
+      TBASE_NODE_ROLES: ${TBASE_NODE2_ROLES:?Set roles from vendor-approved role.info}
+      TBASE_NODE1_HOST: tbase-node1
+    volumes:
+      - ${TBASE_NODE2_DATA:?Set node2 data path}:/vendor-confirmed/tbase-data
+      - ${TBASE_PACKAGE_HOST_PATH:?Set vendor package path}:/vendor-confirmed/packages:ro
+    expose:
+      - "${TBASE_DATANODE_PORT:?Set vendor-confirmed datanode port}"
+    networks: [shsystem]
+
+  tbase-node3:
+    image: ${TBASE_NODE_IMAGE:?Set vendor-confirmed TBase node image}
+    container_name: tbase-node3
+    hostname: tbase-node3
+    restart: unless-stopped
+    # Replace with the vendor-confirmed roles, command, privileges and healthcheck.
+    environment:
+      TBASE_NODE_NAME: ${TBASE_NODE3_NAME:-node3}
+      TBASE_NODE_ROLES: ${TBASE_NODE3_ROLES:?Set roles from vendor-approved role.info}
+      TBASE_NODE1_HOST: tbase-node1
+      TBASE_NODE2_HOST: tbase-node2
+    volumes:
+      - ${TBASE_NODE3_DATA:?Set node3 data path}:/vendor-confirmed/tbase-data
+      - ${TBASE_PACKAGE_HOST_PATH:?Set vendor package path}:/vendor-confirmed/packages:ro
+    expose:
+      - "${TBASE_DATANODE_PORT:?Set vendor-confirmed datanode port}"
+    depends_on:
+      - tbase-node1
+      - tbase-node2
+    networks: [shsystem]
+
+networks:
+  shsystem:
+    internal: true

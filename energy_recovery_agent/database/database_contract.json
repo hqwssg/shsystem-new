@@ -1,0 +1,84 @@
+{
+  "contract_version": "1.8",
+  "status": "implemented_pending_target_database_acceptance",
+  "database": {
+    "engine": "postgresql",
+    "minimum_major_version": 16,
+    "name": "carbon_emissions",
+    "schema": "energy_recovery",
+    "encoding": "UTF8",
+    "table_prefix": "simulation_"
+  },
+  "naming": {
+    "identifier_style": "lower_snake_case_ascii",
+    "domain_primary_key": "uuid",
+    "detail_primary_key": "bigint_generated_always_as_identity",
+    "foreign_key_style": "referenced_entity_id",
+    "index_prefix": "idx_simulation_",
+    "unique_constraint_prefix": "uq_simulation_",
+    "check_constraint_prefix": "ck_simulation_",
+    "foreign_key_prefix": "fk_simulation_"
+  },
+  "time": {
+    "database_type": "timestamp_with_time_zone",
+    "storage_timezone": "UTC",
+    "application_timezone": "Asia/Shanghai",
+    "algorithm_relative_time_unit": "second"
+  },
+  "units": {
+    "distance": "km",
+    "mass": "t",
+    "force": "kN",
+    "power": "kW",
+    "energy": "kWh",
+    "speed": "km/h",
+    "gradient": "permille"
+  },
+  "data_status_values": [
+    "official",
+    "derived_from_official",
+    "planning_placeholder",
+    "synthetic"
+  ],
+  "run_status_values": [
+    "pending",
+    "validating",
+    "running",
+    "succeeded",
+    "failed",
+    "cancelled"
+  ],
+  "integration": {
+    "input_mode": "immutable_version_and_run_snapshot",
+    "algorithm_read_pattern": "load_once_then_compute_in_memory",
+    "result_write_pattern": "transactional_batch_write",
+    "run_creation_idempotency": "project_scoped_idempotency_key_and_request_sha256",
+    "worker_ownership": "expiring_lease_token_with_heartbeat",
+    "stale_run_recovery": "requeue_until_attempt_limit_then_fail",
+    "state_audit": "monotonic_state_version_and_append_only_event",
+    "rolling_storage_runtime_state": "immutable_run_parameter_snapshot_with_per_device_soc_availability_and_power_limits",
+    "historical_disturbance_replay": "immutable_version_file_referenced_by_run_parameter_and_frozen_with_run_snapshot",
+    "joint_parameter_robustness": "immutable_interval_contract_evaluated_as_traceable_discrete_physical_parameter_and_operation_disturbance_combinations",
+    "storage_device_static_binding": "simulation_storage_device_rows_are_serialized_into_storage_devices.json_and_frozen_with_each_run_snapshot",
+    "storage_physical_override_policy": "database_runs_reject_aggregate_capacity_power_and_efficiency_overrides",
+    "solver_resource_policy": "worker_scoped_quick_standard_fine_wall_clock_budget_with_search_only_timeout_fallback_and_auditable_result_artifact",
+    "file_adapter_retained_for_regression": true,
+    "hard_delete_master_data": false
+  },
+  "connection": {
+    "dsn_environment_variable": "SIMULATION_DATABASE_URL",
+    "credentials_in_repository": false,
+    "tls_required_outside_local_development": true
+  },
+  "roles": {
+    "simulation_migrator": "owns schema migrations and DDL",
+    "simulation_platform": "writes versioned inputs and creates runs",
+    "simulation_worker": "reads frozen inputs and writes run results",
+    "simulation_readonly": "reads approved run status and results"
+  },
+  "retention": {
+    "master_and_version_records": "no_automatic_hard_delete",
+    "run_metadata_kpi_and_decisions": "retain_for_project_lifetime",
+    "high_volume_detail_minimum_days": 365
+  }
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "code": "geometry",
+    "filename": "线路几何.xlsx",
+    "title": "线路几何",
+    "hint": "线路总长、车站、区间坡度限速"
+  },
+  {
+    "code": "trains",
+    "filename": "列车参数.xlsx",
+    "title": "列车参数",
+    "hint": "重车、空车质量与牵引制动"
+  },
+  {
+    "code": "storage",
+    "filename": "储能设备.xlsx",
+    "title": "储能设备",
+    "hint": "容量功率电价和储能区段"
+  },
+  {
+    "code": "timetable",
+    "filename": "运行图.xlsx",
+    "title": "运行图",
+    "hint": "列车时刻到发"
+  },
+  {
+    "code": "operations",
+    "filename": "追踪与作业.xlsx",
+    "title": "追踪与作业",
+    "hint": "追踪间隔和技术作业时分"
+  },
+  {
+    "code": "power_arm",
+    "filename": "供电臂.xlsx",
+    "title": "供电臂",
+    "hint": "供电臂起终点和储能接入"
+  },
+  {
+    "code": "disturbance",
+    "filename": "滚动扰动.xlsx",
+    "title": "滚动扰动",
+    "hint": "历史晚点、限速、储能状态回放"
+  },
+  {
+    "code": "joint_params",
+    "filename": "联合参数.xlsx",
+    "title": "联合参数",
+    "hint": "稳健性参数上下限"
+  },
+  {
+    "code": "storage_planning",
+    "filename": "储能规划.xlsx",
+    "title": "储能规划",
+    "hint": "候选站点、储能技术、场景和规划策略"
+  }
+]

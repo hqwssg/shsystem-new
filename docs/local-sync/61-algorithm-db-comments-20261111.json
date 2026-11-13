@@ -1,0 +1,30 @@
+{
+  "group": "61-algorithm-db-comments-20261111",
+  "source_before": "a66f9a78079b5d26263eaf205f7031def3f0e423",
+  "source_tag": "pre-sync-61-algorithm-db-comments-20261111",
+  "private_config_before": "refs/local-config/61-algorithm-db-comments-20261111-before",
+  "upstream": "2fe42000b9df8086f76a763c0ec4df9622c54ca7",
+  "summary": "algorithm database comment-only upgrade with target schema guards",
+  "checks": {
+    "unit_tests": 8,
+    "isolated_schema_tables": 53,
+    "isolated_schema_columns": 667,
+    "apply_rollback_idempotency_and_schema_drift": "passed",
+    "local_tables": 51,
+    "local_columns": 632,
+    "local_rows": 145355,
+    "local_backup_bytes": 272163339,
+    "all_local_data_sha256_unchanged": true,
+    "target_schema_verified": true,
+    "missing_local_tables_not_created": [
+      "energy_train_telemetry",
+      "energy_segment_consumption_summary"
+    ],
+    "online_actions": "none",
+    "private_user_files_preserved": [
+      "ruoyi-ui/.env.development",
+      "tools/start-local.ps1"
+    ]
+  },
+  "private_config_after": "refs/local-config/61-algorithm-db-comments-20261111-after"
+}

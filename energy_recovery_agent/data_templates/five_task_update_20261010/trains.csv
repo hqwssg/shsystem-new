@@ -1,0 +1,3 @@
+name,mass_tons,max_traction_kN,max_brake_kN,rotational_mass_factor,davis_a,davis_b,davis_c,length_km,longitudinal_segments,direction,traction_adhesion_weight_fraction,brake_adhesion_weight_fraction,max_power_kW,mass_data_status,mass_min_tons,mass_max_tons,mass_note
+Heavy,21600.0,5600.0,6200.0,1.06,8.0,0.10,0.0028,2.6136,20,forward,0.22,1.0,28800.0,pdf_2w_c80_mass_virtual_traction_preset,,,质量来自 PDF 2 万吨 C80 代表重车；牵引力/制动力/Davis/功率为工程虚拟预设（约 4x7200kW 机车量级），正式牵引特性曲线到位后替换。
+Empty,4320.0,2800.0,3200.0,1.05,5.5,0.08,0.0022,2.70,20,reverse,0.55,1.0,14400.0,multi_tier_formation_catalog_no_single_fixed_value,2160.0,4320.0,空车质量默认 4320t=C80 216 辆空总重（编组目录 1+1）；牵引/制动/Davis/功率为工程虚拟预设，正式参数到位后替换。可用 --empty-mass-tons 覆盖。

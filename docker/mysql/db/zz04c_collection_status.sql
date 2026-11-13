@@ -1,0 +1,17 @@
+-- Additive migration for existing MySQL/MariaDB carbon_emissions databases.
+-- Safe to run more than once.
+SET NAMES utf8mb4;
+SET @db := DATABASE();
+
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_node_config' AND column_name='last_collection_time')=0, 'ALTER TABLE emission_node_config ADD COLUMN last_collection_time TIMESTAMP NULL COMMENT ''latest collection completion time''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_node_config' AND column_name='last_collection_status')=0, 'ALTER TABLE emission_node_config ADD COLUMN last_collection_status TINYINT NULL COMMENT ''1 success, 2 failed''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_node_config' AND column_name='last_collection_message')=0, 'ALTER TABLE emission_node_config ADD COLUMN last_collection_message VARCHAR(500) NULL COMMENT ''latest collection result''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_meter_info' AND column_name='last_collection_status')=0, 'ALTER TABLE emission_meter_info ADD COLUMN last_collection_status TINYINT NULL COMMENT ''1 success, 2 failed''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_meter_info' AND column_name='last_collection_message')=0, 'ALTER TABLE emission_meter_info ADD COLUMN last_collection_message VARCHAR(500) NULL COMMENT ''latest collection result''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_fossil_fuel_meter_info' AND column_name='last_collection_status')=0, 'ALTER TABLE emission_fossil_fuel_meter_info ADD COLUMN last_collection_status TINYINT NULL COMMENT ''1 success, 2 failed''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_fossil_fuel_meter_info' AND column_name='last_collection_message')=0, 'ALTER TABLE emission_fossil_fuel_meter_info ADD COLUMN last_collection_message VARCHAR(500) NULL COMMENT ''latest collection result''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_purchased_heat_meter_info' AND column_name='last_collection_status')=0, 'ALTER TABLE emission_purchased_heat_meter_info ADD COLUMN last_collection_status TINYINT NULL COMMENT ''1 success, 2 failed''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
+SET @sql := IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=@db AND table_name='emission_purchased_heat_meter_info' AND column_name='last_collection_message')=0, 'ALTER TABLE emission_purchased_heat_meter_info ADD COLUMN last_collection_message VARCHAR(500) NULL COMMENT ''latest collection result''', 'SELECT 1'); PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;

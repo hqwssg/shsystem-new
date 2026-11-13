@@ -1,0 +1,274 @@
+{
+  "schema_version": "1.0",
+  "dataset": "real_shuohuang",
+  "updated_at": "2026-11-05",
+  "purpose": "把算法运行时真正读取的每个数据槽位列成清单，逐槽检查是否有值、是否覆盖完整、值从哪来。目标是「仿真阶段不允许有空槽」：缺的数据用虚拟值填，但必须登记为 virtual，等真数据到位后逐条替换，而不是让算法静默降级。",
+  "status_legend": {
+    "measured": "甲方资料或电表原始字段直接读出，当前可信",
+    "derived": "由已确认数据推算，链条明确但未经厂家/甲方确认",
+    "virtual": "虚拟填充值：当前无真实来源，为了让算法完整可运行而给定；不得作为结论依据",
+    "optional_blank": "允许留空，且留空有明确物理含义（如曲线半径空=直线段）",
+    "not_modeled": "数据可推导但当前模型未使用；登记影响量级，供后续决定是否接入"
+  },
+  "rules": {
+    "file_exists": "文件存在且非空",
+    "positive_number": "该列每一行都能解析为正数",
+    "non_negative_number": "该列每一行都能解析为非负数（允许 0）",
+    "non_empty": "该列每一行都非空",
+    "coverage": "start_km/end_km 连续覆盖 0..extent，无缺口、无重叠倒序",
+    "monotonic_increasing": "该数值列单调不减",
+    "at_least_one_non_empty": "该列至少有一行非空",
+    "at_least_one_true": "该布尔列至少有一行为 true",
+    "row_count_matches": "行数与参照表一致",
+    "json_positive": "JSON 指针指向的数值为正",
+    "json_defined": "JSON 指针存在且非空",
+    "loco_curves": "trains.csv 里每个 locomotive_type 都能在曲线库中找到，且含牵引/制动曲线点与接触网电压",
+    "allow_blank_number": "允许留空；非空行必须是合法非负数（留空有物理含义时使用）",
+    "phase_break_boundaries": "由供电臂相邻边界推出电分相位置，报告数量与间距；仅登记影响，不参与仿真"
+  },
+  "slots": [
+    {
+      "id": "train_mass",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "mass_tons",
+      "rule": "positive_number",
+      "required": true,
+      "unit": "t",
+      "source": "measured",
+      "note": "车辆总重（不含机车），加载层按 locomotive_type/count 追加机车自重。"
+    },
+    {
+      "id": "train_power_cap",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "max_power_kW",
+      "rule": "positive_number",
+      "required": true,
+      "unit": "kW",
+      "source": "derived",
+      "note": "必须与曲线库的单机持续功率 × 台数一致，否则控制与结算两处口径会分叉。"
+    },
+    {
+      "id": "train_loco_type",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "locomotive_type",
+      "rule": "non_empty",
+      "required": true,
+      "unit": "-",
+      "source": "measured",
+      "note": "为空时电制动/再生能力退化为 0 且不报错，是典型静默降级点。"
+    },
+    {
+      "id": "train_loco_count",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "locomotive_count",
+      "rule": "positive_number",
+      "required": true,
+      "unit": "台",
+      "source": "virtual",
+      "note": "虚拟填充 1：`locomotive_count` 列只作回退值（CSV 写 1），权威编组在 `locomotive_consist = SHENHUA_12:1|SHENHUA_8:1`，加载时归一为 2 台；判定依据见 assumptions.json 的 `two_wan_ton_locomotive_count`。",
+      "assumption_id": "two_wan_ton_locomotive_count"
+    },
+    {
+      "id": "train_davis",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "davis_a",
+      "rule": "non_negative_number",
+      "required": true,
+      "unit": "N/kN",
+      "source": "measured",
+      "note": "TB/T 1407.1-2018 表5；davis_b/davis_c 同源，由同一加载器校验。"
+    },
+    {
+      "id": "train_length",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "length_km",
+      "rule": "positive_number",
+      "required": true,
+      "unit": "km",
+      "source": "measured",
+      "note": "列车长 2.6 km，决定「全列平均坡度」的取样窗；为空会让列车退化成质点。"
+    },
+    {
+      "id": "train_traction",
+      "file": "data/real_shuohuang/trains.csv",
+      "field": "max_traction_kN",
+      "rule": "positive_number",
+      "required": true,
+      "unit": "kN",
+      "source": "derived",
+      "note": "双机 5,600 kN；与机车曲线、黏着上限共同约束起步。"
+    },
+    {
+      "id": "loco_curve_bank",
+      "file": "data/real_shuohuang/locomotive_curves.json",
+      "field": null,
+      "rule": "loco_curves",
+      "required": true,
+      "unit": "-",
+      "source": "derived",
+      "note": "SHENHUA_12 为 1.5×HXD1 外推（按 12/8 轴数比），待厂家特性表替换。"
+    },
+    {
+      "id": "gradient_profile",
+      "file": "data/real_shuohuang/gradients.csv",
+      "field": "gradient_per_mille",
+      "rule": "coverage",
+      "required": true,
+      "unit": "‰",
+      "source": "derived",
+      "note": "1,500 余段连续覆盖全线；来源为线路图图形数字化，细结构存疑（见 assumptions.json）。"
+    },
+    {
+      "id": "segment_speed_limit",
+      "file": "data/real_shuohuang/segments.csv",
+      "field": "speed_limit_kmh",
+      "rule": "coverage",
+      "required": true,
+      "unit": "km/h",
+      "source": "measured",
+      "note": "来自《列车运行图及技术资料》线路允许速度表（重车 75/80）。"
+    },
+    {
+      "id": "segment_curve_radius",
+      "file": "data/real_shuohuang/segments.csv",
+      "field": "curve_radius_m",
+      "rule": "allow_blank_number",
+      "required": false,
+      "unit": "m",
+      "source": "optional_blank",
+      "note": "空值含义是「直线段」，曲线阻力按 0 计；填虚拟半径会凭空增加阻力，故不填。"
+    },
+    {
+      "id": "station_positions",
+      "file": "data/real_shuohuang/stations.csv",
+      "field": "position_km",
+      "rule": "monotonic_increasing",
+      "required": true,
+      "unit": "km",
+      "source": "measured",
+      "note": "33 站 0–583.003 km，直接决定区间切片与按图定时。"
+    },
+    {
+      "id": "dwell_en_route",
+      "file": "data/real_shuohuang/station_dwell.csv",
+      "field": "heavy_2w_min",
+      "rule": "non_negative_number",
+      "required": false,
+      "unit": "min",
+      "source": "measured",
+      "note": "只有 1 个途中停站（西柏坡）；其余站为通过站，空行不是缺口。"
+    },
+    {
+      "id": "power_arm_coverage",
+      "file": "data/real_shuohuang/power_arm_intervals.csv",
+      "field": "start_km",
+      "rule": "coverage",
+      "required": true,
+      "unit": "km",
+      "source": "derived",
+      "note": "76 段覆盖 0–589 km，边界由电分相中心生成，故电分相位置本身已在数据里。"
+    },
+    {
+      "id": "storage_sections",
+      "file": "data/real_shuohuang/power_arm_intervals.csv",
+      "field": "storage_section_id",
+      "rule": "at_least_one_non_empty",
+      "required": true,
+      "unit": "-",
+      "source": "virtual",
+      "note": "只有 2 个规划储能区段（145–164、164–200.7 km），且标注为 planning_assumption；这是储能结论「只能回收 0.2% 弃能」的直接原因。",
+      "assumption_id": "storage_candidate_sections"
+    },
+    {
+      "id": "energy_transfer_active",
+      "file": "data/real_shuohuang/energy_transfer_zones.csv",
+      "field": "active_in_operational_baseline",
+      "rule": "at_least_one_true",
+      "required": true,
+      "unit": "-",
+      "source": "measured",
+      "note": "柔性供电已实施区间 108–219 km，进入运行基线。"
+    },
+    {
+      "id": "headway",
+      "file": "data/real_shuohuang/headway_constraints.csv",
+      "field": "headway_min",
+      "rule": "positive_number",
+      "required": true,
+      "unit": "min",
+      "source": "measured",
+      "note": "追踪间隔 9/11 min，调度与运行图优化的硬约束。"
+    },
+    {
+      "id": "station_tracks",
+      "file": "data/real_shuohuang/station_resources.csv",
+      "field": "track_capacity",
+      "rule": "row_count_matches",
+      "required": true,
+      "unit": "条",
+      "source": "measured",
+      "note": "33 站各一行，行数必须与 stations.csv 一致，否则越行会让避让失效。"
+    },
+    {
+      "id": "battery_capacity",
+      "file": "data/real_shuohuang/battery.json",
+      "field": "/capacity_kwh",
+      "rule": "json_positive",
+      "required": true,
+      "unit": "kWh",
+      "source": "measured",
+      "note": "飞轮 45 + 钛酸锂 100 = 145 kWh，来自甲方《5.储能系统参数.doc》。"
+    },
+    {
+      "id": "battery_efficiency",
+      "file": "data/real_shuohuang/battery.json",
+      "field": "/round_trip_efficiency",
+      "rule": "json_positive",
+      "required": true,
+      "unit": "-",
+      "source": "measured",
+      "note": "往返效率 0.9。"
+    },
+    {
+      "id": "battery_price",
+      "file": "data/real_shuohuang/battery.json",
+      "field": "/grid_price_per_kwh",
+      "rule": "json_positive",
+      "required": true,
+      "unit": "元/kWh",
+      "source": "measured",
+      "note": "0.6818 元/kWh，盈亏电价判据的分母。"
+    },
+    {
+      "id": "battery_discharge",
+      "file": "data/real_shuohuang/battery.json",
+      "field": "/max_discharge_power_kW",
+      "rule": "json_defined",
+      "required": true,
+      "unit": "kW",
+      "source": "virtual",
+      "note": "甲方未给，运行基线按 0（保守）；规划按 planning_max_discharge_power_assumption_kW=2000 假设。两个口径都已显式写入文件，不会静默。",
+      "assumption_id": "storage_discharge_power"
+    },
+    {
+      "id": "timetable_template",
+      "file": "data_templates/running_diagram_template.xlsx",
+      "field": null,
+      "rule": "file_exists",
+      "required": true,
+      "unit": "-",
+      "source": "measured",
+      "note": "图定运行图模板，规划输入由此生成 mixed_running_diagram.xlsx。"
+    },
+    {
+      "id": "phase_breaks",
+      "file": "data/real_shuohuang/power_arm_intervals.csv",
+      "field": null,
+      "rule": "phase_break_boundaries",
+      "required": false,
+      "unit": "-",
+      "source": "not_modeled",
+      "note": "电分相位置以供电臂边界形式存在（30 处/方向，间距中位 20.3 km），模型未做「过中性区断电」；实测中性区窗口内牵引电量占 0.35%（±50 m）～1.03%（±100 m），故不接入。"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_metadata": {
+    "data_status": "heuristic_defaults",
+    "scope": "Shuohuang real_partial resource-model defaults",
+    "note": "These values are model defaults where the PDF does not provide station throat capacity, route-locking rules, exact block capacity, or task-level station occupation data. They are not official infrastructure capacity data.",
+    "pdf_replacements": [
+      "min_depart_headway_s is derived at load time from headway_constraints.csv when the PDF Shuohuang 2 万吨 headway exceeds this default.",
+      "station-specific track_capacity is read from station_resources.csv, whose source is the PDF station table track count including mainline tracks.",
+      "technical operation occupation is read from technical_operation_times.csv and applied only through station_operation_assignments.csv.",
+      "heavy-empty-heavy flow continuity is enforced, but initial flow stock is a scenario assumption because the PDF bundle does not provide initial rolling-stock inventory."
+    ],
+    "needs_replacement_with": [
+      "real station throat capacity",
+      "route-locking and interlocking data",
+      "real signaling block boundaries",
+      "section capacity/headway rules by train type and direction",
+      "task-level station operation assignments"
+    ]
+  },
+  "station_track_capacity": 2,
+  "terminal_track_capacity": 4,
+  "throat_capacity": 1,
+  "station_occupancy_s": 180,
+  "throat_occupancy_s": 90,
+  "section_release_margin_s": 30,
+  "section_capacity_spacing_km": 8.0,
+  "single_line_ranges_km": [],
+  "min_overlap_s": 1,
+  "conflict_limit": 50,
+  "initial_heavy_flow_count": 1000,
+  "initial_empty_flow_count": 1000,
+  "enforce_flow_continuity": true
+}

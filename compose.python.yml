@@ -1,0 +1,20 @@
+services:
+  sh-python:
+    image: ${PYTHON_IMAGE:?Set PYTHON_IMAGE}
+    restart: unless-stopped
+    environment:
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN}
+      API_KEY: ${PREDICTION_API_KEY}
+      CERDB_HOST: ${CERDB_HOST}
+      CERDB_PORT: ${CERDB_PORT}
+      CERDB_DB: ${CERDB_DB}
+      CERDB_APP_USER: ${CERDB_APP_USER}
+      CERDB_APP_PASSWORD: ${CERDB_APP_PASSWORD}
+      CERDB_DSN: ${CERDB_DSN:?Set CERDB_DSN to the vendor-supported Python connection string}
+      ENERGY_DATABASE_URL: ${ENERGY_DATABASE_URL}
+      PREDICTION_API_PORT: "8090"
+      SHARED_ROOT: /srv/shared
+    ports:
+      - "${PYTHON_BIND_ADDRESS:-127.0.0.1}:${PYTHON_PORT:-8091}:8091"
+      - "${PREDICTION_BIND_ADDRESS:-127.0.0.1}:${PREDICTION_PORT:-8090}:8090"
+    volumes: ["${SHARED_DATA_HOST_PATH:?Set SHARED_DATA_HOST_PATH}:/srv/shared"]

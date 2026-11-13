@@ -1,0 +1,56 @@
+# ============================================================
+# 单列车再生制动能量回收项目 —— 数据路径配置
+#
+# 设计原则（对应技术方案与项目边界要求）：
+#   1. 共享铁路基础数据不复制多份，通过本文件指向唯一数据源（只读引用）。
+#   2. 本项目专用数据（高频状态、电力电子参数、RHONN/EKF/UKF/NSMC 参数）
+#      一律落在 single_train_data_root 下，与重空协同项目物理隔离。
+#   3. 不在代码中硬编码任何绝对路径；所有路径在此集中声明。
+#
+# 路径解析规则：
+#   - 相对路径相对于本项目根目录（本文件的上一级目录）。
+#   - 支持环境变量覆盖，优先级：环境变量 > 本文件。
+#       SINGLE_TRAIN_SHARED_DATA_ROOT
+#       SINGLE_TRAIN_DATA_ROOT
+#       SINGLE_TRAIN_EXPERIMENTS_ROOT
+# ============================================================
+
+schema_version: "1.0"
+
+# ---------- 共享铁路基础数据（只读，唯一数据源） ----------
+# 当前指向共享规范数据生成的混合运行视图，目录名 real_shuohuang 是兼容名称。
+# 真实字段与虚拟字段分别维护在 ../shared_data/real 与 ../shared_data/virtual。
+# 用工作区根目录 tools/manage_shared_data.py build 生成；规则见 ../shared_data/DATA_POLICY.md。
+# 本项目的角色：只读消费，绝不写回。
+shared_data_root: "data/shared"
+
+# 共享数据可用性探测文件（缺失即视为共享数据未就位，直接报错而不是静默降级）
+shared_data_required_files:
+  - stations.csv
+  - segments.csv
+  - gradients.csv
+  - curves.csv
+  - trains.csv
+  - power_arm_intervals.csv
+  - route_metadata.json
+  # 以下三个是代码装配时的必需文件（SHARED_PARSE_FILES），此前漏登记，
+  # 导致 check_shared_data 只查 7 个、缺件仍报“就位”。2026-11-05 补齐。
+  - operating_conditions.json
+  - battery.json
+  - locomotive_curves.json
+
+# ---------- 本项目专用参数（生成视图，只读消费） ----------
+# 高频动态状态、电力电子参数、储能详细参数、RHONN/EKF/UKF/NSMC 参数
+single_train_data_root: "data/single_train"
+
+# ---------- 实验与输出 ----------
+experiments_root: "data/experiments"
+data_manifest: "data/data_manifest.yaml"
+
+# ---------- 共享数据契约说明 ----------
+# shared 数据的状态权威来源（不是本项目维护，只做引用记录）
+shared_data_status_authority: "../shared_data/DATA_POLICY.md"
+
+# 写入保护：本项目对 shared_data_root 只读。
+# 若检测到写操作意图（例如输出落盘到 shared 根目录），应直接抛错。
+shared_data_read_only: true

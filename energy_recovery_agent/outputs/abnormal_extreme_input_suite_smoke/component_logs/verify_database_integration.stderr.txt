@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "C:\Users\reinvent\Desktop\work003\energy_recovery_agent\tests\smoke\verify_database_integration.py", line 827, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\reinvent\Desktop\work003\energy_recovery_agent\tests\smoke\verify_database_integration.py", line 808, in main
+    verify_migrations()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\reinvent\Desktop\work003\energy_recovery_agent\tests\smoke\verify_database_integration.py", line 51, in verify_migrations
+    assert [path.name[:3] for path in migration_paths] == [
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "001", "002", "003", "004", "005", "006", "007"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ]
+    ^
+AssertionError

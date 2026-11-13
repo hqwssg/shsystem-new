@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportDeptSubjectMapper">
+    <select id="selectByDeptId" resultType="com.ruoyi.carbon.report.domain.ReportDeptSubject">
+        select id, dept_id as deptId, subject_node_id as subjectNodeId,
+               energy_allocation as energyAllocation, enabled
+        from report_dept_subject
+        where dept_id = #{deptId}
+    </select>
+    <select id="selectDepartments" resultType="com.ruoyi.carbon.report.domain.ReportSubjectOption">
+        select d.dept_id as deptId, d.dept_name as deptName,
+               s.subject_node_id as subjectNodeId, n.name as subjectName,
+               s.energy_allocation as energyAllocation, s.enabled
+        from sys_dept d
+        left join report_dept_subject s on s.dept_id = d.dept_id
+        left join emission_node n on n.id = s.subject_node_id
+        where d.del_flag = '0' and d.status = '0'
+        <if test="deptId != null">and d.dept_id = #{deptId}</if>
+        ${params.dataScope}
+        order by d.order_num, d.dept_id
+    </select>
+    <select id="selectCompanies" resultType="com.ruoyi.carbon.report.domain.ReportSubjectOption">
+        select d.dept_id as deptId, d.dept_name as deptName,
+               s.subject_node_id as subjectNodeId, n.name as subjectName,
+               s.energy_allocation as energyAllocation, s.enabled
+        from sys_carbon_company c
+        inner join sys_dept d on d.dept_id = c.dept_id
+        left join report_dept_subject s on s.dept_id = d.dept_id
+        left join emission_node n on n.id = s.subject_node_id
+        where d.del_flag = '0' and d.status = '0'
+        <if test="deptId != null">and d.dept_id = #{deptId}</if>
+        ${params.dataScope}
+        order by d.order_num, d.dept_id
+    </select>
+    <select id="selectNodes" resultType="com.ruoyi.carbon.report.domain.ReportSubjectOption">
+        select n.id as subjectNodeId, n.name as subjectName,
+               t.id as templateId, t.name as templateName, t.dept_id as deptId
+        from emission_node n
+        inner join emission_template t on t.id = n.template_id
+        where n.type_id in (1, 2)
+        ${params.dataScope}
+        union
+        select n.id as subjectNodeId, n.name as subjectName,
+               null as templateId, '已配置主体' as templateName, s.dept_id as deptId
+        from report_dept_subject s
+        inner join emission_node n on n.id = s.subject_node_id
+        inner join sys_dept t on t.dept_id = s.dept_id
+        where n.type_id in (1, 2) and t.status = '0' and t.del_flag = '0'
+          and not exists (select 1 from emission_template old_template where old_template.id = n.template_id)
+        ${params.dataScope}
+        order by templateId, subjectNodeId
+    </select>
+    <insert id="upsert">
+        insert into report_dept_subject
+            (dept_id, subject_node_id, energy_allocation, enabled, create_by, create_time)
+        values (#{deptId}, #{subjectNodeId}, #{energyAllocation}, '1', #{createBy}, now())
+        on duplicate key update subject_node_id = values(subject_node_id),
+            energy_allocation = values(energy_allocation), enabled = '1',
+            update_by = #{updateBy}, update_time = now()
+    </insert>
+</mapper>

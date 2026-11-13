@@ -1,0 +1,292 @@
+{
+  "package": "algorithm-demo-data-init-20261113",
+  "projectCode": "algorithm_demo_20261113_all",
+  "projectId": "18066cfd-dfe7-56c2-8b3d-de51086f5dac",
+  "heavyVersions": [
+    {
+      "code": "demo_all_20261113",
+      "name": "全任务统一演示版（2026-11-13，非正式）",
+      "id": "7ffea20f-0f14-503a-8139-b2df205d4c50",
+      "fileCount": 43,
+      "sha256": "9d604e9ef9736f0711fa9276f8d0a4962e99b15c696688590897fb4abefaee06"
+    }
+  ],
+  "singleVersion": {
+    "id": "8c62d99f-5f02-5215-83aa-9da81d87cbc1",
+    "code": "demo_single_20261113",
+    "name": "全任务配套单列车版（2026-11-13，非正式）",
+    "sha256": "2e0a59f64d96abe3f8f6fc0ae5eef05bb0ea537e857f6448def404848e7a61e2"
+  },
+  "tables": {
+    "energy_project": 1,
+    "energy_project_version": 1,
+    "energy_dataset_file": 43,
+    "energy_storage_candidate_site": 1,
+    "energy_storage_technology": 1,
+    "energy_storage_site_technology_option": 1,
+    "energy_storage_planning_scenario": 1,
+    "energy_storage_planning_policy": 1,
+    "energy_station": 33,
+    "energy_route_segment": 1390,
+    "energy_train_type_parameter": 2,
+    "energy_power_arm": 76,
+    "energy_station_resource": 33,
+    "single_version": 1
+  },
+  "departmentBinding": "resolved from target active sys_user account; no local dept id",
+  "localSource": "November 12 cores; unified planning inputs plus capacity-matched replay; no tasks or results imported",
+  "planningPreset": {
+    "planningReady": true,
+    "planningIssues": [],
+    "planningPolicyOptions": [
+      {
+        "code": "synthetic_cost_robust_v1",
+        "label": "synthetic_cost_robust_v1"
+      }
+    ],
+    "scenarioSetOptions": [
+      {
+        "code": "synthetic_typical_days_v1",
+        "label": "synthetic_typical_days_v1"
+      }
+    ]
+  },
+  "noTasksOrResults": true,
+  "heavyTaskTypes": [
+    "storage_planning",
+    "timetable_audit",
+    "timetable_optimization",
+    "dispatch",
+    "rolling_rescheduling",
+    "joint_parameter_robustness"
+  ],
+  "singleTaskTypes": [
+    "simulation",
+    "comparison",
+    "validation",
+    "eco_driving"
+  ],
+  "historicalReplay": {
+    "supported": true,
+    "initialTotalKwh": 72.5,
+    "batteryCapacityKwh": 145.0
+  },
+  "compatibility": "Deploy November 12 code first; no old snapshots are overwritten",
+  "dataFiles": [
+    {
+      "path": "data/assumptions.json",
+      "bytes": 45737,
+      "sha256": "391fe3f167597d1c275693487b37485a5020a2e2f9f293538f36184440904b1b"
+    },
+    {
+      "path": "data/battery.json",
+      "bytes": 1104,
+      "sha256": "14abe775c7ff81b256d687411ee411e0950864fbf79cef7daf1d6540ce995cf5"
+    },
+    {
+      "path": "data/build_summary.json",
+      "bytes": 578,
+      "sha256": "267429dfec9b7eb3fd7a7b86dd140e7696e13a008c285fd07aa5dd892d706b3e"
+    },
+    {
+      "path": "data/curves.csv",
+      "bytes": 20683,
+      "sha256": "0b633733bc88c318ef6e1bea9aaf0e0a6f8c6f0854ca81661c2a291493476b7e"
+    },
+    {
+      "path": "data/DATASET_README.md",
+      "bytes": 4028,
+      "sha256": "15c599cbcbbd49bd4a2b864b5192fbcd404a2da9b9b3eb4d14127f2c3213a5bc"
+    },
+    {
+      "path": "data/energy_calibration_factors.json",
+      "bytes": 2775,
+      "sha256": "8c1f4c7a1a5f214f8e95c326963e11efb795aef73fd5f69a5782713dbb15c155"
+    },
+    {
+      "path": "data/energy_transfer_zones.csv",
+      "bytes": 637,
+      "sha256": "87438ad15225e42c068c43cced110869a12bdfaac7b6896376105ca78456571b"
+    },
+    {
+      "path": "data/gradients.csv",
+      "bytes": 33101,
+      "sha256": "ed4cc7815dce6d63dbd7a3ef1a4d621b085a0c6287b96fe3c824cbbf3c1c7392"
+    },
+    {
+      "path": "data/headway_constraints.csv",
+      "bytes": 283,
+      "sha256": "9263d140357c0f9b50944f7ec12ebcf4b2e5bb629e3e534b0e88fc11f956acb6"
+    },
+    {
+      "path": "data/line_speed_limits.csv",
+      "bytes": 582,
+      "sha256": "6c67599fed8eec45ef23d5d8063ac9a588398aa36c95724a8e75cc8ea64f650c"
+    },
+    {
+      "path": "data/locomotive_curves.json",
+      "bytes": 25673,
+      "sha256": "60474784c5404e33607ee282729b16bea4d070a03b1974930f43fcecec79326f"
+    },
+    {
+      "path": "data/locomotive_curves_README.md",
+      "bytes": 14497,
+      "sha256": "630f32c5653a82a8f3c016e6e981cf87aa96e92d9ffe5e3f111edbc7e15fc5a1"
+    },
+    {
+      "path": "data/operating_conditions.json",
+      "bytes": 546,
+      "sha256": "507bfe3cbc49e8f8540f833b13470d04f80c98aa9b26064b87f65f85f82e6dec"
+    },
+    {
+      "path": "data/pdf_station_master.csv",
+      "bytes": 3404,
+      "sha256": "d5345c71a2c2eb7b1767b2c5080d68ba8900ae552201d365d66f47a37413033f"
+    },
+    {
+      "path": "data/pdf_station_out_of_scope.csv",
+      "bytes": 2502,
+      "sha256": "81a53451ca38daaff5fc80ac5e0fa41b1f20db212c6d9ece759f7f3ca54b901b"
+    },
+    {
+      "path": "data/platform/historical_disturbance_replay.json",
+      "bytes": 2767,
+      "sha256": "fd586ff9c63edeada5d8cf81f843bbdc3f47887d38880e2724ec64bd401ef911"
+    },
+    {
+      "path": "data/platform/joint_parameter_ranges.json",
+      "bytes": 203,
+      "sha256": "c24f6a08b3631e5797356f72d812d21bf93d5341bc3ef545a4274cf1e7bc7672"
+    },
+    {
+      "path": "data/platform/timetable.xlsx",
+      "bytes": 10410,
+      "sha256": "a94bd8378b6c5b9341d071169707ae85f677068c5ff138da3727b3ca1525208f"
+    },
+    {
+      "path": "data/power_arm_intervals.csv",
+      "bytes": 53825,
+      "sha256": "613e7460199160dfa6b42710aab443ff38890efca6d33265e5b31563b7bb7220"
+    },
+    {
+      "path": "data/resource_config.json",
+      "bytes": 1704,
+      "sha256": "d3753e5cb487c19425357540b4f3ca3a5ac9904c220279f3749ea8164e4888b7"
+    },
+    {
+      "path": "data/route_metadata.json",
+      "bytes": 3292,
+      "sha256": "8b9ef5d73fddef15384bd32b4380f4925732798e74413f74437150e7b0006c52"
+    },
+    {
+      "path": "data/section_run_times.csv",
+      "bytes": 104029,
+      "sha256": "174f92a026ddaa0a710a19cf0895180177a3f0f1e857fa436f1f88f09a8c97b0"
+    },
+    {
+      "path": "data/section_run_times_2026.json",
+      "bytes": 4619,
+      "sha256": "3460b6b4c54780ff20705ce7b8027749aa1588a014594bf9b5295115408dcbb2"
+    },
+    {
+      "path": "data/segments.csv",
+      "bytes": 85241,
+      "sha256": "1cd13c0dc13bb824479433e63a130411af1ebe457dd0dbb5033661e5bd50cd72"
+    },
+    {
+      "path": "data/smart_meter_calibration_samples.csv",
+      "bytes": 275607,
+      "sha256": "d80dcf06b0d5efb369cda3993e97a4813be120d40fbc9b331b5d74d75bbaa411"
+    },
+    {
+      "path": "data/smart_meter_calibration_samples_summary.json",
+      "bytes": 953,
+      "sha256": "45a32dc5d676b5dd2fadc7c99244fd4db21234408e86187e396884adb5fc37c3"
+    },
+    {
+      "path": "data/smart_meter_catenary_voltage.csv",
+      "bytes": 372,
+      "sha256": "c0b6e0c3dd6b75b686b74de5c2e6a74b0db88a593978b6df74142c4d1aeb39be"
+    },
+    {
+      "path": "data/smart_meter_field_dictionary.csv",
+      "bytes": 1473,
+      "sha256": "dd9e89712a613e57206fd11c8b5e39d019ba437c5180bac4df590cddd5bb46c6"
+    },
+    {
+      "path": "data/smart_meter_interval_feedback.csv",
+      "bytes": 13275,
+      "sha256": "3380cebaf6dca2521a2f5c22101e7fb8833675e45713519d0d223d18ff98775b"
+    },
+    {
+      "path": "data/smart_meter_representative_interval_samples.csv",
+      "bytes": 52687,
+      "sha256": "3271cf54fbb0af254a9b2b289e3bf8c131b9a9172ef79412c973c00049b45d74"
+    },
+    {
+      "path": "data/station_dwell.csv",
+      "bytes": 450,
+      "sha256": "e796f893be72df7ff1eb4aa4ade413af89a5349bb4d4c750da7c3771f9c884b5"
+    },
+    {
+      "path": "data/station_operation_assignments.csv",
+      "bytes": 516,
+      "sha256": "d861af7b5db8cbc4a7682da2a7fce992961def3d6ea08ffee99381f9477f0825"
+    },
+    {
+      "path": "data/station_resources.csv",
+      "bytes": 706,
+      "sha256": "21ffd0863cb18479c8ab5a8a4733c16e0a545b5e2276fcc9beb7fef558fb9123"
+    },
+    {
+      "path": "data/stations.csv",
+      "bytes": 800,
+      "sha256": "f89e0180a6dd167007f52ece1d6cdd51778e56d3a9ba4ed32729baaf9b4cc50a"
+    },
+    {
+      "path": "data/storage_candidate_sites.csv",
+      "bytes": 407,
+      "sha256": "b34c856e2ed67aea2221e7ee67b95f079fbad185480d6069b57de896b1c086f7"
+    },
+    {
+      "path": "data/storage_planning_policy.json",
+      "bytes": 880,
+      "sha256": "a7fa5e8a840f05c21ac267adaef365a9dea68477e9b09e752c3e0987a50fddcd"
+    },
+    {
+      "path": "data/storage_planning_scenarios.json",
+      "bytes": 674,
+      "sha256": "6c01aa0bbc438db61e2f4b99feccfa9536ab3ba9a1e0d420309988b7662537b3"
+    },
+    {
+      "path": "data/storage_site_technology_options.csv",
+      "bytes": 227,
+      "sha256": "3a9cf61b2981ac0837e2f72779ad8c753118d0605ccd15c46e4f0599df6f8cc5"
+    },
+    {
+      "path": "data/storage_technologies.csv",
+      "bytes": 723,
+      "sha256": "53499dca6dc3fdcdfaa34224d10f535a8d1a862c2dc933a90db5cc1fe9803e96"
+    },
+    {
+      "path": "data/technical_operation_times.csv",
+      "bytes": 4801,
+      "sha256": "b3d2f8be31b21866a3993c123f686803be2295f9a9727f2b028ba421925badd3"
+    },
+    {
+      "path": "data/technical_operation_times_out_of_scope.csv",
+      "bytes": 1647,
+      "sha256": "87c87d629fc3b5dd2cd1005b1706c3ebd6643e0dd4c8108c979ba18a91228251"
+    },
+    {
+      "path": "data/train_formation_modes_2025.csv",
+      "bytes": 2449,
+      "sha256": "69fbff9a3d4a7bd68308abd28a72bd8b94563776eb6b35ffb888ed4de1cbb0af"
+    },
+    {
+      "path": "data/trains.csv",
+      "bytes": 1648,
+      "sha256": "e906aa7ae928d5687488692fd44730d9112f54360430499faf04f64e67e6e626"
+    }
+  ]
+}

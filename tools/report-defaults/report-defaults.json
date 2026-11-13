@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "scope": "Stable company report defaults and reviewed default images only; no annual measurements or results",
+  "companies": [
+    {
+      "company_key": "suning",
+      "company_name": "肃宁分公司",
+      "profile": {
+        "process_description": "依据铁路行业运行规范开展所辖线路的日常保养、检修，保障铁路持续稳定运行。",
+        "default_compiler": "",
+        "default_org_boundary": "",
+        "default_validator": "",
+        "default_equipment_json": [],
+        "company_overview": "国能朔黄铁路发展有限责任公司肃宁分公司成立于2002年1月1日，隶属于朔黄铁路发展有限责任公司，主要承担所辖铁路的行车组织和设备设施养护维修及管理任务。",
+        "default_workload_json": [],
+        "default_approver": "",
+        "default_chapter6_json": {},
+        "legal_name": "国能朔黄铁路发展有限责任公司肃宁分公司",
+        "default_authors": "",
+        "default_reviewer": "",
+        "business_description": "负责所辖铁路的行车组织，以及工务、电务、供电、生活等设备设施的养护维修及管理。",
+        "short_name": "肃宁分公司",
+        "default_exclusion_note": "",
+        "entity_code": "suning",
+        "carbon_department": "",
+        "default_accounting_method": "依据《陆上运输企业温室气体排放核算方法与报告指南（试行）》进行核算。",
+        "default_checker": "",
+        "header_template": "",
+        "default_activity_prose_json": {}
+      },
+      "images": [
+        {
+          "role": "cover_logo",
+          "filename": "cover_logo.png",
+          "mime_type": "image/png",
+          "path": "images/suning/cover_logo.png",
+          "size_bytes": 10016,
+          "sha256": "6b57e31ab615ce4a9bcf56807d7183a999594ff5a27c276688d3a727c45e3948"
+        },
+        {
+          "role": "office_location",
+          "filename": "office_location.jpeg",
+          "mime_type": "image/jpeg",
+          "path": "images/suning/office_location.jpeg",
+          "size_bytes": 220004,
+          "sha256": "26043204f3cbc9a22af12bb48d69cc3bd97cf98d6ed4cea2a7d788079c7da7ae"
+        }
+      ]
+    },
+    {
+      "company_key": "yuanping",
+      "company_name": "原平分公司",
+      "profile": {
+        "process_description": "依据铁路行业运行规范开展所辖线路的日常保养、检修，保障铁路持续稳定运行。",
+        "default_compiler": "",
+        "default_org_boundary": "",
+        "default_validator": "",
+        "default_equipment_json": [],
+        "company_overview": "国能朔黄铁路发展有限责任公司原平分公司成立于2002年1月1日，是国能朔黄铁路发展有限责任公司下属的分公司，承担所辖电气化铁路的运营维护、运输组织和后勤保障管理工作。",
+        "default_workload_json": [],
+        "default_approver": "",
+        "default_chapter6_json": {},
+        "legal_name": "国能朔黄铁路发展有限责任公司原平分公司",
+        "default_authors": "",
+        "default_reviewer": "",
+        "business_description": "负责所辖电气化铁路的运营维护、运输组织和后勤保障管理。",
+        "short_name": "原平分公司",
+        "default_exclusion_note": "",
+        "entity_code": "yuanping",
+        "carbon_department": "",
+        "default_accounting_method": "依据《陆上运输企业温室气体排放核算方法与报告指南（试行）》进行核算。",
+        "default_checker": "",
+        "header_template": "",
+        "default_activity_prose_json": {}
+      },
+      "images": [
+        {
+          "role": "cover_logo",
+          "filename": "cover_logo.png",
+          "mime_type": "image/png",
+          "path": "images/yuanping/cover_logo.png",
+          "size_bytes": 10016,
+          "sha256": "6b57e31ab615ce4a9bcf56807d7183a999594ff5a27c276688d3a727c45e3948"
+        },
+        {
+          "role": "office_location",
+          "filename": "office_location.jpeg",
+          "mime_type": "image/jpeg",
+          "path": "images/yuanping/office_location.jpeg",
+          "size_bytes": 173620,
+          "sha256": "6fbb354d7f4c2f8ba1019d2e507f99a7b656e43829cf8125d1dcf49aefff25db"
+        }
+      ]
+    },
+    {
+      "company_key": "jiliang",
+      "company_name": "机辆分公司",
+      "profile": {
+        "process_description": "承担铁路运输任务，开展机车运用、维修管理以及联运单位机车运用的综合管理。",
+        "default_compiler": "",
+        "default_org_boundary": "",
+        "default_validator": "",
+        "default_equipment_json": [],
+        "company_overview": "国能朔黄铁路发展有限责任公司机辆分公司成立于2002年，隶属国能朔黄铁路公司，主要承担朔黄铁路运输任务，负责直流机车、交流机车、内燃机车的运用、维修管理以及联运单位机车运用的综合管理。",
+        "default_workload_json": [],
+        "default_approver": "",
+        "default_chapter6_json": {},
+        "legal_name": "国能朔黄铁路发展有限责任公司机辆分公司",
+        "default_authors": "",
+        "default_reviewer": "",
+        "business_description": "承担铁路运输任务，负责直流机车、交流机车、内燃机车的运用、维修管理以及联运单位机车运用的综合管理。",
+        "short_name": "机辆分公司",
+        "default_exclusion_note": "",
+        "entity_code": "jiliang",
+        "carbon_department": "",
+        "default_accounting_method": "依据《陆上运输企业温室气体排放核算方法与报告指南（试行）》进行核算。",
+        "default_checker": "",
+        "header_template": "",
+        "default_activity_prose_json": {}
+      },
+      "images": [
+        {
+          "role": "cover_logo",
+          "filename": "cover_logo.png",
+          "mime_type": "image/png",
+          "path": "images/jiliang/cover_logo.png",
+          "size_bytes": 10016,
+          "sha256": "6b57e31ab615ce4a9bcf56807d7183a999594ff5a27c276688d3a727c45e3948"
+        }
+      ]
+    }
+  ]
+}

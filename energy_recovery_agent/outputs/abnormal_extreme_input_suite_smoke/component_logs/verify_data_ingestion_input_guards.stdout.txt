@@ -1,0 +1,1 @@
+data ingestion strict numeric and boolean guards passed

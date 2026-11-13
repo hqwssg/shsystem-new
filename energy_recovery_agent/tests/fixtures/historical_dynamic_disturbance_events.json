@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.2",
+  "replay_code": "dynamic-events-two-cycle-001",
+  "data_status": "synthetic",
+  "source_system": "dynamic-event-regression",
+  "source_note": "验证取消、加车、资源封锁和供电臂动态限值进入多轮滚动求解。",
+  "execute_window_s": 3300,
+  "cycles": [
+    {
+      "cycle_index": 0,
+      "current_time_s": 0,
+      "observed_at": "2026-01-01T00:00:00+08:00",
+      "source_record_ids": ["dynamic-record-0001"],
+      "observed_heavy_delay_s": 0,
+      "observed_empty_delay_s": 0,
+      "events": [
+        {
+          "event_id": "dynamic-cancel-0001",
+          "event_type": "train_cancelled",
+          "entity_id": "E001",
+          "payload": {"reason": "合成取消回归"}
+        },
+        {
+          "event_id": "dynamic-add-0001",
+          "event_type": "train_added",
+          "entity_id": "E003",
+          "payload": {"train_type": "Empty", "departure_s": 4000, "reason": "合成加车回归"}
+        },
+        {
+          "event_id": "dynamic-resource-0001",
+          "event_type": "resource_unavailable",
+          "entity_id": "throat:2",
+          "payload": {"resource_type": "throat", "start_time_s": 50000, "end_time_s": 51000, "reason": "远期封锁传播回归"}
+        },
+        {
+          "event_id": "dynamic-power-0001",
+          "event_type": "power_arm_limit",
+          "entity_id": "朔黄线:上行:START-PA-048",
+          "payload": {"max_traction_supply_kw": 500000, "start_time_s": 50000, "end_time_s": 51000, "reason": "远期限功率传播回归"}
+        }
+      ]
+    },
+    {
+      "cycle_index": 1,
+      "current_time_s": 3300,
+      "observed_at": "2026-01-01T00:55:00+08:00",
+      "source_record_ids": ["dynamic-record-0002"],
+      "observed_heavy_delay_s": 0,
+      "observed_empty_delay_s": 0,
+      "events": []
+    }
+  ]
+}

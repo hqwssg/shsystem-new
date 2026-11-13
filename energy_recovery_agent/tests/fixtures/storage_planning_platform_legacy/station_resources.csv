@@ -1,0 +1,34 @@
+﻿station_name,track_capacity,throat_capacity,is_terminal
+Shenchi South,4,1,true
+Virtual Station 02,2,1,false
+Virtual Station 03,2,1,false
+Virtual Station 04,2,1,false
+Virtual Station 05,2,1,false
+Virtual Station 06,2,1,false
+Virtual Station 07,2,1,false
+Yinshanzhuang,2,1,false
+Virtual Station 08,2,1,false
+Dongye,2,1,false
+Virtual Station 09,2,1,false
+Diliudeng,2,1,false
+Virtual Station 10,2,1,false
+Virtual Station 11,2,1,false
+Xiaojue,2,1,false
+Virtual Station 12,2,1,false
+Virtual Station 13,2,1,false
+Virtual Station 14,2,1,false
+Virtual Station 15,2,1,false
+Virtual Station 16,2,1,false
+Virtual Station 17,2,1,false
+Virtual Station 18,2,1,false
+Virtual Station 19,2,1,false
+Virtual Station 20,2,1,false
+Suning North,2,1,false
+Virtual Station 21,2,1,false
+Virtual Station 22,2,1,false
+Virtual Station 23,2,1,false
+Virtual Station 24,2,1,false
+Virtual Station 25,2,1,false
+Virtual Station 26,2,1,false
+Virtual Station 27,2,1,false
+Huanghua Port,4,1,true

@@ -1,0 +1,21 @@
+﻿line,station_id,station_name,chainage,position_km,station_type,track_count_including_mainline,source_pages,notes
+黄万线,HW001,黄骅南,K0+00,0.000,区段站,21,11,Out of project scope; project only models 朔黄线.
+黄万线,HW002,黄骅东,K9+806,9.806,中间站,3,11,Out of project scope; project only models 朔黄线.
+黄万线,HW003,羊三木,K21+456,21.456,中间站,2,11,Out of project scope; project only models 朔黄线.
+黄万线,HW004,窦庄子,K32+206,32.206,中间站,2,11,Out of project scope; project only models 朔黄线.
+黄万线,HW005,郭庄子,K41+506,41.506,中间站（卸车站）,4,11,Out of project scope; project only models 朔黄线.
+黄万线,HW006,北港农场,K51+919,51.919,中间站,2,11,Out of project scope; project only models 朔黄线.
+黄万线,HW007,大港水库,K61+269,61.269,中间站,3,11,Out of project scope; project only models 朔黄线.
+黄万线,HW008,神港,K79+300,79.300,区段站（装卸车站）,28,11,Out of project scope; PDF also notes extended mileage K113+377.
+黄大线,HD001,黄骅南,K538+614,538.614,区段站,21,11,Out of project scope; shown with 朔黄线 mileage in 黄大线 table.
+黄大线,HD002,贾象,K9+219,9.219,中间站,4,11,Out of project scope; project only models 朔黄线.
+黄大线,HD003,海兴南,K32+462,32.462,中间站,3,11,Out of project scope; project only models 朔黄线.
+黄大线,HD004,碣石山,K59+623,59.623,中间站,3,11,Out of project scope; project only models 朔黄线.
+黄大线,HD005,无棣北,K67+623,67.623,中间站,3,11,Out of project scope; project only models 朔黄线.
+黄大线,HD006,沾化西,K90+423,90.423,中间站,3,11,Out of project scope; project only models 朔黄线.
+黄大线,HD007,滨城,K111+905,111.905,中间站（接轨站）,4,11,Out of project scope; project only models 朔黄线.
+黄大线,HD008,利津,K128+009,128.009,中间站（接轨站）,6,11,Out of project scope; project only models 朔黄线.
+黄大线,HD009,东营西,K159+570,159.570,区段站,10,11,Out of project scope; project only models 朔黄线.
+黄大线,HD010,丁庄,K174+371,174.371,中间站,3,12,Out of project scope; project only models 朔黄线.
+黄大线,HD011,羊口,K196+585,196.585,中间站（接轨站）,5,12,Out of project scope; project only models 朔黄线.
+朔黄线,SH034,黄骅港港口作业区,K589+196,589.196,编组站（装卸车站）,75,11,Out of current mainline model scope after station cleanup; active terminal is 黄骅港 K583+003.

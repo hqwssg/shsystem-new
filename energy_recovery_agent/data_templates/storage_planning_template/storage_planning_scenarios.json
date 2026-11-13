@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "scenario_set_code": "planning_scenario_set_replace_me",
+  "scenarios": [
+    {
+      "scenario_code": "planning_normal",
+      "scenario_name": "待确认典型运行场景",
+      "weight": 1.0,
+      "core_for_feasibility": true,
+      "schedule_template": {
+        "heavy_count": 3,
+        "empty_count": 3,
+        "heavy_headway_s": 3300,
+        "empty_headway_s": 2700,
+        "heavy_empty_phase_s": 2600
+      },
+      "grid_price_per_kwh": 0,
+      "demand_charge_per_kw_year": 0,
+      "wasted_energy_penalty_per_kwh": 0,
+      "parameter_overrides": {},
+      "data_status": "planning_placeholder",
+      "source_note": "运行图、场景权重和价格均待正式资料替换"
+    }
+  ]
+}
+

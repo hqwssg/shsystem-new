@@ -1,0 +1,25 @@
+{
+  "source_samples": "data\\real_shuohuang\\smart_meter_calibration_samples.csv",
+  "output_csv": "outputs\\energy_calibration_mainline_refined\\03_calibration_samples\\smart_meter_calibration_samples.csv",
+  "selection_policy": "mainline_mapped_nonzero_traction_from_ab_aggregation",
+  "sample_count": 532,
+  "filter_counts": {
+    "excluded_zero_distance": 248,
+    "aggregated_kept": 519,
+    "excluded_unmapped": 386,
+    "single_meter_kept": 13,
+    "excluded_status": 6,
+    "selected": 532
+  },
+  "realtime_trainid_counts": {
+    "58A+58B": 519,
+    "58A": 5,
+    "58B": 8
+  },
+  "calibration_status_counts": {
+    "usable_high_confidence": 521,
+    "usable_with_boundary_gap_review": 11
+  },
+  "energy_unit_status": "confirmed_kwh_from_provider_reply",
+  "note": "Filtered to stations mapped onto current mainline stations.csv with nonzero distance and traction. Still experimental, not final engineering calibration."
+}

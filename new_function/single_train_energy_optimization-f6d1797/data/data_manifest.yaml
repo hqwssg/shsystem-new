@@ -1,0 +1,493 @@
+# 2026-11-06：本清单保留接口与历史导航；规范数据与真实/虚拟判定见
+# ../shared_data/catalog.json 和 ../shared_data/DATA_POLICY.md（相对项目根）。
+# data/single_train 与 shared/ 为生成运行视图，禁止直接改值。
+# ============================================================
+# 单列车再生制动能量回收项目 —— 数据清单 (data_manifest)
+#
+# 状态取值（严格按项目约定，不猜测）：
+#   official     正式文件/合同口径提供
+#   real         真实测量或真实资料整理
+#   derived      由 real/official 数据按明确规则推导
+#   assumed      工程假设（有依据但非实测）
+#   synthetic    虚拟生成数据
+#   placeholder  纯占位，仅用于打通接口
+#   unknown      来源不明确 —— 不得猜，保留 unknown
+#
+# 字段：name / path / source / status / unit / version / last_updated / notes
+#
+# 校验方式：python tools/check_data_manifest.py
+# ============================================================
+
+schema_version: "1.0"
+generated_by: "manual_curated"
+generated_at: "2026-09-24"
+project: "single_train_energy_optimization"
+shared_data_root: "../heavy_empty_train_coordination/data/real_shuohuang"
+shared_data_owner: "heavy_empty_train_coordination"
+shared_data_read_only: true
+
+# ============================================================
+# 一、共享铁路基础数据（只读引用，不在本项目复制）
+# ============================================================
+shared:
+
+  - name: stations
+    path: "shared/stations.csv"
+    source: "heavy_empty_train_coordination/data/real_shuohuang/stations.csv（线路图1/2/3 + PDF 站表）"
+    status: real
+    unit: "km（position_km）"
+    version: "real_shuohuang@2026-07-25"
+    last_updated: "2026-07-25"
+    notes: "33 行，仅含朔黄主线真实站点，终点黄骅港 K583+003。本项目用于定位制动区段起讫。"
+
+  - name: segments
+    path: "shared/segments.csv"
+    source: "heavy_empty_train_coordination/data/real_shuohuang/segments.csv"
+    status: derived
+    unit: "km / ‰ / m / km/h"
+    version: "real_shuohuang@2026-11-04（v2.0）"
+    last_updated: "2026-11-04"
+    notes: "1390 行，由真实坡度、平曲线、限速合成。本项目按里程查询坡度/曲线/限速，构造制动工况输入。v1.2（问题 29）：三个字段的**消费点**此前不一致——坡度与曲线半径进入动力学（`gradient_resistance_n` / `curve_resistance_n`），限速却只被透传到 `BrakingInput.speed_limit_mps` 而**无任何消费点**，越限不报错；现由 `simulation/profiles.py::_check_speed_limit_respected` 在剖面构造处逐点校验（全局限速 + 逐样本限速两路），越限直接报错。官方配置下实测未越限（族 R 速度 29.33~30.00 km/h、限速 75~120 km/h、越限 0/10001 步），故该修复对交付数字零影响。v2.0（2026-11-05）：共享 segments.csv 的限速改为 75/80 km/h，族 R 剖面随之重算，历史读数作废。"
+
+  - name: gradients
+    path: "shared/gradients.csv"
+    source: "shuohuang_data/坡度表.xlsx -> gradients.csv"
+    status: real
+    unit: "‰（gradient_per_mille）"
+    version: "real_shuohuang@2026-09-22"
+    last_updated: "2026-09-22"
+    notes: "728 行。长大下坡区段识别（再生制动潜力区）依赖本表。"
+
+  - name: curves
+    path: "shared/curves.csv"
+    source: "shuohuang_data/平曲线表.xlsx -> curves.csv"
+    status: real
+    unit: "m（radius_m）"
+    version: "real_shuohuang@2026-09-22"
+    last_updated: "2026-09-22"
+    notes: "331 行。曲线附加阻力按 600/R 折算等效坡度。"
+
+  - name: trains
+    path: "shared/trains.csv"
+    source: "PDF 编组资料 + 工程虚拟预设"
+    status: mixed
+    unit: "t / kN / - / km"
+    version: "real_shuohuang@2026-11-04（v2.0）"
+    last_updated: "2026-11-04"
+    notes: >
+      仅 2 行（Heavy / Empty）。mass_tons 来自真实编组资料（real）；
+      max_traction_kN / max_brake_kN / davis_a,b,c / max_power_kW 文件自述为工程虚拟预设（assumed）。
+      重要：davis 系数基准已查明（2026-09-25，由本项目读
+      heavy_empty_train_coordination/train_simulator.py::calculate_forces() 得出，
+      属"读代码查明"，尚非重空协同项目的书面确认）：
+          rb_kN = (davis_a + davis_b * v[m/s]) * rolling_multiplier
+                  + davis_c * v[m/s]^2 * aerodynamic_multiplier
+      即「绝对 kN + 速度用 m/s + 二次项作用在 v² + 公式中无质量项」，
+      两个环境乘子默认 1.0（无量纲天气因子）。
+      这与本项目 basis="per_kN_speed_kmh" 的口径不可直接互换：
+          w0[N/kN] = a + b * v[km/h] + c * v[km/h]^2 ;  F0[N] = w0/1000 * m[kg] * g
+      量级差异巨大：Heavy 在 72 km/h 下，本项目口径 405.5 kN，重空口径 11.12 kN（相差 36.5 倍）。
+      本项目仍不复用该组系数，改用 data/single_train/train_parameters.json 中独立标定的 assumed 值；
+      待重空协同项目书面确认基准（尤其是"是否漏了质量项"）后，才考虑改为共享同一组系数。
+      详见 docs/data_sharing_boundary.md §4.1。
+      v2.0（2026-11-04）：新增 locomotive_type / locomotive_count / freight_load_state 三列，
+      mass_note 写明「21600 t = 216 辆 × 100 t，经智能电表 5869 趟核对，不含机车」，
+      max_power_kW 定为单机持续功率 14400（乘台数使用）。mass_tons 数值未变（21600 / 4320），
+      但语义从「列车总重」收紧为「车辆总重」——整备质量改在装配期叠加机车，
+      因此本项目的 22100 t 由 `consist_mass_kg()` 计算，不再回写本文件。
+      v2.1（2026-11-07）：新增 `locomotive_consist` 列 = `SHENHUA_12:1|SHENHUA_8:1`，
+      是**整列编组的权威表示**（两万吨 = 12 轴 + 8 轴两台，依据见 §四）。
+      `locomotive_type` / `locomotive_count` 退化为「首型及其台数」，供未适配 consist 的
+      消费方使用；`locomotive_count` 因此**仍是 1**，不是整列台数——填 2 会按
+      `2 × 300 t / 2 × 14 400 kW` 算成 600 t / 28 800 kW，全错。
+
+  - name: locomotive_curves
+    path: "shared/locomotive_curves.json"
+    source: "TB/T 1407.1-2018《列车牵引计算》扫描件人工读点（表 10 / 附录 B / 附录 L），由 heavy_empty_train_coordination 整理"
+    status: derived
+    unit: "kN / km/h / A / N/kN / t"
+    version: "real_shuohuang@2026-11-04（schema 2.0）"
+    last_updated: "2026-11-04"
+    notes: >
+      本模块的机车侧唯一数据源，`SHARED_PARSE_FILES` 必需文件之一。提供：
+      `SHENHUA_12` 计算重量 300 t、电制动特性 B_d(v)（10-20 km/h 峰值 691.5 kN）、
+      再生发电电流 I_z(v)、机车阻力系数、货车阻力系数、制动黏着系数公式、多机折减系数；
+      `SHENHUA_8`（8 轴补机，200 t / 9 600 kW / 峰值 461.0 kN）为两万吨 1+1 编组的第二台，
+      **状态 derived 且无 I_z 电流表**（沿用 HXD1_25t 平台）。
+      等级 derived：神华号 12 轴曲线按轴数比 12/8 由 HXD₁（8 轴）外推，取点误差 ±1%（表格值）/ ±3%（曲线值），
+      待厂家实测曲线替换；8 轴条目同样待替换。
+      消费点：`ElectricalBrakeCurve.force_limit_n`、`combine_regen_curves`、
+      `TrainBrakingProfile.with_locomotives`、`consist_mass_kg` / `power_cap_w`。
+      **编组口径（2026-11-07 定）**：两万吨 = 12 轴 + 8 轴两台，整备质量 22 100 t、
+      轮周功率上限 24 000 kW、电制动峰值 1 152.5 kN（逐型求和，不是首型 × 2）；
+      此前「1 台、21 900 t / 14 400 kW / 691.5 kN」的读数**全部作废**。
+      **牵引网电压口径（2026-11-07 更新）**：式(72) 交叉校核取 `regen_energy_formula.U_w_kV = 27.42`
+      （5 台车 569,436 条 `wy` 实测合并中位，`U_w_data_status = derived_from_real`；
+      此前 27.2 只用了 SS4 两台）。除 `U_w` 外不引入第二套网压口径。
+      已知残留：`I_z(v)` 表原按 25 kV 绘制，改 27.42 kV 后 `Q_z ∝ U_w` 上浮，使「标准表隐含效率」
+      达到 1.02–1.03（略大于 1）——按此口径记录为已知偏差，不作为待改项；若甲方后续给出该表的绘制网压，
+      只需改 `U_w_kV` 一处并重跑。
+      混编后式(72) 的 `Q_z` 退化为**下限**：8 轴补机没有 I_z 表，合成电流只含 12 轴。
+
+  - name: power_arm_intervals
+    path: "shared/power_arm_intervals.csv"
+    source: "shuohuang_data/供电臂连续区间表.xlsx -> power_arm_intervals.csv"
+    status: derived
+    unit: "km / kW"
+    version: "real_shuohuang@2026-09-22"
+    last_updated: "2026-09-22"
+    notes: >
+      76 行。boundary 由已复核电分相中心公里标生成（inferred_from_verified_boundaries），
+      但 max_traction_supply_kw / max_regen_absorption_kw / max_grid_feedback_kw 为
+      default_large_non_binding_until_official_limits（未获得供电臂电气能力资料前的大值默认）。
+      本项目只在“接入边界”意义上使用，不把它当作已确认的电气能力上限。
+
+  - name: route_metadata
+    path: "shared/route_metadata.json"
+    source: "heavy_empty_train_coordination/data/real_shuohuang/route_metadata.json"
+    status: real
+    unit: "-"
+    version: "real_shuohuang@2026-11-04（v2.0）"
+    last_updated: "2026-11-04"
+    notes: "线路总长 583.003 km；限速按《列车运行图及技术资料》改写为西段 178 km / 75 km/h、东段 405 km / 80 km/h（segments.csv 实测分布：75 有 469 段、80 有 921 段），含 source_metadata 与 explicit_assumptions。v2.0（2026-11-05）：限速由 120 降为 75/80，族 R 全部历史结果作废。"
+
+  - name: operating_conditions
+    path: "shared/operating_conditions.json"
+    source: "heavy_empty_train_coordination/data/real_shuohuang/operating_conditions.json"
+    status: real
+    unit: "-"
+    version: "real_shuohuang@2026-06-20"
+    last_updated: "2026-06-20"
+    notes: "黏着系数 0.28、牵引黏着安全系数 0.85、制动黏着安全系数 0.65；含 PDF 限速区间。weather_conditions 为空。"
+
+  - name: battery
+    path: "shared/battery.json"
+    source: "shuohuang_data/5.储能系统参数.doc -> battery.json"
+    status: real
+    unit: "kWh / - / 元/kWh / kW"
+    version: "real_shuohuang@2026-09-22"
+    last_updated: "2026-09-22"
+    notes: >
+      capacity_kwh=145（飞轮45+钛酸锂100）、round_trip_efficiency=0.9、max_charge_power_kW=2000 为 provided；
+      max_discharge_power_kW=0 为 missing_conservative_zero。本项目以 derived 方式派生出 charge/discharge 效率。
+
+  - name: energy_transfer_zones
+    path: "shared/energy_transfer_zones.csv"
+    source: "shuohuang_data/6.柔性供电能量协同区间.doc -> energy_transfer_zones.csv"
+    status: real
+    unit: "km / kW / -"
+    version: "real_shuohuang@2026-09-22"
+    last_updated: "2026-09-22"
+    notes: "K108-K219 已实施（进入运行基线），K16-K139 规划；最大传输功率 12 MW、效率 0.95。本项目阶段 1 不参与控制，仅登记。"
+
+  - name: headway_constraints
+    path: "shared/headway_constraints.csv"
+    source: "heavy_empty_train_coordination/data/real_shuohuang/headway_constraints.csv"
+    status: real
+    unit: "s"
+    version: "real_shuohuang@2026-06-20"
+    last_updated: "2026-06-20"
+    notes: "属于重空调度约束，本项目不使用（登记以明确边界）。"
+
+  - name: technical_operation_times
+    path: "shared/technical_operation_times.csv"
+    source: "heavy_empty_train_coordination/data/real_shuohuang/technical_operation_times.csv"
+    status: real
+    unit: "s"
+    version: "real_shuohuang@2026-07-25"
+    last_updated: "2026-07-25"
+    notes: "站场作业时分，属于调度层，本项目不使用（登记以明确边界）。"
+
+  - name: train_formation_modes_2025
+    path: "shared/train_formation_modes_2025.csv"
+    source: "shuohuang_data/2025朔黄铁路编组模式.docx"
+    status: real
+    unit: "-"
+    version: "real_shuohuang@2026-09-22"
+    last_updated: "2026-09-22"
+    notes: "编组模式目录，本项目仅用于校验列车质量区间。"
+
+  - name: section_run_times
+    path: "shared/section_run_times.csv"
+    source: "shuohuang_data/列车运行图及技术资料.pdf.pdf 第 22–25 页（（四）列车区间运行时分及起停附加时分）"
+    status: real
+    unit: "min（minutes）/ km（distance_km）"
+    version: "real_shuohuang@2026-11-07"
+    last_updated: "2026-11-07"
+    notes: "1153 行长表 / 54 区间：朔黄线 34（含港口Ⅰ/Ⅲ场）、黄万线 9、黄大线 11。通通时分保留原表全部分档（3万吨/2万吨/万吨普货/通勤），起停附加单列 quantity；class_slots 记原表槽位。朔黄线区间公里与 stations.csv 站间距逐条互校 32/32 通过（最大偏差 0.50 km），终点由里程轴与站序两条独立路径互证。黄万线万家码头→东大沽（34.6 km）原件通时分为空，如实保留。提取脚本 tools/extract_section_run_times.py。"
+
+  - name: smart_meter_interval_feedback
+    path: "shared/smart_meter_interval_feedback.csv"
+    source: "shuohuang_data/智能电表数据带说明/nhtj_jkfile_station_202607021731.csv"
+    status: real
+    unit: "kWh/km（regen_kwh_per_km_*）/ min（pure_run_time_min_p50）"
+    version: "real_shuohuang@2026-11-07"
+    last_updated: "2026-11-07"
+    notes: "56.07 万条「每趟每区间」台账聚合为 192 行（站对 × 重量桶）。再生强度 = use_fkdn/zxgl；剔除里程非正 3.91 万行、强度 >60 kWh/km 的 1.73 万行（表读数跨零/换表）。≥2 万吨中位 22.40 kWh/km，长下坡区间 44–55。a/b/c 三表是一台 12 轴机车的三节，不是机车台数。仅作区间级量级参照，不与族 R 制动窗口直接相减。提取脚本 tools/extract_smart_meter_evidence.py。"
+
+  - name: smart_meter_catenary_voltage
+    path: "shared/smart_meter_catenary_voltage.csv"
+    source: "shuohuang_data/智能电表数据带说明/point_ammeter_data_info_2010.csv + SS4-151.xlsx + SS4-58.xlsx"
+    status: real
+    unit: "V（*_v）/ 条（samples）"
+    version: "real_shuohuang@2026-11-07"
+    last_updated: "2026-11-07"
+    notes: "5 台车逐时刻 wy（网压）分位数，仅保留 >10 kV 有效样本共 569,436 条；合并中位 27,420 V，即式(72) 的 U_w（已 promote 到 shared.locomotive_curves）。"
+
+# ============================================================
+# 二、本项目专用参数（读写）
+# ============================================================
+single_train:
+
+  - name: train_parameters
+    path: "data/single_train/train_parameters.json"
+    source: "本项目维护；整备质量与机车曲线由 shared 导出，阻力系数为 assumed"
+    status: derived
+    unit: "SI（kg / m / s / N / ‰）"
+    version: "v2.0"
+    last_updated: "2026-11-05"
+    notes: >
+      v2.0（2026-11-05 共享数据同步）：整备质量由 21600 t 改为 21900 t —— trains.csv 的
+      mass_tons 语义固定为**车辆总重**（216 辆 × 100 t，经智能电表 5869 趟核对，不含机车），
+      机车按 1 台 × 神华号 12 轴 300 t 另加；装配时由 consist_mass_kg() 从共享数据重算并校验镜像值，
+      幂等标记 vehicle_mass_kg 保证重复叠加不会重复加。同时新增 locomotive_type / locomotive_count /
+      electrical_level 三个口径字段：max_regen_force_n 由 6200 kN（全列制动总量，误用）改为单台曲线峰值
+      691.5 kN，按台数与投入级位 0.48 折算到全列——旧口径把可回收电量高估约一个数量级。
+      assumed 字段：basic_resistance、regen_fraction_cap；max_brake_force_n 取自 trains.csv 的
+      max_brake_kN = 6200 kN（全列空气 + 电制动总量，只约束总制动力，不作再生能力）。
+
+  - name: motor_parameters
+    path: "data/single_train/motor_parameters.json"
+    source: "本项目维护；功率上限由 shared trains.csv 导出，其余为 placeholder/assumed"
+    status: placeholder
+    unit: "SI（W / N / m/s / V）"
+    version: "v2.0"
+    last_updated: "2026-11-05"
+    notes: "v2.0（2026-11-05）：max_regen_power_w 28800 kW → 14400 kW（trains.csv 的 max_power_kW 是**单机**持续功率，× 台数得全列上限）；max_regen_force_n 6200 kN → 691.5 kN（单台机车曲线峰值，装配时按台数折算）。功率上限的唯一来源是共享数据，本文件只是镜像，装配时不一致直接报错。无实测牵引/制动特性曲线。dc_link_voltage_window 为纯占位。v1.1（问题 26）：regen_efficiency.peak_load_ratio 由 0.75 改为 1.0——该字段此前被声明并被读取却从未进入 efficiency() 公式（死参数），修复后负载率归一化到峰值负载点，取 1.0 时曲线与历史文档口径逐位一致（交付能量数字零影响）；待实测效率云图到位后按云图峰值点回填。"
+
+  - name: dc_dc_parameters
+    path: "data/single_train/dc_dc_parameters.json"
+    source: "本项目维护；duty_limit 来自技术方案（official），其余为 placeholder/assumed"
+    status: placeholder
+    unit: "SI（H / F / Ω / Hz / W / V）"
+    version: "v1.3"
+    last_updated: "2026-11-05"
+    notes: >
+      电感/电容/开关频率均为占位值，未经任何硬件资料确认。duty_limit.u0_max=0.9 来自技术方案 4.2.1.3。
+      **新依赖（2026-09-25，随问题 18 落地引入）**：闭环的『控制通道增益先验』
+      B_target = [[(1-d2)·v_in·dt²/(2·L·C_out), −i_L·dt/C_out], [v_in·dt/L, v_out·dt/L]]
+      由本文件的 inductance_h 与 output_capacitance_f 解析给出，即**控制增益现在挂在两个占位值上**
+      （此前 B 由 EKF/UKF 从数据学出，不直接依赖硬件参数）。开关频率不进入 B_target。
+      实测（族 7，dt=4e-4，tools/probe_gain_prior_placeholder_sensitivity.py）：结构稳健
+      （B_target 按解析式精确缩放，闭环全部留在物理包络内，先验残差恒定 2.16e-16）；
+      但回收能量对占位值敏感（C_out×0.5 → +62.0%，L×2.0 → +29.8%），
+      故『回收能量』的具体数字在硬件资料到位前不可作为工程结论。
+      已固化为回归测试（tests/test_control_channel.py 缩放律 + tests/test_validation.py 包络）。
+      **消费状态变更（2026-09-26，随问题 32 落地）**：本文件的 power_rating_w（v2.0 起为 14400000.0 W，
+      由 shared trains.csv 的 max_power_kW × 机车台数导出；旧值 28800 kW 是「2 台 × 14.4 MW」的口径）
+      （field_data_status = assumed）此前**被读入却全仓无消费点**——只在 DCConverterParameters.__post_init__
+      被校验为正数、在 from_parameters 被读出，没有任何计算使用它，导致『变流器是否越额定功率』
+      在代码里无法判定。现已补三层消费点：① 判定 DCConverterStepResult.power_limited_by_rating
+      （修复前该标志误用 max_input_current_a，与 input_current_over_limit 逐位相同）；
+      ② 统计 run() 备注『越额定拍数 = k / n（只报告不截断）』；
+      ③ 指标 converter_over_rating_ratio（越限拍占比，经 build_scenario_metrics(extra_ratios=…)
+      并入 ScenarioMetrics.extra），并由 SimulationResult.converter_limits 透传限值。
+      实测（官方套件配置 dt=2e-4，逐步记录 record_stride=1，tools/probe_converter_rating_audit.py --full）：
+      v2.0 口径下重测（dt=2e-4、record_stride=1、主算法）：max|p_in| = 2.303 MW = 额定的 15.99%
+      （s1_flat_braking / s4_power_step）、s2_long_downhill 1.041 MW（7.23%）；max|i_src| = 1535.5 A
+      = max_input_current_a（当时 24000 A）的 6.40%。**全部官方场景的越额定拍 / 越限拍都是 0**。
+      ⚠️ power_rating_w 为 assumed（由共享单机持续功率导出），硬件资料到位后需替换。
+      v1.3（2026-11-05）：max_input_current_a 由 24000 A（28.8 MW 口径遗留，1500 V 下等于 36 MW）
+      改为 9600 A = 14.4 MW ÷ 1500 V，等级 assumed → derived；同时补齐
+      input_capacitance_f / output_capacitance_f / dc_bus_source / input_voltage_window /
+      output_voltage_window / inductor_resistance_ohm 等 13 个此前**没有等级标签**的字段，
+      依赖登记键由匹配不到任何字段的组键 capacitance_f 改为真实字段名 output_capacitance_f
+      （B_target 只用 C_out，母线侧 C_in 不进入解析式）。改后 dt=1e-4 全基线实测
+      max|i_src| = 3388 A（35% 限值）、max|p_in| = 5.12 MW（额定 35.6%），越限仍为 0，能量读数逐位不变。
+
+  - name: storage_parameters
+    path: "data/single_train/storage_parameters.json"
+    source: "由 shared/battery.json 派生 + 工程预设"
+    status: derived
+    unit: "SI（J / W / V / Ω）"
+    version: "v1.3"
+    last_updated: "2026-11-05"
+    notes: >
+      capacity/RTE/max_charge 为 real；max_discharge 采用规划假设值（原文件 missing_conservative_zero）；
+      soc_min/soc_max 与 nominal_voltage 为 assumed/placeholder。
+      **新依赖（2026-09-25，随问题 21 落地引入）**：闭环参考量 x_ref 的电压分量由
+      「窗口内就地保持」改为「储能吸收匹配」：
+      P_abs = min(P_req, P_avail, P_conv, max_charge_power_w)；
+      v_ref = clip((V_oc + sqrt(V_oc² + 4·P_abs·R_int))/2, V_out,min, V_out,max)。
+      即**闭环控制律现在挂在储能侧的三个参数上**（此前本文件只被被控对象使用，
+      不被控制器使用）：max_charge_power_w（real，硬上限）、
+      nominal_voltage_v 与 internal_resistance_ohm（均 placeholder）。
+      实测（s1/s2，dt=2e-4，全分辨率，tools/probe_reference_voltage_placeholder_sensitivity.py）：
+      结构稳健（无论 V_oc/R_int/max_charge_power_w 如何按 0.5×/2.0× 缩放，
+      稳态恒满足 (1−d2)·i_L = i_sink 且 d2 → 0（中位数 ≤ 0.112），
+      v_out 峰值留在窗口内（≤ 1240.5 V < 1500 V））；但回收能量对占位值与功率上限敏感。
+      注意：i_L 的**水平**由可吸收功率决定，其峰值随 max_charge_power_w 缩放而变是
+      **正确行为而非缺陷**，故不作为结构判据。
+      故『回收能量』的具体数字在储能电气资料到位前不可作为工程结论。
+      已固化为回归测试（tests/test_validation.py 参考量包络 + 敏感度）。
+      **消费状态变更（2026-09-26，随问题 33 落地）**：max_charge_power_w 由「只被控制器与被控对象
+      读取」扩展为「由仿真器逐步记录成参考量列」——SimulationArrays.reference_power_w =
+      RegenerativeReferenceState.absorbable_power(observation)，供 tracking_* 指标组作**参考功率**。
+      修复前该指标组的参考量取的是 regen_wheel_power_w（**轮端**可用再生功率），与实测量
+      accepted_power_w（**储能侧**接受功率）跨了整条变换链，官方 s1 实测 28.8 MW vs 2.0 MW、
+      缺口 14.4×，使 tracking_rmse 对全部控制器都是 19.30~20.52 MW（回收 0.000 kWh 的
+      uncontrolled_zero_duty 只比主算法差 5.9%）、overshoot 恒 0、settling_time 恒 None。
+      同时把 max_charge_power_w 的校验由「严格为正」放宽为「>= 0」：None 表示『未给定上限』，
+      0.0 表示『上限就是 0』——后者是 validation/perturbation.py::disable_storage 造的
+      「无储能」被控对象（基线 no_storage_zero_duty），语义上 P_abs=0 ⟹ i_L,ref=0、
+      v_out,ref=V_oc，正是「仅回网」的稳态。本文件的数值本身**未改动**。
+      本条修复只改报告通道，交付数字零影响。详见 docs/regenerative_braking_algorithm.md §5.17。
+      v1.3（2026-11-05）：补登两个此前没有等级标签的字段——capacity_j（derived，= capacity_kwh × 3.6e6）
+      与 soc_initial（assumed，0.5）；**数值未改动**，只补溯源。登记表见 docs/virtual_data_register_2026-11-05.md。
+
+# ============================================================
+# 三、当前缺失数据（不得猜测，保留为缺口）
+# ============================================================
+missing:
+
+  - name: traction_curve
+    path: "data/single_train/traction_curve.csv"
+    source: "部分销账（2026-11-05）：已由 shared/locomotive_curves.json 覆盖（TB/T 1407.1-2018 表 10 机车参数、表 B.5 黏着牵引力、附录 B 持续牵引力）；仍待厂家实测曲线"
+    status: unknown
+    unit: "km/h vs kN"
+    version: "-"
+    last_updated: "2026-11-05"
+    notes: >
+      部分销账。整文件 `traction_curve.csv` 不提供，改由 shared/locomotive_curves.json 的
+      `SHENHUA_12.params` / `adhesion_traction_curve` / 持续牵引力点列供数，等级 derived
+      （按轴数比 12/8 由 HXD₁ 外推，非厂家实测）。仍缺的是厂家实测牵引特性，用于替换外推曲线；
+      台账登记见 docs/data_asset_audit_2026-11-05.md §4。
+
+  - name: braking_curve
+    path: "data/single_train/braking_curve.csv"
+    source: "部分销账（2026-11-05）：已由 shared/locomotive_curves.json 的 SHENHUA_12.brake_curve 覆盖（TB/T 1407.1-2018 附录 B 表格值，10-20 km/h 峰值 691.5 kN）；仍待厂家实测电制动曲线"
+    status: unknown
+    unit: "km/h vs kN"
+    version: "-"
+    last_updated: "2026-11-05"
+    notes: >
+      部分销账。原“与牵引对称的占位包络”已作废：电制动力改由 locomotive_curves.json 的
+      电制动特性 B_d(v) 给出，装配时经 ElectricalBrakeCurve.force_limit_n(v) 逐速度查询，
+      再乘级位 electrical_level=0.48 与机车台数；等级 derived（附录 B 表格值，取点误差 ±1%）。
+      仍缺低速失效段的厂家实测。台账登记见 docs/data_asset_audit_2026-11-05.md §4。
+
+  - name: motor_efficiency_map
+    path: "data/single_train/motor_efficiency_map.csv"
+    source: "待提供：电机效率云图（转速-转矩-效率）"
+    status: unknown
+    unit: "-"
+    version: "-"
+    last_updated: "-"
+    notes: "缺失。当前用可解释的解析近似，已标记 assumed。"
+
+  - name: high_frequency_voltage_current
+    path: "data/experiments/…"
+    source: "待提供：直流母线电压/电流、储能端电流高频实测记录"
+    status: unknown
+    unit: "V / A"
+    version: "-"
+    last_updated: "-"
+    notes: >
+      完全缺失。现有智能电表数据（shuohuang_data/260704-列车智能电表数据、智能电表数据带说明）
+      为累计电量口径，无法支撑 RHONN/NSMC 的高频辨识与控制验证。
+      因此本项目全部高频仿真结果一律标注 “simulation result / not engineering conclusion”。
+
+  - name: converter_hardware
+    path: "data/single_train/dc_dc_parameters.json"
+    source: "待提供：变流器硬件资料（器件、电感、电容、开关频率、额定）"
+    status: unknown
+    unit: "-"
+    version: "-"
+    last_updated: "-"
+    notes: "缺失，当前为 placeholder。"
+
+  - name: storage_electrical
+    path: "data/single_train/storage_parameters.json"
+    source: "待提供：储能系统电气资料（额定电压、内阻、最大放电功率、SOC 区间）"
+    status: unknown
+    unit: "V / Ω / W / -"
+    version: "-"
+    last_updated: "-"
+    notes: >
+      部分缺失：max_discharge_power 在 shared/battery.json 中为 missing_conservative_zero。
+      **2026-09-25 起优先级提升**：问题 21 裁定后，`nominal_voltage_v` 与
+      `internal_resistance_ohm` 不再只是被控对象参数，而是**闭环控制律的直接输入**
+      （决定 v_ref，从而决定 i_L,ref 与回收能量）。资料到位前，
+      回收能量的绝对值不可作为工程结论。
+
+  - name: rhonn_ekf_ukf_nsmc_parameters
+    path: "data/single_train/rhonn_parameters.json 等"
+    source: "口径变更（2026-09-25）：不作为数据文件提供，改以代码内 dataclass 固化"
+    status: unknown
+    unit: "-"
+    version: "-"
+    last_updated: "-"
+    notes: >
+      原条目假设阶段 3–7 会建立 rhonn_parameters.json 等参数文件。该假设已被推翻：
+      RHONN/EKF/UKF/NSMC 的参数**不落数据文件**，而是以 `RHONNConfig` / `EKFConfig` /
+      `UKFConfig` / `NSMCConfig`（dataclass，带默认值与校验）固化在代码里，见
+      docs/technical_scheme_code_mapping.md §E。理由：这些是**结构/算法口径**
+      （维度、α/β、归一化尺度、η、λ、候选键），不是测量得到的物理量；
+      放代码里可随测试一起审计，避免「数据文件里一个数、代码里另一个数」。
+      本条目保留在此处，仅作为「刻意不落数据文件」的记录，不再是待补数据缺口。
+
+# ============================================================
+# 四、口径争议登记（contested）
+#
+# 与 missing 段不同：这里的**数据是有的**，但同一份数据存在两种自洽性不同的
+# 解读，且尚未由甲方裁定。登记的目的不是"记录一个已知问题"，而是**防止对外
+# 只报一套数字**——凡涉及下列口径的输出，必须同时说明另一套口径的影响。
+#
+# 校验方式：python tools/check_data_manifest.py（status 必须为 contested/settled，
+# contested 必须给出 alternatives 与 owner_to_confirm）
+# ============================================================
+contested_assumptions:
+  - id: two_wan_ton_locomotive_count
+    title: "两万吨列车机车台数与编组（12 轴 + 8 轴）"
+    status: settled
+    value: 2
+    unit: "台"
+    resolved_at: "2026-11-07"
+    mirror_of: "heavy_empty_train_coordination/data/real_shuohuang/assumptions.json#two_wan_ton_locomotive_count"
+    basis: >
+      三条相互独立的证据指向「1+1 两台」：
+      ① 甲方《2025朔黄铁路编组模式》：「两万吨 重车 编组模式 1+1（交+交）辆数 216」，
+      「1+1」「交+交」均指两台交流机车；
+      ② 《列车运行图及技术资料》第 7 页：「2 万吨列车由国能号 12 轴 + 国能号 8 轴交流机车固定担当」；
+      ③ 能量守恒独立校核（`tools/audit_energy_closure.py`）：单机口径下轮周牵引 6,322 kWh
+      低于 m·g·U − ½mv² 的物理下界 9,884 kWh（−36%），只有「双机、电表读数只是其中一台」
+      一种读法可满足该下界（+26.2%）。
+    conflict: >
+      电表台账每趟只有 3 块表（a/b/c），三者之和恒等于 use_ygdn，看起来"只有一台车"。
+      但 `250917-2001号车…xls` 证明这是「一台车 A/B/C 三节」的记账口径：三块表是本务机车
+      （12 轴 = 3 节）的三节，补机（8 轴 = 2 节）不在本表内。此前两次判定（先 1 台、后 3 台）
+      都只在"表数"这一个维度上推台数，方向都错。因此本条从 contested 改为 settled。
+    alternatives:
+      - value: 1
+        label: "单台 12 轴（曾判定，已撤回）"
+        implication: >
+          整备 21,900 t、功率 14,400 kW、电制动峰值 691.5 kN。
+          该口径下牵引电量低于物理下界 36%，物理上不成立，不再作为对外口径。
+    impact_in_this_project:
+      - "整备质量：21,900 t → 22,100 t（12 轴 300 t + 8 轴 200 t，逐型求和）"
+      - "功率上限：14,400 kW → 24,000 kW（逐型 continuous_power_kW 求和，不是首型 × 2）"
+      - "电制动力上限：691.5 kN → 1,152.5 kN（两条曲线按并集速度栅格逐点求和）"
+      - "式(72) 交叉校核：SHENHUA_8 无 I_z 表，Q_z 降级为**下限**（只含 12 轴电流）"
+      - "全部历史读数作废（质量 +0.9%、功率 +67%、电制动峰值 +67%）"
+    project_default: "1+1 两台（SHENHUA_12:1|SHENHUA_8:1，整备 22,100 t）"
+    switch_how: >
+      编组以 `trains.csv:locomotive_consist` 为准（权威表示）；
+      `locomotive_type` / `locomotive_count` 只描述首型，供未适配的消费方退回使用。
+      单机型情景对比传 `build_component_bundle(..., locomotive_count=N)` 显式覆盖。
+    owner_to_confirm: >
+      甲方（机车运用 / 电表台账）——编组已定，但 **8 轴补机的电表数据与厂家电制动曲线仍待补**：
+      当前 `SHENHUA_8` 条目沿用 HXD1_25t 平台（2(B0-B0)、200 t、9,600 kW），
+      状态为 `derived_from_hxd1_25t_pending_owner_confirmation`，且没有 I_z 电流表。
+    affected_entries:
+      - trains
+      - locomotive_curves

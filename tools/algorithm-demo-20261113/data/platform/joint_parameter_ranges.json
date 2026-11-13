@@ -1,0 +1,1 @@
+{"schema_version": "1.0", "evaluation_code": "local_20261109", "data_status": "synthetic_test_interval", "ranges": {"storage_capacity": [0.99, 1.01]}, "sampling": {"interior_sample_count": 0, "seed": 7}}

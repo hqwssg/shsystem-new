@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' blob: data:; style-src 'unsafe-inline' blob: data:; img-src blob: data:; font-src blob: data:; media-src blob: data:; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>重空协同优化系统</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255),rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="重空协同优化系统" srcdoc='&lt;!doctype html&gt;&lt;html lang=&quot;zh-CN&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;title&gt;重空协同优化系统&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;hec-v2&quot;&gt;
+  &lt;style&gt;
+    #hec-v2 {
+      color-scheme: light dark;
+      width: 100%;
+      color: light-dark(#17212b, #eef3f6);
+      font-family: Inter, &quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, system-ui, sans-serif;
+      font-size: 14px;
+    }
+
+    #hec-v2 * { box-sizing: border-box; }
+    #hec-v2 button, #hec-v2 input, #hec-v2 select { font: inherit; }
+    #hec-v2 button { cursor: pointer; }
+    #hec-v2 button:disabled { cursor: wait; opacity: .72; }
+
+    #hec-v2 .hec2-shell {
+      display: grid;
+      grid-template-columns: 205px minmax(0, 1fr);
+      min-height: 760px;
+      overflow: hidden;
+      background: light-dark(#f2f5f7, #0f151a);
+      border: 1px solid light-dark(#cbd3d9, #34434e);
+      border-radius: 9px;
+    }
+
+    #hec-v2 .hec2-side {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 17px 11px;
+      color: #edf3f5;
+      background: #17262f;
+    }
+
+    #hec-v2 .hec2-brand {
+      padding: 2px 8px 16px;
+      border-bottom: 1px solid #354651;
+    }
+
+    #hec-v2 .hec2-brand strong { display: block; font-weight: 500; }
+    #hec-v2 .hec2-brand span { display: block; margin-top: 4px; color: #a8b7c0; font-size: 12px; }
+    #hec-v2 .hec2-nav-title { margin: 17px 9px 6px; color: #91a3ad; font-size: 12px; }
+    #hec-v2 .hec2-nav { display: grid; gap: 3px; }
+
+    #hec-v2 .hec2-nav button {
+      width: 100%;
+      min-height: 39px;
+      padding: 8px 10px;
+      color: #cbd6dc;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      border-radius: 5px;
+    }
+
+    #hec-v2 .hec2-nav button:hover { background: #223640; }
+    #hec-v2 .hec2-nav button[aria-current=&quot;page&quot;] {
+      color: #ffffff;
+      background: #304550;
+      box-shadow: inset 3px 0 #e9ad43;
+    }
+
+    #hec-v2 .hec2-side-meta {
+      margin-top: auto;
+      padding: 14px 8px 0;
+      color: #9eb0ba;
+      border-top: 1px solid #354651;
+      font-size: 12px;
+    }
+
+    #hec-v2 .hec2-side-meta strong { display: block; margin-top: 4px; color: #eef3f5; font-weight: 500; }
+    #hec-v2 .hec2-main { min-width: 0; }
+
+    #hec-v2 .hec2-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      padding: 11px 20px;
+      background: light-dark(#ffffff, #172128);
+      border-bottom: 1px solid light-dark(#d7dee3, #34434e);
+    }
+
+    #hec-v2 .hec2-case strong { display: block; font-weight: 500; }
+    #hec-v2 .hec2-case span { display: block; margin-top: 3px; color: light-dark(#697680, #acb8c0); font-size: 12px; }
+
+    #hec-v2 .hec2-mode {
+      display: inline-flex;
+      padding: 5px 8px;
+      color: light-dark(#805814, #ffda96);
+      background: light-dark(#fff4de, #3a2c17);
+      border: 1px solid light-dark(#ebce96, #72562b);
+      border-radius: 5px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #hec-v2 .hec2-content { padding: 20px; }
+    #hec-v2 .hec2-page { display: none; }
+    #hec-v2 .hec2-page.is-active { display: block; }
+    #hec-v2 .hec2-page-head { margin-bottom: 15px; }
+    #hec-v2 .hec2-page-head h2 { margin: 0; font-size: 20px; font-weight: 500; }
+    #hec-v2 .hec2-page-head p { margin: 5px 0 0; color: light-dark(#697680, #acb8c0); }
+
+    #hec-v2 .hec2-notice {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      color: light-dark(#6e4b10, #ffda96);
+      background: light-dark(#fff5e2, #332817);
+      border-left: 3px solid #dfa23a;
+    }
+
+    #hec-v2 .hec2-notice strong { font-weight: 500; }
+    #hec-v2 .hec2-notice span { color: light-dark(#75571f, #e8c98f); }
+
+    #hec-v2 .hec2-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(245px, .8fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    #hec-v2 .hec2-panel {
+      min-width: 0;
+      padding: 14px;
+      background: light-dark(#ffffff, #182229);
+      border: 1px solid light-dark(#d7dee3, #34434e);
+      border-radius: 6px;
+    }
+
+    #hec-v2 .hec2-panel-head {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    #hec-v2 .hec2-panel h3 { margin: 0; font-size: 14px; font-weight: 500; }
+    #hec-v2 .hec2-secondary { color: light-dark(#6d7982, #a7b4bc); font-size: 12px; }
+
+    #hec-v2 .hec2-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    #hec-v2 .hec2-field { min-width: 0; }
+    #hec-v2 .hec2-field label { display: block; margin-bottom: 5px; color: light-dark(#5d6972, #b7c1c7); font-size: 12px; }
+
+    #hec-v2 .hec2-field input,
+    #hec-v2 .hec2-field select {
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 8px;
+      color: light-dark(#17212b, #edf3f6);
+      background: light-dark(#ffffff, #11191f);
+      border: 1px solid light-dark(#c6cfd5, #465762);
+      border-radius: 4px;
+    }
+
+    #hec-v2 .hec2-field input:disabled {
+      color: light-dark(#7b878f, #86969f);
+      background: light-dark(#edf1f3, #202b32);
+    }
+
+    #hec-v2 .hec2-derived-value {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 8px;
+      color: light-dark(#4f5d66, #c3cdd3);
+      background: light-dark(#edf1f3, #202b32);
+      border: 1px solid light-dark(#d3dade, #3d4b54);
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    #hec-v2 .hec2-inline-check {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      min-height: 36px;
+      padding: 7px 8px;
+      background: light-dark(#f8fafb, #131d23);
+      border: 1px solid light-dark(#d6dde2, #3c4b55);
+      border-radius: 4px;
+    }
+
+    #hec-v2 .hec2-inline-check input { width: 17px; height: 17px; margin: 0; accent-color: #d99c33; }
+    #hec-v2 .hec2-actions { display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 14px; }
+
+    #hec-v2 .hec2-button {
+      min-height: 36px;
+      padding: 7px 13px;
+      color: light-dark(#26333c, #e5ecef);
+      background: light-dark(#ffffff, #1b2730);
+      border: 1px solid light-dark(#c7d0d6, #455660);
+      border-radius: 5px;
+    }
+
+    #hec-v2 .hec2-button-primary {
+      color: #17212b;
+      background: #e9ad43;
+      border-color: #d39730;
+      font-weight: 500;
+    }
+
+    #hec-v2 .hec2-button:hover { filter: brightness(.98); }
+    #hec-v2 .hec2-readiness { display: grid; gap: 0; }
+
+    #hec-v2 .hec2-data-row,
+    #hec-v2 .hec2-result-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 39px;
+      padding: 8px 0;
+      border-bottom: 1px solid light-dark(#e8ecef, #2c3942);
+    }
+
+    #hec-v2 .hec2-data-row:last-child, #hec-v2 .hec2-result-row:last-child { border-bottom: 0; }
+    #hec-v2 .hec2-data-row span, #hec-v2 .hec2-result-row span { color: light-dark(#68757e, #a9b6be); }
+    #hec-v2 .hec2-data-row strong, #hec-v2 .hec2-result-row strong { text-align: right; font-weight: 500; }
+    #hec-v2 .hec2-ok { color: light-dark(#136746, #8de3bd) !important; }
+    #hec-v2 .hec2-warn { color: light-dark(#8a5a00, #ffd479) !important; }
+    #hec-v2 .hec2-bad { color: light-dark(#a43b34, #ff9b91) !important; }
+    #hec-v2 .hec2-lock { color: light-dark(#6a7680, #abb7bf); font-size: 12px; }
+
+    #hec-v2 .hec2-mini-note {
+      margin-top: 11px;
+      padding: 9px 10px;
+      color: light-dark(#5f6b74, #b0bbc2);
+      background: light-dark(#f4f7f8, #121c22);
+      border-left: 3px solid light-dark(#9eabb3, #5a6972);
+      font-size: 12px;
+    }
+
+    #hec-v2 .hec2-statusline {
+      display: none;
+      margin-top: 12px;
+      padding: 9px 10px;
+      color: light-dark(#145f42, #91e4c0);
+      background: light-dark(#e9f5ef, #17392d);
+      border-left: 3px solid light-dark(#38876b, #67b99c);
+    }
+
+    #hec-v2 .hec2-statusline.is-active { display: block; }
+    #hec-v2 .hec2-statusline.is-error {
+      color: light-dark(#8a2929, #ffb0b0);
+      background: light-dark(#fff0f0, #3a1d1d);
+      border-left-color: light-dark(#b64b4b, #d66a6a);
+    }
+
+    #hec-v2 .hec2-table-wrap { width: 100%; overflow-x: auto; }
+    #hec-v2 table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    #hec-v2 th, #hec-v2 td { padding: 9px 8px; text-align: left; border-bottom: 1px solid light-dark(#e5eaed, #2d3a43); white-space: nowrap; }
+    #hec-v2 th { color: light-dark(#66737c, #aab6be); font-weight: 500; }
+    #hec-v2 td.hec2-num, #hec-v2 th.hec2-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    #hec-v2 .hec2-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    #hec-v2 .hec2-kpi {
+      min-width: 0;
+      padding: 12px 13px;
+      background: light-dark(#ffffff, #182229);
+      border: 1px solid light-dark(#d7dee3, #34434e);
+      border-radius: 6px;
+    }
+
+    #hec-v2 .hec2-kpi span { display: block; color: light-dark(#68757e, #a9b6be); font-size: 12px; }
+    #hec-v2 .hec2-kpi strong { display: block; margin-top: 6px; overflow-wrap: anywhere; font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; }
+    #hec-v2 .hec2-kpi small { display: block; margin-top: 3px; color: light-dark(#176d4b, #8ce2bd); font-size: 12px; }
+
+    #hec-v2 .hec2-empty {
+      padding: 34px 16px;
+      color: light-dark(#6b7780, #aab6bd);
+      text-align: center;
+      background: light-dark(#ffffff, #182229);
+      border: 1px solid light-dark(#d7dee3, #34434e);
+      border-radius: 6px;
+    }
+
+    #hec-v2 .hec2-result-content { display: none; }
+    #hec-v2 .hec2-result-content.is-active { display: block; }
+    #hec-v2 .hec2-result-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+    #hec-v2 .hec2-result-head h3 { margin: 0; font-size: 15px; font-weight: 500; }
+    #hec-v2 .hec2-result-head p { margin: 4px 0 0; color: light-dark(#68757e, #a9b6be); font-size: 12px; }
+
+    #hec-v2 .hec2-success {
+      padding: 5px 8px;
+      color: light-dark(#145f42, #91e4c0);
+      background: light-dark(#e9f5ef, #17392d);
+      border: 1px solid light-dark(#b9dfcc, #2d624e);
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #hec-v2 .hec2-stack { display: grid; gap: 12px; }
+    #hec-v2 .hec2-wide { grid-column: 1 / -1; }
+    #hec-v2 .hec2-progress { display: none; gap: 6px; margin-top: 11px; }
+    #hec-v2 .hec2-progress.is-active { display: grid; }
+    #hec-v2 .hec2-progress-track { height: 5px; overflow: hidden; background: light-dark(#e7ecef, #2b3941); border-radius: 3px; }
+    #hec-v2 .hec2-progress-bar { width: 0; height: 100%; background: #d99c33; transition: width .25s ease; }
+    #hec-v2 .hec2-progress-label { color: light-dark(#66737c, #aab6be); font-size: 12px; }
+    #hec-v2 .hec2-perf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    #hec-v2 .hec2-perf-value { display: block; margin-top: 5px; font-size: 18px; font-variant-numeric: tabular-nums; }
+    #hec-v2 .hec2-code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; overflow-wrap: anywhere; }
+
+    @media (max-width: 760px) {
+      #hec-v2 .hec2-shell { grid-template-columns: 1fr; }
+      #hec-v2 .hec2-side { padding: 12px; }
+      #hec-v2 .hec2-brand { padding-bottom: 10px; }
+      #hec-v2 .hec2-nav-title, #hec-v2 .hec2-side-meta { display: none; }
+      #hec-v2 .hec2-nav { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 9px; }
+      #hec-v2 .hec2-nav button { min-height: 35px; padding: 7px 4px; text-align: center; font-size: 12px; }
+      #hec-v2 .hec2-nav button[aria-current=&quot;page&quot;] { box-shadow: inset 0 -3px #e9ad43; }
+      #hec-v2 .hec2-content { padding: 14px; }
+      #hec-v2 .hec2-grid { grid-template-columns: 1fr; }
+      #hec-v2 .hec2-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 470px) {
+      #hec-v2 .hec2-top { align-items: flex-start; padding: 11px 14px; }
+      #hec-v2 .hec2-mode { white-space: normal; text-align: right; }
+      #hec-v2 .hec2-fields, #hec-v2 .hec2-kpis { grid-template-columns: 1fr; }
+      #hec-v2 .hec2-actions { align-items: stretch; flex-direction: column-reverse; }
+      #hec-v2 .hec2-button { width: 100%; }
+      #hec-v2 .hec2-result-head { flex-direction: column; }
+      #hec-v2 .hec2-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+  &lt;/style&gt;
+
+  &lt;div class=&quot;hec2-shell&quot;&gt;
+    &lt;aside class=&quot;hec2-side&quot;&gt;
+      &lt;div class=&quot;hec2-brand&quot;&gt;
+        &lt;strong&gt;重空协同优化系统&lt;/strong&gt;
+        &lt;span&gt;运行与节能决策支持&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;hec2-nav-title&quot;&gt;业务功能&lt;/div&gt;
+      &lt;nav class=&quot;hec2-nav&quot; aria-label=&quot;系统导航&quot;&gt;
+        &lt;button type=&quot;button&quot; data-page=&quot;run&quot; aria-current=&quot;page&quot;&gt;运行任务&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-page=&quot;master&quot;&gt;主数据&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-page=&quot;config&quot;&gt;配置模板&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-page=&quot;live&quot;&gt;实时状态&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-page=&quot;results&quot;&gt;任务结果&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-page=&quot;performance&quot;&gt;性能分析&lt;/button&gt;
+      &lt;/nav&gt;
+      &lt;div class=&quot;hec2-side-meta&quot;&gt;
+        当前角色
+        &lt;strong&gt;调度仿真人员 · 只读主数据&lt;/strong&gt;
+      &lt;/div&gt;
+    &lt;/aside&gt;
+
+    &lt;main class=&quot;hec2-main&quot;&gt;
+      &lt;header class=&quot;hec2-top&quot;&gt;
+        &lt;div class=&quot;hec2-case&quot;&gt;
+          &lt;strong&gt;朔黄线重空协同场景&lt;/strong&gt;
+          &lt;span&gt;演示线路版本 L2026.03 · 演示算法版本 A2026.08.15&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class=&quot;hec2-mode&quot;&gt;交互原型 · 前端模拟结果&lt;/span&gt;
+      &lt;/header&gt;
+
+      &lt;div class=&quot;hec2-content&quot;&gt;
+        &lt;section class=&quot;hec2-page is-active&quot; data-page-panel=&quot;run&quot;&gt;
+          &lt;div class=&quot;hec2-page-head&quot;&gt;
+            &lt;h2&gt;新建运行任务&lt;/h2&gt;
+            &lt;p&gt;只填写本次任务会变化的条件；基础数据与设备参数通过版本引用。&lt;/p&gt;
+          &lt;/div&gt;
+
+            &lt;div class=&quot;hec2-notice&quot; role=&quot;note&quot;&gt;
+              &lt;strong&gt;说明&lt;/strong&gt;
+            &lt;span&gt;本页面使用虚拟演示数据进行交互验证。预测时域、执行窗口和评价范围会根据当前运行图、列车范围、场景及策略自动派生并只读显示；运行按钮会读取当前选项并生成不同结果，但尚未连接正式优化算法。正式 CLI 当前可直接映射运行图、列车数量、目标优先级、搜索规模和储能开关；扰动场景、离线 SOC、配置模板等字段仍是原型占位，不能直接提交。正式接入时结果必须携带运行清单和输出质量校验。&lt;/span&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;hec2-grid&quot;&gt;
+            &lt;section class=&quot;hec2-panel&quot; aria-labelledby=&quot;task-fields-title&quot;&gt;
+              &lt;div class=&quot;hec2-panel-head&quot;&gt;
+                &lt;h3 id=&quot;task-fields-title&quot;&gt;本次任务参数&lt;/h3&gt;
+                &lt;span class=&quot;hec2-secondary&quot;&gt;共 12 项 · 3 项自动派生&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;hec2-fields&quot;&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-plan&quot;&gt;基准运行图&lt;/label&gt;
+                  &lt;select id=&quot;hec2-plan&quot;&gt;
+                    &lt;option value=&quot;aug&quot;&gt;演示：2026-08 运行图&lt;/option&gt;
+                    &lt;option value=&quot;jul&quot;&gt;演示：2026-07 历史运行图&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-prediction-window&quot;&gt;预测时域（系统派生）&lt;/label&gt;
+                  &lt;output class=&quot;hec2-derived-value&quot; id=&quot;hec2-prediction-window&quot;&gt;正在根据运行图与范围计算…&lt;/output&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-execute-window&quot;&gt;执行窗口（策略模板）&lt;/label&gt;
+                  &lt;output class=&quot;hec2-derived-value&quot; id=&quot;hec2-execute-window&quot;&gt;正在读取滚动策略…&lt;/output&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-evaluation-window&quot;&gt;评价范围（系统派生）&lt;/label&gt;
+                  &lt;output class=&quot;hec2-derived-value&quot; id=&quot;hec2-evaluation-window&quot;&gt;正在覆盖完整运行与结算事件…&lt;/output&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-scope&quot;&gt;参与列车&lt;/label&gt;
+                  &lt;select id=&quot;hec2-scope&quot;&gt;
+                    &lt;option value=&quot;all&quot;&gt;系统评价范围内全部重空车&lt;/option&gt;
+                    &lt;option value=&quot;corridor&quot;&gt;K100–K250 区段列车&lt;/option&gt;
+                    &lt;option value=&quot;selected&quot;&gt;已选 4 列车&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-objective&quot;&gt;优化目标&lt;/label&gt;
+                  &lt;select id=&quot;hec2-objective&quot;&gt;
+                    &lt;option value=&quot;balanced&quot;&gt;综合平衡&lt;/option&gt;
+                    &lt;option value=&quot;energy&quot;&gt;节能优先&lt;/option&gt;
+                    &lt;option value=&quot;capacity&quot;&gt;运输能力优先&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-scenario&quot;&gt;扰动场景&lt;/label&gt;
+                  &lt;select id=&quot;hec2-scenario&quot;&gt;
+                    &lt;option value=&quot;normal&quot;&gt;正常运行&lt;/option&gt;
+                    &lt;option value=&quot;delay&quot; disabled&gt;重车晚点 15 分钟（待后端场景模型）&lt;/option&gt;
+                    &lt;option value=&quot;weather&quot; disabled&gt;低黏着天气（待后端场景模型）&lt;/option&gt;
+                    &lt;option value=&quot;device&quot; disabled&gt;一套储能设备退出（待后端场景模型）&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-profile&quot;&gt;求解模式&lt;/label&gt;
+                  &lt;select id=&quot;hec2-profile&quot;&gt;
+                    &lt;option value=&quot;quick&quot;&gt;快速评估&lt;/option&gt;
+                    &lt;option value=&quot;standard&quot;&gt;标准优化&lt;/option&gt;
+                    &lt;option value=&quot;formal&quot;&gt;正式优化&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-config&quot;&gt;低频配置模板&lt;/label&gt;
+                  &lt;select id=&quot;hec2-config&quot;&gt;
+                    &lt;option value=&quot;energy-v3&quot;&gt;节能运营模板 V3&lt;/option&gt;
+                    &lt;option value=&quot;capacity-v2&quot;&gt;能力保障模板 V2&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-source&quot;&gt;初始状态来源&lt;/label&gt;
+                  &lt;select id=&quot;hec2-source&quot;&gt;
+                    &lt;option value=&quot;live&quot;&gt;自动读取实时状态&lt;/option&gt;
+                    &lt;option value=&quot;offline&quot;&gt;离线场景手工指定&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-soc&quot;&gt;初始 SOC（仅离线，0%–100%）&lt;/label&gt;
+                  &lt;input id=&quot;hec2-soc&quot; type=&quot;number&quot; min=&quot;0&quot; max=&quot;100&quot; step=&quot;1&quot; value=&quot;62&quot; disabled&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hec2-field&quot;&gt;
+                  &lt;label for=&quot;hec2-storage&quot;&gt;储能参与&lt;/label&gt;
+                  &lt;div class=&quot;hec2-inline-check&quot;&gt;
+                    &lt;input id=&quot;hec2-storage&quot; type=&quot;checkbox&quot; checked&gt;
+                    &lt;span&gt;启用储能协同&lt;/span&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;hec2-actions&quot;&gt;
+                &lt;span class=&quot;hec2-secondary&quot; id=&quot;hec2-estimate&quot;&gt;预计用时：约 8 秒&lt;/span&gt;
+                &lt;button class=&quot;hec2-button hec2-button-primary&quot; type=&quot;button&quot; id=&quot;hec2-run&quot;&gt;校验并运行&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;hec2-statusline&quot; id=&quot;hec2-run-status&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-progress&quot; id=&quot;hec2-run-progress&quot; aria-live=&quot;polite&quot;&gt;
+                &lt;div class=&quot;hec2-progress-track&quot; role=&quot;progressbar&quot; aria-label=&quot;运行进度&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-valuenow=&quot;0&quot;&gt;&lt;div class=&quot;hec2-progress-bar&quot; id=&quot;hec2-progress-bar&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+                &lt;span class=&quot;hec2-progress-label&quot; id=&quot;hec2-progress-label&quot;&gt;等待运行&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/section&gt;
+
+            &lt;aside class=&quot;hec2-panel&quot; aria-labelledby=&quot;data-ready-title&quot;&gt;
+              &lt;div class=&quot;hec2-panel-head&quot;&gt;
+                &lt;h3 id=&quot;data-ready-title&quot;&gt;引用数据&lt;/h3&gt;
+                &lt;span class=&quot;hec2-ok&quot;&gt;演示数据已就绪&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;hec2-readiness&quot;&gt;
+                &lt;div class=&quot;hec2-data-row&quot;&gt;&lt;span&gt;线路与站点&lt;/span&gt;&lt;strong&gt;演示：L2026.03&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-data-row&quot;&gt;&lt;span&gt;车型与动力学&lt;/span&gt;&lt;strong&gt;演示：T2025.11&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-data-row&quot;&gt;&lt;span&gt;信号与站场资源&lt;/span&gt;&lt;strong&gt;演示：R2026.02&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-data-row&quot;&gt;&lt;span&gt;储能设备档案&lt;/span&gt;&lt;strong&gt;演示：E2026.05&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-data-row&quot;&gt;&lt;span&gt;模拟接口状态&lt;/span&gt;&lt;strong class=&quot;hec2-ok&quot; id=&quot;hec2-live-age&quot;&gt;演示值 · 12 秒前&lt;/strong&gt;&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;hec2-mini-note&quot;&gt;上述版本号和状态均为演示值；正式系统中这些数据在运行页只读，普通用户不能修改物理线路、车型、设备额定参数或时域秒数。SOC 在界面中显示为百分比，正式算法按设备可用容量换算为 kWh。&lt;/div&gt;
+              &lt;button class=&quot;hec2-button&quot; type=&quot;button&quot; data-jump=&quot;master&quot; style=&quot;margin-top: 11px;&quot;&gt;查看数据版本&lt;/button&gt;
+            &lt;/aside&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class=&quot;hec2-page&quot; data-page-panel=&quot;master&quot;&gt;
+          &lt;div class=&quot;hec2-page-head&quot;&gt;
+            &lt;h2&gt;固定主数据&lt;/h2&gt;
+            &lt;p&gt;投产运行中对普通用户只读；变更必须形成新版本并保留审计记录。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;hec2-notice&quot; role=&quot;note&quot;&gt;&lt;strong&gt;演示口径&lt;/strong&gt;&lt;span&gt;本页版本、里程、站点数和日期均为规划假设，只演示主数据的版本化管理方式。&lt;/span&gt;&lt;/div&gt;
+          &lt;section class=&quot;hec2-panel&quot;&gt;
+            &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;当前生效版本&lt;/h3&gt;&lt;span class=&quot;hec2-lock&quot;&gt;管理员维护 · 当前角色只读&lt;/span&gt;&lt;/div&gt;
+            &lt;div class=&quot;hec2-table-wrap&quot;&gt;
+              &lt;table&gt;
+                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;数据域&lt;/th&gt;&lt;th&gt;版本&lt;/th&gt;&lt;th&gt;主要内容&lt;/th&gt;&lt;th&gt;更新时间&lt;/th&gt;&lt;th&gt;状态&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;&lt;td&gt;线路基础设施&lt;/td&gt;&lt;td&gt;L2026.03&lt;/td&gt;&lt;td&gt;演示值：594 km、33 站、坡度曲线、限速&lt;/td&gt;&lt;td&gt;演示：2026-03-18&lt;/td&gt;&lt;td class=&quot;hec2-lock&quot;&gt;演示版本&lt;/td&gt;&lt;/tr&gt;
+                  &lt;tr&gt;&lt;td&gt;车型与编组&lt;/td&gt;&lt;td&gt;T2025.11&lt;/td&gt;&lt;td&gt;演示值：重车/空车质量、牵引与制动曲线&lt;/td&gt;&lt;td&gt;演示：2025-11-26&lt;/td&gt;&lt;td class=&quot;hec2-lock&quot;&gt;演示版本&lt;/td&gt;&lt;/tr&gt;
+                  &lt;tr&gt;&lt;td&gt;信号与站场&lt;/td&gt;&lt;td&gt;R2026.02&lt;/td&gt;&lt;td&gt;演示值：闭塞区段、股道、咽喉及通过能力&lt;/td&gt;&lt;td&gt;演示：2026-02-09&lt;/td&gt;&lt;td class=&quot;hec2-lock&quot;&gt;演示版本&lt;/td&gt;&lt;/tr&gt;
+                  &lt;tr&gt;&lt;td&gt;供电与储能设备&lt;/td&gt;&lt;td&gt;E2026.05&lt;/td&gt;&lt;td&gt;演示值：供电臂、容量、功率、效率和设备标识&lt;/td&gt;&lt;td&gt;演示：2026-05-14&lt;/td&gt;&lt;td class=&quot;hec2-lock&quot;&gt;演示版本&lt;/td&gt;&lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+            &lt;/div&gt;
+          &lt;/section&gt;
+          &lt;div class=&quot;hec2-mini-note&quot;&gt;主数据不随一次运行提交数值，只提交版本 ID；历史任务始终引用当时的数据版本。&lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class=&quot;hec2-page&quot; data-page-panel=&quot;config&quot;&gt;
+          &lt;div class=&quot;hec2-page-head&quot;&gt;
+            &lt;h2&gt;低频配置模板&lt;/h2&gt;
+            &lt;p&gt;由专业管理员偶尔维护，运行人员只选择模板，不逐项重复输入。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;hec2-notice&quot; role=&quot;note&quot;&gt;&lt;strong&gt;演示口径&lt;/strong&gt;&lt;span&gt;本页价格、间隔和权重是用于驱动前端模拟器的规划假设，不是正式生产参数。&lt;/span&gt;&lt;/div&gt;
+          &lt;div class=&quot;hec2-grid&quot;&gt;
+            &lt;section class=&quot;hec2-panel&quot;&gt;
+              &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;节能运营模板 V3&lt;/h3&gt;&lt;span class=&quot;hec2-ok&quot;&gt;当前默认&lt;/span&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;电网结算电价&lt;/span&gt;&lt;strong&gt;演示值：0.55 元/kWh&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;储能循环成本&lt;/span&gt;&lt;strong&gt;演示值：0.08 元/kWh&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;最小安全间隔&lt;/span&gt;&lt;strong&gt;演示值：600 s&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;目标权重&lt;/span&gt;&lt;strong&gt;演示值：能耗 60% · 能力 40%&lt;/strong&gt;&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;aside class=&quot;hec2-panel&quot;&gt;
+              &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;能力保障模板 V2&lt;/h3&gt;&lt;span class=&quot;hec2-lock&quot;&gt;可选&lt;/span&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;电网结算电价&lt;/span&gt;&lt;strong&gt;演示值：0.55 元/kWh&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;储能循环成本&lt;/span&gt;&lt;strong&gt;演示值：0.28 元/kWh&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;最小安全间隔&lt;/span&gt;&lt;strong&gt;演示值：660 s&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;目标权重&lt;/span&gt;&lt;strong&gt;演示值：能耗 30% · 能力 70%&lt;/strong&gt;&lt;/div&gt;
+            &lt;/aside&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class=&quot;hec2-page&quot; data-page-panel=&quot;live&quot;&gt;
+          &lt;div class=&quot;hec2-page-head&quot;&gt;
+            &lt;h2&gt;实时状态&lt;/h2&gt;
+            &lt;p&gt;高频数据由接口自动接入并形成运行快照，原则上不由用户手工填写。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;hec2-notice&quot; role=&quot;note&quot;&gt;&lt;strong&gt;模拟接口&lt;/strong&gt;&lt;span&gt;当前状态由前端生成，用于验证刷新、快照固化和故障场景联动；不表示已接入生产实时数据。&lt;/span&gt;&lt;/div&gt;
+          &lt;div class=&quot;hec2-grid&quot;&gt;
+            &lt;section class=&quot;hec2-panel&quot;&gt;
+              &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;模拟数据接入状态&lt;/h3&gt;&lt;button class=&quot;hec2-button&quot; type=&quot;button&quot; id=&quot;hec2-refresh&quot;&gt;刷新模拟状态&lt;/button&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;列车定位与晚点&lt;/span&gt;&lt;strong class=&quot;hec2-ok&quot;&gt;演示正常 · 8 列车&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;临时限速与封锁&lt;/span&gt;&lt;strong class=&quot;hec2-ok&quot;&gt;演示正常 · 0 条封锁&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;储能设备状态&lt;/span&gt;&lt;strong class=&quot;hec2-ok&quot; id=&quot;hec2-live-storage-state&quot;&gt;演示值 · 2 / 2 在线&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;场景可用容量/功率&lt;/span&gt;&lt;strong id=&quot;hec2-live-storage-availability&quot;&gt;演示值 · 100%&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;牵引负荷数据&lt;/span&gt;&lt;strong class=&quot;hec2-ok&quot;&gt;演示正常&lt;/strong&gt;&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;aside class=&quot;hec2-panel&quot;&gt;
+              &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;最新模拟快照&lt;/h3&gt;&lt;span class=&quot;hec2-ok&quot; id=&quot;hec2-snapshot-state&quot;&gt;演示可用于计算&lt;/span&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;状态时刻&lt;/span&gt;&lt;strong id=&quot;hec2-live-time&quot;&gt;演示：2026-08-15 10:32:18&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;综合储能 SOC&lt;/span&gt;&lt;strong id=&quot;hec2-live-soc&quot;&gt;演示值：62%&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;最大列车晚点&lt;/span&gt;&lt;strong id=&quot;hec2-live-delay&quot;&gt;演示值：4 min&lt;/strong&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;快照编号&lt;/span&gt;&lt;strong id=&quot;hec2-snapshot-id&quot;&gt;S-DEMO-103218&lt;/strong&gt;&lt;/div&gt;
+            &lt;/aside&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class=&quot;hec2-page&quot; data-page-panel=&quot;results&quot;&gt;
+          &lt;div class=&quot;hec2-page-head&quot;&gt;
+            &lt;h2&gt;任务结果&lt;/h2&gt;
+            &lt;p&gt;每次运行生成独立任务编号，并保存参数、数据版本和状态快照。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;hec2-empty&quot; id=&quot;hec2-empty-result&quot;&gt;尚未运行任务。请在“运行任务”页面选择条件后运行。&lt;/div&gt;
+          &lt;div class=&quot;hec2-result-content&quot; id=&quot;hec2-result-content&quot;&gt;
+            &lt;div class=&quot;hec2-result-head&quot;&gt;
+              &lt;div&gt;&lt;h3 id=&quot;hec2-result-title&quot;&gt;任务结果&lt;/h3&gt;&lt;p id=&quot;hec2-result-subtitle&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+              &lt;span class=&quot;hec2-success&quot;&gt;模拟计算完成&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;hec2-notice&quot;&gt;&lt;strong&gt;结果口径&lt;/strong&gt;&lt;span&gt;以下均为前端演示值，由模拟器根据所选参数计算，仅用于验证交互和指标口径；正式结果必须由后端算法返回。节能与省钱分别计算，二者可能不一致。&lt;/span&gt;&lt;/div&gt;
+            &lt;div class=&quot;hec2-kpis&quot;&gt;
+              &lt;div class=&quot;hec2-kpi&quot;&gt;&lt;span&gt;基准电网购电量&lt;/span&gt;&lt;strong id=&quot;hec2-base-energy&quot;&gt;—&lt;/strong&gt;&lt;small&gt;当前任务范围&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-kpi&quot;&gt;&lt;span&gt;优化后购电量&lt;/span&gt;&lt;strong id=&quot;hec2-opt-energy&quot;&gt;—&lt;/strong&gt;&lt;small id=&quot;hec2-energy-delta&quot;&gt;—&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-kpi&quot;&gt;&lt;span&gt;电网购电降幅&lt;/span&gt;&lt;strong id=&quot;hec2-saving-rate&quot;&gt;—&lt;/strong&gt;&lt;small&gt;与基线分别比较&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;hec2-kpi&quot;&gt;&lt;span&gt;总成本变化&lt;/span&gt;&lt;strong id=&quot;hec2-cost-delta&quot;&gt;—&lt;/strong&gt;&lt;small&gt;电费、循环成本及罚项&lt;/small&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;hec2-grid&quot;&gt;
+              &lt;section class=&quot;hec2-panel&quot;&gt;
+                &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;基线与模拟方案（前端演示值）&lt;/h3&gt;&lt;span class=&quot;hec2-lock&quot; id=&quot;hec2-constraint-state&quot;&gt;等待演示检查&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-table-wrap&quot;&gt;
+                  &lt;table&gt;
+                    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;指标&lt;/th&gt;&lt;th class=&quot;hec2-num&quot;&gt;基线&lt;/th&gt;&lt;th class=&quot;hec2-num&quot;&gt;模拟优化后&lt;/th&gt;&lt;th class=&quot;hec2-num&quot;&gt;变化&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+                    &lt;tbody&gt;
+                      &lt;tr&gt;&lt;td&gt;电网购电量&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-base&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-opt&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num hec2-ok&quot; id=&quot;hec2-t-saving&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                      &lt;tr&gt;&lt;td&gt;弃电量&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-wasted-base&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-wasted-opt&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-wasted-delta&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                      &lt;tr&gt;&lt;td&gt;再生能有效利用&lt;/td&gt;&lt;td class=&quot;hec2-num&quot;&gt;0.00 kWh&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-regen&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num hec2-ok&quot; id=&quot;hec2-t-regen-delta&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                      &lt;tr&gt;&lt;td&gt;储能充电量 / 放电量&lt;/td&gt;&lt;td class=&quot;hec2-num&quot;&gt;0.00 / 0.00 kWh&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-storage-flow&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-storage-state&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                      &lt;tr&gt;&lt;td&gt;初始 SOC / 终端 SOC&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-soc-base&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-soc-opt&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-soc-delta&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                      &lt;tr&gt;&lt;td&gt;总成本（含循环及罚项）&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-cost-base&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-cost-opt&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-cost-change&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                      &lt;tr&gt;&lt;td&gt;调度调整总量&lt;/td&gt;&lt;td class=&quot;hec2-num&quot;&gt;0 min&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-adjust&quot;&gt;—&lt;/td&gt;&lt;td class=&quot;hec2-num&quot; id=&quot;hec2-t-adjust-note&quot;&gt;—&lt;/td&gt;&lt;/tr&gt;
+                    &lt;/tbody&gt;
+                  &lt;/table&gt;
+                &lt;/div&gt;
+              &lt;/section&gt;
+              &lt;aside class=&quot;hec2-panel&quot;&gt;
+                &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;本次输入快照&lt;/h3&gt;&lt;span class=&quot;hec2-lock&quot;&gt;不可回写&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;运行图&lt;/span&gt;&lt;strong id=&quot;hec2-r-plan&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;时域与范围&lt;/span&gt;&lt;strong id=&quot;hec2-r-scope&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;目标与场景&lt;/span&gt;&lt;strong id=&quot;hec2-r-objective&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;求解与配置&lt;/span&gt;&lt;strong id=&quot;hec2-r-profile&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;状态来源&lt;/span&gt;&lt;strong id=&quot;hec2-r-state&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;储能参与/在线设备&lt;/span&gt;&lt;strong id=&quot;hec2-r-storage&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;数据版本&lt;/span&gt;&lt;strong&gt;演示：L2026.03 / E2026.05&lt;/strong&gt;&lt;/div&gt;
+                &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;结算/终端口径&lt;/span&gt;&lt;strong&gt;演示：10 s / 目标 SOC 50%&lt;/strong&gt;&lt;/div&gt;
+              &lt;/aside&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class=&quot;hec2-page&quot; data-page-panel=&quot;performance&quot;&gt;
+          &lt;div class=&quot;hec2-page-head&quot;&gt;
+            &lt;h2&gt;性能分析&lt;/h2&gt;
+            &lt;p&gt;只展示性能观测口径，不改变算法参数或计算逻辑。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;hec2-notice&quot; role=&quot;note&quot;&gt;&lt;strong&gt;当前边界&lt;/strong&gt;&lt;span&gt;以下为轻量回归基准与前端估算值；正式数据到位后，应使用固定输入、固定种子和相同硬件重新采样。&lt;/span&gt;&lt;/div&gt;
+          &lt;div class=&quot;hec2-perf-grid&quot;&gt;
+            &lt;section class=&quot;hec2-panel&quot;&gt;&lt;span class=&quot;hec2-secondary&quot;&gt;最近一次前端模拟&lt;/span&gt;&lt;strong class=&quot;hec2-perf-value&quot; id=&quot;hec2-perf-last&quot;&gt;—&lt;/strong&gt;&lt;/section&gt;
+            &lt;section class=&quot;hec2-panel&quot;&gt;&lt;span class=&quot;hec2-secondary&quot;&gt;预计正式优化耗时&lt;/span&gt;&lt;strong class=&quot;hec2-perf-value&quot; id=&quot;hec2-perf-estimate&quot;&gt;约 8 秒&lt;/strong&gt;&lt;/section&gt;
+            &lt;section class=&quot;hec2-panel&quot;&gt;&lt;span class=&quot;hec2-secondary&quot;&gt;性能报告状态&lt;/span&gt;&lt;strong class=&quot;hec2-perf-value hec2-ok&quot; id=&quot;hec2-perf-report-state&quot;&gt;待导入&lt;/strong&gt;&lt;/section&gt;
+          &lt;/div&gt;
+          &lt;section class=&quot;hec2-panel&quot;&gt;
+            &lt;div class=&quot;hec2-panel-head&quot;&gt;&lt;h3&gt;观测维度&lt;/h3&gt;&lt;span class=&quot;hec2-lock&quot;&gt;不作为节能结论&lt;/span&gt;&lt;/div&gt;
+            &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;端到端耗时&lt;/span&gt;&lt;strong id=&quot;hec2-perf-e2e&quot;&gt;轻量基准：0.71 s&lt;/strong&gt;&lt;/div&gt;
+            &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;主要热点&lt;/span&gt;&lt;strong class=&quot;hec2-code&quot;&gt;输入解析 / 优化器候选评估&lt;/strong&gt;&lt;/div&gt;
+            &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;可复现依据&lt;/span&gt;&lt;strong class=&quot;hec2-code&quot;&gt;code_snapshot + arguments_sha256 + input/output SHA-256&lt;/strong&gt;&lt;/div&gt;
+            &lt;div class=&quot;hec2-result-row&quot;&gt;&lt;span&gt;建议&lt;/span&gt;&lt;strong&gt;正式数据到位后重复 3 次取中位数&lt;/strong&gt;&lt;/div&gt;
+          &lt;/section&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    (() =&gt; {
+      const root = document.getElementById(&#x27;hec-v2&#x27;);
+      if (!root) return;
+
+      const $ = (selector) =&gt; root.querySelector(selector);
+      const all = (selector) =&gt; Array.from(root.querySelectorAll(selector));
+      const showPage = (name) =&gt; {
+        all(&#x27;[data-page-panel]&#x27;).forEach((panel) =&gt; panel.classList.toggle(&#x27;is-active&#x27;, panel.dataset.pagePanel === name));
+        all(&#x27;[data-page]&#x27;).forEach((button) =&gt; {
+          if (button.dataset.page === name) button.setAttribute(&#x27;aria-current&#x27;, &#x27;page&#x27;);
+          else button.removeAttribute(&#x27;aria-current&#x27;);
+        });
+      };
+
+      all(&#x27;[data-page]&#x27;).forEach((button) =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; showPage(button.dataset.page)));
+      all(&#x27;[data-jump]&#x27;).forEach((button) =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; showPage(button.dataset.jump)));
+
+      const plan = $(&#x27;#hec2-plan&#x27;);
+      const scope = $(&#x27;#hec2-scope&#x27;);
+      const objective = $(&#x27;#hec2-objective&#x27;);
+      const scenarioSelect = $(&#x27;#hec2-scenario&#x27;);
+      const profile = $(&#x27;#hec2-profile&#x27;);
+      const config = $(&#x27;#hec2-config&#x27;);
+      const source = $(&#x27;#hec2-source&#x27;);
+      const socInput = $(&#x27;#hec2-soc&#x27;);
+      const storageToggle = $(&#x27;#hec2-storage&#x27;);
+      const progress = $(&#x27;#hec2-run-progress&#x27;);
+      const progressBar = $(&#x27;#hec2-progress-bar&#x27;);
+      const progressLabel = $(&#x27;#hec2-progress-label&#x27;);
+      const setProgress = (value, label) =&gt; {
+        progress.classList.add(&#x27;is-active&#x27;);
+        progressBar.style.width = `${value}%`;
+        progressBar.parentElement.setAttribute(&#x27;aria-valuenow&#x27;, String(value));
+        progressLabel.textContent = label;
+      };
+      source.addEventListener(&#x27;change&#x27;, () =&gt; {
+        socInput.disabled = source.value !== &#x27;offline&#x27;;
+        socInput.value = source.value === &#x27;offline&#x27; ? &#x27;50&#x27; : &#x27;62&#x27;;
+      });
+
+      const syncStorageScenarioState = () =&gt; {
+        const deviceOut = scenarioSelect.value === &#x27;device&#x27;;
+        const state = $(&#x27;#hec2-live-storage-state&#x27;);
+        state.textContent = deviceOut ? &#x27;演示场景 · 1 / 2 在线&#x27; : &#x27;演示值 · 2 / 2 在线&#x27;;
+        state.classList.toggle(&#x27;hec2-ok&#x27;, !deviceOut);
+        state.classList.toggle(&#x27;hec2-warn&#x27;, deviceOut);
+        $(&#x27;#hec2-live-storage-availability&#x27;).textContent = deviceOut ? &#x27;演示场景 · 50%&#x27; : &#x27;演示值 · 100%&#x27;;
+      };
+      scenarioSelect.addEventListener(&#x27;change&#x27;, syncStorageScenarioState);
+      syncStorageScenarioState();
+
+      profile.addEventListener(&#x27;change&#x27;, () =&gt; {
+        const estimates = { quick: &#x27;约 8 秒&#x27;, standard: &#x27;约 35 秒&#x27;, formal: &#x27;约 2 分钟&#x27; };
+        $(&#x27;#hec2-estimate&#x27;).textContent = `预计用时：${estimates[profile.value]}`;
+        $(&#x27;#hec2-perf-estimate&#x27;).textContent = estimates[profile.value];
+      });
+
+      const labelOf = (select) =&gt; select.options[select.selectedIndex].text;
+      const energy = (value) =&gt; `${value.toLocaleString(&#x27;zh-CN&#x27;, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} kWh`;
+      const money = (value) =&gt; `${value.toLocaleString(&#x27;zh-CN&#x27;, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 元`;
+      const percent = (value) =&gt; `${(value * 100).toFixed(2)}%`;
+      const clamp = (value, min, max) =&gt; Math.min(max, Math.max(min, value));
+      const formatDuration = (seconds) =&gt; {
+        const totalMinutes = Math.round(seconds / 60);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        if (!hours) return `${minutes} 分钟`;
+        if (!minutes) return `${hours} 小时`;
+        return `${hours} 小时 ${minutes} 分钟`;
+      };
+
+      const deriveTimeWindow = () =&gt; {
+        const scopePredictionS = { all: 21600, corridor: 10800, selected: 10800 }[scope.value];
+        const timetableFactor = { aug: 1, jul: 1.15 }[plan.value];
+        const predictionS = Math.round(scopePredictionS * timetableFactor / 600) * 600;
+        const executeS = config.value === &#x27;capacity-v2&#x27; ? 900 : (profile.value === &#x27;quick&#x27; ? 600 : 1800);
+        const completionTailS = { all: 4200, corridor: 3000, selected: 1800 }[scope.value];
+        const scenarioTailS = { normal: 0, delay: 900, weather: 600, device: 300 }[scenarioSelect.value];
+        const evaluationS = Math.ceil((predictionS + completionTailS + scenarioTailS) / 10) * 10;
+        return { predictionS, executeS, evaluationS };
+      };
+
+      const syncDerivedTimeWindow = () =&gt; {
+        const timeWindow = deriveTimeWindow();
+        $(&#x27;#hec2-prediction-window&#x27;).textContent = `系统派生 · ${formatDuration(timeWindow.predictionS)}（只读）`;
+        $(&#x27;#hec2-execute-window&#x27;).textContent = `模板解析 · ${formatDuration(timeWindow.executeS)}（只读）`;
+        $(&#x27;#hec2-evaluation-window&#x27;).textContent = `系统派生 · ${formatDuration(timeWindow.evaluationS)}（含最后结算桶）`;
+      };
+
+      [plan, scope, scenarioSelect, profile, config].forEach((control) =&gt; {
+        control.addEventListener(&#x27;change&#x27;, syncDerivedTimeWindow);
+      });
+      syncDerivedTimeWindow();
+
+      $(&#x27;#hec2-refresh&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        const now = new Date();
+        const stamp = new Intl.DateTimeFormat(&#x27;zh-CN&#x27;, {
+          year: &#x27;numeric&#x27;, month: &#x27;2-digit&#x27;, day: &#x27;2-digit&#x27;, hour: &#x27;2-digit&#x27;, minute: &#x27;2-digit&#x27;, second: &#x27;2-digit&#x27;, hour12: false
+        }).format(now).replaceAll(&#x27;/&#x27;, &#x27;-&#x27;);
+        const hhmmss = [now.getHours(), now.getMinutes(), now.getSeconds()].map((part) =&gt; String(part).padStart(2, &#x27;0&#x27;)).join(&#x27;&#x27;);
+        const newSoc = 58 + ((now.getMinutes() + now.getSeconds()) % 9);
+        $(&#x27;#hec2-live-time&#x27;).textContent = `演示：${stamp}`;
+        $(&#x27;#hec2-live-soc&#x27;).textContent = `演示值：${newSoc}%`;
+        $(&#x27;#hec2-live-delay&#x27;).textContent = `演示值：${2 + (now.getMinutes() % 5)} min`;
+        $(&#x27;#hec2-snapshot-id&#x27;).textContent = `S-DEMO-${hhmmss}`;
+        $(&#x27;#hec2-live-age&#x27;).textContent = &#x27;演示值 · 刚刚&#x27;;
+        $(&#x27;#hec2-snapshot-state&#x27;).textContent = &#x27;演示已刷新，可用于计算&#x27;;
+        if (source.value === &#x27;live&#x27;) socInput.value = String(newSoc);
+      });
+
+      $(&#x27;#hec2-run&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        const runButton = $(&#x27;#hec2-run&#x27;);
+        const status = $(&#x27;#hec2-run-status&#x27;);
+        const scenario = scenarioSelect;
+        const storageEnabled = storageToggle.checked;
+        const soc = Number(socInput.value);
+
+        if (!Number.isFinite(soc) || soc &lt; 0 || soc &gt; 100) {
+          status.textContent = &#x27;校验失败：初始 SOC 必须在 0%–100% 之间。正式算法将按设备可用容量换算为 kWh。&#x27;;
+          status.classList.add(&#x27;is-active&#x27;);
+          status.classList.add(&#x27;is-error&#x27;);
+          return;
+        }
+
+        status.classList.remove(&#x27;is-error&#x27;);
+        runButton.disabled = true;
+        runButton.textContent = &#x27;模拟计算中…&#x27;;
+        status.textContent = &#x27;已根据当前运行图、列车范围和策略重新派生时域，并固化数据版本与状态快照。&#x27;;
+        status.classList.add(&#x27;is-active&#x27;);
+        setProgress(15, &#x27;校验输入与数据版本…&#x27;);
+        window.setTimeout(() =&gt; setProgress(45, &#x27;评估运行图与能耗场景…&#x27;), 220);
+        window.setTimeout(() =&gt; setProgress(75, &#x27;计算储能协同与约束…&#x27;), 440);
+
+        window.setTimeout(() =&gt; {
+          const planFactor = { aug: 1, jul: 1.055 }[plan.value];
+          const scopeBase = { all: 28222.36, corridor: 16980.42, selected: 9340.18 }[scope.value];
+          const timeWindow = deriveTimeWindow();
+          const evaluationFactor = timeWindow.evaluationS / 10800;
+          const objectiveSaving = { balanced: 0.132, energy: 0.178, capacity: 0.087 }[objective.value];
+          const deviceAvailability = scenario.value === &#x27;device&#x27; ? 0.5 : 1;
+          const onlineStorageCount = scenario.value === &#x27;device&#x27; ? 1 : 2;
+          const scenarioPenalty = { normal: 0, delay: 0.023, weather: 0.018, device: 0.041 }[scenario.value];
+          const profileGain = { quick: -0.012, standard: 0, formal: 0.009 }[profile.value];
+          const configGain = { &#x27;energy-v3&#x27;: 0.012, &#x27;capacity-v2&#x27;: -0.011 }[config.value];
+          const storageGain = storageEnabled ? 0.018 * deviceAvailability : -0.071;
+          const socGain = storageEnabled ? (soc - 50) * 0.00045 * deviceAvailability : 0;
+          const savingRate = clamp(objectiveSaving - scenarioPenalty + profileGain + configGain + storageGain + socGain, 0.025, 0.235);
+          const base = scopeBase * evaluationFactor * planFactor;
+          const optimized = base * (1 - savingRate);
+          const wastedBase = base * 0.105;
+          const recoveredPotential = storageEnabled ? base * savingRate * 0.82 * deviceAvailability : 0;
+          const recovered = Math.min(recoveredPotential, wastedBase);
+          const availableStorageCapacity = 20000 * deviceAvailability;
+          const initialSocKwh = availableStorageCapacity * soc / 100;
+          const storageCharge = storageEnabled ? recovered + base * 0.04 * deviceAvailability : 0;
+          const storageDischarge = storageEnabled ? storageCharge * 0.94 * 0.91 : 0;
+          const finalSocKwh = clamp(initialSocKwh + storageCharge * 0.94 - storageDischarge / 0.91, 0, availableStorageCapacity);
+          const wastedOptimized = Math.max(0, wastedBase - recovered);
+          const cyclePrice = config.value === &#x27;capacity-v2&#x27; ? 0.28 : 0.08;
+          const targetFinalSocKwh = availableStorageCapacity * 0.5;
+          const finalSocToleranceKwh = 200 * deviceAvailability;
+          const baselineFinalSocShortfall = Math.max(0, targetFinalSocKwh - initialSocKwh - finalSocToleranceKwh);
+          const optimizedFinalSocShortfall = Math.max(0, targetFinalSocKwh - finalSocKwh - finalSocToleranceKwh);
+          const baseCost = base * 0.55 + wastedBase * 0.02 + baselineFinalSocShortfall * 0.05;
+          const cyclingCost = (storageCharge + storageDischarge) * cyclePrice;
+          const optimizedCost = optimized * 0.55 + cyclingCost + wastedOptimized * 0.02 + optimizedFinalSocShortfall * 0.05;
+          const costSaving = baseCost - optimizedCost;
+          const adjustmentBase = { balanced: 112, energy: 226, capacity: 48 }[objective.value];
+          const adjustment = Math.round((adjustmentBase + ({ normal: 0, delay: 92, weather: 34, device: 61 }[scenario.value])) / 10) / 6;
+          const now = new Date();
+          const runId = `HEC-${String(now.getHours()).padStart(2, &#x27;0&#x27;)}${String(now.getMinutes()).padStart(2, &#x27;0&#x27;)}${String(now.getSeconds()).padStart(2, &#x27;0&#x27;)}-${String(now.getMilliseconds()).padStart(3, &#x27;0&#x27;)}`;
+          const costIncreased = costSaving &lt; 0;
+          const costDelta = $(&#x27;#hec2-cost-delta&#x27;);
+          const tableCostDelta = $(&#x27;#hec2-t-cost-change&#x27;);
+          const hasScenarioWarning = scenario.value !== &#x27;normal&#x27; || !storageEnabled || soc &lt; 20 || soc &gt; 90;
+          const constraintState = $(&#x27;#hec2-constraint-state&#x27;);
+
+          $(&#x27;#hec2-result-title&#x27;).textContent = `任务 ${runId}`;
+          $(&#x27;#hec2-result-subtitle&#x27;).textContent = `前端演示生成于 ${now.toLocaleString(&#x27;zh-CN&#x27;)} · 演示参数与版本已固化`;
+          $(&#x27;#hec2-base-energy&#x27;).textContent = energy(base);
+          $(&#x27;#hec2-opt-energy&#x27;).textContent = energy(optimized);
+          $(&#x27;#hec2-energy-delta&#x27;).textContent = `减少 ${energy(base - optimized)}`;
+          $(&#x27;#hec2-saving-rate&#x27;).textContent = percent(savingRate);
+          costDelta.textContent = costIncreased ? `预计增加 ${money(-costSaving)}` : `预计节省 ${money(costSaving)}`;
+          costDelta.classList.toggle(&#x27;hec2-bad&#x27;, costIncreased);
+          costDelta.classList.toggle(&#x27;hec2-ok&#x27;, !costIncreased);
+          $(&#x27;#hec2-t-base&#x27;).textContent = energy(base);
+          $(&#x27;#hec2-t-opt&#x27;).textContent = energy(optimized);
+          $(&#x27;#hec2-t-saving&#x27;).textContent = `−${percent(savingRate)}`;
+          $(&#x27;#hec2-t-regen&#x27;).textContent = energy(recovered);
+          $(&#x27;#hec2-t-wasted-base&#x27;).textContent = energy(wastedBase);
+          $(&#x27;#hec2-t-wasted-opt&#x27;).textContent = energy(wastedOptimized);
+          $(&#x27;#hec2-t-wasted-delta&#x27;).textContent = recovered &gt; 0 ? `−${energy(wastedBase - wastedOptimized)}` : &#x27;0.00 kWh&#x27;;
+          $(&#x27;#hec2-t-regen-delta&#x27;).textContent = recovered &gt; 0 ? `+${energy(recovered)}` : &#x27;0.00 kWh&#x27;;
+          $(&#x27;#hec2-t-storage-flow&#x27;).textContent = `${energy(storageCharge)} / ${energy(storageDischarge)}`;
+          $(&#x27;#hec2-t-storage-state&#x27;).textContent = storageEnabled ? `${onlineStorageCount} / 2 在线参与` : &#x27;已关闭 · 0 / 2 参与&#x27;;
+          $(&#x27;#hec2-t-soc-base&#x27;).textContent = `${energy(initialSocKwh)} (${soc.toFixed(0)}%)`;
+          $(&#x27;#hec2-t-soc-opt&#x27;).textContent = `${energy(finalSocKwh)} (${availableStorageCapacity &gt; 0 ? (finalSocKwh / availableStorageCapacity * 100).toFixed(1) : &#x27;0.0&#x27;}%)`;
+          $(&#x27;#hec2-t-soc-delta&#x27;).textContent = `${finalSocKwh &gt;= initialSocKwh ? &#x27;+&#x27; : &#x27;−&#x27;}${energy(Math.abs(finalSocKwh - initialSocKwh))}`;
+          $(&#x27;#hec2-t-cost-base&#x27;).textContent = money(baseCost);
+          $(&#x27;#hec2-t-cost-opt&#x27;).textContent = money(optimizedCost);
+          tableCostDelta.textContent = costIncreased ? `+${money(-costSaving)}` : `−${money(costSaving)}`;
+          tableCostDelta.classList.toggle(&#x27;hec2-bad&#x27;, costIncreased);
+          tableCostDelta.classList.toggle(&#x27;hec2-ok&#x27;, !costIncreased);
+          $(&#x27;#hec2-t-adjust&#x27;).textContent = `${adjustment.toFixed(1)} min`;
+          $(&#x27;#hec2-t-adjust-note&#x27;).textContent = objective.value === &#x27;capacity&#x27; ? &#x27;能力约束优先&#x27; : &#x27;用于重空及储能对齐&#x27;;
+          $(&#x27;#hec2-r-plan&#x27;).textContent = labelOf(plan);
+          $(&#x27;#hec2-r-scope&#x27;).textContent = `${formatDuration(timeWindow.predictionS)}前瞻 / ${formatDuration(timeWindow.evaluationS)}评价 · ${labelOf(scope)}`;
+          $(&#x27;#hec2-r-objective&#x27;).textContent = `${labelOf(objective)} · ${labelOf(scenario)}`;
+          $(&#x27;#hec2-r-profile&#x27;).textContent = `${labelOf(profile)} · ${labelOf(config)}`;
+          $(&#x27;#hec2-r-state&#x27;).textContent = source.value === &#x27;live&#x27;
+            ? `模拟快照 ${$(&#x27;#hec2-snapshot-id&#x27;).textContent} · SOC ${soc}%`
+            : `离线指定 · SOC ${soc}%`;
+          $(&#x27;#hec2-r-storage&#x27;).textContent = storageEnabled
+            ? `启用 · ${onlineStorageCount} / 2 在线 · 可用容量/功率 ${Math.round(deviceAvailability * 100)}%`
+            : `关闭 · ${onlineStorageCount} / 2 设备在线但不参与`;
+          constraintState.textContent = hasScenarioWarning ? &#x27;演示检查通过（含场景警告）&#x27; : &#x27;演示假设：约束通过&#x27;;
+          constraintState.classList.toggle(&#x27;hec2-warn&#x27;, hasScenarioWarning);
+          constraintState.classList.toggle(&#x27;hec2-ok&#x27;, !hasScenarioWarning);
+          constraintState.classList.remove(&#x27;hec2-lock&#x27;);
+
+          $(&#x27;#hec2-empty-result&#x27;).style.display = &#x27;none&#x27;;
+          $(&#x27;#hec2-result-content&#x27;).classList.add(&#x27;is-active&#x27;);
+          $(&#x27;#hec2-perf-last&#x27;).textContent = &#x27;前端演示 · 0.70 s&#x27;;
+          $(&#x27;#hec2-perf-report-state&#x27;).textContent = &#x27;已记录运行快照&#x27;;
+          status.textContent = `任务 ${runId} 已完成。结果已根据当前选项刷新。`;
+          runButton.disabled = false;
+          runButton.textContent = &#x27;重新运行&#x27;;
+          setProgress(100, &#x27;完成 · 结果与输入快照已固化&#x27;);
+          showPage(&#x27;results&#x27;);
+        }, 700);
+      });
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;'></iframe>
+</body>
+</html>

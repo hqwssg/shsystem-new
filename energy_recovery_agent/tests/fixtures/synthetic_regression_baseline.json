@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "created_at_utc": "2026-08-29T07:28:51.499176+00:00",
+  "scenario_ids": [
+    "settlement_nominal",
+    "storage_no_direct",
+    "settlement_invariants",
+    "multi_storage_terminal_soc",
+    "zero_length_train",
+    "resource_conflict_detection",
+    "invalid_input_guards",
+    "power_arm_lookup",
+    "rolling_constraints"
+  ],
+  "scenarios": [
+    {"scenario_id": "settlement_nominal", "script": "tests/smoke/verify_energy_settlement_correctness.py", "expected": "normal settlement invariants pass", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "ca53db0ccfb4c5f0e9bf0a55e323872d39933d2f4490f61f11009eb0c1208f4c"},
+    {"scenario_id": "storage_no_direct", "script": "tests/smoke/verify_energy_scenarios.py", "expected": "direct use remains zero and storage scenario completes", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "54766eb8438e748df4a3491d12cc129e0a5267f76cdb6239b57b8f43abe64000"},
+    {"scenario_id": "settlement_invariants", "script": "tests/smoke/verify_settlement_invariants.py", "expected": "energy/SOC invariants hold", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "5d5e35d96e241693333ad42ce89fc43ea6105784b2df8360a3fdd0c2689f30b1"},
+    {"scenario_id": "multi_storage_terminal_soc", "script": "tests/smoke/verify_multi_storage_terminal_soc.py", "expected": "terminal SOC is reported per storage device", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "f25ae4436baa6f6b3d93a87905d3a239803b0a39c057754f64780413fa338677"},
+    {"scenario_id": "zero_length_train", "script": "tests/smoke/verify_zero_length_train_cache.py", "expected": "zero-length point-mass cache is accepted", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "51b4617cb3d053e0915a2c2c79fc045b6ae37c46475bf21240186b885b6d3c10"},
+    {"scenario_id": "resource_conflict_detection", "script": "tests/smoke/verify_timetable_resource_constraints.py", "expected": "resource conflicts are detected and classified", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "464a76c2f7154483b609cc97b9d54bc22d8f39d6763ded620a2a723943a8111d"},
+    {"scenario_id": "invalid_input_guards", "script": "tests/smoke/verify_data_ingestion_input_guards.py", "expected": "invalid numeric/boolean fields are rejected", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "5e15df575d508e33abaa9054724c052ff0c879c4d06acc687012112ce4fe37b6"},
+    {"scenario_id": "power_arm_lookup", "script": "tests/smoke/verify_power_arm_lookup.py", "expected": "direction/mainline lookup is deterministic", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "e855128224167469a1e07e2287e24c22e380285897bb8e3240b6a2d6e32ebb2a"},
+    {"scenario_id": "rolling_constraints", "script": "tests/smoke/verify_rolling_optimizer_constraints.py", "expected": "constraint domination and Pareto dedup hold", "return_code": 0, "passed": true, "timed_out": false, "output_fingerprint": "2762b97397b6e522f4a131df5e111c3fa362fb9fc424c8b35740f4021607dd22"}
+  ]
+}

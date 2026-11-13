@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "package_id": "frontend_backend_code_20261108_stage_v2",
+  "built_at_utc": "2026-11-08T21:35:00Z",
+  "purpose": "frontend_development_and_backend_contract_integration",
+  "source": "development_working_tree_snapshot",
+  "source_release_version": "2026.11.08.1",
+  "interface_freeze_version": "1.6.0",
+  "data_status": "planning_placeholder",
+  "data_provenance": {
+    "register": "data/real_shuohuang/assumptions.json",
+    "dataset": "real_shuohuang",
+    "updated_at": "2026-11-08",
+    "counts_by_status": {
+      "resolved": 3,
+      "derived": 4,
+      "calibrated": 2,
+      "assumed": 1,
+      "placeholder": 4,
+      "measured": 2,
+      "contested": 1
+    },
+    "note": "状态含义见登记表 status_legend；contested 项的下游结论必须按情景给出。"
+  },
+  "phase": "simulation",
+  "ready_for_integration": true,
+  "ready_for_conclusions": false,
+  "open_capability_count": 0,
+  "conditional_capability_count": 14,
+  "payload_file_count": 657,
+  "included_database_run_types": [
+    "dispatch",
+    "timetable_audit",
+    "timetable_optimization",
+    "rolling_rescheduling",
+    "joint_parameter_robustness",
+    "storage_planning"
+  ],
+  "official_release_evidence_included": false,
+  "credentials_included": false,
+  "official_data_included": false,
+  "checksum_algorithm": "sha256"
+}

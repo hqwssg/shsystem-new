@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "enabled_by_default": false,
+  "data_status": "experimental_kwh_calibration",
+  "source": {
+    "group_coefficients_csv": "outputs\\energy_calibration_mainline_refined\\05_error_analysis_fitcore\\energy_calibration_group_coefficients.csv",
+    "error_summary_json": "outputs\\energy_calibration_mainline_refined\\05_error_analysis_fitcore\\energy_calibration_error_analysis_summary.json",
+    "sample_source": "data\\real_shuohuang\\smart_meter_calibration_samples.csv"
+  },
+  "applicability": {
+    "line": "朔黄线",
+    "energy_unit_status": "confirmed_kwh_from_provider_reply",
+    "fit_scope": "SS4 realtime meter samples matched to station/ammeter_info by trainid and time window",
+    "recommended_use": "comparison and sensitivity testing only; unit is confirmed as kWh but sample coverage and model physics are not final engineering calibration"
+  },
+  "global": {
+    "traction_scale": 0.995168800189934,
+    "sample_count": 178,
+    "median_abs_pct_error_after_scale": 36.4887142677114
+  },
+  "groups": {
+    "direction_aggregation": {
+      "down|aggregated_ab": {
+        "traction_scale": 0.943459,
+        "sample_count": 114,
+        "usable_ratio_count": 114,
+        "coefficient_status": "usable",
+        "ratio_p10": 0.470927,
+        "ratio_p90": 1.941699
+      },
+      "up|aggregated_ab": {
+        "traction_scale": 1.019481,
+        "sample_count": 64,
+        "usable_ratio_count": 64,
+        "coefficient_status": "usable",
+        "ratio_p10": 0.29422,
+        "ratio_p90": 1.467904
+      }
+    },
+    "travel_direction": {
+      "down": {
+        "traction_scale": 0.943459,
+        "sample_count": 114,
+        "usable_ratio_count": 114,
+        "coefficient_status": "usable",
+        "ratio_p10": 0.470927,
+        "ratio_p90": 1.941699
+      },
+      "up": {
+        "traction_scale": 1.019481,
+        "sample_count": 64,
+        "usable_ratio_count": 64,
+        "coefficient_status": "usable",
+        "ratio_p10": 0.29422,
+        "ratio_p90": 1.467904
+      }
+    },
+    "aggregation_type": {
+      "aggregated_ab": {
+        "traction_scale": 0.995169,
+        "sample_count": 178,
+        "usable_ratio_count": 178,
+        "coefficient_status": "usable",
+        "ratio_p10": 0.450034,
+        "ratio_p90": 1.859412
+      }
+    },
+    "realtime_trainid": {
+      "58A+58B": {
+        "traction_scale": 0.995169,
+        "sample_count": 178,
+        "usable_ratio_count": 178,
+        "coefficient_status": "usable",
+        "ratio_p10": 0.450034,
+        "ratio_p90": 1.859412
+      }
+    }
+  },
+  "resolution_order": [
+    "direction_aggregation",
+    "travel_direction",
+    "aggregation_type",
+    "global"
+  ]
+}

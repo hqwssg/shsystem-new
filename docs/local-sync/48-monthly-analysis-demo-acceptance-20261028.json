@@ -1,0 +1,23 @@
+{
+  "group": "48-monthly-analysis-demo-acceptance-20261028",
+  "source_before": "6ecdbf698cf2b3fd208f0e065da9736a73ca28c7",
+  "source_tag": "pre-sync-48-monthly-analysis-demo-acceptance-20261028",
+  "private_config_before": "refs/local-config/48-monthly-analysis-demo-acceptance-20261028-before",
+  "upstream": "fb77c2d47c25064201f778cb0a1386e1996a744f",
+  "summary": "完成月度统计演示验收、交付说明及边界修正",
+  "checks": {
+    "backend_full_tests": 232,
+    "backend_final_targeted_tests": 15,
+    "export_checks": 6,
+    "failures": 0,
+    "errors": 0,
+    "frontend_build": "PASS",
+    "browser_queries": "three modes, organization, quarter/year, node, scene, department/station PASS",
+    "browser_download": "not authorized; no bypass",
+    "demo_monthly_rows": 357,
+    "demo_idempotence_cleanup": "PASS including external FK guard",
+    "protected_configs_unchanged": true,
+    "online_deployment": false
+  },
+  "private_config_after": "refs/local-config/48-monthly-analysis-demo-acceptance-20261028-after"
+}

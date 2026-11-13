@@ -1,0 +1,1750 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-08T20:40:05-08:00",
+  "package": "single_train_energy_recovery",
+  "module": "regenerative_braking",
+  "purpose": "单列车再生制动能量回收：RHONN 状态辨识 + EKF/UKF 在线更新 + NSMC 控制",
+  "python_requires": ">=3.10",
+  "dependencies": [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pyyaml>=6.0"
+  ],
+  "default_simulation": {
+    "dt_s": 0.0001,
+    "record_stride": 10,
+    "note": "评估口径 Ts = h = 1e-4 s；引用任何能量数字必须同时写明步长与装配"
+  },
+  "entrypoints": [
+    {
+      "name": "load_component_bundle",
+      "function": "load_component_bundle(paths: 'Optional[ProjectPaths]' = None) -> 'ComponentBundle'",
+      "purpose": "读取四类参数，装配列车/电机/变流器/储能对象",
+      "module": "regenerative_braking.simulation.scenario_runner"
+    },
+    {
+      "name": "build_simulator",
+      "function": "build_simulator(bundle: 'ComponentBundle') -> 'RegenerativeBrakingSimulator'",
+      "purpose": "构造仿真器实例（每次运行前显式复位被控对象）",
+      "module": "regenerative_braking.simulation.scenario_runner"
+    },
+    {
+      "name": "build_closed_loop_controller",
+      "function": "build_closed_loop_controller(*, limits: 'Optional[DutyLimits]' = None, rhonn_config: 'Optional[RHONNConfig]' = None, identifier: 'Optional[OnlineIdentifier]' = None, nsmc_config: 'Optional[NSMCConfig]' = None, converter_params: 'Optional[DCConverterParameters]' = None, storage_params: 'Optional[object]' = None, sample_time_s: 'Optional[float]' = None, apply_control_channel_gain_prior: 'bool' = True, measurement_filter_time_constant_s: 'float' = 0.0, measurement_filter_alpha: 'float' = 1.0, storage_resistance_time_constant_s: 'float' = 0.0, history_limit: 'int' = 2000, reference_strategy: 'str' = 'storage_matched', feedback_resistance_upper_factor: 'Optional[float]' = None, controller_profile: 'str' = 'custom') -> 'ClosedLoopController'",
+      "purpose": "装配主算法联合闭环控制器",
+      "module": "regenerative_braking.simulation.closed_loop"
+    },
+    {
+      "name": "run_case",
+      "function": "run_case(bundle: 'ComponentBundle', series: 'ProfileSeries', case: 'BaselineCase', config: 'Optional[SimulationConfig]' = None) -> 'SimulationResult'",
+      "purpose": "跑单个场景 × 单个控制器，返回 SimulationResult",
+      "module": "regenerative_braking.simulation.scenario_runner"
+    },
+    {
+      "name": "build_validation_scenarios",
+      "function": "build_validation_scenarios(bundle: 'ComponentBundle', dt: 'float', *, shared: 'Optional[SharedRailwayData]' = None, config: 'Optional[ScenarioProfileConfig]' = None) -> 'Tuple[ValidationScenario, ...]'",
+      "purpose": "构造验证场景剖面；传 shared 才含真实线路族 R",
+      "module": "regenerative_braking.validation.scenarios"
+    },
+    {
+      "name": "baseline_catalog",
+      "function": "baseline_catalog(controller_profile: 'str' = 'default', *, reference_strategy: 'str' = 'storage_matched', reference_upper_factor: 'Optional[float]' = None) -> 'Tuple[ValidationBaseline, ...]'",
+      "purpose": "列出全部可对比控制器",
+      "module": "regenerative_braking.validation.baselines"
+    }
+  ],
+  "controllers": [
+    {
+      "label": "uncontrolled_zero_duty",
+      "description": "无控制：占空比恒 0，再生能量全部回网",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "fixed_duty_d1_0.75",
+      "description": "固定占空比 d1=0.75（刚过充电门槛，轻载）",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "fixed_duty_d1_0.85",
+      "description": "固定占空比 d1=0.85（逼近 u0=0.9，受储能功率约束）",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "pi",
+      "description": "定常 PI（与主算法共用滑模面/参考量口径）",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "pid",
+      "description": "定常 PID（微分时间默认等于一个采样步长）",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "traditional_smc",
+      "description": "传统滑模控制（无边界层，bang-bang）",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "ideal_upper_bound",
+      "description": "理想控制器上界参照（无损 buck 理想占空比）",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "no_storage_zero_duty",
+      "description": "无储能（仅回网）：储能充放电功率上限置 0 + 占空比恒 0",
+      "is_main_algorithm": false
+    },
+    {
+      "label": "rhonn_nsmc",
+      "description": "主算法：RHONN + EKF/UKF（可解释模式切换）+ NSMC 联合闭环；参数 profile=default；reference_strategy=storage_matched",
+      "is_main_algorithm": true
+    }
+  ],
+  "controller_lifecycle": {
+    "rule": "每次 run 都必须新建控制器；不要缓存实例跨场景复用",
+    "how": "controller = build_closed_loop_controller(...)，每个 (场景, 控制器) 调一次",
+    "why": "rhonn_nsmc 的 reset() 保留在线学到的权重（热启动）。复用同一实例跑第二个场景时，前若干拍仍用上一场景的权重，读数依赖此前跑过什么——不是物理差异，是状态残留",
+    "evidence": "同一场景同一控制器重跑：净存入 1.023138811709 → 1.022264756990 kWh（长剖面约 0.085%）；几秒级小剖面可直接翻到 0（热启动后 u_eq 落到充电门槛以下，整段不充电）",
+    "detection": "复用发生时结果 extra_notes 会带「⚠ 控制器实例第 N 次运行」标注，可用于自检"
+  },
+  "scenarios": [
+    {
+      "id": "s1_flat_braking",
+      "variant": "nominal",
+      "family": "1_平直常规制动",
+      "description": "等减速度 0.25 m/s²，入口 36.0 km/h，窗口 8.0 s",
+      "steps": 80000
+    },
+    {
+      "id": "s2_long_downhill",
+      "variant": "nominal",
+      "family": "2_长大下坡",
+      "description": "-9.0 ‰ 坡道，18.0→16.0 km/h 后恒速 2.0 s",
+      "steps": 57038
+    },
+    {
+      "id": "sR_route_braking",
+      "variant": "nominal",
+      "family": "R_真实线路区段制动",
+      "description": "区段自 0.00 km 起，入口 30.0 km/h",
+      "steps": 20001
+    },
+    {
+      "id": "s3_mass_variation",
+      "variant": "mass_0.6x",
+      "family": "3_载重变化",
+      "description": "质量 0.6×（13260 t），请求减速度 0.250 m/s²",
+      "steps": 80000
+    },
+    {
+      "id": "s3_mass_variation",
+      "variant": "mass_1.4x",
+      "family": "3_载重变化",
+      "description": "质量 1.4×（30940 t），请求减速度 0.180 m/s²",
+      "steps": 80000
+    },
+    {
+      "id": "s4_power_step",
+      "variant": "nominal",
+      "family": "4_制动功率突变",
+      "description": "减速度在 0.05 与 0.22 m/s² 间阶跃（每 1.0 s 一段）",
+      "steps": 40000
+    },
+    {
+      "id": "s5_soc_near_limit",
+      "variant": "soc0_0.85",
+      "family": "5_SOC接近上限",
+      "description": "初始 SOC 0.85（上限 0.90）下持续再生",
+      "steps": 57038
+    },
+    {
+      "id": "s5_soc_near_limit",
+      "variant": "soc0_0.89",
+      "family": "5_SOC接近上限",
+      "description": "初始 SOC 0.89（上限 0.90）下持续再生",
+      "steps": 57038
+    },
+    {
+      "id": "s6_parameter_perturbation",
+      "variant": "converter_L_plus50pct",
+      "family": "6_参数扰动",
+      "description": "变流器电感 L ×1.5（参数扰动）",
+      "steps": 80000
+    },
+    {
+      "id": "s6_parameter_perturbation",
+      "variant": "storage_R_plus100pct",
+      "family": "6_参数扰动",
+      "description": "储能内阻 R ×2.0（参数扰动）",
+      "steps": 80000
+    },
+    {
+      "id": "s7_strong_nonlinearity",
+      "variant": "nominal",
+      "family": "7_强非线性触发UKF",
+      "description": "大阶跃分段剖面（减速度 0.02↔0.18 m/s²，坡度 0↔−6 ‰）",
+      "steps": 40000
+    },
+    {
+      "id": "s8_measurement_noise",
+      "variant": "noise_1pct",
+      "family": "8_测量噪声",
+      "description": "电压/电流相对噪声 1%（另加 SOC/速度噪声）",
+      "steps": 80000
+    },
+    {
+      "id": "s8_measurement_noise",
+      "variant": "noise_5pct",
+      "family": "8_测量噪声",
+      "description": "电压/电流相对噪声 5%（另加 SOC/速度噪声）",
+      "steps": 80000
+    },
+    {
+      "id": "s9_model_mismatch",
+      "variant": "nominal",
+      "family": "9_模型失配",
+      "description": "被控对象质量 ×1.8（39780 t），控制器/辨识器仍用标称参数",
+      "steps": 80000
+    }
+  ],
+  "scenario_construction": {
+    "with_shared_data": 14,
+    "without_shared_data": 13,
+    "note": "传 shared=load_shared_railway_data(paths) 才包含真实线路区段制动（族 R）；不传则族 R 显式缺席，场景数为 13。",
+    "recipe": "from regenerative_braking.io.data_loader import load_shared_railway_data; shared = load_shared_railway_data(paths); build_validation_scenarios(bundle, dt, shared=shared)"
+  },
+  "input_parameters": [
+    {
+      "file": "data/single_train/train_parameters.json",
+      "profile_id": "shuohuang_heavy_c80_placeholder",
+      "label": "朔黄线 2 万吨 C80 重车代表工况（单列车再生制动仿真用）",
+      "label_raw": "朔黄线 2 万吨 C80 重车代表工况（单列车再生制动仿真用）",
+      "data_status": "derived",
+      "fields": [
+        {
+          "field": "vehicle_mass_tons",
+          "value": 21600.0,
+          "unit": "t",
+          "cn": "车辆总重（不含机车）",
+          "provenance": "车辆总重 21600 t，来自 trains.csv 的 Heavy.mass_tons；语义固定为『不含机车』，机车质量另行叠加，不得就地改写本值",
+          "provenance_raw": "车辆总重 21600 t，来自 trains.csv 的 Heavy.mass_tons；语义固定为『不含机车』，机车质量另行叠加，不得就地改写本值",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "basic_resistance.a_n_per_kn",
+          "value": 0.92,
+          "unit": "N/kN",
+          "cn": "基本阻力常数项",
+          "provenance": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_raw": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_scope": "group:basic_resistance",
+          "data_status": "official"
+        },
+        {
+          "field": "basic_resistance.b_n_per_kn_per_kmh",
+          "value": 0.0048,
+          "unit": "N/(kN·km/h)",
+          "cn": "基本阻力速度一次项",
+          "provenance": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_raw": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_scope": "group:basic_resistance",
+          "data_status": "official"
+        },
+        {
+          "field": "basic_resistance.c_n_per_kn_per_kmh2",
+          "value": 0.000125,
+          "unit": "N/(kN·km/h²)",
+          "cn": "基本阻力速度二次项",
+          "provenance": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_raw": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_scope": "group:basic_resistance",
+          "data_status": "official"
+        },
+        {
+          "field": "basic_resistance.curve_equivalent_per_mille_numerator",
+          "value": 600.0,
+          "unit": "‰",
+          "cn": "曲线附加阻力等效分子",
+          "provenance": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_raw": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+          "provenance_scope": "group:basic_resistance",
+          "data_status": "official"
+        },
+        {
+          "field": "mass_kg",
+          "value": 22100000.0,
+          "unit": "kg",
+          "cn": "列车质量",
+          "provenance": "整备质量 = 车辆总重 21600 t + 机车自重 500 t（神华号 12 轴 300 t + 神华号 8 轴 200 t）= 22100 t（22100000 kg）。车辆总重取自 trains.csv 的 Heavy.mass_tons（216 辆 × 100 t，经智能电表 5869 趟核对，不含机车）；机车自重逐型取自 locomotive_curves.json 的 computed_mass_t。**编组以 trains.csv:locomotive_consist（SHENHUA_12:1|SHENHUA_8:1）为准**，本字段为镜像值，装配时由共享数据按各机型台数重算并校验。两万吨为 1+1 两台的依据：编组模式文档「两万吨 重车 编组模式 1+1（交+交）辆数 216」、运行图技术资料第 7 页「2 万吨列车由国能号 12 轴 + 国能号 8 轴交流机车固定担当」，以及能量守恒独立校核——单机口径下轮周牵引 6322 kWh 低于物理下界 9884 kWh（−36%），只有「双机、电表读数只是其中一台」可满足该下界（+26.2%）。此前「单台 12 轴、21900 t」的登记已撤回。",
+          "provenance_raw": "整备质量 = 车辆总重 21600 t + 机车自重 500 t（神华号 12 轴 300 t + 神华号 8 轴 200 t）= 22100 t（22100000 kg）。车辆总重取自 trains.csv 的 Heavy.mass_tons（216 辆 × 100 t，经智能电表 5869 趟核对，不含机车）；机车自重逐型取自 locomotive_curves.json 的 computed_mass_t。**编组以 trains.csv:locomotive_consist（SHENHUA_12:1|SHENHUA_8:1）为准**，本字段为镜像值，装配时由共享数据按各机型台数重算并校验。两万吨为 1+1 两台的依据：编组模式文档「两万吨 重车 编组模式 1+1（交+交）辆数 216」、运行图技术资料第 7 页「2 万吨列车由国能号 12 轴 + 国能号 8 轴交流机车固定担当」，以及能量守恒独立校核——单机口径下轮周牵引 6322 kWh 低于物理下界 9884 kWh（−36%），只有「双机、电表读数只是其中一台」可满足该下界（+26.2%）。此前「单台 12 轴、21900 t」的登记已撤回。",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "locomotive_count",
+          "value": 1,
+          "unit": "个",
+          "cn": "机车台数",
+          "provenance": "**仅表示首型（locomotive_type = SHENHUA_12）的台数，不是整列机车总数。**整列编组以 trains.csv:locomotive_consist 为准（当前 SHENHUA_12:1|SHENHUA_8:1，共 2 台）。保留本字段 = 1 而不是改成 2，是因为它要与 trains.csv 的同名列保持一致（镜像关系），且未适配编组的消费方读到「1 台 12 轴」是保守低估；若填 2 而不区分机型，会按 2 × 300 t / 2 × 14400 kW 算出 600 t / 28800 kW，全错。1 台 / 2 台情景对比仍可通过 build_component_bundle(locomotive_count=N) 显式覆盖。",
+          "provenance_raw": "**仅表示首型（locomotive_type = SHENHUA_12）的台数，不是整列机车总数。**整列编组以 trains.csv:locomotive_consist 为准（当前 SHENHUA_12:1|SHENHUA_8:1，共 2 台）。保留本字段 = 1 而不是改成 2，是因为它要与 trains.csv 的同名列保持一致（镜像关系），且未适配编组的消费方读到「1 台 12 轴」是保守低估；若填 2 而不区分机型，会按 2 × 300 t / 2 × 14400 kW 算出 600 t / 28800 kW，全错。1 台 / 2 台情景对比仍可通过 build_component_bundle(locomotive_count=N) 显式覆盖。",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "electrical_level",
+          "value": 0.48,
+          "unit": "",
+          "cn": "电制动投入级位",
+          "provenance": "电制动投入级位 0.48：占机车曲线能力的份额，用于把电制动与空气制动的分摊标定到实绩再生电量（两万吨 396 km 工况实绩 14826 kWh；1 台 12 轴满级位约 27983 kWh）。只改变电/空分摊，不改变总制动力，因此速度轨迹逐位不变、可离线扫描标定",
+          "provenance_raw": "电制动投入级位 0.48：占机车曲线能力的份额，用于把电制动与空气制动的分摊标定到实绩再生电量（两万吨 396 km 工况实绩 14826 kWh；1 台 12 轴满级位约 27983 kWh）。只改变电/空分摊，不改变总制动力，因此速度轨迹逐位不变、可离线扫描标定",
+          "provenance_scope": "self",
+          "data_status": "calibrated"
+        },
+        {
+          "field": "train_length_m",
+          "value": 2613.6,
+          "unit": "m",
+          "cn": "列车长度",
+          "provenance": "列车长度 2613.6 m，取共享 trains.csv 的 Heavy.length_km；仅作编组记录，动力学按质点处理，坡度取列车所在位置的线路坡度，未沿车长加权",
+          "provenance_raw": "列车长度 2613.6 m，取共享 trains.csv 的 Heavy.length_km；仅作编组记录，动力学按质点处理，坡度取列车所在位置的线路坡度，未沿车长加权",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "longitudinal_segments",
+          "value": 20,
+          "unit": "段",
+          "cn": "纵向离散段数",
+          "provenance": "纵向离散段数 20：把列车长度切分为若干段的预留参数，供沿车长坡度加权使用；当前计算取线路区间坡度，未消费该字段",
+          "provenance_raw": "纵向离散段数 20：把列车长度切分为若干段的预留参数，供沿车长坡度加权使用；当前计算取线路区间坡度，未消费该字段",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "rotational_mass_factor",
+          "value": 1.06,
+          "unit": "—",
+          "cn": "旋转质量系数",
+          "provenance": "旋转质量系数 1.06，来自 trains.csv 的 Heavy.rotational_mass_factor：把轮对与传动系的转动惯量折算为平动等效质量（m_eq = 1.06 m）",
+          "provenance_raw": "旋转质量系数 1.06，来自 trains.csv 的 Heavy.rotational_mass_factor：把轮对与传动系的转动惯量折算为平动等效质量（m_eq = 1.06 m）",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "max_brake_force_n",
+          "value": 6200000.0,
+          "unit": "N",
+          "cn": "最大制动力",
+          "provenance": "全列最大制动力 6200 kN，来自 trains.csv 的 Heavy.max_brake_kN，是空气制动 + 电制动的总量；它约束的是『总制动力』，不是可回收的再生能力",
+          "provenance_raw": "全列最大制动力 6200 kN，来自 trains.csv 的 Heavy.max_brake_kN，是空气制动 + 电制动的总量；它约束的是『总制动力』，不是可回收的再生能力",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "max_regen_force_n",
+          "value": 691500.0,
+          "unit": "N",
+          "cn": "最大再生制动力",
+          "provenance": "单台机车电制动力峰值 691.5 kN（10–20 km/h），来自 locomotive_curves.json 的 SHENHUA_12.brake_curve，装配时按台数与级位折算到全列。旧口径曾误用 6200 kN（全列制动总量）作再生上限，会把可回收电量高估约一个数量级。**本字段登记的是 1 台口径**，台数 ≠ 1 时装配重算为「单台峰值 × 台数」，不再校验本值",
+          "provenance_raw": "单台机车电制动力峰值 691.5 kN（10–20 km/h），来自 locomotive_curves.json 的 SHENHUA_12.brake_curve，装配时按台数与级位折算到全列。旧口径曾误用 6200 kN（全列制动总量）作再生上限，会把可回收电量高估约一个数量级。**本字段登记的是 1 台口径**，台数 ≠ 1 时装配重算为「单台峰值 × 台数」，不再校验本值",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "regen_fraction_cap",
+          "value": 0.85,
+          "unit": "—",
+          "cn": "再生制动占比上限",
+          "provenance": "可再生比例上限 0.85：限制再生制动力最多占所需制动力的 85%，其余由摩擦承担；工程预设",
+          "provenance_raw": "可再生比例上限 0.85：限制再生制动力最多占所需制动力的 85%，其余由摩擦承担；工程预设",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "adhesion.coefficient",
+          "value": 0.28,
+          "unit": "",
+          "cn": "黏着系数",
+          "provenance": "data/real_shuohuang/operating_conditions.json: default_adhesion_coefficient=0.28, braking_adhesion_safety_factor=0.65",
+          "provenance_raw": "data/real_shuohuang/operating_conditions.json: default_adhesion_coefficient=0.28, braking_adhesion_safety_factor=0.65",
+          "provenance_scope": "group:adhesion",
+          "data_status": "real"
+        },
+        {
+          "field": "adhesion.braking_safety_factor",
+          "value": 0.65,
+          "unit": "—",
+          "cn": "制动黏着安全系数",
+          "provenance": "data/real_shuohuang/operating_conditions.json: default_adhesion_coefficient=0.28, braking_adhesion_safety_factor=0.65",
+          "provenance_raw": "data/real_shuohuang/operating_conditions.json: default_adhesion_coefficient=0.28, braking_adhesion_safety_factor=0.65",
+          "provenance_scope": "group:adhesion",
+          "data_status": "real"
+        },
+        {
+          "field": "gravity_m_per_s2",
+          "value": 9.81,
+          "unit": "m/s²",
+          "cn": "重力加速度",
+          "provenance": "重力加速度 9.81 m/s²，与代码常量 dynamics/train_braking_model.py::GRAVITY_M_PER_S2 取值一致；计算取代码常量，本字段作记录",
+          "provenance_raw": "重力加速度 9.81 m/s²，与代码常量 dynamics/train_braking_model.py::GRAVITY_M_PER_S2 取值一致；计算取代码常量，本字段作记录",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "ambient.rolling_multiplier",
+          "value": 1.0,
+          "unit": "",
+          "cn": "滚动阻力环境修正系数",
+          "provenance": "环境修正系数（滚动 1.0、气动 1.0）：天气与轨面条件接口，与共享项目 operating_conditions.json 的空 weather_conditions 一致；乘 1.0 即不修正",
+          "provenance_raw": "环境修正系数（滚动 1.0、气动 1.0）：天气与轨面条件接口，与共享项目 operating_conditions.json 的空 weather_conditions 一致；乘 1.0 即不修正",
+          "provenance_scope": "group:ambient",
+          "data_status": "assumed"
+        },
+        {
+          "field": "ambient.aerodynamic_multiplier",
+          "value": 1.0,
+          "unit": "",
+          "cn": "气动阻力环境修正系数",
+          "provenance": "环境修正系数（滚动 1.0、气动 1.0）：天气与轨面条件接口，与共享项目 operating_conditions.json 的空 weather_conditions 一致；乘 1.0 即不修正",
+          "provenance_raw": "环境修正系数（滚动 1.0、气动 1.0）：天气与轨面条件接口，与共享项目 operating_conditions.json 的空 weather_conditions 一致；乘 1.0 即不修正",
+          "provenance_scope": "group:ambient",
+          "data_status": "assumed"
+        }
+      ]
+    },
+    {
+      "file": "data/single_train/motor_parameters.json",
+      "profile_id": "shuohuang_regen_motor_placeholder",
+      "label": "牵引电机再生制动特性（解析包络，非实测曲线）",
+      "label_raw": "牵引电机再生制动特性（占位包络，非实测特性曲线）",
+      "data_status": "placeholder",
+      "fields": [
+        {
+          "field": "max_regen_power_w",
+          "value": 24000000.0,
+          "unit": "W",
+          "cn": "最大再生电功率",
+          "provenance": "全列再生功率上限 24000 kW = 神华号 12 轴 14400 kW × 1 + 神华号 8 轴 9600 kW × 1，逐型取自各自 locomotive_curves.json 的 params.continuous_power_kW，编组取自 trains.csv:locomotive_consist。装配时由共享数据重算并校验；控制侧（本字段）与结算侧（dc_dc.power_rating_w）共用同一来源，不得各维护一份常数。**不能用「首型功率 × 总台数」**：8 轴补机是 9600 kW 而不是 14400 kW，那样会算成 28800 kW（高估 20%）。",
+          "provenance_raw": "全列再生功率上限 24000 kW = 神华号 12 轴 14400 kW × 1 + 神华号 8 轴 9600 kW × 1，逐型取自各自 locomotive_curves.json 的 params.continuous_power_kW，编组取自 trains.csv:locomotive_consist。装配时由共享数据重算并校验；控制侧（本字段）与结算侧（dc_dc.power_rating_w）共用同一来源，不得各维护一份常数。**不能用「首型功率 × 总台数」**：8 轴补机是 9600 kW 而不是 14400 kW，那样会算成 28800 kW（高估 20%）。",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "max_regen_force_n",
+          "value": 1152500.0,
+          "unit": "N",
+          "cn": "最大再生制动力",
+          "provenance": "全列电制动力峰值 1152.5 kN = SHENHUA_12 691.5 kN + SHENHUA_8 461.0 kN，两条曲线都在 10–20 km/h 达峰，按并集速度栅格逐点求和。SHENHUA_8 的曲线沿用 HXD1_25t 平台（2(B0-B0)、200 t），属工程推导值，拿到厂家资料后应替换。该值只描述各台电机+变流器的电制动能力之和，与全列 6200 kN 空气+电制动总量不是同一口径。",
+          "provenance_raw": "全列电制动力峰值 1152.5 kN = SHENHUA_12 691.5 kN + SHENHUA_8 461.0 kN，两条曲线都在 10–20 km/h 达峰，按并集速度栅格逐点求和。SHENHUA_8 的曲线沿用 HXD1_25t 平台（2(B0-B0)、200 t），属工程推导值，拿到厂家资料后应替换。该值只描述各台电机+变流器的电制动能力之和，与全列 6200 kN 空气+电制动总量不是同一口径。",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "min_regen_speed_m_per_s",
+          "value": 1.0,
+          "unit": "m/s",
+          "cn": "最低可再生速度",
+          "provenance": "最低可再生速度 1.0 m/s（约 3.6 km/h）：低于该速度再生包络归零，制动力全部转由摩擦承担；工程预设",
+          "provenance_raw": "最低可再生速度 1.0 m/s（约 3.6 km/h）：低于该速度再生包络归零，制动力全部转由摩擦承担；工程预设",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "regen_efficiency.peak",
+          "value": 0.9,
+          "unit": "",
+          "cn": "电机峰值效率",
+          "provenance": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_raw": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_scope": "group:regen_efficiency",
+          "data_status": "assumed"
+        },
+        {
+          "field": "regen_efficiency.peak_load_ratio",
+          "value": 1.0,
+          "unit": "—",
+          "cn": "峰值负载归一化点",
+          "provenance": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_raw": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_scope": "group:regen_efficiency",
+          "data_status": "assumed"
+        },
+        {
+          "field": "regen_efficiency.low_load_penalty",
+          "value": 0.35,
+          "unit": "",
+          "cn": "轻载效率惩罚",
+          "provenance": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_raw": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_scope": "group:regen_efficiency",
+          "data_status": "assumed"
+        },
+        {
+          "field": "regen_efficiency.low_speed_penalty",
+          "value": 0.25,
+          "unit": "",
+          "cn": "低速效率惩罚",
+          "provenance": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_raw": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_scope": "group:regen_efficiency",
+          "data_status": "assumed"
+        },
+        {
+          "field": "regen_efficiency.low_speed_reference_m_per_s",
+          "value": 5.0,
+          "unit": "m/s",
+          "cn": "低速惩罚参考速度",
+          "provenance": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_raw": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+          "provenance_scope": "group:regen_efficiency",
+          "data_status": "assumed"
+        },
+        {
+          "field": "dc_link_voltage_window.nominal_v",
+          "value": 1500.0,
+          "unit": "V",
+          "cn": "直流母线额定电压",
+          "provenance": "工程预设，待正式牵引传动系统资料（网压、中间直流电压、变流器额定）确认",
+          "provenance_raw": "占位：待正式牵引传动系统资料（网压、中间直流电压、变流器额定）到位后替换",
+          "provenance_scope": "group:dc_link_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "dc_link_voltage_window.min_v",
+          "value": 1200.0,
+          "unit": "V",
+          "cn": "直流母线电压下限",
+          "provenance": "工程预设，待正式牵引传动系统资料（网压、中间直流电压、变流器额定）确认",
+          "provenance_raw": "占位：待正式牵引传动系统资料（网压、中间直流电压、变流器额定）到位后替换",
+          "provenance_scope": "group:dc_link_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "dc_link_voltage_window.max_v",
+          "value": 1800.0,
+          "unit": "V",
+          "cn": "直流母线电压上限",
+          "provenance": "工程预设，待正式牵引传动系统资料（网压、中间直流电压、变流器额定）确认",
+          "provenance_raw": "占位：待正式牵引传动系统资料（网压、中间直流电压、变流器额定）到位后替换",
+          "provenance_scope": "group:dc_link_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "overvoltage_derate_start_v",
+          "value": 1530.0,
+          "unit": "V",
+          "cn": "过压降额起始电压",
+          "provenance": "过压降额起点 1530 V（约 1.02 倍额定网压）：超过后再生能力随母线电压线性衰减；工程预设",
+          "provenance_raw": "过压降额起点 1530 V（约 1.02 倍额定网压）：超过后再生能力随母线电压线性衰减；工程预设",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "overvoltage_derate_end_v",
+          "value": 1800.0,
+          "unit": "V",
+          "cn": "过压降额终止电压",
+          "provenance": "过压降额终点 1800 V：到达该电压再生能力降为零并退出，与 dc_dc_parameters.json 的母线窗口上界 1800 V 配套；工程预设",
+          "provenance_raw": "过压降额终点 1800 V：到达该电压再生能力降为零并退出，与 dc_dc_parameters.json 的母线窗口上界 1800 V 配套；工程预设",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        }
+      ]
+    },
+    {
+      "file": "data/single_train/dc_dc_parameters.json",
+      "profile_id": "bidirectional_dcdc_placeholder",
+      "label": "双向 DC-DC 升降压变换器（T1/T2 双开关平均模型）",
+      "label_raw": "双向 DC-DC 升降压变换器（T1/T2 双开关平均模型）",
+      "data_status": "placeholder",
+      "fields": [
+        {
+          "field": "duty_limit.u0_max",
+          "value": 0.9,
+          "unit": "",
+          "cn": "占空比上限",
+          "provenance": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+          "provenance_raw": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+          "provenance_scope": "group:duty_limit",
+          "data_status": "official"
+        },
+        {
+          "field": "duty_limit.min",
+          "value": 0.0,
+          "unit": "",
+          "cn": "占空比下限",
+          "provenance": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+          "provenance_raw": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+          "provenance_scope": "group:duty_limit",
+          "data_status": "official"
+        },
+        {
+          "field": "duty_limit.max",
+          "value": 1.0,
+          "unit": "",
+          "cn": "占空比物理上限",
+          "provenance": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+          "provenance_raw": "技术方案 4.2.1.3：u0 = 0.9（PWM 占空比上限，用于避免 IGBT 过流）",
+          "provenance_scope": "group:duty_limit",
+          "data_status": "official"
+        },
+        {
+          "field": "inductance_h",
+          "value": 0.0005,
+          "unit": "H",
+          "cn": "滤波电感",
+          "provenance": "滤波电感 0.5 mH：决定电感电流纹波与电流环增益（∂i_L/∂d1 ∝ 1/L），并进入 B_target 解析式；工程预设，待变流器硬件资料确认",
+          "provenance_raw": "滤波电感 0.5 mH：决定电感电流纹波与电流环增益（∂i_L/∂d1 ∝ 1/L），并进入 B_target 解析式；工程预设，待变流器硬件资料确认",
+          "provenance_scope": "self",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "inductor_resistance_ohm",
+          "value": 0.002,
+          "unit": "Ω",
+          "cn": "电感等效电阻",
+          "provenance": "电感绕阻直流电阻 0.002 Ω，用于电感铜损 P = i_L²·R 的核算；工程预设，非器件手册值",
+          "provenance_raw": "电感绕阻直流电阻 0.002 Ω，用于电感铜损 P = i_L²·R 的核算；工程预设，非器件手册值",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "input_capacitance_f",
+          "value": 0.02,
+          "unit": "F",
+          "cn": "母线侧输入电容",
+          "provenance": "母线侧输入电容 0.02 F，与源阻抗共同决定母线电压在功率突变时的动态过程；工程预设",
+          "provenance_raw": "母线侧输入电容 0.02 F，与源阻抗共同决定母线电压在功率突变时的动态过程；工程预设",
+          "provenance_scope": "self",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "output_capacitance_f",
+          "value": 0.02,
+          "unit": "F",
+          "cn": "储能侧输出电容",
+          "provenance": "储能侧输出电容 0.02 F，同时进入控制通道增益先验 B_target 的分母（∂v_out/∂d2 ∝ 1/C_out）；工程预设",
+          "provenance_raw": "储能侧输出电容 0.02 F，同时进入控制通道增益先验 B_target 的分母（∂v_out/∂d2 ∝ 1/C_out）；工程预设",
+          "provenance_scope": "self",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "switching_frequency_hz",
+          "value": 5000.0,
+          "unit": "Hz",
+          "cn": "开关频率",
+          "provenance": "开关频率 5 kHz：平均模型不显式使用（B_target 与闭环结果对 fs 不敏感），用于纹波核算与器件选型口径；工程预设",
+          "provenance_raw": "开关频率 5 kHz：平均模型不显式使用（B_target 与闭环结果对 fs 不敏感），用于纹波核算与器件选型口径；工程预设",
+          "provenance_scope": "self",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "dc_bus_source.open_circuit_voltage_v",
+          "value": 1500.0,
+          "unit": "V",
+          "cn": "母线源开路电压",
+          "provenance": "母线按「刚性电压源 + 源阻抗 + 输入电容」建模：开路电压 1500 V 取额定网压量级，源阻抗 0.01 Ω 承担母线电压偏差下的功率交换，是再生能量经母线回馈牵引网的物理通道；工程预设",
+          "provenance_raw": "母线按「刚性电压源 + 源阻抗 + 输入电容」建模：开路电压 1500 V 取额定网压量级，源阻抗 0.01 Ω 承担母线电压偏差下的功率交换，是再生能量经母线回馈牵引网的物理通道；工程预设",
+          "provenance_scope": "group:dc_bus_source",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "dc_bus_source.resistance_ohm",
+          "value": 0.01,
+          "unit": "Ω",
+          "cn": "母线源内阻",
+          "provenance": "母线按「刚性电压源 + 源阻抗 + 输入电容」建模：开路电压 1500 V 取额定网压量级，源阻抗 0.01 Ω 承担母线电压偏差下的功率交换，是再生能量经母线回馈牵引网的物理通道；工程预设",
+          "provenance_raw": "母线按「刚性电压源 + 源阻抗 + 输入电容」建模：开路电压 1500 V 取额定网压量级，源阻抗 0.01 Ω 承担母线电压偏差下的功率交换，是再生能量经母线回馈牵引网的物理通道；工程预设",
+          "provenance_scope": "group:dc_bus_source",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "converter_efficiency",
+          "value": 0.97,
+          "unit": "",
+          "cn": "变流器效率",
+          "provenance": "工程预设 0.97（非实测）",
+          "provenance_raw": "工程预设 0.97（非实测）",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "power_rating_w",
+          "value": 24000000.0,
+          "unit": "W",
+          "cn": "变流器额定功率",
+          "provenance": "变流器额定 24000 kW，与电机再生功率上限同源：按 trains.csv:locomotive_consist 的编组逐型取 continuous_power_kW 求和（12 轴 14400 + 8 轴 9600）。装配时由共享数据重算并校验，禁止在此另立常数。",
+          "provenance_raw": "变流器额定 24000 kW，与电机再生功率上限同源：按 trains.csv:locomotive_consist 的编组逐型取 continuous_power_kW 求和（12 轴 14400 + 8 轴 9600）。装配时由共享数据重算并校验，禁止在此另立常数。",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "max_input_current_a",
+          "value": 16000.0,
+          "unit": "A",
+          "cn": "最大输入电流",
+          "provenance": "变流器输入侧额定电流 16000 A = 全列功率上限 24000 kW ÷ 直流母线 1500 V，与 power_rating_w 同源，随编组（12 轴 14400 + 8 轴 9600 kW）联动。该值只用于**报告**输入侧电流越限比（converter_input_current_over_limit_ratio），不截断；实测再生电流峰值远低于此（s1 约 3.4 kA）。此前按 1 台口径登记为 9600 A（= 14.4 MW ÷ 1500 V），两万吨 1+1 编组下已不成立。",
+          "provenance_raw": "变流器输入侧额定电流 16000 A = 全列功率上限 24000 kW ÷ 直流母线 1500 V，与 power_rating_w 同源，随编组（12 轴 14400 + 8 轴 9600 kW）联动。该值只用于**报告**输入侧电流越限比（converter_input_current_over_limit_ratio），不截断；实测再生电流峰值远低于此（s1 约 3.4 kA）。此前按 1 台口径登记为 9600 A（= 14.4 MW ÷ 1500 V），两万吨 1+1 编组下已不成立。",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "max_output_current_a",
+          "value": 3000.0,
+          "unit": "A",
+          "cn": "最大输出电流",
+          "provenance": "储能侧输出电流上限 3000 A，同时作为 NSMC 的电感电流硬上限 i_L,max；工程预设",
+          "provenance_raw": "储能侧输出电流上限 3000 A，同时作为 NSMC 的电感电流硬上限 i_L,max；工程预设",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "input_voltage_window.min_v",
+          "value": 1200.0,
+          "unit": "V",
+          "cn": "母线电压窗口下限",
+          "provenance": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+          "provenance_raw": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+          "provenance_scope": "group:input_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "input_voltage_window.nominal_v",
+          "value": 1500.0,
+          "unit": "V",
+          "cn": "母线电压窗口额定值",
+          "provenance": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+          "provenance_raw": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+          "provenance_scope": "group:input_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "input_voltage_window.max_v",
+          "value": 1800.0,
+          "unit": "V",
+          "cn": "母线电压窗口上限",
+          "provenance": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+          "provenance_raw": "母线电压窗口 1200 / 1500 / 1800 V：用于 PWM 安全边界与数值可信度校验，越出 3 倍窗口即抛数值错误；工程预设",
+          "provenance_scope": "group:input_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "output_voltage_window.min_v",
+          "value": 600.0,
+          "unit": "V",
+          "cn": "储能侧电压窗口下限",
+          "provenance": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设",
+          "provenance_raw": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设",
+          "provenance_scope": "group:output_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "output_voltage_window.nominal_v",
+          "value": 1100.0,
+          "unit": "V",
+          "cn": "储能侧电压窗口额定值",
+          "provenance": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设",
+          "provenance_raw": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设",
+          "provenance_scope": "group:output_voltage_window",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "output_voltage_window.max_v",
+          "value": 1500.0,
+          "unit": "V",
+          "cn": "储能侧电压窗口上限",
+          "provenance": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设",
+          "provenance_raw": "储能侧电压窗口 600 / 1100 / 1500 V：既是物理边界，也是闭环参考电压 v_ref 的上下界来源；工程预设",
+          "provenance_scope": "group:output_voltage_window",
+          "data_status": "placeholder"
+        }
+      ]
+    },
+    {
+      "file": "data/single_train/storage_parameters.json",
+      "profile_id": "shuohuang_storage_from_battery_json",
+      "label": "车载/沿线储能系统（飞轮 45kWh + 钛酸锂 100kWh 聚合模型）",
+      "label_raw": "车载/沿线储能系统（飞轮 45kWh + 钛酸锂 100kWh 聚合模型）",
+      "data_status": "derived",
+      "fields": [
+        {
+          "field": "capacity_j",
+          "value": 522000000.0,
+          "unit": "J",
+          "cn": "储能容量（焦耳）",
+          "provenance": "由 capacity_kwh = 145 kWh 换算的焦耳值（145 × 3.6×10⁶ = 5.22×10⁸ J），供能量台账按焦耳逐拍积分使用，与 capacity_kwh 同源",
+          "provenance_raw": "由 capacity_kwh = 145 kWh 换算的焦耳值（145 × 3.6×10⁶ = 5.22×10⁸ J），供能量台账按焦耳逐拍积分使用，与 capacity_kwh 同源",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "capacity_kwh",
+          "value": 145.0,
+          "unit": "kWh",
+          "cn": "储能容量",
+          "provenance": "heavy_empty_train_coordination/data/real_shuohuang/battery.json -> capacity_kwh = 145.0（飞轮 45kWh + 钛酸锂 100kWh，来源 shuohuang_data/5.储能系统参数.doc）",
+          "provenance_raw": "heavy_empty_train_coordination/data/real_shuohuang/battery.json -> capacity_kwh = 145.0（飞轮 45kWh + 钛酸锂 100kWh，来源 shuohuang_data/5.储能系统参数.doc）",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "round_trip_efficiency",
+          "value": 0.9,
+          "unit": "",
+          "cn": "往返效率",
+          "provenance": "battery.json -> round_trip_efficiency = 0.9（provided）",
+          "provenance_raw": "battery.json -> round_trip_efficiency = 0.9（provided）",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "charge_efficiency",
+          "value": 0.9486832980505138,
+          "unit": "",
+          "cn": "充电效率",
+          "provenance": "由 round_trip_efficiency 按对称分配推导：η_ch = sqrt(0.9) ≈ 0.94868；充电时 ΔE = η_ch·∫P",
+          "provenance_raw": "由 round_trip_efficiency 按对称分配推导：η_ch = sqrt(0.9) ≈ 0.94868；充电时 ΔE = η_ch·∫P",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "discharge_efficiency",
+          "value": 0.9486832980505138,
+          "unit": "",
+          "cn": "放电效率",
+          "provenance": "由 round_trip_efficiency 按对称分配推导：η_dis = sqrt(0.9) ≈ 0.94868；放电时 ΔE = −∫P/η_dis",
+          "provenance_raw": "由 round_trip_efficiency 按对称分配推导：η_dis = sqrt(0.9) ≈ 0.94868；放电时 ΔE = −∫P/η_dis",
+          "provenance_scope": "self",
+          "data_status": "derived"
+        },
+        {
+          "field": "soc_min",
+          "value": 0.1,
+          "unit": "",
+          "cn": "SOC 下限",
+          "provenance": "荷电状态下限 0.10：到达后充电功率上限被压至 0，不再接受制动能量；工程预设，非实测",
+          "provenance_raw": "荷电状态下限 0.10：到达后充电功率上限被压至 0，不再接受制动能量；工程预设，非实测",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "soc_max",
+          "value": 0.9,
+          "unit": "",
+          "cn": "SOC 上限",
+          "provenance": "荷电状态上限 0.90：到达后同样拒绝继续充电；上下限共同构成可用能量窗口；工程预设，非实测",
+          "provenance_raw": "荷电状态上限 0.90：到达后同样拒绝继续充电；上下限共同构成可用能量窗口；工程预设，非实测",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "soc_initial",
+          "value": 0.5,
+          "unit": "",
+          "cn": "初始 SOC",
+          "provenance": "初始荷电状态 0.5，取可用区间 0.10–0.90 的中点作为统一初态；工程预设。所有控制器必须使用同一初态，回收能量才可横向比较",
+          "provenance_raw": "初始荷电状态 0.5，取可用区间 0.10–0.90 的中点作为统一初态；工程预设。所有控制器必须使用同一初态，回收能量才可横向比较",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "max_charge_power_w",
+          "value": 2000000.0,
+          "unit": "W",
+          "cn": "最大充电功率",
+          "provenance": "battery.json -> max_charge_power_kW = 2000.0（provided）",
+          "provenance_raw": "battery.json -> max_charge_power_kW = 2000.0（provided）",
+          "provenance_scope": "self",
+          "data_status": "real"
+        },
+        {
+          "field": "max_discharge_power_w",
+          "value": 2000000.0,
+          "unit": "W",
+          "cn": "最大放电功率",
+          "provenance": "battery.json -> max_discharge_power_kW = 0.0（missing_conservative_zero）；规划值 planning_max_discharge_power_assumption_kW = 2000.0，本文件采用规划值并标注 assumed",
+          "provenance_raw": "battery.json -> max_discharge_power_kW = 0.0（missing_conservative_zero）；规划值 planning_max_discharge_power_assumption_kW = 2000.0，本文件采用规划值并标注 assumed",
+          "provenance_scope": "self",
+          "data_status": "assumed"
+        },
+        {
+          "field": "nominal_voltage_v",
+          "value": 1100.0,
+          "unit": "V",
+          "cn": "储能额定电压",
+          "provenance": "工程预设：待储能系统电气资料替换",
+          "provenance_raw": "placeholder：待储能系统电气资料替换",
+          "provenance_scope": "self",
+          "data_status": "placeholder"
+        },
+        {
+          "field": "internal_resistance_ohm",
+          "value": 0.02,
+          "unit": "Ω",
+          "cn": "储能内阻",
+          "provenance": "储能等效内阻 0.02 Ω：进入储能侧二参数电压模型，决定参考电压 v_ref 的斜率（结构稳健、幅值敏感）；工程预设",
+          "provenance_raw": "储能等效内阻 0.02 Ω：进入储能侧二参数电压模型，决定参考电压 v_ref 的斜率（结构稳健、幅值敏感）；工程预设",
+          "provenance_scope": "self",
+          "data_status": "placeholder"
+        }
+      ]
+    }
+  ],
+  "virtual_summary": {
+    "total_fields": 64,
+    "virtual_fields": 36,
+    "by_level": {
+      "real": 10,
+      "official": 7,
+      "derived": 10,
+      "calibrated": 1,
+      "assumed": 19,
+      "placeholder": 17
+    },
+    "level_policy": "assumed / placeholder / synthetic / unknown 记为虚拟值；real / official / derived / calibrated 由真实资料或实算得到",
+    "note": "虚拟值只保证链路完整，不保证幅值正确。界面必须原样显示每个字段的 data_status，placeholder 不得当作工程值展示；更换正式资料后能量与电压峰值都会变。",
+    "register_doc": "docs/virtual_data_register_2026-11-05.md"
+  },
+  "output_fields": {
+    "summary_columns": [
+      {
+        "field": "scenario_id",
+        "cn": "场景编号",
+        "note": "机读标识，如 s1_flat_braking"
+      },
+      {
+        "field": "scenario",
+        "cn": "场景与变体编号",
+        "note": "机读标识，如 s1_flat_braking[nominal]"
+      },
+      {
+        "field": "scenario_family",
+        "cn": "场景族",
+        "note": "1–10 族编号，机读标识"
+      },
+      {
+        "field": "scenario_variant",
+        "cn": "场景变体",
+        "note": "nominal、noise_5pct 等，机读标识"
+      },
+      {
+        "field": "baseline",
+        "cn": "控制器标识",
+        "note": "机读键，主算法为 rhonn_nsmc"
+      },
+      {
+        "field": "baseline_label",
+        "cn": "控制器标识（本入口）",
+        "note": "机读键，与 baseline 同义"
+      },
+      {
+        "field": "controller",
+        "cn": "控制器名称",
+        "note": "机读键"
+      },
+      {
+        "field": "is_optimized",
+        "cn": "是否优化方案",
+        "note": "布尔值"
+      },
+      {
+        "field": "result_kind",
+        "cn": "结果类别",
+        "note": "机读状态码，标明为仿真结果"
+      },
+      {
+        "field": "steps",
+        "cn": "积分步数",
+        "note": "步"
+      },
+      {
+        "field": "duration_s",
+        "cn": "仿真时长",
+        "note": "秒"
+      },
+      {
+        "field": "filter_mode",
+        "cn": "滤波器模式",
+        "note": "本场景选用的 EKF 或 UKF"
+      },
+      {
+        "field": "filter_final_mode",
+        "cn": "滤波器终态模式",
+        "note": "运行结束时的选择结果"
+      },
+      {
+        "field": "filter_switch_count",
+        "cn": "滤波器切换次数",
+        "note": "次"
+      },
+      {
+        "field": "filter_pending_scheme_confirmation",
+        "cn": "滤波器待确认标识",
+        "note": "原样保留的机读状态"
+      },
+      {
+        "field": "notes",
+        "cn": "备注",
+        "note": "中文说明，逐条以竖线分隔"
+      },
+      {
+        "field": "mechanical_braking_energy_kWh",
+        "cn": "机械制动能量",
+        "note": "千瓦时，轮周口径"
+      },
+      {
+        "field": "available_regenerative_energy_kWh",
+        "cn": "可再生能量",
+        "note": "千瓦时，电机侧电功率积分"
+      },
+      {
+        "field": "captured_energy_kWh",
+        "cn": "储能端吸收能量",
+        "note": "千瓦时，尚未扣除储能充电损耗"
+      },
+      {
+        "field": "storage_energy_kWh",
+        "cn": "储能净存入能量",
+        "note": "千瓦时，逐拍储能能量增量之和"
+      },
+      {
+        "field": "loss_energy_kWh",
+        "cn": "未存入能量（旧口径）",
+        "note": "千瓦时，含回网能量，不能当作发热耗散"
+      },
+      {
+        "field": "friction_braking_energy_kWh",
+        "cn": "摩擦制动能量",
+        "note": "千瓦时"
+      },
+      {
+        "field": "motor_loss_energy_kWh",
+        "cn": "电机损耗能量",
+        "note": "千瓦时，可再生能量减电机电功率"
+      },
+      {
+        "field": "converter_loss_energy_kWh",
+        "cn": "变流器损耗能量",
+        "note": "千瓦时，开关与导通损耗"
+      },
+      {
+        "field": "converter_inductor_loss_energy_kWh",
+        "cn": "电感铜损能量",
+        "note": "千瓦时"
+      },
+      {
+        "field": "storage_loss_energy_kWh",
+        "cn": "储能内部损耗能量",
+        "note": "千瓦时"
+      },
+      {
+        "field": "curtailed_energy_kWh",
+        "cn": "被削减能量",
+        "note": "千瓦时，储能拒收部分"
+      },
+      {
+        "field": "grid_export_energy_kWh",
+        "cn": "回网能量",
+        "note": "千瓦时，经母线送回牵引网"
+      },
+      {
+        "field": "grid_import_energy_kWh",
+        "cn": "电网回吸能量",
+        "note": "千瓦时，从牵引网取电"
+      },
+      {
+        "field": "grid_net_export_energy_kWh",
+        "cn": "净回网能量",
+        "note": "千瓦时，回网减回吸"
+      },
+      {
+        "field": "grid_source_loss_energy_kWh",
+        "cn": "源阻抗损耗能量",
+        "note": "千瓦时"
+      },
+      {
+        "field": "reactive_energy_delta_kWh",
+        "cn": "电抗能量变化",
+        "note": "千瓦时，电感与电容储能净变化"
+      },
+      {
+        "field": "closure_residual_kWh",
+        "cn": "能量闭合残差",
+        "note": "千瓦时，应接近零"
+      },
+      {
+        "field": "closure_relative_residual",
+        "cn": "相对闭合残差",
+        "note": "无量纲，闭合残差除以机械制动能量"
+      },
+      {
+        "field": "regenerative_efficiency",
+        "cn": "再生效率",
+        "note": "无量纲，(储能吸收 − 电网回吸) ÷ 电机侧电功率；扣除回吸部分，避免低速再生不足时出现大于 1"
+      },
+      {
+        "field": "capture_ratio",
+        "cn": "捕获比例",
+        "note": "无量纲，(储能吸收 − 电网回吸) ÷ 机械制动能量"
+      },
+      {
+        "field": "regen_current_energy_kWh",
+        "cn": "式(72) 电流积分再生电量",
+        "note": "千瓦时，Q_z = U_w·Σ(I_z·λ·Δt)，查标准附录 L 的再生电流表；与「力 × 速度 × 效率」完全独立，仅作互校，不进入能量闭合"
+      },
+      {
+        "field": "regen_current_charge_a_s",
+        "cn": "式(72) 电流积分量",
+        "note": "安培·秒，Σ I_z·λ·Δt，乘网压后折算电量"
+      },
+      {
+        "field": "regen_current_to_motor_ratio",
+        "cn": "式(72) 与力-速度路径之比",
+        "note": "无量纲，电流积分电量 ÷ 电机侧电能量；接近 1 说明两条口径自洽，大于 1 表示标准电流表隐含的电功率高于本模型的效率假设"
+      },
+      {
+        "field": "regen_current_check_passed",
+        "cn": "式(72) 交叉校核通过",
+        "note": "布尔值，两路径相对偏差在 ±10% 内；未产生再生电量时为空"
+      },
+      {
+        "field": "regen_current_implied_efficiency",
+        "cn": "标准电流表隐含效率",
+        "note": "无量纲，式(72) 电量 ÷ 轮周再生能量；只反映 B_d(v)、I_z(v) 与 U_w 三者是否自洽，与电机效率假设无关。大于 1 说明网压与电流表原本的绘制电压不一致"
+      },
+      {
+        "field": "net_storage_capture_ratio",
+        "cn": "净存入捕获比例",
+        "note": "无量纲，净存入能量除以可再生能量"
+      },
+      {
+        "field": "storage_net_of_grid_import_energy_kWh",
+        "cn": "扣除回吸的净存入能量",
+        "note": "千瓦时，保守口径"
+      },
+      {
+        "field": "storage_net_of_grid_import_ratio",
+        "cn": "扣除回吸的净存入比例",
+        "note": "无量纲，除以机械制动能量"
+      },
+      {
+        "field": "reference_section_distance_km",
+        "cn": "参照区间长度",
+        "note": "公里，官方站表里程差；描述整段区间，不是本场景跑过的距离"
+      },
+      {
+        "field": "reference_official_run_time_min",
+        "cn": "参照区间官方时分",
+        "note": "分钟，PDF 运行图技术资料 2 万吨列车该方向通通时分；整段区间，不可与本场景用时相减"
+      },
+      {
+        "field": "reference_meter_regen_kwh_per_km_p50",
+        "cn": "参照区间实绩再生强度中位",
+        "note": "千瓦时每公里，智能电表台账该区间 ≥2 万吨列车的单位里程反馈电量中位"
+      },
+      {
+        "field": "reference_meter_regen_kwh_per_km_p90",
+        "cn": "参照区间实绩再生强度九十分位",
+        "note": "千瓦时每公里，同上口径的 90 分位"
+      },
+      {
+        "field": "reference_meter_samples",
+        "cn": "参照区间样本数",
+        "note": "条，参与该区间分位数统计的电表台账记录数"
+      },
+      {
+        "field": "stored_plus_net_grid_export_energy_kWh",
+        "cn": "净存入加净回网能量",
+        "note": "千瓦时"
+      },
+      {
+        "field": "nonstored_energy_kWh",
+        "cn": "未存入能量",
+        "note": "千瓦时，含回网，不能当作发热耗散"
+      },
+      {
+        "field": "physical_dissipation_energy_kWh",
+        "cn": "模型显式耗散能量",
+        "note": "千瓦时，摩擦、电机、变流器、电感、源阻抗与储能损耗之和"
+      },
+      {
+        "field": "regenerative_chain_loss_energy_kWh",
+        "cn": "再生链损耗能量",
+        "note": "千瓦时，显式耗散扣除摩擦制动"
+      },
+      {
+        "field": "soc_start",
+        "cn": "初始荷电状态",
+        "note": "无量纲，0–1"
+      },
+      {
+        "field": "soc_end",
+        "cn": "结束荷电状态",
+        "note": "无量纲，0–1"
+      },
+      {
+        "field": "soc_min_seen",
+        "cn": "过程最低荷电状态",
+        "note": "无量纲，0–1"
+      },
+      {
+        "field": "soc_max_seen",
+        "cn": "过程最高荷电状态",
+        "note": "无量纲，0–1"
+      },
+      {
+        "field": "soc_variation",
+        "cn": "荷电状态波动幅度",
+        "note": "无量纲，最高减最低"
+      },
+      {
+        "field": "voltage_ripple_mean",
+        "cn": "储能侧电压波动均值",
+        "note": "伏"
+      },
+      {
+        "field": "voltage_ripple_std",
+        "cn": "储能侧电压波动标准差",
+        "note": "伏"
+      },
+      {
+        "field": "voltage_ripple_peak_to_peak",
+        "cn": "储能侧电压波动峰峰值",
+        "note": "伏"
+      },
+      {
+        "field": "voltage_ripple_rms",
+        "cn": "储能侧电压波动相对均值的均方根",
+        "note": "伏"
+      },
+      {
+        "field": "voltage_ripple_relative_ripple",
+        "cn": "储能侧电压波动相对波动率，无量纲",
+        "note": "伏"
+      },
+      {
+        "field": "current_ripple_mean",
+        "cn": "储能侧电流波动均值",
+        "note": "安"
+      },
+      {
+        "field": "current_ripple_std",
+        "cn": "储能侧电流波动标准差",
+        "note": "安"
+      },
+      {
+        "field": "current_ripple_peak_to_peak",
+        "cn": "储能侧电流波动峰峰值",
+        "note": "安"
+      },
+      {
+        "field": "current_ripple_rms",
+        "cn": "储能侧电流波动相对均值的均方根",
+        "note": "安"
+      },
+      {
+        "field": "current_ripple_relative_ripple",
+        "cn": "储能侧电流波动相对波动率，无量纲",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_ripple_mean",
+        "cn": "电感电流波动均值",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_ripple_std",
+        "cn": "电感电流波动标准差",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_ripple_peak_to_peak",
+        "cn": "电感电流波动峰峰值",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_ripple_rms",
+        "cn": "电感电流波动相对均值的均方根",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_ripple_relative_ripple",
+        "cn": "电感电流波动相对波动率，无量纲",
+        "note": "安"
+      },
+      {
+        "field": "input_current_ripple_mean",
+        "cn": "母线电流波动均值",
+        "note": "安"
+      },
+      {
+        "field": "input_current_ripple_std",
+        "cn": "母线电流波动标准差",
+        "note": "安"
+      },
+      {
+        "field": "input_current_ripple_peak_to_peak",
+        "cn": "母线电流波动峰峰值",
+        "note": "安"
+      },
+      {
+        "field": "input_current_ripple_rms",
+        "cn": "母线电流波动相对均值的均方根",
+        "note": "安"
+      },
+      {
+        "field": "input_current_ripple_relative_ripple",
+        "cn": "母线电流波动相对波动率，无量纲",
+        "note": "安"
+      },
+      {
+        "field": "input_voltage_ripple_mean",
+        "cn": "母线电压波动均值",
+        "note": "伏"
+      },
+      {
+        "field": "input_voltage_ripple_std",
+        "cn": "母线电压波动标准差",
+        "note": "伏"
+      },
+      {
+        "field": "input_voltage_ripple_peak_to_peak",
+        "cn": "母线电压波动峰峰值",
+        "note": "伏"
+      },
+      {
+        "field": "input_voltage_ripple_rms",
+        "cn": "母线电压波动相对均值的均方根",
+        "note": "伏"
+      },
+      {
+        "field": "input_voltage_ripple_relative_ripple",
+        "cn": "母线电压波动相对波动率，无量纲",
+        "note": "伏"
+      },
+      {
+        "field": "power_ripple_mean",
+        "cn": "储能侧功率波动均值",
+        "note": "瓦"
+      },
+      {
+        "field": "power_ripple_std",
+        "cn": "储能侧功率波动标准差",
+        "note": "瓦"
+      },
+      {
+        "field": "power_ripple_peak_to_peak",
+        "cn": "储能侧功率波动峰峰值",
+        "note": "瓦"
+      },
+      {
+        "field": "power_ripple_rms",
+        "cn": "储能侧功率波动相对均值的均方根",
+        "note": "瓦"
+      },
+      {
+        "field": "power_ripple_relative_ripple",
+        "cn": "储能侧功率波动相对波动率，无量纲",
+        "note": "瓦"
+      },
+      {
+        "field": "tracking_rmse",
+        "cn": "跟踪均方根误差",
+        "note": "瓦，参考与实测同侧"
+      },
+      {
+        "field": "tracking_iae",
+        "cn": "跟踪绝对误差积分",
+        "note": "瓦·秒"
+      },
+      {
+        "field": "tracking_ise",
+        "cn": "跟踪平方误差积分",
+        "note": "瓦²·秒"
+      },
+      {
+        "field": "tracking_max_abs_error",
+        "cn": "跟踪最大绝对误差",
+        "note": "瓦"
+      },
+      {
+        "field": "tracking_final_abs_error",
+        "cn": "跟踪末端绝对误差",
+        "note": "瓦"
+      },
+      {
+        "field": "settling_time",
+        "cn": "调节时间",
+        "note": "秒，进入稳态带所需时间"
+      },
+      {
+        "field": "overshoot",
+        "cn": "超调比例",
+        "note": "无量纲，相对参考均值"
+      },
+      {
+        "field": "control_effort_tv",
+        "cn": "占空比总变差",
+        "note": "无量纲，抖振指标，不是损耗能量"
+      },
+      {
+        "field": "control_effort_rate",
+        "cn": "占空比变化率",
+        "note": "每秒，总变差除以时长"
+      },
+      {
+        "field": "duty_saturation_ratio",
+        "cn": "占空比贴轨比例",
+        "note": "无量纲，按实际生效可行域判定"
+      },
+      {
+        "field": "converter_over_rating_ratio",
+        "cn": "变流器超额定功率比例",
+        "note": "无量纲，超过额定功率的样本占比"
+      },
+      {
+        "field": "converter_input_current_over_limit_ratio",
+        "cn": "变流器超输入电流上限比例",
+        "note": "无量纲"
+      },
+      {
+        "field": "time_s",
+        "cn": "仿真时间",
+        "note": "秒"
+      },
+      {
+        "field": "speed_mps",
+        "cn": "车速",
+        "note": "米每秒"
+      },
+      {
+        "field": "mechanical_braking_power_w",
+        "cn": "机械制动功率",
+        "note": "瓦，轮周口径"
+      },
+      {
+        "field": "regen_wheel_power_w",
+        "cn": "可再生机械功率",
+        "note": "瓦，轮周口径"
+      },
+      {
+        "field": "friction_braking_power_w",
+        "cn": "摩擦制动功率",
+        "note": "瓦"
+      },
+      {
+        "field": "motor_electrical_power_w",
+        "cn": "电机电功率",
+        "note": "瓦，折算到直流侧"
+      },
+      {
+        "field": "duty_cycle_T1",
+        "cn": "上管占空比 T1",
+        "note": "无量纲，受 0–0.9 约束"
+      },
+      {
+        "field": "duty_cycle_T2",
+        "cn": "下管占空比 T2",
+        "note": "无量纲，受 0–0.9 约束"
+      },
+      {
+        "field": "input_voltage_v",
+        "cn": "母线电压",
+        "note": "伏"
+      },
+      {
+        "field": "input_current_a",
+        "cn": "母线电流",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_a",
+        "cn": "电感电流",
+        "note": "安"
+      },
+      {
+        "field": "output_voltage_v",
+        "cn": "储能侧电压",
+        "note": "伏"
+      },
+      {
+        "field": "output_current_a",
+        "cn": "储能侧电流",
+        "note": "安"
+      },
+      {
+        "field": "output_power_w",
+        "cn": "储能侧输出功率",
+        "note": "瓦"
+      },
+      {
+        "field": "reference_power_w",
+        "cn": "参考可吸收功率",
+        "note": "瓦，储能侧，与实测同侧"
+      },
+      {
+        "field": "accepted_power_w",
+        "cn": "储能实际接受功率",
+        "note": "瓦"
+      },
+      {
+        "field": "curtailed_power_w",
+        "cn": "被削减功率",
+        "note": "瓦"
+      },
+      {
+        "field": "grid_export_power_w",
+        "cn": "回网功率",
+        "note": "瓦"
+      },
+      {
+        "field": "grid_import_power_w",
+        "cn": "电网回吸功率",
+        "note": "瓦"
+      },
+      {
+        "field": "grid_source_loss_w",
+        "cn": "源阻抗损耗功率",
+        "note": "瓦"
+      },
+      {
+        "field": "soc",
+        "cn": "荷电状态",
+        "note": "无量纲，0–1"
+      },
+      {
+        "field": "motor_efficiency",
+        "cn": "电机再生效率",
+        "note": "无量纲"
+      },
+      {
+        "field": "dc_link_derating",
+        "cn": "母线过压降额系数",
+        "note": "无量纲，1 表示不降额"
+      },
+      {
+        "field": "stored_energy_delta_j",
+        "cn": "本拍储能能量增量",
+        "note": "焦耳"
+      },
+      {
+        "field": "storage_loss_j",
+        "cn": "本拍储能损耗",
+        "note": "焦耳"
+      },
+      {
+        "field": "converter_loss_power_w",
+        "cn": "本拍变流器损耗功率",
+        "note": "瓦"
+      },
+      {
+        "field": "converter_inductor_loss_power_w",
+        "cn": "本拍电感铜损功率",
+        "note": "瓦"
+      },
+      {
+        "field": "reactive_energy_delta_j",
+        "cn": "电抗能量变化",
+        "note": "焦耳"
+      },
+      {
+        "field": "storage_charge_power_limit_w",
+        "cn": "储能充电功率上限",
+        "note": "瓦，同拍许可值"
+      },
+      {
+        "field": "control_update",
+        "cn": "控制是否更新",
+        "note": "0 或 1"
+      },
+      {
+        "field": "charge_safety_override",
+        "cn": "充电安全覆盖是否生效",
+        "note": "0 或 1"
+      }
+    ],
+    "timeseries_columns": [
+      {
+        "field": "time_s",
+        "cn": "仿真时间",
+        "note": "秒"
+      },
+      {
+        "field": "speed_mps",
+        "cn": "车速",
+        "note": "米每秒"
+      },
+      {
+        "field": "mechanical_braking_power_w",
+        "cn": "机械制动功率",
+        "note": "瓦，轮周口径"
+      },
+      {
+        "field": "regen_wheel_power_w",
+        "cn": "可再生机械功率",
+        "note": "瓦，轮周口径"
+      },
+      {
+        "field": "friction_braking_power_w",
+        "cn": "摩擦制动功率",
+        "note": "瓦"
+      },
+      {
+        "field": "motor_electrical_power_w",
+        "cn": "电机电功率",
+        "note": "瓦，折算到直流侧"
+      },
+      {
+        "field": "duty_cycle_T1",
+        "cn": "上管占空比 T1",
+        "note": "无量纲，受 0–0.9 约束"
+      },
+      {
+        "field": "duty_cycle_T2",
+        "cn": "下管占空比 T2",
+        "note": "无量纲，受 0–0.9 约束"
+      },
+      {
+        "field": "input_voltage_v",
+        "cn": "母线电压",
+        "note": "伏"
+      },
+      {
+        "field": "input_current_a",
+        "cn": "母线电流",
+        "note": "安"
+      },
+      {
+        "field": "inductor_current_a",
+        "cn": "电感电流",
+        "note": "安"
+      },
+      {
+        "field": "output_voltage_v",
+        "cn": "储能侧电压",
+        "note": "伏"
+      },
+      {
+        "field": "output_current_a",
+        "cn": "储能侧电流",
+        "note": "安"
+      },
+      {
+        "field": "output_power_w",
+        "cn": "储能侧输出功率",
+        "note": "瓦"
+      },
+      {
+        "field": "reference_power_w",
+        "cn": "参考可吸收功率",
+        "note": "瓦，储能侧，与实测同侧"
+      },
+      {
+        "field": "accepted_power_w",
+        "cn": "储能实际接受功率",
+        "note": "瓦"
+      },
+      {
+        "field": "curtailed_power_w",
+        "cn": "被削减功率",
+        "note": "瓦"
+      },
+      {
+        "field": "grid_export_power_w",
+        "cn": "回网功率",
+        "note": "瓦"
+      },
+      {
+        "field": "grid_import_power_w",
+        "cn": "电网回吸功率",
+        "note": "瓦"
+      },
+      {
+        "field": "grid_source_loss_w",
+        "cn": "源阻抗损耗功率",
+        "note": "瓦"
+      },
+      {
+        "field": "soc",
+        "cn": "荷电状态",
+        "note": "无量纲，0–1"
+      },
+      {
+        "field": "motor_efficiency",
+        "cn": "电机再生效率",
+        "note": "无量纲"
+      },
+      {
+        "field": "dc_link_derating",
+        "cn": "母线过压降额系数",
+        "note": "无量纲，1 表示不降额"
+      },
+      {
+        "field": "stored_energy_delta_j",
+        "cn": "本拍储能能量增量",
+        "note": "焦耳"
+      },
+      {
+        "field": "storage_loss_j",
+        "cn": "本拍储能损耗",
+        "note": "焦耳"
+      },
+      {
+        "field": "converter_loss_power_w",
+        "cn": "本拍变流器损耗功率",
+        "note": "瓦"
+      },
+      {
+        "field": "converter_inductor_loss_power_w",
+        "cn": "本拍电感铜损功率",
+        "note": "瓦"
+      },
+      {
+        "field": "reactive_energy_delta_j",
+        "cn": "电抗能量变化",
+        "note": "焦耳"
+      },
+      {
+        "field": "storage_charge_power_limit_w",
+        "cn": "储能充电功率上限",
+        "note": "瓦，同拍许可值"
+      },
+      {
+        "field": "control_update",
+        "cn": "控制是否更新",
+        "note": "0 或 1"
+      },
+      {
+        "field": "charge_safety_override",
+        "cn": "充电安全覆盖是否生效",
+        "note": "0 或 1"
+      }
+    ],
+    "gate_fields": [
+      {
+        "field": "physical_violation",
+        "cn": "物理约束"
+      },
+      {
+        "field": "closure_failure",
+        "cn": "能量闭合"
+      },
+      {
+        "field": "health_failure",
+        "cn": "辨识健康"
+      },
+      {
+        "field": "soc_exit_failure",
+        "cn": "荷电状态许可退出"
+      }
+    ]
+  },
+  "conventions": {
+    "machine_keys_are_english": "CSV/JSON 键名保持英文；中文只出现在说明层，不得改写键名",
+    "energy_units": "能量统一 kWh；功率统一 W（时序 CSV）或 kW（摘要，见字段后缀）",
+    "same_side_comparison": "跟踪指标参考取储能侧可吸收功率，不取轮端再生功率",
+    "regen_caliber": "问「回收了多少再生」必须用 storage_net_of_grid_import_energy_kWh（= 净存入 − 电网回吸）；storage_energy_kWh 与 captured_energy_kWh 含从母线回吸的电网电，只能当端口吸收量，直接当回收量会把电网电算成再生",
+    "closure_tolerance": "能量闭合相对残差 < 1e-4 为通过"
+  }
+}

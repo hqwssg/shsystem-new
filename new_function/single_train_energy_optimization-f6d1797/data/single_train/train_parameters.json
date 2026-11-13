@@ -1,0 +1,70 @@
+{
+  "vehicle_mass_tons": 21600.0,
+  "locomotive_type": "SHENHUA_12",
+  "basic_resistance": {
+    "a_n_per_kn": 0.92,
+    "b_n_per_kn_per_kmh": 0.0048,
+    "c_n_per_kn_per_kmh2": 0.000125,
+    "curve_equivalent_per_mille_numerator": 600.0,
+    "basis": "per_kN_speed_kmh",
+    "note": "w0 = a + b*v + c*v^2 [N/kN]，v 单位 km/h；F0 = w0/1000 * m * g [N]。曲线附加阻力按 600/R 折算为等效坡度（‰），与共享项目同一折算约定。"
+  },
+  "field_data_status": {
+    "basic_resistance": "official",
+    "mass_kg": "derived",
+    "vehicle_mass_tons": "real",
+    "locomotive_type": "real",
+    "locomotive_count": "derived",
+    "electrical_level": "calibrated",
+    "max_brake_force_n": "real",
+    "max_regen_force_n": "derived",
+    "rotational_mass_factor": "real",
+    "adhesion": "real",
+    "regen_fraction_cap": "assumed",
+    "train_length_m": "real",
+    "longitudinal_segments": "assumed",
+    "gravity_m_per_s2": "real",
+    "ambient": "assumed"
+  },
+  "provenance": {
+    "basic_resistance": "2026-11-06 原件视觉核对：TB/T 1407.1-2018 纸页3（PDF物理页8）表5货车重车 A=0.92、B=0.0048、C=0.000125，式(5)曲线阻力600/R；v单位km/h、w单位N/kN。是标准公式值，不是现场阻力实测；按本项目重车代表工况选用。",
+    "mass_kg": "整备质量 = 车辆总重 21600 t + 机车自重 500 t（神华号 12 轴 300 t + 神华号 8 轴 200 t）= 22100 t（22100000 kg）。车辆总重取自 trains.csv 的 Heavy.mass_tons（216 辆 × 100 t，经智能电表 5869 趟核对，不含机车）；机车自重逐型取自 locomotive_curves.json 的 computed_mass_t。**编组以 trains.csv:locomotive_consist（SHENHUA_12:1|SHENHUA_8:1）为准**，本字段为镜像值，装配时由共享数据按各机型台数重算并校验。两万吨为 1+1 两台的依据：编组模式文档「两万吨 重车 编组模式 1+1（交+交）辆数 216」、运行图技术资料第 7 页「2 万吨列车由国能号 12 轴 + 国能号 8 轴交流机车固定担当」，以及能量守恒独立校核——单机口径下轮周牵引 6322 kWh 低于物理下界 9884 kWh（−36%），只有「双机、电表读数只是其中一台」可满足该下界（+26.2%）。此前「单台 12 轴、21900 t」的登记已撤回。",
+    "vehicle_mass_tons": "车辆总重 21600 t，来自 trains.csv 的 Heavy.mass_tons；语义固定为『不含机车』，机车质量另行叠加，不得就地改写本值",
+    "locomotive_type": "机车机型 SHENHUA_12（神华号 12 轴交流电力机车），来自 trains.csv 的 Heavy.locomotive_type",
+    "locomotive_count": "**仅表示首型（locomotive_type = SHENHUA_12）的台数，不是整列机车总数。**整列编组以 trains.csv:locomotive_consist 为准（当前 SHENHUA_12:1|SHENHUA_8:1，共 2 台）。保留本字段 = 1 而不是改成 2，是因为它要与 trains.csv 的同名列保持一致（镜像关系），且未适配编组的消费方读到「1 台 12 轴」是保守低估；若填 2 而不区分机型，会按 2 × 300 t / 2 × 14400 kW 算出 600 t / 28800 kW，全错。1 台 / 2 台情景对比仍可通过 build_component_bundle(locomotive_count=N) 显式覆盖。",
+    "electrical_level": "电制动投入级位 0.48：占机车曲线能力的份额，用于把电制动与空气制动的分摊标定到实绩再生电量（两万吨 396 km 工况实绩 14826 kWh；1 台 12 轴满级位约 27983 kWh）。只改变电/空分摊，不改变总制动力，因此速度轨迹逐位不变、可离线扫描标定",
+    "max_brake_force_n": "全列最大制动力 6200 kN，来自 trains.csv 的 Heavy.max_brake_kN，是空气制动 + 电制动的总量；它约束的是『总制动力』，不是可回收的再生能力",
+    "max_regen_force_n": "单台机车电制动力峰值 691.5 kN（10–20 km/h），来自 locomotive_curves.json 的 SHENHUA_12.brake_curve，装配时按台数与级位折算到全列。旧口径曾误用 6200 kN（全列制动总量）作再生上限，会把可回收电量高估约一个数量级。**本字段登记的是 1 台口径**，台数 ≠ 1 时装配重算为「单台峰值 × 台数」，不再校验本值",
+    "adhesion": "data/real_shuohuang/operating_conditions.json: default_adhesion_coefficient=0.28, braking_adhesion_safety_factor=0.65",
+    "rotational_mass_factor": "旋转质量系数 1.06，来自 trains.csv 的 Heavy.rotational_mass_factor：把轮对与传动系的转动惯量折算为平动等效质量（m_eq = 1.06 m）",
+    "regen_fraction_cap": "可再生比例上限 0.85：限制再生制动力最多占所需制动力的 85%，其余由摩擦承担；工程预设",
+    "train_length_m": "列车长度 2613.6 m，取共享 trains.csv 的 Heavy.length_km；仅作编组记录，动力学按质点处理，坡度取列车所在位置的线路坡度，未沿车长加权",
+    "longitudinal_segments": "纵向离散段数 20：把列车长度切分为若干段的预留参数，供沿车长坡度加权使用；当前计算取线路区间坡度，未消费该字段",
+    "gravity_m_per_s2": "重力加速度 9.81 m/s²，与代码常量 dynamics/train_braking_model.py::GRAVITY_M_PER_S2 取值一致；计算取代码常量，本字段作记录",
+    "ambient": "环境修正系数（滚动 1.0、气动 1.0）：天气与轨面条件接口，与共享项目 operating_conditions.json 的空 weather_conditions 一致；乘 1.0 即不修正"
+  },
+  "schema_version": "1.0",
+  "profile_id": "shuohuang_heavy_c80_placeholder",
+  "label": "朔黄线 2 万吨 C80 重车代表工况（单列车再生制动仿真用）",
+  "data_status": "derived",
+  "note": "本文件为仿真输入参数，不是正式工程参数。所有 assumed / placeholder 字段在获得正式牵引制动特性资料后必须替换。",
+  "mass_kg": 22100000.0,
+  "locomotive_count": 1,
+  "electrical_level": 0.48,
+  "train_length_m": 2613.6,
+  "longitudinal_segments": 20,
+  "rotational_mass_factor": 1.06,
+  "max_brake_force_n": 6200000.0,
+  "max_regen_force_n": 691500.0,
+  "regen_fraction_cap": 0.85,
+  "adhesion": {
+    "coefficient": 0.28,
+    "braking_safety_factor": 0.65
+  },
+  "gravity_m_per_s2": 9.81,
+  "ambient": {
+    "note": "rolling / aerodynamic multipliers 预留接口，当前恒为 1.0（与共享项目 operating_conditions.json 的空 weather_conditions 一致）。",
+    "rolling_multiplier": 1.0,
+    "aerodynamic_multiplier": 1.0
+  }
+}

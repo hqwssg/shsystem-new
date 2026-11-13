@@ -1,0 +1,65 @@
+services:
+  cerdb:
+    image: ${CERDB_IMAGE:?Set CERDB_IMAGE to the vendor-confirmed openGauss CERDB image}
+    container_name: cerdb
+    restart: unless-stopped
+    environment:
+      CERDB_DB: ${CERDB_DB:?Set CERDB_DB}
+      CERDB_APP_USER: ${CERDB_APP_USER:?Set CERDB_APP_USER}
+      CERDB_APP_PASSWORD: ${CERDB_APP_PASSWORD:?Set CERDB_APP_PASSWORD}
+    volumes:
+      - ${CERDB_DATA_HOST_PATH:?Set CERDB_DATA_HOST_PATH}:/var/lib/cerdb
+      - ${CERDB_LICENSE_HOST_PATH:?Set CERDB_LICENSE_HOST_PATH}:/run/cerdb/license:ro
+    expose:
+      - "${CERDB_PORT:?Set CERDB_PORT}"
+    networks: [internal]
+
+  sh-python:
+    image: ${PYTHON_IMAGE:?Set PYTHON_IMAGE}
+    container_name: sh-python
+    restart: unless-stopped
+    environment:
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN:?Set PYTHON_INTERNAL_TOKEN}
+      API_KEY: ${PREDICTION_API_KEY:?Set PREDICTION_API_KEY}
+      CERDB_HOST: cerdb
+      CERDB_PORT: ${CERDB_PORT}
+      CERDB_DB: ${CERDB_DB}
+      CERDB_APP_USER: ${CERDB_APP_USER}
+      CERDB_APP_PASSWORD: ${CERDB_APP_PASSWORD}
+      CERDB_DSN: ${CERDB_DSN:?Set CERDB_DSN to the vendor-supported Python connection string}
+      ENERGY_DATABASE_URL: ${ENERGY_DATABASE_URL}
+      PREDICTION_API_PORT: "8090"
+      SHARED_ROOT: /srv/shared
+    volumes:
+      - ${SHARED_DATA_HOST_PATH:?Set SHARED_DATA_HOST_PATH}:/srv/shared
+    expose: ["8090", "8091"]
+    depends_on:
+      cerdb: {condition: service_started}
+    networks: [internal]
+
+  sh-app:
+    image: ${APP_IMAGE:?Set APP_IMAGE}
+    container_name: sh-app
+    restart: unless-stopped
+    environment:
+      CERDB_JDBC_DRIVER: ${CERDB_JDBC_DRIVER:?Set CERDB_JDBC_DRIVER}
+      CERDB_JDBC_URL: ${CERDB_JDBC_URL:?Set CERDB_JDBC_URL}
+      CERDB_APP_USER: ${CERDB_APP_USER}
+      CERDB_APP_PASSWORD: ${CERDB_APP_PASSWORD}
+      PYTHON_SERVICE_URL: http://sh-python:8091
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN}
+      PYTHON_SERVICE_REQUIRED: "true"
+      PREDICTION_BASE_URL: http://sh-python:8090
+      PREDICTION_API_KEY: ${PREDICTION_API_KEY:?Set PREDICTION_API_KEY}
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
+    ports: ["${WEB_PORT:-80}:80"]
+    volumes:
+      - ${SHARED_DATA_HOST_PATH:?Set SHARED_DATA_HOST_PATH}:/srv/shared
+    depends_on:
+      cerdb: {condition: service_started}
+      sh-python: {condition: service_started}
+    networks: [internal]
+
+networks:
+  internal:
+    internal: true

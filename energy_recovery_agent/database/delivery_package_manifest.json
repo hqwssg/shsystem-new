@@ -1,0 +1,47 @@
+{
+  "package_version": "2026.09.10.3",
+  "module": "energy_recovery_simulation",
+  "database": "carbon_emissions",
+  "schema": "energy_recovery",
+  "table_prefix": "simulation_",
+  "minimum_postgresql_major": 16,
+  "migration_range": "001-007",
+  "run_types": [
+    "dispatch",
+    "timetable_audit",
+    "timetable_optimization",
+    "rolling_rescheduling",
+    "joint_parameter_robustness"
+  ],
+  "runtime_boundary": "The database worker requires the matching complete algorithm project, including run_project.py and algorithm modules.",
+  "entry_points": {
+    "deploy": "tools/deploy_database.ps1",
+    "worker": "tools/run_database_worker_loop.py",
+    "healthcheck": "tools/database_healthcheck.py",
+    "target_access_verification": "tools/verify_target_database_access.py",
+    "segregated_five_run_acceptance": "tools/run_database_five_run_acceptance.py",
+    "five_run_acceptance": "tools/verify_database_five_run_e2e.py",
+    "platform_stress_fault": "tools/platform_task_stress_fault.py",
+    "stress_result_verification": "tools/verify_platform_task_stress_results.py",
+    "package_verification": "tools/verify_database_delivery_package.py",
+    "interface_contract_verification": "tools/verify_interface_contract_freeze.py"
+  },
+  "documentation": [
+    "docs/interface_contract_freeze.md",
+    "docs/database_delivery_package_guide.md",
+    "docs/database_platform_integration_handoff.md",
+    "docs/database_platform_integration_checklist.md",
+    "docs/database_integration_guide.md",
+    "docs/database_runtime_transaction_idempotency.md",
+    "docs/solver_resource_budget_and_degradation.md",
+    "docs/historical_disturbance_replay_interface.md",
+    "docs/database_storage_device_algorithm_binding.md",
+    "docs/platform_task_stress_fault.md",
+    "docs/optimization_attribution_and_bottleneck_report.md"
+  ],
+  "security": {
+    "credentials_included": false,
+    "production_tls_required": true,
+    "roles_are_nologin": true
+  }
+}

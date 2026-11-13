@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "purpose": "staging_database_five_run_acceptance",
+  "dataset_extra_files": {
+    "platform/running_diagram.xlsx": "data_templates/running_diagram_template.xlsx",
+    "platform/historical_disturbance_replay.json": "data_templates/historical_disturbance_replay_template.json",
+    "platform/joint_parameter_ranges.json": "data_templates/joint_parameter_ranges_template.json"
+  },
+  "runs": [
+    {
+      "run_type": "dispatch",
+      "parameters_file": "database/examples/dispatch_parameters.json"
+    },
+    {
+      "run_type": "timetable_audit",
+      "parameters_file": "database/examples/timetable_audit_parameters.json"
+    },
+    {
+      "run_type": "timetable_optimization",
+      "parameters_file": "database/examples/timetable_optimization_parameters.json"
+    },
+    {
+      "run_type": "rolling_rescheduling",
+      "parameters_file": "database/examples/rolling_rescheduling_parameters.json"
+    },
+    {
+      "run_type": "joint_parameter_robustness",
+      "parameters_file": "database/examples/joint_parameter_robustness_parameters.json"
+    }
+  ],
+  "acceptance_command": "python tools/run_database_five_run_acceptance.py --project-code <code> --version-code <version> --output-dir <output>"
+}

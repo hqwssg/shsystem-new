@@ -1,0 +1,21 @@
+{
+  "population_size": 2,
+  "generations": 1,
+  "seed": 20260908,
+  "storage_devices": [
+    {
+      "storage_section_id": "storage_section_1:K145-K164",
+      "soc_kwh": 2500.0,
+      "available": true,
+      "max_charge_power_kw": 5000.0,
+      "max_discharge_power_kw": 5000.0
+    },
+    {
+      "storage_section_id": "storage_section_2:K164-K200.7",
+      "soc_kwh": 2500.0,
+      "available": false,
+      "max_charge_power_kw": 0.0,
+      "max_discharge_power_kw": 0.0
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportLlmConfigMapper">
+    <select id="selectValue" resultType="string">
+        select config_value from sys_config where config_key = #{configKey} limit 1
+    </select>
+    <update id="updateValue">
+        update sys_config set config_value = #{configValue}, update_by = #{username}, update_time = sysdate()
+        where config_key = #{configKey}
+    </update>
+    <insert id="insertValue">
+        insert into sys_config (config_name, config_key, config_value, config_type, create_by, create_time, remark)
+        values (#{configName}, #{configKey}, #{configValue}, 'N', #{username}, sysdate(), #{remark})
+    </insert>
+</mapper>

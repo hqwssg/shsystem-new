@@ -1,0 +1,750 @@
+{
+ "schema_version": "1.0",
+ "dataset": "real_shuohuang",
+ "updated_at": "2026-11-08",
+ "purpose": "把「缺少的数据」显式登记成假设，而不是散落在代码注释里。前端据此决定哪些数字可以直接展示、哪些必须带不确定性标注。",
+ "status_legend": {
+  "measured": "甲方资料或电表原始字段直接读出，可当事实使用",
+  "resolved": "曾登记为待确认或存疑项，现已由一手资料定案；判定依据与已撤回的旧读法都写在 basis / conflict 里，数值可直接使用，但必须保留判定过程以备复核",
+  "calibrated": "用实绩反标定得到，与实绩吻合但存在参数相关性（不同参数组合可得到相近结果）",
+  "derived": "由已确认数据推算，推算链条明确但未获厂家/甲方确认",
+  "assumed": "工程惯例取值，无本项目实测支撑",
+  "placeholder": "规划占位，仅用于跑通流程与页面展示，不得对外表述为结论",
+  "contested": "数据之间自相矛盾，已登记但未定案；下游结论必须按情景给出"
+ },
+ "assumptions": [
+  {
+   "id": "two_wan_ton_locomotive_count",
+   "title": "两万吨列车机车台数",
+   "value": 2,
+   "unit": "台",
+   "status": "resolved",
+   "basis": "**2026-11-07 第三次判定，按数据源优先级而非字段个数。**① `shuohuang_data/2025朔黄铁路编组模式.docx`（甲方编组模式说明）：「两万吨 重车：编组模式 1+1（交+交）辆数 216 辆、载重 21600 吨」——「1+1」「交+交」均指两台交流机车。② `列车运行图及技术资料.pdf` 第 7 页：「2 万吨列车由国能号 12 轴 + 国能号 8 轴交流机车固定担当」。③ `traintypeid` 不是台数（233 为单机 12 轴、231 为 8 轴，二者是「记了哪台车的表」，不是编组台数）。→ **两万吨 = 12 轴 + 8 轴，两台。**",
+   "conflict": "电表台账每趟只有 3 块表（a/b/c），frozenset 合计恒等于 `use_ygdn`。**这不等于整列只有一台车**：`250917-2001号车…xls` 证明台账是「一台车 A/B/C 三节」的口径（三节之和 = 该车总能耗，逐趟吻合）。3 块表 = 本务机车（12 轴 = 3 节）的三节，**补机（8 轴）不在本表内**。此前两次判定（先 1 台、后 3 台）都是在「表数」这一个维度上推台数，方向都错。",
+   "alternatives": [
+    {
+     "value": 1,
+     "label": "一台 12 轴（2026-11-08 曾判定）",
+     "implication": "**已撤回。** 依据是「233 有 3 块表、231 只有 2 块表 ⇒ 一表一节 ⇒ 单机」。但「一表一节」只说明台账计的是单台机车，不能推出列车只有一台；编组模式文档与运行图技术资料都写两台。"
+    },
+    {
+     "value": 3,
+     "label": "三台（2026-11-07 曾判定）",
+     "implication": "**已撤回。** 把三节当成三台；带补机的 231 反而只有两块表，已否证。"
+    }
+   ],
+   "impact_outputs": [
+    "traction_kwh",
+    "net_energy_kwh",
+    "storage_annual_revenue",
+    "break_even_grid_price"
+   ],
+   "owner_to_confirm": "甲方（机车运用/电表台账）",
+   "affected_files": [
+    "data/real_shuohuang/trains.csv"
+   ],
+   "scenario_test": {
+    "scenario": "按 2 台神12 填充（locomotive_count=2、max_power_kW=28,800、整备质量 22,200 t）",
+    "tested_at": "2026-11-05",
+    "how": "复制 data/real_shuohuang 后仅改 trains.csv 的机车台数与功率，其余输入不变，重跑 plan-storage-mixed 并与单机基线逐项比对。",
+    "artifacts": [
+     "outputs/assumption_sensitivity/loco1_plan/storage_planning_summary.json",
+     "outputs/assumption_sensitivity/loco2_plan/storage_planning_summary.json",
+     "outputs/assumption_sensitivity/假设填充与情景敏感性.md"
+    ],
+    "result": "决策不变（两套情景均 keep_no_build）；全年弃能 5.29 → 10.00 GWh（+89%），年购电 37.59 → 39.60 GWh（+5.3%），最优可建方案的购电削减 18,070 → 20,079 kWh/年（+11%），盈亏电价 45.04 → 42.70 元/kWh。",
+    "conclusion": "储能结论对该假设不敏感，可直接对外；净电量与电费绝对值对该假设敏感（+5.3%），只能按情景给出。原因是回收集被 2 个候选站 × 72.5 kWh 容量下界 × 1,000 kW 功率下界卡死，弃能翻倍也进不来。"
+   },
+   "closure_audit": {
+    "audited_at": "2026-11-05",
+    "tool": "tools/audit_energy_closure.py",
+    "criterion": "W_牵引(轮周) ≥ m·g·U − ½·m·v_max²，U 为累计爬升；与操纵、阻力、效率无关",
+    "results": [
+     {
+      "reading": "whole_train（单机，读数即全列）",
+      "whole_train_traction_kwh": 6322,
+      "lower_bound_grid_kwh": 9884,
+      "margin_pct": -36.0,
+      "verdict": "violates_bound"
+     },
+     {
+      "reading": "one_of_two（双机，读数只是其中一台）",
+      "whole_train_traction_kwh": 12644,
+      "lower_bound_grid_kwh": 10019,
+      "margin_pct": 26.2,
+      "verdict": "admissible"
+     },
+     {
+      "reading": "whole_2loco（双机，读数已是汇总）",
+      "whole_train_traction_kwh": 6322,
+      "lower_bound_grid_kwh": 10019,
+      "margin_pct": -36.9,
+      "verdict": "violates_bound"
+     }
+    ],
+    "profile_sensitivity": "6 档保高程重建变体下：读数精度档内（高程容差 ≤1.0 m）重车牵引 17,139–17,314 kWh（≤1.0%）、再生 14,311–14,341（0.2%）、时分 417.2–417.5 min；压力档（容差放到 4 m，已在改地形）牵引降到 16,685（−3.6%）。判定要翻转需把高程扭曲到 4 m，为 0.5‰ 读数分辨率（0.25 m）的 16 倍。",
+    "known_model_bias": "**2026-11-08 第二次重写**。旧版有两处口径错：① 18,716 是反应式控制器的结果（不是模型最优）；② 10,874 建立在已作废的 ×2 读数上。按现在对齐的口径：实测重车两万吨毛牵引 **5,539 kWh**（逐区间中位之和，电网侧）／ **4,764**（轮周，×0.86）；模型单台反应式控制器 16,726（轮周）、无区间约束最优 13,516（轮周）。真缺口不是百分比而是**速度剖面形状**：模型纯运行 345 min + 站停 66 min，实测纯运行 362 min——模型更快却多耗 3 倍电，因为它在每个小起伏上做一次「制动泄能 + 牵引补能」，实测司机让速度自由浮动、靠动能顶过起伏。补记两条已修正的参数：实测反馈/制动 ≈ 36%（`electrical_level=0.48` 在 1 台配置下复现，2 台会放大到 2.0 倍）；编组为 **1 台 12 轴（3 节）**，此前「3 台」的读法把节数当成了台数，已作废。详见 `outputs/section_energy/` 与 `outputs/meter_scope/`。",
+    "artifacts": [
+     "outputs/energy_closure/closure_matrix.json",
+     "outputs/energy_closure/scenario_envelope.json",
+     "outputs/energy_closure/能量闭合判定与情景包络.md"
+    ],
+    "attribution": {
+     "attributed_at": "2026-11-05",
+     "tool": "tools/attribute_traction_energy.py",
+     "identity": "E_牵引 − E_制动 − W_基本阻力 − W_坡道 = ΔKE（全部轮周口径）",
+     "identity_residual": "全程 1,393.3 kWh，但 100% 落在 16 个限速夹紧步上（模型把越限动能当瞬时机械制动抹掉却不记 brake_kN）；其余 2,460 步残差为 0.000 kWh——账在模型自己记账的地方逐位闭合。",
+     "by_gradient": {
+      "up": {
+       "distance_km": 54.8,
+       "traction_kwh": 10407,
+       "grade_kwh": 4242,
+       "basic_kwh": 6405
+      },
+      "down": {
+       "distance_km": 340.1,
+       "traction_kwh": 8160,
+       "brake_kwh": 59762,
+       "grade_kwh": -95352,
+       "basic_kwh": 40704
+      },
+      "flat": {
+       "distance_km": 0.9,
+       "traction_kwh": 148
+      }
+     },
+     "finding": "上坡牵引 10,407 kWh ≈ 上坡坡道功 4,242 + 上坡阻力 6,405 = 10,647（差 −2.3%），物理侧自洽，且已经逼近实绩目标 10,874（−4.3%）。下坡段却用了 8,160 kWh，而按恒等式下坡段牵引本应为 0（重力已覆盖阻力）。8,160 ÷ 7,842 = 104%，**超额全部落在下坡段**。",
+     "falsified": [
+      "控制抖动：惰行死区 0.02 → 2.0 m/s（100 倍），牵引 18,716 → 18,319（−2.1%）、制动功 59,979 → 59,529（−0.8%）。",
+      "制动后再牵引：模型在自身速度剖面下的牵引只比「维持该步速度所需最小值」高 4.0%；重力已足够推动的步里牵引仅 1,000 kWh（占 5%）。"
+     ],
+     "interpretation": "既不是阻力标定问题，也不是「调调参数就能修」：把按图定时口径（strict 逐区间压速 / dwell 站停吸收）与牵引死区一起扫（2×5 格），两条曲线几乎重合，410 min 处最低牵引仍有 18,167 kWh（+67%）；要把牵引压到 10,874 需要约 445 min（晚 35 min）。**目标点 (10,874, 410) 落在可达前沿之外。**缺的是前瞻式速度规划：当前控制器是反应式的（掉了才补、超了才刹），实绩操纵必须在上坡前先提速度、靠动能顶过去。已实现并保留 `schedule_speed_cap` 开关（默认 strict，不改变既有结果），实测无效的 `descent_speed_boost_mps` 已移除。",
+     "artifacts": [
+      "outputs/traction_attribution/traction_attribution.json",
+      "outputs/traction_attribution/牵引归因分解.md",
+      "outputs/traction_attribution/coast_band_sweep.csv",
+      "tests/smoke/verify_traction_attribution.py",
+      "outputs/traction_attribution/droop_sweep.csv",
+      "outputs/traction_attribution/policy_sweep.csv"
+     ],
+     "frontier": {
+      "tested_at": "2026-11-05",
+      "tool": "--sweep-policy 0 3 4 5 6",
+      "result": "strict：412.7/18,716 → 447.5/11,454 → 456.3/10,309；dwell：412.0/18,167 → 447.0/10,629 → 456.3/9,631（每格为 时分 min / 牵引 kWh）",
+      "verdict": "410 min 处最低 18,167 kWh；打到 10,874 kWh 需约 445 min。目标点在可达前沿之外。"
+     },
+     "bound_split": {
+      "tool": "tools/plan_speed_profile.py",
+      "optimal_kwh": 12919,
+      "optimal_minutes": 412.8,
+      "controller_kwh": 18716,
+      "metred_wheel_kwh": 10874,
+      "strategy_kwh": 5797,
+      "physics_kwh": 2045,
+      "verdict": "超额 7,842 kWh = 策略 74% + 物理 26%。物理那 2,045 kWh 改控制器永远修不掉：即使允许任意规划速度，最优仍比实绩高 19%，说明阻力/坡度/质量里至少有一项偏大约 20%。",
+      "caveat": "DP 允许把陡坡速度压到十几 km/h，剖面本身不可驾驶，只作下界。"
+     }
+    },
+    "verdict_note": "**2026-11-08 更正**：`whole_train` 被此处的势能下界判为 violating，是因为该下界假设「全线路只有一块动能缓冲」。本线累计爬升 166.4 m 分散在约 87 段上坡，动能缓冲可逐段复用 13 次，下界因此偏紧。实测车次表证明 `whole_train` 成立：1,904 趟两万吨重车的 `use_ygdn` 恒等于 a+b+c 三表之和。上表 `one_of_two`（×2 = 12,644）的读法**作废**。"
+   },
+   "resolved": {
+    "resolved_at": "2026-11-07",
+    "tool": "tools/audit_data_inventory.py",
+    "finding": "**台数 = 2（12 轴 + 8 轴）。三次判定全部作废重来，前两次都错在拿字段个数推台数。**\n本次改用「数据源优先级 + 能量守恒」双判据：\n① 甲方编组模式文档与运行图技术资料（一手，且互相独立）都写两台；\n② 能量守恒独立校核：21,500 t 降 1,508 m 势能约 88,300 kWh、阻力约 38,500 kWh，可回收约 50,000 kWh；两台各回收 1.5 万、合计约 3 万（回收率 61%）合理，单台回收 1.5 万只有 31%，偏低。",
+    "decisive_evidence": {
+     "single_loco_ledger": {
+      "file": "shuohuang_data/250917-2001号车运行阶段数据总览（标黄导明细，重要数据）.xls",
+      "content": "单车台账，A/B/C 三节，216 辆、21,492 t、神池南→肃宁北 396 km",
+      "gross_kwh_median": 6834,
+      "feed_kwh_median": 16742,
+      "unit_kwh_per_10kt_km": 7.99,
+      "section_sum_equals_total": true
+     },
+     "trip_ledger": {
+      "file": "nhtj_jkfile_ammeter_info",
+      "trips": 1854,
+      "gross_kwh_median": 6228,
+      "feed_kwh_median": 14660,
+      "three_meter_share": 0.84
+     },
+     "conclusion": "两条独立台账同量级 ⇒ 电表台账 = 单台机车（3 节）；编组两台 ⇒ 整列目标 = 2×读数。"
+    },
+    "target_reset": {
+     "old_target_grid_kwh": 5539,
+     "old_target_wheel_kwh": 4764,
+     "new_target_grid_kwh": 12456,
+     "new_target_wheel_kwh": 10712,
+     "new_feed_grid_kwh": 29320,
+     "basis": "整列 = 2 × 单机中位（6,228 / 14,660）",
+     "model": {
+      "traction_kwh": 16726,
+      "regen_kwh": 14324,
+      "unit_kwh_per_10kt_km": 19.26
+     },
+     "ratios": {
+      "traction": 1.34,
+      "regen": 0.49
+     },
+     "headline": "**不是「模型多耗 3 倍电」，而是「模型少回收一半」**：实测重车净值 12,456−29,320 = −16,864（净发电），模型 +2,402（净耗电），符号相反。"
+    },
+    "artifacts": [
+     "outputs/data_inventory/数据清点报告.md",
+     "outputs/data_inventory/data_inventory.json",
+     "data/real_shuohuang/section_run_times_2026.json"
+    ]
+   },
+   "next_action": "**2026-11-08 更新：控制策略这条线已排除，剩下的不确定性只剩「目标值本身」。** 前瞻剖面扫描（`tools/build_flight_profile.py`）给出能耗—时分前沿：反应式 18,959 kWh / 421.7 min，放松时分可到 10,340 kWh / 467.0 min，压到模型最快 423.3 min 仍要 17,626 kWh。**实测（409 min / 12,456 kWh）落在前沿左下方，两个维度同时不可达**，所以换任何剖面都缩不回来。现在唯一能动的是 12,456 这个目标：它是「单机台账 6,228 × 2」的等分假设。若补机（8 轴）出力只有本务的一半，目标降到约 9,342，模型差距会从 +42% 扩大到 +89%；若补机不出力（目标就是 6,228），差距扩大到 +183%。**因此必须拿到补机的电表读数，否则无法判定模型是「差 42%」还是「差 183%」。**",
+   "implementation": {
+    "implemented_at": "2026-11-07",
+    "files": [
+     "data/real_shuohuang/locomotive_curves.json（新增 SHENHUA_8：2(B0-B0)、200 t、9600 kW、起动 760 kN）",
+     "data/real_shuohuang/trains.csv（新增 locomotive_consist 列 = SHENHUA_12:1|SHENHUA_8:1）",
+     "tools/derive_shenhua8_entry.py（8 轴条目推导，幂等）"
+    ],
+    "effect": {
+     "mass_t": {
+      "before": 21900,
+      "after": 22100
+     },
+     "power_cap_kW": {
+      "before": 14400,
+      "after": 24000
+     },
+     "od_km": {
+      "before": 396.0,
+      "after": 406.571
+     },
+     "traction_kwh": {
+      "before": 16726,
+      "after": 18959
+     },
+     "regen_kwh": {
+      "before": 14324,
+      "after": 23278
+     },
+     "net_kwh": {
+      "before": 2402,
+      "after": -4318
+     },
+     "running_minutes": {
+      "before": 417.3,
+      "after": 421.7
+     }
+    },
+    "note": "牵引上升是因为功率翻倍后反应式控制律更激进（更快到限速、更多往复），不是数据接错。"
+   }
+  },
+  {
+   "id": "freight_basic_resistance",
+   "title": "货车单位基本阻力系数",
+   "value": "TB/T 1407.1-2018 表 5：重车 A=0.92、B=0.0048、C=0.000125；空车 A=2.23、B=0.0053、C=0.000675（N/kN，v 单位 km/h）",
+   "unit": "N/kN",
+   "status": "resolved",
+   "basis": "直接取国家标准表 5，未做任何本项目标定。`locomotive_curves.json` 的 `freight_resistance_coeffs` 与 `trains.csv` 的 davis_a/b/c 两处一致。",
+   "conflict": "**2026-11-07 解除 contested。** 逐页读扫描件（`TBT1407.1-2018FDIS.pdf` 印刷第 3 页 = PDF 第 8 页）核对表 5：货车重车 0.92 / 0.0048 / 0.000125，货车空车 2.23 / 0.0053 / 0.000675——**与项目所用逐字一致，不存在抄错**。此前两条「阻力偏大」的证据均随计量口径纠正而失效：①「单台 + 标准阻力跑不到图定」——编组实为 1+1 两台，功率上限翻倍，该结论不成立；②「空车反推 w0≈1.65 vs 公式 4.98」——反推依赖「这批空车 4,320 t」的分组假设，若按中位 2,160 t（106 辆）反推则为 7.1 N/kN，高于公式，说明该方法对质量假设极敏感，不可用。剩余残差（牵引 1.21–1.34 倍）归入控制律与制动回收。",
+   "alternatives": [
+    {
+     "value": "按 ×0.35 缩放（等效 w0 ≈ 0.58 N/kN）",
+     "label": "拟合解",
+     "implication": "三项指标同时命中，但 0.58 N/kN 对 2 万吨列车只有约 125 kN 阻力，低于任何工程常识，**不可作为结论**"
+    },
+    {
+     "value": "换厂家实测阻力曲线",
+     "label": "待甲方提供",
+     "implication": "C80 货车的实测单位基本阻力；一旦到位可直接替代标准表 5，并把「阻力 vs 控制律」的不可分辨彻底解开"
+    }
+   ],
+   "impact_outputs": [
+    "traction_kwh",
+    "regen_kwh",
+    "running_minutes",
+    "timetable_feasibility",
+    "storage_annual_revenue"
+   ],
+   "owner_to_confirm": "甲方（车辆/机务）",
+   "affected_files": [
+    "data/real_shuohuang/locomotive_curves.json",
+    "data/real_shuohuang/trains.csv"
+   ],
+   "diagnostic": {
+    "diagnosed_at": "2026-11-08",
+    "tool": "tools/scan_resistance_scale.py",
+    "artifacts": [
+     "outputs/resistance_scale/resistance_scale.json",
+     "outputs/resistance_scale/阻力缩放扫描.md"
+    ],
+    "sweep": {
+     "1.00": {
+      "traction_kwh": 16726,
+      "regen_kwh": 14324,
+      "minutes": 417.3
+     },
+     "0.70": {
+      "traction_kwh": 10935,
+      "regen_kwh": 15621,
+      "minutes": 413.7
+     },
+     "0.50": {
+      "traction_kwh": 7942,
+      "regen_kwh": 17195,
+      "minutes": 411.8
+     },
+     "0.35": {
+      "traction_kwh": 6087,
+      "regen_kwh": 18635,
+      "minutes": 410.5
+     },
+     "0.25": {
+      "traction_kwh": 5170,
+      "regen_kwh": 19904,
+      "minutes": 408.2
+     }
+    },
+    "observed_wheel": {
+     "traction_kwh": 6441,
+     "regen_kwh": 15924,
+     "minutes": 409
+    },
+    "verdict": "**不改。** 系数与国标表 5 逐字一致；两条曾支持「阻力偏大」的证据已随计量口径纠正而失效。阻力不是当前主缺口。"
+   },
+   "note": "另注：国标式(5) 曲线附加阻力 w_r = 600/R 项目未计入，按 `平曲线表.xlsx` 331 段曲线折算到全线仅 0.24 N/kN（曲线上 0.67），约为基本阻力的 15%，是缺口但量级不足以解释偏差。"
+  },
+  {
+   "id": "shenhua12_traction_brake_curves",
+   "title": "神华号 12 轴机车牵引/电制动特性",
+   "value": "1.5 × HXD1_25t（8 轴）特性外推",
+   "unit": "曲线",
+   "status": "derived",
+   "basis": "厂家特性表未到位；按轴数比 12/8 缩放 HXD1 曲线，持续功率 14,400 kW、起动牵引力按同比例。",
+   "conflict": null,
+   "alternatives": [
+    {
+     "value": "厂家实测曲线",
+     "label": "待甲方提供",
+     "implication": "牵引力上限与电制动上限直接改变，再生电量与运行时分同步变化"
+    }
+   ],
+   "impact_outputs": [
+    "traction_limit_kN",
+    "regen_kwh",
+    "running_minutes"
+   ],
+   "owner_to_confirm": "甲方（机务）",
+   "affected_files": [
+    "data/real_shuohuang/locomotive_curves.json"
+   ]
+  },
+  {
+   "id": "electrical_brake_level",
+   "title": "电制动投入级位",
+   "value": 0.48,
+   "unit": "无量纲（占机车电制动曲线能力的份额）",
+   "status": "calibrated",
+   "basis": "神池南→肃宁北Ⅱ场 396 km：两万吨最优 0.50、万吨最优 0.46，取中位 0.48；再生电量与实绩差 3.4%。",
+   "conflict": "该级位与「掉速容差」不完全可辨识：再生电量的等值线上存在多组（惰行带, 级位）组合，0.48 只在惰行带固定为 0.02 时成立，不能解释为「司机放 48% 档」。**另有一条强耦合（2026-11-08 补记）**：级位只改电制动与空气制动的**分摊**、不改轨迹，所以它的绝对值必须绑定编组台数才有意义——同一级位下 1 台给 14,324 kWh、2 台 27,350、3 台 38,545（实测反馈 13,695）。0.48 的标定是在 1 台配置下做的，台数一改就必须重标，不能沿用。\n\n**2026-11-07 复核（编组改为 1+1 两台后）**：级位只改电制动与空气制动的分摊、不改轨迹，所以同一级位下再生随台数近似线性变化。实测整列反馈目标 29,320 kWh（= 2 × 14,660），在 10 s 步长、dwell 限速下需要 **0.62** 才能复现（0.48 只给 23,278）；而净值目标 −16,864 需要 0.80。两者不一致，说明**牵引侧仍有 52% 的过量**（模型 18,959 vs 实测 12,456），级位补偿会把控制律的缺陷算进制动分摊。**因此默认值仍保留 0.48，0.62 仅作为「配平再生」的参考点登记，不升级为标定值。** **2026-11-08 目标值更正**：补机按实测占比（0.82 / 0.85）计入后，整列目标改为 11,650 / 27,720（净值 −16,070），配平再生约需 **0.57**（原记 0.62）；默认值仍保持 0.48 的理由不变——牵引侧过量已由 1.52 倍升到 **1.63 倍**，用级位补偿只会把控制律缺陷算进制动分摊。旧的标定产物（`outputs/brake_calibration/calibration.json`，396 km / 单机口径、目标 14,826）已过期，`verify_brake_strategy.py` 现按「产物与当前编组不同口径则 SKIP」处理，重跑需先统一口径。",
+   "alternatives": [],
+   "impact_outputs": [
+    "regen_kwh",
+    "air_brake_kwh"
+   ],
+   "owner_to_confirm": "无需外部确认；属模型内部标定",
+   "affected_files": [
+    "train_simulator.py"
+   ]
+  },
+  {
+   "id": "traction_efficiency",
+   "title": "牵引传动效率",
+   "value": 0.86,
+   "unit": "无量纲",
+   "status": "assumed",
+   "basis": "交直交传动机车常用工程取值，本项目无实测。空车方向能量闭合检验（w0 反推 3.75 vs 公式 3.6–3.7）对该值不敏感，因为检验中它与阻力共同吸收残差。",
+   "conflict": null,
+   "alternatives": [
+    {
+     "value": 0.82,
+     "label": "保守下限",
+     "implication": "电网侧牵引电量约 +4.9%"
+    },
+    {
+     "value": 0.9,
+     "label": "乐观上限",
+     "implication": "电网侧牵引电量约 −4.4%"
+    }
+   ],
+   "impact_outputs": [
+    "traction_kwh",
+    "net_energy_kwh"
+   ],
+   "owner_to_confirm": "甲方（机务）",
+   "affected_files": [
+    "data/real_shuohuang/locomotive_curves.json"
+   ]
+  },
+  {
+   "id": "gradient_profile_source",
+   "title": "线路坡度数据来源",
+   "value": "线路图-2 图形数字化（gradients.csv，728 段；主线 0–396.5 km 446 段）",
+   "unit": "‰",
+   "status": "derived",
+   "basis": "累计高差与线路图一致（0–396 km 净降 1,509 m），空车方向能量闭合；但细结构存疑：东段 60 km 内有 71 段、坡度在 ±4‰ 间每 600 m 跳变。",
+   "conflict": "重车方向是「重力≈阻力」的天平工况，对坡度形状极敏感。但敏感性已量化并排除：保高程重建族下重车牵引仅变 ≤1.5%（精度档）/ 5.1%（压力档）、再生 ≤0.5%、时分 ≤0.1%。此前「平滑到 40 km 可让牵引降到 6,551 kWh」的做法是靠压掉真实爬升实现的（累计爬升 167.6 → 105.8 m），属于改数据而不是降噪，不作为结论。",
+   "alternatives": [
+    {
+     "value": "原始纵断面表",
+     "label": "待甲方提供（PDF 坡度栏或线路纵断面）",
+     "implication": "可直接由几何算出重车方向牵引需求，不再依赖操纵假设"
+    }
+   ],
+   "impact_outputs": [
+    "traction_kwh",
+    "net_energy_kwh"
+   ],
+   "owner_to_confirm": "甲方（工务）",
+   "affected_files": [
+    "data/real_shuohuang/gradients.csv"
+   ]
+  },
+  {
+   "id": "station_fixed_cost",
+   "title": "储能站点固定接入成本 / 单位容量成本",
+   "value": "规划占位（见 storage_planning 输入模板）",
+   "unit": "元/站、元/kWh",
+   "status": "placeholder",
+   "basis": "data_templates/storage_planning_contract.json 定义的必填列与示例值；未经甲方造价确认。储能本体参数（145 kWh、往返效率 0.9、折旧 0.326 元/kWh、电价 0.6818 元/kWh）来自甲方《5.储能系统参数.doc》，属 measured。",
+   "conflict": null,
+   "alternatives": [],
+   "impact_outputs": [
+    "storage_annual_cost",
+    "storage_decision",
+    "break_even_grid_price"
+   ],
+   "owner_to_confirm": "甲方（造价/供电）",
+   "affected_files": [
+    "data_templates/storage_planning_contract.json"
+   ]
+  },
+  {
+   "id": "storage_discharge_power",
+   "title": "储能最大放电功率",
+   "value": 0,
+   "unit": "kW",
+   "status": "placeholder",
+   "basis": "甲方资料只给了容量与效率，未给最大放电功率；运行基线按 0 kW 放电保守处理，规划另按 2,000 kW 假设（battery.json 中 planning_max_discharge_power_assumption_kW）。",
+   "conflict": null,
+   "alternatives": [
+    {
+     "value": 2000,
+     "label": "规划假设值",
+     "implication": "影响可回收量与储能收益上限"
+    }
+   ],
+   "impact_outputs": [
+    "recoverable_kwh_per_year",
+    "storage_decision"
+   ],
+   "owner_to_confirm": "甲方（供电）",
+   "affected_files": [
+    "data/real_shuohuang/battery.json"
+   ]
+  },
+  {
+   "id": "dwell_calibrated_items",
+   "title": "站停作业时分中的估计项",
+   "value": "source_type=calibrated 的行",
+   "unit": "min",
+   "status": "calibrated",
+   "basis": "换班 / 折返 / 装卸 / 起停附加来自《列车运行图及技术资料》站停作业时分表（source_type=pdf）；表中未覆盖的少数站点按同类型站中位补齐（source_type=calibrated）。",
+   "conflict": null,
+   "alternatives": [],
+   "impact_outputs": [
+    "running_minutes",
+    "timetable_feasibility"
+   ],
+   "owner_to_confirm": "甲方（运输）",
+   "affected_files": [
+    "data/real_shuohuang/station_dwell.csv"
+   ]
+  },
+  {
+   "id": "catenary_voltage",
+   "title": "接触网电压",
+   "value": 27.2,
+   "unit": "kV",
+   "status": "measured",
+   "basis": "智能电表 wy 字段 17 万条记录中位数；原虚拟值 25.0 kV 已替换。用于式(72) 再生电流积分校核。",
+   "conflict": null,
+   "alternatives": [],
+   "impact_outputs": [
+    "regen_kwh_equation72_check"
+   ],
+   "owner_to_confirm": "无需外部确认",
+   "affected_files": [
+    "data/real_shuohuang/locomotive_curves.json"
+   ]
+  },
+  {
+   "id": "vehicle_mass_basis",
+   "title": "编组质量口径",
+   "value": "车辆总重（216 辆 × 100 t = 21,600 t）+ 机车自重（神12 300 t + 神8 200 t）= 22,100 t",
+   "unit": "t",
+   "status": "measured",
+   "basis": "编组表 11 种辆数下「总重/辆数」恒为 20.000；电表 2,764 趟三相汇总 6,254 kWh vs use_ygdn 6,217 kWh（差 0.6%）；**2026-11-07 更新**：两万吨改为 1+1 两台后，机车自重由 300 t 改为 300+200=500 t，整列 22,100 t。单车台账 `2001号车` 的「总重 21,492 t」是**车辆部分**（216 辆 × 约 99.5 t），不含机车。",
+   "conflict": null,
+   "alternatives": [],
+   "impact_outputs": [
+    "traction_kwh",
+    "regen_kwh",
+    "running_minutes"
+   ],
+   "owner_to_confirm": "无需外部确认",
+   "affected_files": [
+    "data/real_shuohuang/trains.csv"
+   ]
+  },
+  {
+   "id": "storage_candidate_sections",
+   "title": "储能候选接入区段",
+   "value": "storage_section_1: K145–K164；storage_section_2: K164–K200.7",
+   "unit": "-",
+   "status": "placeholder",
+   "basis": "power_arm_intervals.csv 中 storage_status=planning_assumption_two_storage_sections_pending_official_boundaries 的行；官方供电阻抗与场地边界未提供。",
+   "conflict": "全线 589 km 只声明 2 个候选区段，且都集中在 145–200.7 km。可回收购电因此只有弃能的 0.2%：双机情景弃能 +89%，回收只 +11%，决策不翻转。这是候选站数量问题，不是精度问题。",
+   "alternatives": [
+    {
+     "value": "按供电臂均布候选站（约 30 处/方向）",
+     "label": "全线布点情景",
+     "implication": "需重跑选址定容；回收量随站数近似线性上升，有可能翻转 keep_no_build，是目前唯一还没试过的大杠杆"
+    }
+   ],
+   "impact_outputs": [
+    "storage_candidate_count",
+    "storage_capacity",
+    "break_even_grid_price",
+    "annual_saving"
+   ],
+   "owner_to_confirm": "甲方（供电/建设）",
+   "affected_files": [
+    "data/real_shuohuang/power_arm_intervals.csv"
+   ],
+   "scenario_test": {
+    "scenario": "候选区段 2 → 6（在 293、382、448、515 km 各加一个虚拟区段，均只覆盖单条供电臂）",
+    "tested_at": "2026-11-05",
+    "how": "复制 data 目录，仅在 power_arm_intervals.csv 四条供电臂上补 storage_section_id/start/end，其余不变，重跑 plan-storage-mixed。",
+    "artifacts": [
+     "outputs/assumption_sensitivity/site6_plan/storage_planning_summary.json",
+     "outputs/input_completeness/输入完整性核查.md"
+    ],
+    "result": "方案数 193 → 1,121（+481%），运行时 62 s → 381 s；决策仍 keep_no_build，且最优可行方案与 2 站时完全相同（section_1 / 72.5 kWh / 1000 kW，年节约 −80.2 万元，盈亏电价 45.04 元/kWh）。",
+    "conclusion": "储能「不建」对候选站数量不敏感：每多建一个站要付 400 万元站点固定成本 + 150 万元设备固定成本（年化约 84 万元），而单站可回收电量只有 1.8 万 kWh/年（价值 1.2 万元），任何站点在任何位置都不成立。真正能翻转结论的只有成本结构或 50 倍以上的可回收电量，不是站数。"
+   }
+  },
+  {
+   "id": "timetable_density",
+   "title": "典型日列车密度",
+   "value": "实测 59 重 + 64 空 / 日（2026-06-13）；全期中位 53 重车/日",
+   "unit": "对/日",
+   "status": "placeholder",
+   "basis": "逐区间实测表 nhtj_jkfile_station 里，神池南→肃宁北Ⅱ场 的整趟记录（23 个区间）有 5,872 条、覆盖 121 天，中位 53 趟/日、最忙 75 趟/日；空车同量级。原模板 running_diagram_template.xlsx 只有 1 对/日，密度只有实测的 1/50。现已用 tools/build_timetable_from_telemetry.py 从实测表直接重建运行图，不再依赖模板。",
+   "conflict": "密度同时决定年化电量、同臂对消机会与储能循环次数。模板 1 对/日算出的盈亏电价是 45.04 元/kWh，5 对/日是 4.34，实测密度（59+64）是 2.88——同一条线路、同一套造价，只因密度不同就差 15 倍。用模板口径对外说「储能不成立」是错的：它把密度低估了 50 倍。",
+   "alternatives": [
+    {
+     "value": "1 对/日（模板）",
+     "label": "占位运行图",
+     "implication": "盈亏电价 45.04 元/kWh，严重高估差距"
+    },
+    {
+     "value": "5 对/日（人为加密）",
+     "label": "过渡验证",
+     "implication": "盈亏电价 4.34 元/kWh"
+    },
+    {
+     "value": "59 重 + 64 空 / 日（实测重建）",
+     "label": "当前采用",
+     "implication": "盈亏电价 2.88 元/kWh；弃能 313 GWh/年"
+    }
+   ],
+   "impact_outputs": [
+    "expected_wasted_kwh_per_year",
+    "grid_reduction_vs_no_build_kwh_per_year",
+    "break_even_grid_price_cny_per_kwh",
+    "storage_decision"
+   ],
+   "owner_to_confirm": "甲方（运输/调度）",
+   "affected_files": [
+    "data_templates/running_diagram_template.xlsx"
+   ],
+   "scenario_test": {
+    "tested_at": "2026-11-05",
+    "how": "从 nhtj_jkfile_station 按 nhtj_guid 串起整趟，一跳区间为一站，到发时刻取实测；跨零点写成 24:xx 保持单调；末尾同站调车段丢弃；站名 肃宁北Ⅱ场 → 肃宁北 归一。生成 xlsx 后作为 --timetable 传入 plan-storage-mixed。",
+    "artifacts": [
+     "tools/build_timetable_from_telemetry.py",
+     "outputs/timetable_measured/running_diagram_2026-06-13.xlsx",
+     "outputs/timetable_measured/plan/storage_planning_summary.json"
+    ],
+    "result": "2026-06-13（59 重 + 64 空）：弃能 313.15 GWh/年、购电 2,333.47 GWh/年；最优可建 290 kWh（技术表上限）× 2 站，可回收 807,636 kWh/年，年节约 −177.3 万元，盈亏电价 2.88 元/kWh。决策仍 keep_no_build。 另做容量扫描（单站 290 / 1,500 / 3,000 kWh）：减购电 1,332,396 / 4,629,341 / 6,322,995 kWh/年，盈亏电价 3.54 / 1.39 / 1.15 元/kWh，年吞吐 2.81 / 9.77 / 13.35 GWh。",
+    "conclusion": "决策不变且**结构性地不可能变**：按甲方《5.储能系统参数.doc》给的 0.326 元/kWh 吞吐折旧、90% 往返效率，每回收 1 kWh 要从电网取 1/0.9 kWh、吞吐 2.11 kWh，折旧成本 2.11 × 0.326 = 0.688 元，而电价只有 0.6818 元——**变量毛利是负的 0.9%，与规模无关**。实测密度下只是把这个负毛利率暴露得更彻底（模板口径 66 倍差距，实测密度 + 3 MWh 站点 1.7 倍差距，容量无限大时的渐近线是 1.009 倍）。要让储能成立，必须动这条参数：吞吐折旧降到 ≤0.32 元/kWh，或往返效率提到 ≥0.93，或电价涨到 ≥1.15 元/kWh。"
+   }
+  },
+  {
+   "id": "storage_throughput_cost",
+   "title": "储能吞吐折旧与往返效率",
+   "value": "吞吐折旧 0.326 元/kWh（每吞吐 1 kWh 的折旧费用）；往返效率 0.90（充/放两侧各 0.9487）",
+   "unit": "元/kWh；—",
+   "status": "derived",
+   "basis": "甲方《5.储能系统参数.doc》原文给出「电池折旧成本（每吞吐 1 千瓦时的折旧费用，元/kwh）」= 0.326；往返效率 0.90 由充放电效率各 sqrt(0.9) 对称拆分写入 storage_technologies.csv（data_status=derived_from_official）。",
+   "conflict": "这两个数直接决定储能成立与否，而且现参数**刚好处在分界线的错误一侧**：储能用本来要弃掉的再生电量充电，每回收 1 kWh 需吞吐 (1 + 1/η) = 2.111 kWh，折旧成本 2.111 × 0.326 = 0.688 元 > 电价 0.6818 元，边际毛利 −0.9%。参数地图给出更严的结论：这是**串联的两道约束**——单站 290 kWh 下即使折旧归零，盈亏电价仍 2.017 元/kWh（2.96×），卡的是 capex；放到 3,000 kWh 后成立上限又只有 0.100 元/kWh，现折旧是它的 3.2 倍。",
+   "alternatives": [
+    {
+     "value": "0.326 → 0.10 元/kWh",
+     "label": "折旧降到 3,000 kWh 档的成立上限",
+     "implication": "3,000 kWh/站 + 90% 效率下盈亏电价约 0.67 元/kWh < 现价，决策翻转为建储能"
+    },
+    {
+     "value": "0.90 → 0.95",
+     "label": "只提往返效率",
+     "implication": "边际上限由 0.3230 抬到 0.3322，仍低于 0.326 的实际要求之外；容量档的成立上限也只从 0.100 微升，决策不翻转"
+    },
+    {
+     "value": "单站容量 290 → 3,000 kWh",
+     "label": "只放开容量",
+     "implication": "固定成本那道能过（2.017 → 0.458），但折旧那道仍拦住，决策不翻转"
+    }
+   ],
+   "impact_outputs": [
+    "storage_decision",
+    "break_even_grid_price_cny_per_kwh",
+    "annual_saving_cny",
+    "投资建议"
+   ],
+   "owner_to_confirm": "甲方（设备 / 财务口径）",
+   "affected_files": [
+    "outputs/timetable_measured/inputs/storage_technologies.csv",
+    "shuohuang_data/5.储能系统参数.doc"
+   ],
+   "scenario_test": {
+    "scenario": "吞吐折旧 × 往返效率 二维扫描（8 格 × 42 折旧档），其余输入不变",
+    "tested_at": "2026-11-05",
+    "how": "折旧维按解析外推（折旧单价只进成本、不进调度，一次仿真覆盖整列）；效率维按 sqrt(η) 对称改写 charge/discharge_efficiency 后各跑一次完整规划；每个格子的判定取「全候选方案里盈亏电价最小者」，因为问题问的是「储能能不能成立」而非「哪个方案最省钱」。",
+    "artifacts": [
+     "tools/scan_storage_parameter_map.py",
+     "outputs/storage_parameter_map/parameter_map.csv",
+     "outputs/storage_parameter_map/储能参数地图.png",
+     "outputs/storage_parameter_map/储能参数地图说明.md"
+    ],
+    "result": "8 格全部 keep_no_build。290 kWh 档：折旧 0/0.326/0.8 时盈亏电价 2.017/2.692/3.706 元/kWh，η 由 0.86 拉到 0.97 只把 0.326 档从 2.752 压到 2.600（−5.5%）。3,000 kWh 档：折旧为 0 时降到 0.458（0.67×，固定成本这道过了），但成立上限只有 0.100 元/kWh，0.326 档盈亏电价 1.146（1.68×）。",
+    "conclusion": "结论不随效率或折旧的合理调整翻转，原因不是「数据不够」而是这两个实测参数的组合本身越过了门槛：纯边际上限 0.3230 已经低于 0.326，容量档的实际上限更低（0.100）。要让储能成立，必须动造价/容量（把固定成本那道让开）**并且**把折旧降到 0.10 元/kWh 量级，单靠提效率无效。"
+   }
+  },
+  {
+   "id": "storage_cost_accounting",
+   "title": "储能成本是否重复计（capex 年化 vs 吞吐折旧）",
+   "value": "当前模型：capex 按循环寿命到期重置 + 另计 0.326 元/kWh 吞吐折旧（两者同时生效）",
+   "unit": "—",
+   "status": "contested",
+   "basis": "规划器 `_annualized_lifecycle_investment()` 用 `min(日历寿命 12 年, 循环寿命 6,000 次 ÷ 年循环数)` 定电池寿命，到期重新购置一整套设备。实测密度下这个方案年循环 2,225 次，折合寿命 2.70 年，12 年要换 4 次，设备年化 2,565,359 元/年，折合每吞吐 0.1922 元/kWh——**磨损已经在年化里付过一遍**。在此基础上再叠加 0.326 元/kWh，合计 0.5182 元/kWh，是单算磨损的 2.70 倍。",
+   "conflict": "0.326 无论按哪个分母读都对不上本项目：若它只覆盖容量磨损，隐含循环寿命 1,380 次（技术表 6,000）；若覆盖全部设备，隐含 3,170 次；若按 12 年日历摊，隐含年吞吐 1.58 GWh（实际 13.35 GWh，只占 12%）。三种读法都要求同时假定「电池只能用一两千次」和「设备一年几乎不转」，这与本项目的高循环工况直接矛盾。结论对这条高度敏感：同一套造价与运行图，折旧算一遍还是两遍，3,000 kWh 档的盈亏电价从 1.146（1.68×，不建）变到 0.458（0.67×，建）。",
+   "alternatives": [
+    {
+     "value": "只保留重置（折旧归零）",
+     "label": "磨损由重置体现",
+     "implication": "盈亏电价 0.458 元/kWh，决策翻转为建"
+    },
+    {
+     "value": "只保留 0.326（不按循环重置）",
+     "label": "磨损由折旧体现",
+     "implication": "盈亏电价 0.857 元/kWh，仍不建"
+    },
+    {
+     "value": "两者都不计（下界）",
+     "label": "只看造价与电量",
+     "implication": "盈亏电价 0.169 元/kWh，用于判断量级"
+    }
+   ],
+   "impact_outputs": [
+    "storage_decision",
+    "break_even_grid_price_cny_per_kwh",
+    "投资建议"
+   ],
+   "owner_to_confirm": "甲方（储能参数文档的编制口径）",
+   "affected_files": [
+    "outputs/timetable_measured/inputs/storage_technologies.csv",
+    "storage_planning_mvp.py",
+    "shuohuang_data/5.储能系统参数.doc"
+   ],
+   "scenario_test": {
+    "scenario": "把 capex 年化与吞吐折旧拆成四种互斥口径，重算最优方案的盈亏电价与决策",
+    "tested_at": "2026-11-05",
+    "how": "重写年化函数：mode=replace 复刻规划器（按循环寿命重置），mode=single 只按日历寿命；两种年化 × 显式折旧 0 / 0.326 共四种组合。年化重算对 22 个候选方案的复现误差为 0.000000 元。",
+    "artifacts": [
+     "tools/invert_storage_degradation_basis.py",
+     "outputs/degradation_basis/折旧口径反演.md",
+     "outputs/degradation_basis/degradation_basis.json",
+     "outputs/capex_decision/造价到决策.md"
+    ],
+    "result": "A 现状（重置 + 0.326）1.146 元/kWh（1.68×）不建；B 只重置 0.458（0.67×）建；C 单次投资 + 0.326 → 0.857（1.26×）不建；D 单次投资 + 零折旧 0.169（0.25×）建。A 与 C 是两种互斥的自洽口径，模型现在用的是 A，即两边都算了一遍。 另做造价一维扫描（四项同比例缩放 100%→0%）：A 口径要降到 9.6% 才成立（需降 90.4%），造价归零时也只到 0.633 元/kWh（0.93×），几乎无余量；C 口径要降到 21.9%（需降 78.1%）；B 口径现价即成立、无需降价。",
+    "conclusion": "「储能不成立」这一结论对折旧口径极度敏感，而且现有证据指向模型重复计了一遍磨损。在甲方确认口径之前，储能结论不得对外发布单值，只能按 A/B 两个口径给出区间（0.458–1.146 元/kWh）；决策也从「确定不建」降级为「视口径而定」。 造价扫描进一步说明：结论不是被造价卡住的——A 口径下即使设备白送也只剩 7% 的余量，而 B 口径当前造价就能建。所以「要不要降造价」这个议题必须排在本条口径确认之后。"
+   }
+  },
+  {
+   "id": "meter_reading_subject",
+   "title": "电表台账的计量对象",
+   "value": "单台机车（12 轴机车 = A/B/C 三节），不含补机",
+   "unit": "—",
+   "status": "resolved",
+   "basis": "`use_ygdn ≡ a_use_ygdn + b_use_ygdn + c_use_ygdn`（1,904/1,904 吻合）；`250917-2001号车…xls` 独立证明「三节之和 = 该车总能耗」（9/9 趟）；两条台账（1,854 趟 vs 单车 9 趟）毛牵引中位 6,228 vs 6,834、反馈 14,660 vs 16,742，同量级。",
+   "conflict": "**2026-11-08 补记：这条假设现在成了整条链上的唯一瓶颈。** 控制策略已被前沿扫描排除（见 `two_wan_ton_locomotive_count.next_action`），剩下的不确定性全部集中到「整列 = 单机 × 2」这个等分假设上：若补机出力只有本务一半，目标降到约 9,342 kWh；若补机不计表，目标就是 6,228 kWh。对应模型（最快 17,626 kWh）的差距分别是 +89% 与 +183%，**而这三个数完全由这一个假设决定。** **2026-11-08 当日更正：** 上述三读法已被 `helper_loco_energy_share` 的实测镜像样本取代——补机确实有表（193 趟 8 轴记录），出力为本务的 0.82/0.85，整列为 11,650 / 27,720 kWh，等分假设高估 7.3%，本轮瓶颈解除。",
+   "alternatives": [
+    {
+     "value": "整列车（含补机）",
+     "label": "曾如此假定",
+     "implication": "**已否证。** 若为整列，则两万吨单车台账不该只有 3 块表，且 2001 号车（明确是一台车）的三节之和已等于总额。"
+    }
+   ],
+   "impact_outputs": [
+    "traction_kwh",
+    "regen_kwh",
+    "unit_energy",
+    "storage_annual_revenue"
+   ],
+   "owner_to_confirm": "甲方（机务/电务）",
+   "affected_files": [
+    "data/real_shuohuang/assumptions.json"
+   ],
+   "note": "**2026-11-08 更正：后半句作废。** 「每趟只记一台机车」成立（只有 a/b/c 三列），但「补机没有任何记录」不成立——两万吨窗口里有 **193 趟 `traintypeid=231`（神华号 8 轴）**，总重同为 21,600 t / 216 辆、纯运行同为 405 min，正是 1+1 里补机侧的那台表。补机的能耗因此**可测，不必再靠等分假设**，见 `helper_loco_energy_share`。"
+  },
+  {
+   "id": "helper_loco_energy_share",
+   "title": "补机（8 轴）相对本务（12 轴）的能耗占比",
+   "value": "0.82 毛牵引 / 0.85 反馈 / 1.00 纯运行（实测镜像样本）",
+   "unit": "比值",
+   "status": "derived",
+   "basis": "两万吨重车窗口（神池南→肃宁北、总重 ≥21,000 t）内，台账按「这一趟记了哪台车的表」分成两组：`traintypeid=233`（12 轴、3 块表）1,623 趟，`traintypeid=231`（8 轴、2 块表）193 趟。两组的总重中位同为 21,600 t、辆数同为 216、纯运行中位同为 405 min，**说明它们是同一批 1+1 列车的两侧**（8 轴单机黏着牵引 467 kN 拉不动 21,600 t 起动所需的 578 kN，不可能是单独牵引）。中位数：233 组毛牵引 6,400 / 反馈 14,958，231 组 5,250 / 12,762。故补机/本务 = 0.82 / 0.85，整列目标 = 6,400 + 5,250 = **11,650 kWh**、反馈 14,958 + 12,762 = **27,720 kWh**。",
+   "conflict": "此前的「整列 = 单机 × 2」等分假设把补机按本务全额计，**高估毛牵引 7.3%、高估反馈 5.7%**（12,497 / 29,331 vs 11,650 / 27,720）。方向上使模型的牵引缺口看起来比实际小：按等分是 18,959/12,497 = 1.52 倍，按镜像样本是 **1.63 倍**；反馈 0.79 → **0.84 倍**。",
+   "alternatives": [
+    {
+     "value": "补机 = 本务（× 2）",
+     "label": "等分假设（2026-11-07 起用）",
+     "implication": "**已由实测取代。** 等分只适用于「两台出力完全相同」的情形；实测 8 轴那台的毛牵引只有 12 轴那台的 0.82，因为 8 轴功率 9,600 kW、黏着质量更小，实际承担份额偏低。"
+    },
+    {
+     "value": "补机 = 本务一半（× 1.5）",
+     "label": "此前的敏感性下界",
+     "implication": "对应目标 9,342 kWh，**低于实测的 11,650**，已排除。"
+    }
+   ],
+   "impact_outputs": [
+    "traction_kwh",
+    "regen_kwh",
+    "net_energy_kwh",
+    "unit_energy",
+    "storage_annual_revenue"
+   ],
+   "owner_to_confirm": "甲方（机务）：台账为何按趟择一记录、193 趟的 8 轴是否为固定补机位",
+   "affected_files": [
+    "data/real_shuohuang/assumptions.json"
+   ],
+   "note": "两组是不同日期的不同趟，用中位数相加属一阶估计；严格做法需要同一趟的两条记录配对，但台账里不存在这种配对（同日同车次同时出现 231 与 233 的组合为 0）。"
+  }
+ ]
+}

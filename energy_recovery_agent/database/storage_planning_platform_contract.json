@@ -1,0 +1,36 @@
+{
+  "local_version": "2026.10.10.1-mysql-six-tasks",
+  "run_type": "storage_planning",
+  "display_name": "储能选址与定容规划",
+  "engine": "MySQL",
+  "migration": "V3__storage_planning.sql",
+  "upstream_package": "new_function/algorithm_release_20261010_v1",
+  "entrypoint": "plan-storage",
+  "parameters": {
+    "planning_policy_code": {"required": true, "source": "selected_version"},
+    "scenario_set_code": {"required": true, "source": "selected_version"},
+    "search_mode": {"default": "coarse", "choices": ["coarse", "coarse_to_fine", "exhaustive"]},
+    "max_levels_per_dimension": {"default": 2, "minimum": 2},
+    "settlement_step_s": {"default": 60, "minimum": 1},
+    "refinement_shortlist_size": {"default": 3, "minimum": 1, "visible_for": "coarse_to_fine"}
+  },
+  "parameter_preset_additions": ["planningReady", "planningIssues", "planningPolicyOptions", "scenarioSetOptions"],
+  "result_endpoint": {
+    "method": "GET",
+    "path": "/carbon/energy/runs/{runId}/storage-planning",
+    "permission": "carbon:energy:query",
+    "department_guard": true,
+    "required_status": "succeeded",
+    "query": {"pageNum": 1, "pageSize": 20, "maximumPageSize": 100, "planId": "optional_owned_plan"},
+    "fields": ["decision", "plans", "selectedPlan", "devices", "scenarioResults", "baselineScenarioResults", "referenceOnly", "total", "pageNum", "pageSize"],
+    "json_keys": "camelCase"
+  },
+  "decision_values": ["recommend_build", "keep_no_build", "no_feasible_plan"],
+  "worker_wall_clock_seconds": {"quick": 180, "standard": 600, "fine": 1200},
+  "automatic_search_fallback": false,
+  "installed_devices_required": false,
+  "recommended_devices_written_back": false,
+  "fixed_timetable": true,
+  "old_five_task_upgrade_record": "docs/five_task_upgrade_20261010.md",
+  "formal_acceptance": false
+}

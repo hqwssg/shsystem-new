@@ -1,0 +1,12 @@
+{
+  "energy_scenario": "storage_no_direct",
+  "objective_mode": "balanced",
+  "objective_priority": "energy_first",
+  "search_method": "nsga2",
+  "population_size": 30,
+  "generations": 10,
+  "seed": 42,
+  "heavy_count": 2,
+  "empty_count": 2,
+  "settlement_step_s": 10
+}

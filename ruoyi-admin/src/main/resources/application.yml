@@ -1,0 +1,156 @@
+server:
+  port: ${SERVER_PORT:8081}
+  # Keep Chinese sheet names intact when Spring parses encoded query parameters.
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: ruoyi-admin
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:127.0.0.1}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        loginUsername: ruoyi
+        loginPassword: 123456
+    dynamic:
+      druid:
+        initial-size: 5
+        min-idle: 5
+        maxActive: 20
+        maxWait: 60000
+        connectTimeout: 30000
+        socketTimeout: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,slf4j
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      datasource:
+        master:
+          driver-class-name: ${DATABASE_JDBC_DRIVER:${CERDB_JDBC_DRIVER:com.mysql.cj.jdbc.Driver}}
+          url: ${DATABASE_JDBC_URL:${CERDB_JDBC_URL:jdbc:mysql://127.0.0.1:3306/carbon_emissions?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}}
+          username: ${DATABASE_USER:${CERDB_APP_USER:shsystem_app}}
+          password: ${DATABASE_PASSWORD:${CERDB_APP_PASSWORD:}}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  quartz:
+    job-store-type: memory
+
+mybatis:
+  typeAliasesPackage: com.ruoyi.system,com.ruoyi.gen.domain,com.ruoyi.job.domain,com.ruoyi.carbon.report.domain,com.ruoyi.carbon.energy,com.ruoyi.carbon.analysis.domain
+  mapperLocations: classpath*:mapper/**/*.xml
+
+carbon:
+  report:
+    renderer:
+      python-executable: ${CARBON_REPORT_PYTHON:python}
+      module-root: ${CARBON_REPORT_RENDERER_ROOT:.}
+      work-dir: ${CARBON_REPORT_WORK_DIR:./report-work}
+      artifact-dir: ${CARBON_REPORT_ARTIFACT_DIR:./uploadPath/reports}
+      soffice-path: ${CARBON_REPORT_SOFFICE_PATH:}
+      timeout-seconds: ${CARBON_REPORT_RENDER_TIMEOUT:300}
+  energy:
+    python-executable: ${ENERGY_PYTHON:python}
+    project-root: ${ENERGY_PROJECT_ROOT:}
+    upload-dir: ${ENERGY_UPLOAD_DIR:./uploadPath/energy}
+    timeout-seconds: ${ENERGY_CLI_TIMEOUT:300}
+    solve-timeout-seconds: ${ENERGY_SOLVE_TIMEOUT:1800}
+    resource-profile: ${ENERGY_RESOURCE_PROFILE:standard}
+    database-url: ${ENERGY_DATABASE_URL:}
+
+pagehelper:
+  helperDialect: ${PAGEHELPER_DIALECT:mysql}
+  supportMethodsArguments: true
+  params: count=countSql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+security:
+  captcha:
+    enabled: true
+    type: math
+  ignore:
+    whites:
+      - /auth/logout
+      - /auth/login
+      - /auth/register
+      - /auth/register/departments
+      - /code
+      - /csrf
+      - /error
+      - /v3/api-docs/**
+      - /swagger-ui/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /statics/**
+      - /internal/goview/audit/operation
+      - /internal/goview/audit/login
+      - /internal/goview/audit/job
+      - /internal/carbon/audit/operation
+      - /internal/carbon/audit/job
+
+integration:
+  goview:
+    audit:
+      secret: ${GOVIEW_AUDIT_SECRET:local-integration-secret}
+
+python:
+  service-url: ${PYTHON_SERVICE_URL:}
+  internal-token: ${PYTHON_INTERNAL_TOKEN:}
+  required: ${PYTHON_SERVICE_REQUIRED:false}
+
+springdoc:
+  serverUrl: http://localhost:8081
+  api-docs:
+    enabled: true
+  info:
+    title: Carbon Emissions Management API
+    description: Carbon emissions management and integrated authorization API
+    contact:
+      name: Carbon Emissions Management Team
+
+gen:
+  author: carbon-team
+  packageName: com.ruoyi.system
+  autoRemovePre: false
+  tablePrefix: sys_
+  allowOverwrite: false
+
+file:
+  domain: ${FILE_DOMAIN:http://127.0.0.1:8081}
+  path: ${FILE_PATH:./uploadPath}
+  prefix: /statics
+
+minio:
+  url: http://127.0.0.1:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: test
+
+referer:
+  enabled: false
+  allowed-domains: localhost,127.0.0.1

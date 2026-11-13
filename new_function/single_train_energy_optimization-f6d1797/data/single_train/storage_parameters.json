@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "shuohuang_storage_from_battery_json",
+  "label": "车载/沿线储能系统（飞轮 45kWh + 钛酸锂 100kWh 聚合模型）",
+  "data_status": "derived",
+  "field_data_status": {
+    "capacity_kwh": "real",
+    "capacity_j": "derived",
+    "round_trip_efficiency": "real",
+    "charge_efficiency": "derived",
+    "discharge_efficiency": "derived",
+    "max_charge_power_w": "real",
+    "max_discharge_power_w": "assumed",
+    "soc_min": "assumed",
+    "soc_max": "assumed",
+    "soc_initial": "assumed",
+    "nominal_voltage_v": "placeholder",
+    "internal_resistance_ohm": "placeholder"
+  },
+  "provenance": {
+    "capacity_kwh": "heavy_empty_train_coordination/data/real_shuohuang/battery.json -> capacity_kwh = 145.0（飞轮 45kWh + 钛酸锂 100kWh，来源 shuohuang_data/5.储能系统参数.doc）",
+    "round_trip_efficiency": "battery.json -> round_trip_efficiency = 0.9（provided）",
+    "max_charge_power_w": "battery.json -> max_charge_power_kW = 2000.0（provided）",
+    "max_discharge_power_w": "battery.json -> max_discharge_power_kW = 0.0（missing_conservative_zero）；规划值 planning_max_discharge_power_assumption_kW = 2000.0，本文件采用规划值并标注 assumed",
+    "charge_efficiency": "由 round_trip_efficiency 按对称分配推导：η_ch = sqrt(0.9) ≈ 0.94868；充电时 ΔE = η_ch·∫P",
+    "discharge_efficiency": "由 round_trip_efficiency 按对称分配推导：η_dis = sqrt(0.9) ≈ 0.94868；放电时 ΔE = −∫P/η_dis",
+    "soc_min": "荷电状态下限 0.10：到达后充电功率上限被压至 0，不再接受制动能量；工程预设，非实测",
+    "soc_max": "荷电状态上限 0.90：到达后同样拒绝继续充电；上下限共同构成可用能量窗口；工程预设，非实测",
+    "soc_initial": "初始荷电状态 0.5，取可用区间 0.10–0.90 的中点作为统一初态；工程预设。所有控制器必须使用同一初态，回收能量才可横向比较",
+    "capacity_j": "由 capacity_kwh = 145 kWh 换算的焦耳值（145 × 3.6×10⁶ = 5.22×10⁸ J），供能量台账按焦耳逐拍积分使用，与 capacity_kwh 同源",
+    "internal_resistance_ohm": "储能等效内阻 0.02 Ω：进入储能侧二参数电压模型，决定参考电压 v_ref 的斜率（结构稳健、幅值敏感）；工程预设",
+    "nominal_voltage_v": "placeholder：待储能系统电气资料替换"
+  },
+  "note": "battery.json 明确标注最大放电功率、站址和接入供电臂未提供；本文件不伪造这些字段。",
+
+  "capacity_j": 522000000.0,
+  "capacity_kwh": 145.0,
+
+  "round_trip_efficiency": 0.9,
+  "charge_efficiency": 0.9486832980505138,
+  "discharge_efficiency": 0.9486832980505138,
+
+  "soc_min": 0.1,
+  "soc_max": 0.9,
+  "soc_initial": 0.5,
+
+  "max_charge_power_w": 2000000.0,
+  "max_discharge_power_w": 2000000.0,
+
+  "nominal_voltage_v": 1100.0,
+  "internal_resistance_ohm": 0.02,
+  "storage_bus_model_note": "DC-DC 输出侧按「开路电压 = nominal_voltage_v + 内阻 internal_resistance_ohm」建模（见 dynamics/dc_dc_converter.py 的 StorageBusRequest）。两者均为 placeholder，待储能系统电气资料（额定电压、内阻、SOC-OCV 曲线）到位后替换。当前未引入 SOC-OCV 非线性曲线，避免伪造无依据的特性。",
+
+  "technology_mix": [
+    { "technology": "flywheel", "capacity_kwh": 45.0, "source": "battery.json -> provided_45kwh_flywheel_plus_100kwh_lto" },
+    { "technology": "lithium_titanate", "capacity_kwh": 100.0, "source": "battery.json -> provided_45kwh_flywheel_plus_100kwh_lto" }
+  ],
+
+  "reference_voltage_dependency": {
+    "note": "闭环参考量 x_ref 的电压分量挂在储能侧二参数模型上——这是 2026-09-25（方案问题 21）引入的新依赖，本文件此前只被被控对象使用，不被控制器使用。",
+    "consumer": "regenerative_braking.tracking.RegenerativeReferenceState.from_converter_and_storage_params（经 build_closed_loop_controller(storage_params=...) 与 validation.baselines._reference 装配）",
+    "formula": "P_abs = min(P_req, P_avail, P_conv, max_charge_power_w); v_ref = clip((V_oc + sqrt(V_oc^2 + 4*P_abs*R_int)) / 2, V_out,min, V_out,max); i_L,ref = clip(P_abs / v_ref, 0, i_L,max)",
+    "depends_on": {
+      "max_charge_power_w": "real（battery.json -> max_charge_power_kW = 2000.0，provided）—— 硬上限，缺了它 P_abs 会超过储能吸收能力，多余的电流只能靠 d2 旁路",
+      "nominal_voltage_v": "placeholder（代码字段 StorageParameters.nominal_voltage_v / V_oc）—— 决定 v_ref 的绝对值",
+      "internal_resistance_ohm": "placeholder（代码字段 StorageParameters.internal_resistance_ohm / R_int）—— 决定 v_ref 的斜率"
+    },
+    "independent_of": {
+      "soc_min / soc_max": "🟥 历史表述：参考量只用 max_charge_power_w 做规划；SOC 相关的降额由被控对象的 sink_current（available_charge_power_w）兜底。2026-10-07 已纠正：生产参考通过 observation.storage_charge_power_limit_w 消费同拍 SOC 余量许可；参考装配仍不直接读取这两个参数，许可由 StorageSystem.available_charge_power_w 计算。"
+    },
+    "measured_sensitivity": {
+      "probe": "tools/probe_reference_voltage_placeholder_sensitivity.py",
+      "scenario": "s1_flat_braking / s2_long_downhill，dt = 2e-4，全分辨率",
+      "structure": "稳健：无论 V_oc / R_int / max_charge_power_w 如何按 0.5x / 2.0x 缩放，稳态都满足 (1-d2)*i_L = i_sink、d2 -> 0（实测中位数 <= 0.112），且 v_out 峰值留在窗口内（实测 <= 1240.5 V < 1500 V）",
+      "magnitude": "敏感：V_oc 与 R_int 直接决定 v_ref，从而决定 i_L,ref 与回收能量；max_charge_power_w 决定 P_abs 上限，从而决定 i_L 的水平（这是正确行为，不是缺陷——i_L 的水平本就由可吸收功率决定）",
+      "conclusion": "参考量口径的**结构**（d2 -> 0、i_L -> i_sink、v_out 在窗口内）是稳健的；**幅值**（具体回收 kWh）依赖两个 placeholder 与储能功率上限，不可作为工程结论。已固化为回归测试。"
+    }
+  }
+}

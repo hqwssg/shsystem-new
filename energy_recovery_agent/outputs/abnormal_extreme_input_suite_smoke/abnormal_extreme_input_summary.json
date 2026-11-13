@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "passed": false,
+  "component_count": 6,
+  "passed_component_count": 5,
+  "failed_component_count": 1,
+  "enumerated_case_count": 204,
+  "failed_components": [
+    "deep_guard_scripts"
+  ],
+  "components": [
+    {
+      "name": "static_data_anomalies",
+      "passed": true,
+      "case_count": 29,
+      "detail": "静态数据文件、拓扑、车辆、储能和跨表引用",
+      "output": "static_data/SYNTHETIC_DATA_ANOMALY_REPORT.md"
+    },
+    {
+      "name": "platform_parameter_anomalies",
+      "passed": true,
+      "case_count": 49,
+      "detail": "五类任务的结构、数值、枚举、路径和设备状态",
+      "output": "platform_parameters/PLATFORM_PARAMETER_ANOMALY_REPORT.md"
+    },
+    {
+      "name": "realtime_state_anomalies",
+      "passed": true,
+      "case_count": 40,
+      "detail": "实时字段、时钟、顺序、断流、设备和滚动恢复",
+      "output": "realtime_state/REALTIME_STATE_ANOMALY_MATRIX_REPORT.md"
+    },
+    {
+      "name": "core_extreme_scenarios",
+      "passed": true,
+      "case_count": 10,
+      "detail": "空输入、零/满SOC、零效率、极大/极小有限量和多设备隔离",
+      "output": "core_extremes/ALGORITHM_ROBUSTNESS_CHECKS.md"
+    },
+    {
+      "name": "random_differential",
+      "passed": true,
+      "case_count": 70,
+      "detail": "能量桶、时间切片、资源重叠和Pareto独立参考差分",
+      "output": "random_differential/RANDOM_SYNTHETIC_DIFFERENTIAL_REPORT.md"
+    },
+    {
+      "name": "deep_guard_scripts",
+      "passed": false,
+      "case_count": 6,
+      "detail": "核心构造器、数据导入、供电臂、资源、扰动回放和数据库适配器",
+      "output": "component_logs/"
+    }
+  ],
+  "deep_guard_results": [
+    {
+      "name": "verify_robustness_contracts",
+      "passed": true,
+      "return_code": 0,
+      "elapsed_s": 2.1,
+      "stdout": "component_logs/verify_robustness_contracts.stdout.txt",
+      "stderr": "component_logs/verify_robustness_contracts.stderr.txt"
+    },
+    {
+      "name": "verify_data_ingestion_input_guards",
+      "passed": true,
+      "return_code": 0,
+      "elapsed_s": 1.168,
+      "stdout": "component_logs/verify_data_ingestion_input_guards.stdout.txt",
+      "stderr": "component_logs/verify_data_ingestion_input_guards.stderr.txt"
+    },
+    {
+      "name": "verify_power_arm_input_guards",
+      "passed": true,
+      "return_code": 0,
+      "elapsed_s": 1.139,
+      "stdout": "component_logs/verify_power_arm_input_guards.stdout.txt",
+      "stderr": "component_logs/verify_power_arm_input_guards.stderr.txt"
+    },
+    {
+      "name": "verify_resource_interval_contracts",
+      "passed": true,
+      "return_code": 0,
+      "elapsed_s": 0.85,
+      "stdout": "component_logs/verify_resource_interval_contracts.stdout.txt",
+      "stderr": "component_logs/verify_resource_interval_contracts.stderr.txt"
+    },
+    {
+      "name": "verify_historical_disturbance_replay",
+      "passed": true,
+      "return_code": 0,
+      "elapsed_s": 7.735,
+      "stdout": "component_logs/verify_historical_disturbance_replay.stdout.txt",
+      "stderr": "component_logs/verify_historical_disturbance_replay.stderr.txt"
+    },
+    {
+      "name": "verify_database_integration",
+      "passed": false,
+      "return_code": 1,
+      "elapsed_s": 0.144,
+      "stdout": "component_logs/verify_database_integration.stdout.txt",
+      "stderr": "component_logs/verify_database_integration.stderr.txt"
+    }
+  ],
+  "random_case_set_sha256": "3e51c3b6e914f9e5432cfc9a0f543e70f12cd5ce1bb71c767dff8089d9e9b6ac",
+  "outputs": {
+    "report": "ABNORMAL_EXTREME_INPUT_TEST_REPORT.md",
+    "summary": "abnormal_extreme_input_summary.json"
+  }
+}

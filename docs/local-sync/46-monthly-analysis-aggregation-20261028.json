@@ -1,0 +1,15 @@
+{
+  "group": "46-monthly-analysis-aggregation-20261028",
+  "source_before": "2ae9fdb24acade2cc15b05459ce3489d8e8d9598",
+  "source_tag": "pre-sync-46-monthly-analysis-aggregation-20261028",
+  "private_config_before": "refs/local-config/46-monthly-analysis-aggregation-20261028-before",
+  "upstream": "fb77c2d47c25064201f778cb0a1386e1996a744f",
+  "summary": "新增月度分组汇总、组织同期对比和一致口径导出",
+  "checks": {
+    "backend_tests": 231,
+    "failures": 0,
+    "errors": 0,
+    "database_write": false
+  },
+  "private_config_after": "refs/local-config/46-monthly-analysis-aggregation-20261028-after"
+}

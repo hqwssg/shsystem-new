@@ -1,0 +1,2 @@
+﻿site_code,site_name,position_km,power_arm_code,storage_section_start_km,storage_section_end_km,direction,buildable,max_connection_power_kw,max_capacity_kwh,fixed_site_cost_cny,allowed_technology_codes,data_status,source_note
+SYN-SITE-145,合成候选站K145,150,朔黄线:上行:PA-018-PA-020,145,163.847,both,true,12000,30000,0,SYN-LFP,synthetic,仅用于验证两类技术可选和站点固定成本

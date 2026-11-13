@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "scope": "Stable company report defaults and reviewed default images only; no annual measurements or results",
+  "companies": [
+    {
+      "company_key": "suning",
+      "company_name": "肃宁分公司",
+      "profile": {
+        "process_description": "依据铁路行业运行规范开展所辖线路的日常保养、检修，保障铁路持续稳定运行。",
+        "default_compiler": "",
+        "default_org_boundary": "",
+        "default_validator": "",
+        "default_equipment_json": [
+          {
+            "name": "罐车",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "/",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "轨道平车",
+            "category": "",
+            "quantity": 7,
+            "unit": "",
+            "model": "PC-40、PC-30II/30T",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "接触网作业车",
+            "category": "",
+            "quantity": 12,
+            "unit": "",
+            "model": "JZW-4、JW-4G",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "轨道车",
+            "category": "",
+            "quantity": 13,
+            "unit": "",
+            "model": "GC-270、GCY-720、QGC-25等",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "绝缘子带电水冲洗作业车",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "KJ-D",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "接触网绝缘子水冲洗车组",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QX-2",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "公务车",
+            "category": "",
+            "quantity": 134,
+            "unit": "",
+            "model": "/",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "公务车",
+            "category": "",
+            "quantity": 63,
+            "unit": "",
+            "model": "/",
+            "energy_type": "汽油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "站点内各机电设备",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "/",
+            "energy_type": "电",
+            "remark": "2024年参考；数量未提供"
+          }
+        ],
+        "company_overview": "国能朔黄铁路发展有限责任公司肃宁分公司成立于2002年1月1日，隶属于朔黄铁路发展有限责任公司，主要承担所辖铁路的行车组织和设备设施养护维修及管理任务。",
+        "default_workload_json": [],
+        "default_approver": "",
+        "default_chapter6_json": {},
+        "legal_name": "国能朔黄铁路发展有限责任公司肃宁分公司",
+        "default_authors": "",
+        "default_reviewer": "",
+        "business_description": "负责所辖铁路的行车组织，以及工务、电务、供电、生活等设备设施的养护维修及管理。",
+        "short_name": "肃宁分公司",
+        "default_exclusion_note": "",
+        "entity_code": "suning",
+        "carbon_department": "",
+        "default_accounting_method": "依据《陆上运输企业温室气体排放核算方法与报告指南（试行）》进行核算。",
+        "default_checker": "",
+        "header_template": "",
+        "default_activity_prose_json": {}
+      },
+      "images": [
+        {
+          "role": "cover_logo",
+          "filename": "cover_logo.png",
+          "mime_type": "image/png",
+          "path": "images/suning/cover_logo.png",
+          "size_bytes": 10016,
+          "sha256": "6b57e31ab615ce4a9bcf56807d7183a999594ff5a27c276688d3a727c45e3948"
+        },
+        {
+          "role": "office_location",
+          "filename": "office_location.jpeg",
+          "mime_type": "image/jpeg",
+          "path": "images/suning/office_location.jpeg",
+          "size_bytes": 220004,
+          "sha256": "26043204f3cbc9a22af12bb48d69cc3bd97cf98d6ed4cea2a7d788079c7da7ae"
+        },
+        {
+          "role": "org_chart",
+          "filename": "org_chart_2024.png",
+          "mime_type": "image/png",
+          "path": "images/suning/org_chart.png",
+          "size_bytes": 127292,
+          "sha256": "dc74fab1fb56bedc7dd462b428c98ad563f237b65b7abb76e2a2c128cbe29fa7"
+        }
+      ]
+    },
+    {
+      "company_key": "yuanping",
+      "company_name": "原平分公司",
+      "profile": {
+        "process_description": "依据铁路行业运行规范开展所辖线路的日常保养、检修，保障铁路持续稳定运行。",
+        "default_compiler": "",
+        "default_org_boundary": "",
+        "default_validator": "",
+        "default_equipment_json": [
+          {
+            "name": "电锅炉",
+            "category": "",
+            "quantity": 12,
+            "unit": "",
+            "model": "0.125~2t/h",
+            "energy_type": "电力",
+            "remark": "陈家沟、宁武西站、梁家沟、龙宫站、沙峪、北大牛站、回风站、东冶站、南湾站、滴流磴站、古月站、温塘站；2024年参考"
+          },
+          {
+            "name": "双源热泵",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "/",
+            "energy_type": "电力",
+            "remark": "猴刎站、小觉站；2024年参考"
+          },
+          {
+            "name": "公务车",
+            "category": "",
+            "quantity": 46,
+            "unit": "",
+            "model": "/",
+            "energy_type": "汽油",
+            "remark": "2024年参考"
+          },
+          {
+            "name": "生产、检修、保障用车",
+            "category": "",
+            "quantity": 84,
+            "unit": "",
+            "model": "/",
+            "energy_type": "柴油",
+            "remark": "2024年参考"
+          }
+        ],
+        "company_overview": "国能朔黄铁路发展有限责任公司原平分公司成立于2002年1月1日，是国能朔黄铁路发展有限责任公司下属的分公司，承担所辖电气化铁路的运营维护、运输组织和后勤保障管理工作。",
+        "default_workload_json": [],
+        "default_approver": "",
+        "default_chapter6_json": {},
+        "legal_name": "国能朔黄铁路发展有限责任公司原平分公司",
+        "default_authors": "",
+        "default_reviewer": "",
+        "business_description": "负责所辖电气化铁路的运营维护、运输组织和后勤保障管理。",
+        "short_name": "原平分公司",
+        "default_exclusion_note": "",
+        "entity_code": "yuanping",
+        "carbon_department": "",
+        "default_accounting_method": "依据《陆上运输企业温室气体排放核算方法与报告指南（试行）》进行核算。",
+        "default_checker": "",
+        "header_template": "",
+        "default_activity_prose_json": {}
+      },
+      "images": [
+        {
+          "role": "cover_logo",
+          "filename": "cover_logo.png",
+          "mime_type": "image/png",
+          "path": "images/yuanping/cover_logo.png",
+          "size_bytes": 10016,
+          "sha256": "6b57e31ab615ce4a9bcf56807d7183a999594ff5a27c276688d3a727c45e3948"
+        },
+        {
+          "role": "office_location",
+          "filename": "office_location.jpeg",
+          "mime_type": "image/jpeg",
+          "path": "images/yuanping/office_location.jpeg",
+          "size_bytes": 173620,
+          "sha256": "6fbb354d7f4c2f8ba1019d2e507f99a7b656e43829cf8125d1dcf49aefff25db"
+        },
+        {
+          "role": "org_chart",
+          "filename": "org_chart_2024.png",
+          "mime_type": "image/png",
+          "path": "images/yuanping/org_chart.png",
+          "size_bytes": 77216,
+          "sha256": "318f82beb76d66c7d809894f5c611b5746c455bdfcf729a870c89992f0c6648c"
+        }
+      ]
+    },
+    {
+      "company_key": "jiliang",
+      "company_name": "机辆分公司",
+      "profile": {
+        "process_description": "承担铁路运输任务，开展机车运用、维修管理以及联运单位机车运用的综合管理。",
+        "default_compiler": "",
+        "default_org_boundary": "",
+        "default_validator": "",
+        "default_equipment_json": [
+          {
+            "name": "韶山4B型电力机车",
+            "category": "",
+            "quantity": 87,
+            "unit": "",
+            "model": "SS4B",
+            "energy_type": "电",
+            "remark": "6400kW；2025年参考"
+          },
+          {
+            "name": "神华八轴电力机车",
+            "category": "",
+            "quantity": 34,
+            "unit": "",
+            "model": "HXD1",
+            "energy_type": "电",
+            "remark": "9600kW；2025年参考"
+          },
+          {
+            "name": "神华十二轴电力机车",
+            "category": "",
+            "quantity": 30,
+            "unit": "",
+            "model": "CEA1A1",
+            "energy_type": "电",
+            "remark": "14400kW；2025年参考"
+          },
+          {
+            "name": "内燃机车",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "GKD0",
+            "energy_type": "柴油",
+            "remark": "810kW；2025年参考"
+          },
+          {
+            "name": "内燃机车",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DF12",
+            "energy_type": "柴油",
+            "remark": "1985kW；2025年参考"
+          },
+          {
+            "name": "内燃机车",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DF4B",
+            "energy_type": "柴油",
+            "remark": "2650kW；2025年参考"
+          },
+          {
+            "name": "内燃机车",
+            "category": "",
+            "quantity": 4,
+            "unit": "",
+            "model": "DF4D",
+            "energy_type": "柴油",
+            "remark": "3240kW；2025年参考"
+          },
+          {
+            "name": "内燃机车",
+            "category": "",
+            "quantity": 10,
+            "unit": "",
+            "model": "HXN3",
+            "energy_type": "柴油",
+            "remark": "4400kW；2025年参考"
+          },
+          {
+            "name": "电动架车机",
+            "category": "",
+            "quantity": 4,
+            "unit": "",
+            "model": "JC-25  Gn=25t",
+            "energy_type": "电",
+            "remark": "64kW；2025年参考"
+          },
+          {
+            "name": "电动架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "25TTY25-JB",
+            "energy_type": "电",
+            "remark": "16kW；2025年参考"
+          },
+          {
+            "name": "移动架车机",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "JC-25",
+            "energy_type": "电",
+            "remark": "32kW；2025年参考"
+          },
+          {
+            "name": "电动架车机",
+            "category": "",
+            "quantity": 4,
+            "unit": "",
+            "model": "BC440",
+            "energy_type": "电",
+            "remark": "64kW；2025年参考"
+          },
+          {
+            "name": "移动架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DJY-25",
+            "energy_type": "电",
+            "remark": "16kW；2025年参考"
+          },
+          {
+            "name": "空气压缩机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "G4FF 10.5TM",
+            "energy_type": "电",
+            "remark": "11.9kW；2025年参考"
+          },
+          {
+            "name": "双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QD16∕3.2T",
+            "energy_type": "电",
+            "remark": "100KW；2025年参考"
+          },
+          {
+            "name": "双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "5T",
+            "energy_type": "电",
+            "remark": "50KW；2025年参考"
+          },
+          {
+            "name": "双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QD10∕3.2T",
+            "energy_type": "电",
+            "remark": "70KW；2025年参考"
+          },
+          {
+            "name": "单梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "5T",
+            "energy_type": "电",
+            "remark": "30KW；2025年参考"
+          },
+          {
+            "name": "单梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "2T",
+            "energy_type": "电",
+            "remark": "20KW；2025年参考"
+          },
+          {
+            "name": "JC25T架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "JC25X4",
+            "energy_type": "电",
+            "remark": "16KW；2025年参考"
+          },
+          {
+            "name": "JC25T架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "JC25X4",
+            "energy_type": "电",
+            "remark": "16KW；2025年参考"
+          },
+          {
+            "name": "JC25T架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "JC25X4",
+            "energy_type": "电",
+            "remark": "16KW；2025年参考"
+          },
+          {
+            "name": "DJ35Y架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DJ35YX4",
+            "energy_type": "电",
+            "remark": "22KW；2025年参考"
+          },
+          {
+            "name": "DJ35Y架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DJ35YX4",
+            "energy_type": "电",
+            "remark": "22KW；2025年参考"
+          },
+          {
+            "name": "电动双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QD5T-22.5M",
+            "energy_type": "电",
+            "remark": "30kw；2025年参考"
+          },
+          {
+            "name": "电动双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QD10/3.2T-22.5M",
+            "energy_type": "电",
+            "remark": "38kW；2025年参考"
+          },
+          {
+            "name": "电动双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QD10/3.2T-22.5M",
+            "energy_type": "电",
+            "remark": "38kW；2025年参考"
+          },
+          {
+            "name": "电动双梁桥式起重机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "QD10/3.2T-16.5M",
+            "energy_type": "电",
+            "remark": "38kW；2025年参考"
+          },
+          {
+            "name": "电动双梁桥式起重机(含大车轨道）",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "10T",
+            "energy_type": "电",
+            "remark": "16kW；2025年参考"
+          },
+          {
+            "name": "电动双钩桥式起重机",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "QD32.5/5T-25.5M",
+            "energy_type": "电",
+            "remark": "90kW；2025年参考；数量未提供"
+          },
+          {
+            "name": "电动吊钩桥式起重机",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "QD10T-25.5M",
+            "energy_type": "电",
+            "remark": "38kW；2025年参考；数量未提供"
+          },
+          {
+            "name": "电动双钩桥式起重机",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "QD10/3.2T-19.5M",
+            "energy_type": "电",
+            "remark": "45kW；2025年参考；数量未提供"
+          },
+          {
+            "name": "电动吊钩桥式起重机",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "QD5T-19.5M",
+            "energy_type": "电",
+            "remark": "20kW；2025年参考；数量未提供"
+          },
+          {
+            "name": "电动双梁桥式起重机",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "10/3T 25.5M",
+            "energy_type": "电",
+            "remark": "38KW；2025年参考；数量未提供"
+          },
+          {
+            "name": "喷油泵试验台",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DC341",
+            "energy_type": "电",
+            "remark": "22KW；2025年参考"
+          },
+          {
+            "name": "移动架车机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DJ-35",
+            "energy_type": "电",
+            "remark": "55KW；2025年参考"
+          },
+          {
+            "name": "轴承中频感应加热器",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "IGR35-500",
+            "energy_type": "电",
+            "remark": "35KW；2025年参考"
+          },
+          {
+            "name": "HXN3型内燃机车功率模块功能试验台",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "DLS-TEST-CMTB",
+            "energy_type": "电",
+            "remark": "120KW；2025年参考"
+          },
+          {
+            "name": "智能蓄电池充放电机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "SS4B",
+            "energy_type": "电",
+            "remark": "35KW；2025年参考"
+          },
+          {
+            "name": "空气压缩机",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "G4FF 10.5TM",
+            "energy_type": "电",
+            "remark": "11.9KW；2025年参考"
+          },
+          {
+            "name": "可编程仪表综合校验设备",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "YH630A",
+            "energy_type": "电",
+            "remark": "15KW；2025年参考"
+          },
+          {
+            "name": "双轴数控不落轮镟床",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "U2000-400D",
+            "energy_type": "电",
+            "remark": "400kW；2025年参考"
+          },
+          {
+            "name": "制动检修线",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "/",
+            "energy_type": "电",
+            "remark": "195.5KW；2025年参考"
+          },
+          {
+            "name": "辅机自动吹扫",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "/",
+            "energy_type": "电",
+            "remark": "48KW；2025年参考"
+          },
+          {
+            "name": "牵引电机自动吹扫",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "/",
+            "energy_type": "电",
+            "remark": "35KW；2025年参考"
+          },
+          {
+            "name": "电机磨合试验台",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "SS4G机车",
+            "energy_type": "电",
+            "remark": "60KW；2025年参考"
+          },
+          {
+            "name": "车轮车床",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "CKM8013",
+            "energy_type": "电",
+            "remark": "110KW；2025年参考"
+          },
+          {
+            "name": "立式车床",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "5116",
+            "energy_type": "电",
+            "remark": "55KW；2025年参考"
+          },
+          {
+            "name": "电热鼓风干燥箱",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "CH-AG",
+            "energy_type": "电",
+            "remark": "113KW；2025年参考"
+          },
+          {
+            "name": "公铁两用车",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "RTT-2500G",
+            "energy_type": "电",
+            "remark": "2500KW；2025年参考"
+          },
+          {
+            "name": "螺杆空压机",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "GA37P A 8.5",
+            "energy_type": "电",
+            "remark": "37KW；2025年参考"
+          },
+          {
+            "name": "交流电焊机",
+            "category": "",
+            "quantity": 3,
+            "unit": "",
+            "model": "BX1-500-2",
+            "energy_type": "电",
+            "remark": "20KW；2025年参考"
+          },
+          {
+            "name": "空气压缩机1",
+            "category": "",
+            "quantity": 2,
+            "unit": "",
+            "model": "380V",
+            "energy_type": "电",
+            "remark": "55KW；2025年参考"
+          },
+          {
+            "name": "轴承加热装置",
+            "category": "",
+            "quantity": 1,
+            "unit": "",
+            "model": "BGJ-C-2    28KW",
+            "energy_type": "电",
+            "remark": "28KW；2025年参考"
+          },
+          {
+            "name": "公务车",
+            "category": "",
+            "quantity": 33,
+            "unit": "",
+            "model": "/",
+            "energy_type": "汽油",
+            "remark": "2025年参考"
+          },
+          {
+            "name": "公务车",
+            "category": "",
+            "quantity": 8,
+            "unit": "",
+            "model": "/",
+            "energy_type": "柴油",
+            "remark": "2025年参考"
+          },
+          {
+            "name": "燃气灶具",
+            "category": "",
+            "quantity": null,
+            "unit": "",
+            "model": "/",
+            "energy_type": "天然气",
+            "remark": "2025年参考；数量未提供"
+          }
+        ],
+        "company_overview": "国能朔黄铁路发展有限责任公司机辆分公司成立于2002年，隶属国能朔黄铁路公司，主要承担朔黄铁路运输任务，负责直流机车、交流机车、内燃机车的运用、维修管理以及联运单位机车运用的综合管理。",
+        "default_workload_json": [],
+        "default_approver": "",
+        "default_chapter6_json": {},
+        "legal_name": "国能朔黄铁路发展有限责任公司机辆分公司",
+        "default_authors": "",
+        "default_reviewer": "",
+        "business_description": "承担铁路运输任务，负责直流机车、交流机车、内燃机车的运用、维修管理以及联运单位机车运用的综合管理。",
+        "short_name": "机辆分公司",
+        "default_exclusion_note": "",
+        "entity_code": "jiliang",
+        "carbon_department": "",
+        "default_accounting_method": "依据《陆上运输企业温室气体排放核算方法与报告指南（试行）》进行核算。",
+        "default_checker": "",
+        "header_template": "",
+        "default_activity_prose_json": {}
+      },
+      "images": [
+        {
+          "role": "cover_logo",
+          "filename": "cover_logo.png",
+          "mime_type": "image/png",
+          "path": "images/jiliang/cover_logo.png",
+          "size_bytes": 10016,
+          "sha256": "6b57e31ab615ce4a9bcf56807d7183a999594ff5a27c276688d3a727c45e3948"
+        },
+        {
+          "role": "org_chart",
+          "filename": "org_chart_2025.jpeg",
+          "mime_type": "image/jpeg",
+          "path": "images/jiliang/org_chart.jpeg",
+          "size_bytes": 57314,
+          "sha256": "f7ab6c8648d767bd395e01e23708ba24da4af9c6ead05a92e2bb68a6bd5fb950"
+        },
+        {
+          "role": "office_location",
+          "filename": "office_location_2025.png",
+          "mime_type": "image/png",
+          "path": "images/jiliang/office_location.png",
+          "size_bytes": 238383,
+          "sha256": "0db62bd31c592b4518abfde00bf84e9e55e07d59bc0fd2abb62b350b6ab582c4"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "说明": "以下是本包新版本实际执行的最小验收参数。重空键为后端参数名，页面按对应中文字段填写。task-validation中的任务ID来自本地隔离数据库，线上不会预先生成这些任务。",
+  "重空版本": {
+    "code": "demo_all_20261113",
+    "name": "全任务统一演示版（2026-11-13，非正式）",
+    "id": "7ffea20f-0f14-503a-8139-b2df205d4c50",
+    "fileCount": 43,
+    "sha256": "9d604e9ef9736f0711fa9276f8d0a4962e99b15c696688590897fb4abefaee06"
+  },
+  "单列车版本": {
+    "id": "8c62d99f-5f02-5215-83aa-9da81d87cbc1",
+    "code": "demo_single_20261113",
+    "name": "全任务配套单列车版（2026-11-13，非正式）",
+    "sha256": "2e0a59f64d96abe3f8f6fc0ae5eef05bb0ea537e857f6448def404848e7a61e2"
+  },
+  "重空任务": [
+    {
+      "task": "timetable_audit",
+      "runType": "timetable_audit",
+      "parameters": {
+        "timetable_relative_path": "platform/timetable.xlsx"
+      }
+    },
+    {
+      "task": "timetable_optimization",
+      "runType": "timetable_optimization",
+      "parameters": {
+        "population_size": 2,
+        "generations": 1,
+        "seed": 7,
+        "timetable_relative_path": "platform/timetable.xlsx",
+        "mode": "nsga2",
+        "max_candidates": 3
+      }
+    },
+    {
+      "task": "dispatch",
+      "runType": "dispatch",
+      "parameters": {
+        "population_size": 2,
+        "generations": 1,
+        "seed": 7,
+        "heavy_count": 1,
+        "empty_count": 1,
+        "disable_storage_preset_search": true,
+        "disable_energy_observability": true
+      }
+    },
+    {
+      "task": "rolling_rescheduling",
+      "runType": "rolling_rescheduling",
+      "parameters": {
+        "population_size": 2,
+        "generations": 1,
+        "seed": 7
+      }
+    },
+    {
+      "task": "historical_replay",
+      "runType": "rolling_rescheduling",
+      "parameters": {
+        "population_size": 2,
+        "generations": 1,
+        "seed": 7,
+        "disturbance_history_relative_path": "platform/historical_disturbance_replay.json"
+      }
+    },
+    {
+      "task": "joint_parameter_robustness",
+      "runType": "joint_parameter_robustness",
+      "parameters": {
+        "parameter_ranges_relative_path": "platform/joint_parameter_ranges.json",
+        "heavy_count": 1,
+        "empty_count": 1
+      }
+    },
+    {
+      "task": "storage_planning",
+      "runType": "storage_planning",
+      "parameters": {
+        "planning_policy_code": "synthetic_cost_robust_v1",
+        "scenario_set_code": "synthetic_typical_days_v1",
+        "search_mode": "coarse_to_fine",
+        "max_levels_per_dimension": 2,
+        "settlement_step_s": 60
+      }
+    }
+  ],
+  "单列车任务": [
+    {
+      "runType": "simulation",
+      "parameters": {
+        "scenarioKeys": [
+          "s1_flat_braking[nominal]"
+        ],
+        "initialSpeedKmh": 18,
+        "initialSoc": 0.5
+      }
+    },
+    {
+      "runType": "comparison",
+      "parameters": {
+        "scenarioKeys": [
+          "s1_flat_braking[nominal]"
+        ],
+        "initialSpeedKmh": 18,
+        "initialSoc": 0.5
+      }
+    },
+    {
+      "runType": "validation",
+      "parameters": {
+        "scenarioKeys": [
+          "s1_flat_braking[nominal]",
+          "s3_mass_variation[mass_0.6x]"
+        ],
+        "initialSoc": 0.5
+      }
+    },
+    {
+      "runType": "eco_driving",
+      "parameters": {
+        "trainName": "Heavy",
+        "routeStartKm": 108.0,
+        "routeEndKm": 108.005,
+        "initialSpeedKmh": 18.0,
+        "terminalSpeedKmh": 18.0,
+        "targetRuntimeS": 1.0,
+        "initialSoc": 0.5
+      }
+    }
+  ],
+  "节能驾驶补充说明": "本包隔离验证用108.000至108.005km、1秒作为短区段数值冒烟测试，不是工程节能结论。此前已实际点击测试页面默认40秒案例：经验方案130.89秒被标记超时，优化38.11秒通过。请保留各自约束状态，不将无效基准用于收益比较。",
+  "任意参数边界": "输入齐备不代表任意编组、成本、目标时间或全部候选都可行；不取消物理校验。单列车目标运行时间上限195秒，每方案200万步，电气步长1e-4秒。"
+}

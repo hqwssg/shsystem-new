@@ -1,0 +1,59 @@
+{
+  "tables": [
+    "energy_project",
+    "energy_project_version",
+    "energy_dataset_file",
+    "energy_storage_candidate_site",
+    "energy_storage_technology",
+    "energy_storage_site_technology_option",
+    "energy_storage_planning_scenario",
+    "energy_storage_planning_policy",
+    "energy_station",
+    "energy_route_segment",
+    "energy_train_type_parameter",
+    "energy_power_arm",
+    "energy_station_resource",
+    "single_version"
+  ],
+  "counts": {
+    "energy_project": 1,
+    "energy_project_version": 1,
+    "energy_dataset_file": 43,
+    "energy_storage_candidate_site": 1,
+    "energy_storage_technology": 1,
+    "energy_storage_site_technology_option": 1,
+    "energy_storage_planning_scenario": 1,
+    "energy_storage_planning_policy": 1,
+    "energy_station": 33,
+    "energy_route_segment": 1390,
+    "energy_train_type_parameter": 2,
+    "energy_power_arm": 76,
+    "energy_station_resource": 33,
+    "single_version": 1
+  },
+  "allTables": [
+    "energy_project",
+    "energy_project_version",
+    "energy_dataset_file",
+    "energy_storage_candidate_site",
+    "energy_storage_technology",
+    "energy_storage_site_technology_option",
+    "energy_storage_planning_scenario",
+    "energy_storage_planning_policy",
+    "energy_station",
+    "energy_route_segment",
+    "energy_train_type_parameter",
+    "energy_power_arm",
+    "energy_station_resource",
+    "single_version",
+    "energy_dept_project",
+    "single_dept_project"
+  ],
+  "projectId": "18066cfd-dfe7-56c2-8b3d-de51086f5dac",
+  "versionIds": [
+    "7ffea20f-0f14-503a-8139-b2df205d4c50"
+  ],
+  "singleId": "8c62d99f-5f02-5215-83aa-9da81d87cbc1",
+  "projectCode": "algorithm_demo_20261113_all",
+  "maxStatementBytes": 965784
+}

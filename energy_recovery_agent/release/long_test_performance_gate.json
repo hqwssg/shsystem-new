@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "gate_version": "2026.09.11.1",
+  "scope": "当前规划与合成数据的软件性能回归门禁，不构成生产 SLA",
+  "tests": {
+    "heavy_empty_network": {"script": "tests/smoke/verify_heavy_empty_network_optimizer.py", "timeout_s": 600, "repeat_count": 2, "baseline_median_elapsed_s": 131.511, "max_median_elapsed_s": 360, "max_peak_rss_mb": 2048},
+    "rolling_optimizer": {"script": "tests/smoke/verify_rolling_optimizer_constraints.py", "timeout_s": 600, "repeat_count": 1, "baseline_median_elapsed_s": 0.969, "max_median_elapsed_s": 10, "max_peak_rss_mb": 1024},
+    "timetable_optimizer": {"script": "tests/smoke/verify_timetable_optimizer_nsga2.py", "timeout_s": 300, "repeat_count": 1, "baseline_median_elapsed_s": 14.986, "max_median_elapsed_s": 60, "max_peak_rss_mb": 2048},
+    "timetable_resources": {"script": "tests/smoke/verify_timetable_resource_constraints.py", "timeout_s": 180, "repeat_count": 1, "baseline_median_elapsed_s": 0.889, "max_median_elapsed_s": 10, "max_peak_rss_mb": 1024},
+    "dispatch_output_path": {"script": "tests/smoke/verify_dispatch_output_path.py", "timeout_s": 300, "repeat_count": 1, "baseline_median_elapsed_s": 0.095, "max_median_elapsed_s": 5, "max_peak_rss_mb": 512},
+    "historical_disturbance_replay": {"script": "tests/integration/verify_historical_disturbance_replay_end_to_end.py", "timeout_s": 1200, "repeat_count": 2, "baseline_median_elapsed_s": 225.316, "max_median_elapsed_s": 600, "max_peak_rss_mb": 2048},
+    "joint_parameter_robustness": {"script": "tests/integration/verify_joint_parameter_robustness_end_to_end.py", "timeout_s": 600, "repeat_count": 1, "baseline_median_elapsed_s": 8.45, "max_median_elapsed_s": 60, "max_peak_rss_mb": 2048}
+  }
+}

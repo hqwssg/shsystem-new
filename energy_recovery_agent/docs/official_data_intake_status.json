@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "goal_items": {
+    "rebuild_and_replace_real_shuohuang": "done",
+    "rerun_smokes_and_pipelines": "done",
+    "docs_cli_units": "done",
+    "official_timetable": "missing",
+    "official_vehicle_dynamics": "missing",
+    "official_power_arm_electrical": "missing",
+    "official_storage_params": "missing",
+    "official_signaling_blocks": "missing",
+    "official_initial_inventory": "missing",
+    "nonzero_calibration_samples": "done_experimental",
+    "usable_group_coefficients": "done_experimental",
+    "formal_energy_saving_or_capacity_conclusions": "blocked_until_official_data",
+    "official_intake_dry_run": "done",
+    "official_data_auto_trigger": "done"
+  },
+  "current_experimental_calibration": {
+    "sample_count": 532,
+    "robust_fit_sample_count": 178,
+    "global_scale": 0.995168800189934,
+    "group_median_abs_pct_error": 41.4402235,
+    "enabled_by_default": false,
+    "data_status": "experimental_kwh_calibration",
+    "selection_policy": "mainline_mapped_nonzero_traction_from_ab_aggregation",
+    "stratum_counts": {
+      "fit_core": 178,
+      "review_short_stop": 291,
+      "review_low_intensity": 52,
+      "review_boundary_gap": 1,
+      "review_single_meter": 0,
+      "out_of_ratio_band": 2,
+      "review_zero_or_invalid": 8
+    },
+    "fit_policy": "fit_core_only_aggregated_ab_exclude_zero_energy_short_stop_low_intensity_single_meter",
+    "robust_median_abs_pct_error_after_scale": 36.4887142677114
+  },
+  "required_inbox": [
+    "timetable",
+    "vehicle_dynamics",
+    "power_arm_electrical",
+    "storage",
+    "signaling",
+    "inventory"
+  ],
+  "algorithm_scope_locks": {
+    "mainline_only_stations": 33,
+    "exclude_off_mainline_stations": true,
+    "ss4_match_policy": "compare_single_meter_and_A_plus_B_pick_best",
+    "fit_policy": "fit_core_only_aggregated_ab_exclude_zero_energy_short_stop_low_intensity_single_meter",
+    "empty_mass_policy": "multi_tier_no_single_fixed_value_default_4320"
+  },
+  "official_intake_dry_run": {
+    "generated_at_utc": "2026-07-25T14:03:46.521170+00:00",
+    "result": "pass_empty_inbox_ready",
+    "ready_categories": [],
+    "missing_categories": [
+      "timetable",
+      "vehicle_dynamics",
+      "power_arm_electrical",
+      "storage",
+      "signaling",
+      "inventory"
+    ]
+  },
+  "empty_mass_policy": {
+    "single_fixed_value_found": false,
+    "default_tons": 4320,
+    "tiers_tons": [
+      2160,
+      2668,
+      3036,
+      4320
+    ],
+    "source": "train_formation_modes_2025 + PDF formation totals; no unique empty mass in PDF",
+    "pdf_password_note": "PDF opens with Seldom (capital S); lowercase seldom fails"
+  }
+}

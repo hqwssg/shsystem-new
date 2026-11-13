@@ -1,0 +1,89 @@
+services:
+  sh-db:
+    image: ${MYSQL_IMAGE:-mysql:8.0}
+    container_name: sh-db
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME:?Set DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER:?Set DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ${MYSQL_DATA_HOST_PATH:?Set MYSQL_DATA_HOST_PATH}:/var/lib/mysql
+      - ./docker/mysql/db:/docker-entrypoint-initdb.d:ro
+    expose:
+      - "3306"
+    ports:
+      - "${MYSQL_BIND_ADDRESS:-127.0.0.1}:${MYSQL_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks: [shsystem]
+
+  sh-python:
+    image: ${PYTHON_IMAGE:?Set PYTHON_IMAGE}
+    container_name: sh-python
+    restart: unless-stopped
+    environment:
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN:?Set PYTHON_INTERNAL_TOKEN}
+      API_KEY: ${PREDICTION_API_KEY:?Set PREDICTION_API_KEY}
+      DATABASE_DSN: mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@sh-db:3306/${DATABASE_NAME}
+      DATABASE_DRIVER: mysql
+      DATABASE_HOST: sh-db
+      DATABASE_PORT: "3306"
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DB_HOST: sh-db
+      DB_PORT: "3306"
+      DB_NAME: ${DATABASE_NAME}
+      DB_USER: ${DATABASE_USER}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      ENERGY_DATABASE_URL: mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@sh-db:3306/${DATABASE_NAME}
+      PREDICTION_API_PORT: "8090"
+      SHARED_ROOT: /srv/shared
+    volumes:
+      - ${SHARED_DATA_HOST_PATH:?Set SHARED_DATA_HOST_PATH}:/srv/shared
+    expose: ["8090", "8091"]
+    depends_on:
+      sh-db:
+        condition: service_healthy
+    networks: [shsystem]
+
+  sh-app:
+    image: ${APP_IMAGE:?Set APP_IMAGE}
+    container_name: sh-app
+    restart: unless-stopped
+    environment:
+      DATABASE_JDBC_DRIVER: com.mysql.cj.jdbc.Driver
+      DATABASE_JDBC_URL: jdbc:mysql://sh-db:3306/${DATABASE_NAME}?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      PAGEHELPER_DIALECT: mysql
+      PYTHON_SERVICE_URL: http://sh-python:8091
+      PYTHON_INTERNAL_TOKEN: ${PYTHON_INTERNAL_TOKEN:?Set PYTHON_INTERNAL_TOKEN}
+      PYTHON_SERVICE_REQUIRED: "true"
+      PREDICTION_BASE_URL: http://sh-python:8090
+      PREDICTION_API_KEY: ${PREDICTION_API_KEY:?Set PREDICTION_API_KEY}
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
+    ports:
+      - "${WEB_PORT:-80}:80"
+    volumes:
+      - ${SHARED_DATA_HOST_PATH:?Set SHARED_DATA_HOST_PATH}:/srv/shared
+    depends_on:
+      sh-db:
+        condition: service_healthy
+      sh-python:
+        condition: service_started
+    networks: [shsystem]
+
+networks:
+  shsystem:
+    internal: true

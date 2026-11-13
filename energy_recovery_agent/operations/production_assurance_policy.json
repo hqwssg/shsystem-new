@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "policy_version": "2026.09.11.1",
+  "scope": "部署前本地保障基线；正式阈值必须在目标平台按SLA重新批准",
+  "monitoring": {
+    "recent_window_hours": 24,
+    "minimum_failure_rate_sample_count": 10,
+    "thresholds": {
+      "pending_count": {"warning": 50, "critical": 200, "direction": "max"},
+      "oldest_pending_age_s": {"warning": 300, "critical": 900, "direction": "max"},
+      "stale_heartbeat_age_s": {"warning": 120, "critical": 300, "direction": "max"},
+      "expired_active_lease_count": {"warning": 1, "critical": 1, "direction": "max"},
+      "recent_failure_rate": {"warning": 0.05, "critical": 0.15, "direction": "max"},
+      "database_size_bytes": {"warning": 53687091200, "critical": 107374182400, "direction": "max"},
+      "artifact_size_bytes": {"warning": 42949672960, "critical": 85899345920, "direction": "max"},
+      "host_disk_free_percent": {"warning": 20, "critical": 10, "direction": "min"}
+    }
+  },
+  "worker": {
+    "poll_interval_seconds": 5,
+    "lease_seconds": 300,
+    "heartbeat_interval_seconds": 60,
+    "max_attempts": 3,
+    "required_resource_profile": "standard",
+    "required_unique_worker_id": true
+  },
+  "backup": {
+    "format": "custom",
+    "restore_database_suffix": "_restore_test",
+    "required_migration_versions": ["001", "002", "003", "004", "005", "006", "007"],
+    "required_tables": [
+      "simulation_project",
+      "simulation_project_version",
+      "simulation_dataset_file",
+      "simulation_run",
+      "simulation_run_state_event",
+      "simulation_result_artifact",
+      "simulation_result_kpi",
+      "simulation_energy_time_slice",
+      "simulation_rolling_control_event"
+    ],
+    "row_count_tables": [
+      "simulation_project",
+      "simulation_project_version",
+      "simulation_run",
+      "simulation_result_artifact"
+    ]
+  },
+  "external_acceptance_items": [
+    "目标服务器与正式数据库部署",
+    "生产TLS证书和四类独立登录账号",
+    "甲方监控告警平台接入与通知链路实测",
+    "正式备份介质上的恢复时间与恢复点验证",
+    "目标硬件和正式负载下的容量与SLA标定",
+    "平台界面、任务接口和调度业务流程联调",
+    "甲方运维职责、值守和事故升级链签字确认"
+  ]
+}

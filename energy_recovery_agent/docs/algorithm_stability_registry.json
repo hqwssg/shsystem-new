@@ -1,0 +1,814 @@
+{
+ "schema_version": "1.0",
+ "as_of": "2026-11-08",
+ "phase": "simulation",
+ "phase_legend": {
+  "simulation": "仿真/联调阶段：输入允许用虚拟值补齐（见 input_completeness_registry.json），算法端到端可跑。此时包可用于前端联调，「结论级字段」仍禁止对外发布。",
+  "production": "正式阶段：虚拟值已全部替换为甲方数据，open 能力清零，结论级字段方可对外发布。"
+ },
+ "purpose": "算法稳定性登记表：逐能力声明「已锁定 / 条件成立 / 未定案」，并给出可复核的证据与所依赖的显式假设。前端据此决定哪些数字可直接展示、哪些必须带条件标注。",
+ "status_legend": {
+  "locked": "有独立数据交叉验证，改动会被测试挡住，可直接展示",
+  "conditional": "方法确定，但数值依赖一条未确认的输入或标定，展示时必须带条件",
+  "open": "数据之间自相矛盾，尚未定案，不得作为结论展示",
+  "superseded": "方法或口径已被推翻，数值只能作历史对照，须同时给出后继能力"
+ },
+ "capabilities": [
+  {
+   "id": "station_positions",
+   "name": "线路里程与站点位置",
+   "status": "locked",
+   "summary": "33 个站点的里程标来自线路图与运行图，作为坡度、限速、区间时分的对齐基准。",
+   "evidence": [
+    {
+     "path": "data/real_shuohuang/stations.csv",
+     "claim": "33 站，神池南 0 km → 肃宁北Ⅱ场 396.6 km"
+    },
+    {
+     "path": "data/real_shuohuang/route_metadata.json",
+     "claim": "全线 583 km（含黄骅港支线）"
+    }
+   ],
+   "assumption_ids": [],
+   "downstream": [
+    "所有区间量"
+   ]
+  },
+  {
+   "id": "speed_limits",
+   "name": "线路允许速度",
+   "status": "locked",
+   "summary": "重车方向限速按运行图允许速度表落地：178 km 为 75 km/h、405 km 为 80 km/h，原文留档。",
+   "evidence": [
+    {
+     "path": "data/real_shuohuang/line_speed_limits.csv",
+     "claim": "限速原文与适用里程"
+    },
+    {
+     "path": "data/real_shuohuang/segments.csv",
+     "claim": "限速已写入运行时段，120 → 75/80"
+    }
+   ],
+   "assumption_ids": [],
+   "downstream": [
+    "运行时分",
+    "牵引电量",
+    "再生电量"
+   ]
+  },
+  {
+   "id": "section_times",
+   "name": "图定区间运行时分",
+   "status": "locked",
+   "summary": "33 段区间时分逐段核对：29 段偏差在 −3…+1 min，全线比图定快 30 min；唯一大偏差是神池南出站 95 min（装车/等信号，非运行行为）。",
+   "evidence": [
+    {
+     "path": "outputs/section_telemetry/section_telemetry_233.csv",
+     "claim": "逐区间实绩 vs 图定，每段 1,500+ 趟"
+    },
+    {
+     "path": "outputs/running_diagram_data/section_times.csv",
+     "claim": "图定区间时分原表"
+    }
+   ],
+   "assumption_ids": [],
+   "downstream": [
+    "按图定时",
+    "运行时分"
+   ]
+  },
+  {
+   "id": "station_dwell",
+   "name": "站停作业时分",
+   "status": "conditional",
+   "summary": "换班/折返/装卸/起停附加来自运行图站停表；表中未覆盖的少数站点按同类型站中位补齐。",
+   "evidence": [
+    {
+     "path": "data/real_shuohuang/station_dwell.csv",
+     "claim": "source_type 区分 pdf / calibrated"
+    }
+   ],
+   "assumption_ids": [
+    "dwell_calibrated_items"
+   ],
+   "downstream": [
+    "按图定时",
+    "停站时刻"
+   ]
+  },
+  {
+   "id": "mass_basis",
+   "name": "编组质量口径",
+   "status": "locked",
+   "summary": "车辆总重（216×100 t）+ 机车自重（300 t）= 21,900 t。编组表 11 种辆数下总重/辆数恒为 20.000；电表三日相汇总与总量差 0.6%。",
+   "evidence": [
+    {
+     "path": "data/real_shuohuang/trains.csv",
+     "claim": "mass_note 记录口径依据"
+    },
+    {
+     "path": "outputs/mass_data_audit",
+     "claim": "编组与单机行反推机车自重的审计输出"
+    }
+   ],
+   "assumption_ids": [
+    "vehicle_mass_basis"
+   ],
+   "downstream": [
+    "阻力",
+    "牵引电量",
+    "再生电量"
+   ]
+  },
+  {
+   "id": "basic_resistance",
+   "name": "基本阻力（TB/T 1407.1 表5）",
+   "status": "locked",
+   "summary": "空车方向（连续爬升 1,676 m）能量闭合反推 w0 = 3.75 N/kN，与公式 3.6–3.7 相符；重车 58 km/h 时 w0 = 1.63 N/kN，与公式 1.62 相符。",
+   "evidence": [
+    {
+     "path": "outputs/section_telemetry/坡度反解与空车校验.md",
+     "claim": "空车方向势能与阻力余量的闭合检验"
+    }
+   ],
+   "assumption_ids": [
+    "traction_efficiency"
+   ],
+   "downstream": [
+    "牵引电量",
+    "运行时分",
+    "惰行判断"
+   ]
+  },
+  {
+   "id": "gradient_profile",
+   "name": "线路坡度剖面（细结构）",
+   "status": "conditional",
+   "summary": "累计高差与线路图一致，细结构敏感性已量化：保高程重建族（高程容差 ≤1.0 m，段数 446→223，仍属同一份剖面的不同读法）下重车牵引仅变 ≤1.5%、再生 ≤0.5%、时分 ≤0.1%；即使把容差放到 4 m（446→77 段，已在改地形）也只到 5.1%。剖面细结构不能解释 2.7 倍的电量缺口。仍未解除的是绝对精度受 0.5‰ 读数分辨率限制，须以原始纵断面表替换后转 locked。",
+   "status_rule": "从 open 降为 conditional 的依据：缺口来源已被证伪（重建族影响 ≤5.1%，远小于 170% 的缺口），剩余不确定性只剩读数分辨率，属『方法确定、数值依赖一条未确认输入』。",
+   "evidence": [
+    {
+     "path": "outputs/energy_closure/closure_matrix.json",
+     "claim": "6 档重建变体 × 2 台数分支的牵引/再生/时分，最大相对变化 3.0%"
+    },
+    {
+     "path": "outputs/energy_closure/能量闭合判定与情景包络.md",
+     "claim": "重建族敏感性表与判定不翻转的论证"
+    },
+    {
+     "path": "data/real_shuohuang/gradients.csv",
+     "claim": "728 段，来源为线路图-2 图形数字化，坡度按 0.5‰ 读数"
+    }
+   ],
+   "assumption_ids": [
+    "gradient_profile_source"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "净值"
+   ]
+  },
+  {
+   "id": "traction_brake_capability",
+   "name": "机车牵引与电制动能力",
+   "status": "conditional",
+   "summary": "功率上限口径已统一（控制与结算共用 power_cap_kW，修掉算两遍导致的 24% 低估）；但神 12 曲线仍是 1.5×HXD1 推导值。",
+   "evidence": [
+    {
+     "path": "data/real_shuohuang/locomotive_curves.json",
+     "claim": "SHENHUA_12、HXD1_25t 曲线与 U_w = 27.2 kV"
+    },
+    {
+     "path": "tests/smoke/verify_power_cap_consistency.py",
+     "claim": "把 CSV 功率改成 1 kW，结果必须逐位不变"
+    }
+   ],
+   "assumption_ids": [
+    "shenhua12_traction_brake_curves"
+   ],
+   "downstream": [
+    "牵引力上限",
+    "再生电量",
+    "运行时分"
+   ]
+  },
+  {
+   "id": "regen_energy",
+   "name": "再生电量",
+   "status": "locked",
+   "summary": "按区间切片与实绩比对 1.06 倍（14,311 vs 13,506 kWh）；电制动级位 0.48 标定后全趟与实绩差 3.4%。 **2026-11-08 补记**：级位只改电制动与空气制动的分摊、不改轨迹，所以它的绝对值必须绑定编组台数。同一级位 0.48 下，1 台给 14,324 kWh、2 台 27,350、3 台 38,545（实测反馈 13,695）。标定是在 1 台配置下做的，台数一改就要重标——本条目的 1.06 倍只在 1 台成立。",
+   "evidence": [
+    {
+     "path": "outputs/brake_calibration/calibration.json",
+     "claim": "51 档级位扫描与双工况交叉验证"
+    },
+    {
+     "path": "tests/smoke/verify_brake_strategy.py",
+     "claim": "级位只改分摊不改轨迹的不变量"
+    },
+    {
+     "path": "outputs/section_energy/calibration_sweep.csv",
+     "claim": "1 台：级位 0.05→0.48 对应再生 4,711→14,324 kWh，牵引恒为 16,726（分摊不改轨迹）"
+    },
+    {
+     "path": "outputs/section_energy/逐区间电量对照.md",
+     "claim": "下坡段实测反馈 13,270 / 模型再生 14,324，1.1 倍——单台口径下再生已吻合"
+    }
+   ],
+   "assumption_ids": [
+    "electrical_brake_level",
+    "catenary_voltage"
+   ],
+   "downstream": [
+    "弃能",
+    "储能可回收量",
+    "净值"
+   ]
+  },
+  {
+   "id": "meter_reading_scope",
+   "name": "电表计量口径（读数即全列）与重空实测基准",
+   "status": "conditional",
+   "summary": "趟级电表台账（`nhtj_jkfile_ammeter_info`）的 `use_ygdn` 是 a/b/c 三列之和（1,904/1,904）。**三列 = 一台 12 轴机车的 A/B/C 三节**，不是整列。`250917-2001号车` 单车台账把能耗拆到 A/B/C 三节、三节之和等于该车总能耗（9/9 趟），且其毛牵引中位 6,834、反馈 16,742 与 1,854 趟台账的 6,228 / 14,660 同量级——**两条独立数据源都指向「台账 = 单机」**。而两万吨编组是 1+1 两台（编组模式文档 + 运行图第 7 页）。所以整列目标 = 单机读数 × 2。\n\n此前三次判定（2 台 → 3 台 → 1 台）全部作废：前两次拿 `traintypeid`、第三次拿「表数」推台数，都是把「台账记了谁」与「列车有几台」混为一谈。",
+   "status_rule": "判为 conditional：计量对象（单机 3 节）已由两条独立台账定案，可复算；但**补机（8 轴）的电表数据不在数据集内**，「整列 = 2×单机」是等分假设，未经实测验证。在补机数据到位前，整列目标只能作区间引用，不得作为验收基准。",
+   "evidence": [
+    {
+     "path": "outputs/meter_scope/meter_scope.json",
+     "claim": "口径审计 1,904/1,904、表号去重占比、重空双向基准、模型三口径对照、坡度特征"
+    },
+    {
+     "path": "outputs/meter_scope/计量口径判定与重空基准.md",
+     "claim": "四条证据、势能下界失效论证、五趟取证、对 12,644/10,874 的撤回"
+    },
+    {
+     "path": "outputs/meter_scope/重空实测电量.png",
+     "claim": "重车净发电 / 空车净耗电的实测对照，以及模型吞吐量偏大的幅度"
+    },
+    {
+     "path": "data/real_shuohuang/assumptions.json",
+     "claim": "`two_wan_ton_locomotive_count` 为 resolved（**1 台 12 轴 / 3 节**），并记录两次误判的撤回链与 benchmark"
+    },
+    {
+     "path": "tests/smoke/verify_meter_scope.py",
+     "claim": "23 条断言"
+    },
+    {
+     "path": "outputs/data_inventory/数据清点报告.md",
+     "claim": "单车台账 vs 趟级台账的量级对照，与「三节之和=总能耗」的逐趟核验"
+    },
+    {
+     "path": "outputs/data_inventory/data_inventory.json",
+     "claim": "43 个文件清点；未使用 15 个"
+    },
+    {
+     "path": "data/real_shuohuang/section_run_times_2026.json",
+     "claim": "运行图 PDF 第 22–23 页区间运行时分转录，含里程 406.6 km 校验"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "净值",
+    "储能收益",
+    "运行的牵引定数"
+   ]
+  },
+  {
+   "id": "heavy_traction_energy",
+   "name": "重车方向牵引电量",
+   "status": "conditional",
+   "summary": "已被下界判死，不是待定而是不成立：势能下界 W≥m·g·U−½m·v_max² 给出 21,900 t 至少要 9,884 kWh（电网侧），而电表读出 6,322 kWh，短 36%。该下界不含阻力模型、操纵策略与传动效率；坡度重建族也已排除（影响 ≤5.1%）。唯一剩下的解释是台数与计量口径：读数只是双机中的一台，按该读法 12,644 kWh 通过下界（+26%）。2026-11-05 追加牵引归因：模型 18,716 kWh 相对该读法 +72%，超额 7,842 kWh 的位置已经定位——**上坡段牵引只有 10,407 kWh（对目标 −4.3%），下坡段却用了 8,160 kWh（= 超额的 104%）**。按能量恒等式化简，下坡段牵引本应为 0（重力已覆盖阻力），所以这部分是驾驶策略问题，不是阻力标定问题。同时否证了两个替代解释：控制抖动（惰行死区放大 100 倍，牵引只降 2.1%）与制动后再牵引（模型在自身速度剖面下的效率只差 4.0%，重力已足够推动的步里牵引仅 1,000 kWh）。 死区扫描给出关键限定：放大牵引死区能把牵引从 18,716 降到 8,300、下坡牵引从 8,160 降到 2,925，**机制确认无误**；但要把牵引压到实绩 10,874 需死区 5.5 m/s，此时时分 452 min（比图定 410 多 42 min）。即**能耗与时分在这条一维路径上对立**，模型无法同时命中 (10,874 kWh, 410 min)。所以真实驾驶不是「恒定目标速度 + 死区」，而是下坡主动提速、把动能存给上坡用——下一步应把速度目标由常数改为随坡度变化的目标。 2026-11-05 追加「可达前沿」判定：把按图定时口径（`schedule_speed_cap`：strict 逐区间压速 / dwell 站停吸收）与牵引死区一起扫（2×5 格），两条曲线几乎重合——**逐区间压速不是主因**，改成站停吸收只让牵引降 3%（18,716 → 18,167）。**在 410 min 时点上模型能做到的最低牵引是 18,167 kWh（+67%）；要把牵引压到 10,874 需要约 445 min（晚 35 min）**。目标点 (10,874, 410) 落在可达前沿之外，「再调参数」这条路至此排除。缺的是**前瞻式速度规划**：当前控制器反应式（掉了才补、超了才刹），而实绩那种操纵必须在上坡前先提速度、靠动能顶过去。另记录一条被否证的尝试：`descent_speed_boost_mps`（下坡提速）实测完全无效（目标速度本就贴着限速），已从代码移除。 2026-11-06 收口：上轮把「下坡牵引」判为驾驶策略问题后，本轮用修正后的 DP + 前馈跟踪定量验证了这条判断。同一份最优剖面用前馈跟踪可在 407.5 min 跑出 10,408 kWh（反应式 18,716 kWh / 412.7 min），即 **超额全部由控制律解释，模型的阻力/坡度/质量标定没有 20% 的系统性偏差**；首版 DP 算出的「物理 26%」源自三处实现错误，已作废（见 `speed_profile_bound`）。该能力仍保持 `open`，但理由已收窄为**计量读法**一项：三种读法只有「读数只是双机之一」通过物理下界，需甲方确认；与阻力/操纵相关的分支全部排除。 **2026-11-08 收口**：此处悬置的「计量读法」已由 `meter_reading_scope` 定案——读数是全列汇总（`use_ygdn ≡ a+b+c`），实测毛牵引 6,248 kWh（轮周 5,374），不是 12,644/10,874。所以本能力**不再因计量口径而未定案**；它转为 `conditional` 的理由变成了一个量化的模型缺口：模型吞吐量（毛牵引、反馈）约为实测的 1.6–1.8 倍、净值比实测更负 50%，成因定位在**制动—再牵引循环偏多**（毛牵引是两个十万量级之差，放大 6.9 倍，制动 17% 的偏差会放大成牵引 150%）。引用本能力时必须带这个条件标注：绝对值只可用于同口径相对比较。 **2026-11-08 第二次收口（台数口径纠正后）**：上一段引用的 1.6–1.8 倍、净值偏负 50% 是**按 2–3 台**跑出来的，而台数已收口为 1 台（见 `meter_reading_scope`）。按 1 台重测：毛牵引 **16,726 kWh**、再生 **14,324**、制动 56,596、纯运行 364 min（另 53 min 站停），对应实测 5,539 / 13,695 / 纯运行 362 min。**再生与时分都对上了（1.05 倍、+2 min），唯独毛牵引仍是 3.02 倍。** 逐区间把偏差钉死在平缓段：17 个下坡段的再生是实测的 1.1 倍，而其余平缓段的牵引 5,390 vs 1,874（2.9 倍）。台数与级位都修不了它——级位扫描中牵引恒为 16,726，1/2/3 台分别 16,726 / 18,167 / 19,100。更关键的是**无约束 DP 最优也只有 13,516 kWh**（2.84 倍），所以这不再是「控制律落后」一句话能解释的，物理侧（阻力 / 制动分摊）也参与了——但成因尚未定位，本条维持 conditional。**2026-11-07 口径重置：电表台账记的是一台机车（3 节），不是整列。** `250917-2001号车…xls` 独立证明「三节之和 = 该车总能耗」，与趟级台账 1,854 趟同量级；而 `2025朔黄铁路编组模式.docx`（1+1 交+交）与运行图技术资料第 7 页（12 轴 + 8 轴）都指**两台**。故整列目标 = 单机读数 × 2：毛牵引 **12,456 kWh**、反馈 **29,320 kWh**（原目标 5,539 / 13,695 作废）。模型 16,726 / 14,324 对应 **1.34 倍 / 0.49 倍**——**问题从「多耗 3 倍」变成「少回收一半」**，而且净能耗符号相反（实测净发电 −16,864，模型净耗电 +2,402）。\n\n按整列口径重述：模型毛牵引 16,726 对实测 12,456（**1.34 倍**），单耗 19.26 对 15.98 kWh/万吨公里（**1.21 倍**）；但反馈 14,324 对实测 29,320（**0.49 倍**），缺口在这里。此前记录的「平缓段牵引 2.9 倍、下坡段再生 1.1 倍」都是按单机口径算的，**倍率需整体重算**。\n\n**2026-11-07 已把真实数据接入模型并重跑**：新增 `SHENHUA_8` 机型条目、`trains.csv` 增列 `locomotive_consist=SHENHUA_12:1|SHENHUA_8:1`、主 OD 里程由硬编码 396.0 改为读 `stations.csv` 的肃宁北 406.571 km。重跑结果：整列 22,100 t / 24,000 kW / 毛牵引 **18,959** / 再生 **23,278** / 纯运行 421.7 min。对整列目标（12,456 / 29,320 / ≈409 min）：牵引 **1.52 倍**、再生 **0.79 倍**、净值 −4,318（**符号已与实测一致**）。相比接入前的 1.34/0.49，「少回收一半」这一条基本解决（0.49 → 0.79），**剩下的主缺口变成牵引过量 52%**——这是反应式控制律的问题，不是数据问题。\n\n**2026-11-08 收口（前瞻剖面 + 能耗—时分前沿）**：把图定逐区间时分算成剖面交给控制器，扫出一条能耗—时分前沿：反应式 18,959 kWh / 421.7 min；沿前沿放松时分可到 **10,340 kWh / 467.0 min**；压到模型最快 **423.3 min 时要 17,626 kWh**。**实测点（409 min / 12,456 kWh）落在前沿的左下方——模型在时间与能耗两个维度上同时不可达**：模型最快也比实测慢 14.3 min，而在自己最快的点上仍多耗 42%。所以剩下的缺口**不是控制策略能闭合的**。另记一条反直觉结论：按坡度给形状（下坡调快、上坡调慢）的剖面不但不省电，反而把牵引抬高到 28,285–38,264 kWh——因为控制律的制动分支触发条件是 `当前速度 > 目标 + coast_band`，**一个低于当前速度的目标就是一道制动指令**，压上坡目标等于把下坡攒的动能先刹掉再牵引补回来。有效的做法是「惰行包络」：手柄回零、只在超限速时制动、只在下限以下才补牵引。 **2026-11-08 目标值更正（本能力引用的所有倍数都要按新目标重读）**：此前「整列目标 = 单机 × 2」的等分假设已由实测取代。两万吨窗口内台账按「这一趟记了哪台车的表」分成两组：`traintypeid=233`（12 轴、3 表）1,623 趟毛牵引中位 6,400 / 反馈 14,958，`traintypeid=231`（8 轴、2 表）193 趟 5,250 / 12,762；两组总重同为 21,600 t、216 辆、纯运行同为 405 min，且 8 轴单机黏着牵引 467 kN 拉不动 21,600 t 所需的 578 kN，**只可能是同一批 1+1 列车的补机侧**。故补机出力 = 本务的 0.82（毛牵引）/ 0.85（反馈），整列目标 **11,650 / 27,720 kWh**（不是等分 ×2 的 12,497 / 29,331，后者高估 7.3% / 5.7%）。按新目标重算：模型 18,959 为 **1.63 倍**（原记 1.52 倍）、再生 23,278 为 **0.84 倍**（原记 0.79 倍）、净值 −4,318 对 −16,070，符号仍一致。**牵引缺口因此更大而不是更小**，但「实测点落在能耗—时分前沿左下方」这条结论不变（两个维度同时不可达），且前沿的绝对位置需按 11,650 重读。详见假设 `helper_loco_energy_share`。",
+   "status_rule": "判为 conditional：编组（1+1 两台）、主 OD 里程、曲线半径、区间时分等真实数据已全部接入，**整列目标**（毛牵引 12,456 / 反馈 29,320）下的净值符号已与实测一致；但毛牵引仍是实测的 1.52 倍、纯运行 421.7 min 长于图定 377 min，说明控制律尚未对齐司机的「动能飞行」操纵。绝对值仍不得对外引用。",
+   "evidence": [
+    {
+     "path": "outputs/energy_closure/closure_matrix.json",
+     "claim": "下界 9,884 / 10,019 kWh；三种读法判定；12 组仿真对照"
+    },
+    {
+     "path": "outputs/traction_attribution/traction_attribution.json",
+     "claim": "上坡 10,407（−4.3%）/ 下坡 8,160（= 超额 104%）；恒等式残差除 16 个限速步外为 0.000"
+    },
+    {
+     "path": "outputs/traction_attribution/coast_band_sweep.csv",
+     "claim": "惰行死区 0.02→2.0 m/s，牵引 18,716→18,319（−2.1%），否证抖动假设"
+    },
+    {
+     "path": "outputs/energy_closure/scenario_envelope.json",
+     "claim": "按分支给出的牵引/再生/净电带宽"
+    },
+    {
+     "path": "outputs/traction_attribution/droop_sweep.csv",
+     "claim": "死区 0→8 m/s：牵引 18,716→8,300、时分 412.7→478.8；打到目标需 5.5 m/s 并晚点 42 min"
+    },
+    {
+     "path": "outputs/traction_attribution/policy_sweep.csv",
+     "claim": "strict/dwell × 5 档死区：410 min 处最低 18,167 kWh；打到 10,874 需 445 min"
+    },
+    {
+     "path": "outputs/meter_scope/meter_scope.json",
+     "claim": "实测毛/反馈/净值 与模型三口径的逐项对照（+81% / +61% / +50%）"
+    },
+    {
+     "path": "outputs/section_energy/section_compare.json",
+     "claim": "1 台：逐区间实测/模型对照、级位扫描、偏差归因"
+    },
+    {
+     "path": "outputs/section_energy/逐区间电量对照.md",
+     "claim": "下坡段再生 1.1 倍、平缓段牵引 2.9 倍；级位只配平再生不改牵引"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "gradient_profile_source"
+   ],
+   "downstream": [
+    "净值",
+    "储能收益",
+    "盈亏电价",
+    "输配电价结论"
+   ]
+  },
+  {
+   "id": "energy_closure_gate",
+   "name": "能耗闭合闸门（势能下界判据）",
+   "status": "locked",
+   "summary": "对任意（质量, 累计爬升, 最高速度）算出一个与操纵无关的牵引电量下界，并据此判死「低于下界的电量读数」。已用 6 档坡度重建 × 2 条台数分支共 12 组仿真交叉验证；读数判定在重建族内不翻转（要翻转需把高程扭曲到 4 m，为读数分辨率的 16 倍）。",
+   "status_rule": "locked 的依据：判据是能量守恒的直接推论，不依赖任何标定参数；判定结果有独立数值验证，且被 tests/smoke/verify_energy_closure_audit.py 挡住。",
+   "evidence": [
+    {
+     "path": "tools/audit_energy_closure.py",
+     "claim": "下界计算、读数判定、重建族敏感性与情景包络"
+    },
+    {
+     "path": "outputs/energy_closure/closure_matrix.csv",
+     "claim": "12 组（变体 × 分支）的完整结果"
+    },
+    {
+     "path": "tests/smoke/verify_energy_closure_audit.py",
+     "claim": "下界单调性、判定稳定性、包络一致性"
+    }
+   ],
+   "assumption_ids": [
+    "gradient_profile_source",
+    "traction_efficiency"
+   ],
+   "downstream": [
+    "牵引电量口径校验",
+    "情景包络"
+   ]
+  },
+  {
+   "id": "storage_planning",
+   "name": "储能选址定容",
+   "status": "conditional",
+   "summary": "搜索与排序逻辑已修（并列决胜条件改为方案内容）。运行图已改为从逐区间实测表重建（59 重 + 64 空 / 日）。参数地图（吞吐折旧 × 往返效率，8 格 × 42 折旧档）把结论收严成**串联的两道约束**：① 固定成本——单站 290 kWh（技术表占位上限）下即使折旧为 0，盈亏电价仍 2.017 元/kWh（2.96× 现价），卡的是 capex 摊薄，参数怎么调都无效；放到 3,000 kWh 才降到 0.458（0.67×）。② 折旧——3,000 kWh 档的成立上限只有 0.100 元/kWh（网格 0.02，真值约 0.106），现折旧 0.326 高出 3.2 倍；不含 capex 的纯边际上限是 电价 ÷ (1+1/η) = 0.3230。效率这条轴几乎不动结论：290 档 η 从 0.86 拉到 0.97，盈亏电价只降 5.5%（2.765 → 2.612），8 格全部 keep_no_build。因此对外只能说「按当前造价与容量技术参数不成立」，且解锁不能只提效率——必须把吞吐折旧降到 0.10 元/kWh 量级，或单站容量放开到 MWh 级并同步降折旧。 2026-11-05 追加折旧口径反演：规划器的 capex 年化**已经**按循环寿命（2,225 次/年 → 2.70 年）到期重置电池，折合每吞吐 0.1922 元/kWh；在此基础上再叠加 0.326，合计 0.5182，是单算磨损的 2.70 倍——疑似把磨损算了两遍。四种口径下 3,000 kWh 档的盈亏电价分别是：A 现状 1.146（1.68×，不建）、B 只保留重置 0.458（0.67×，建）、C 单次投资 + 0.326 → 0.857（1.26×，不建）、D 两者都不计 0.169（0.25×）。A 与 C 互斥、必须二选一，因此储能决策从「确定不建」降级为「视口径而定」，对外只能给 0.458–1.146 元/kWh 的区间，不能给单值。 造价一维扫描（四项同比例缩放）：A 口径要降到 **9.6%** 才成立（需降 90.4%），且造价归零时也只到 0.633 元/kWh（0.93×），几乎没有余量；C 口径要降到 21.9%；B 口径现价即成立。说明造价不是主要杠杆——先定折旧口径，再谈钱。",
+   "evidence": [
+    {
+     "path": "outputs/storage_parameter_map/parameter_map.json",
+     "claim": "8 格 × 42 档参数地图：290 档折旧 0 时仍 2.96×，3,000 档成立上限 0.100 元/kWh"
+    },
+    {
+     "path": "outputs/storage_parameter_map/储能参数地图.png",
+     "claim": "成立域热力图，白线为盈亏电价 = 现价"
+    },
+    {
+     "path": "outputs/timetable_measured/plan/storage_planning_summary.json",
+     "claim": "实测密度（59 重 + 64 空）：弃能 313 GWh/年"
+    },
+    {
+     "path": "outputs/timetable_measured/capacity_scan/runs",
+     "claim": "容量 290 → 1,500 → 3,000 kWh：盈亏电价 3.54 / 1.39 / 1.15（按成本排序选中的方案，非全候选最小值）"
+    },
+    {
+     "path": "outputs/capex_decision/造价到决策.md",
+     "claim": "造价水平 100%→0%：A 门槛 9.6%、C 门槛 21.9%、B 现价即成立"
+    }
+   ],
+   "assumption_ids": [
+    "station_fixed_cost",
+    "storage_discharge_power",
+    "two_wan_ton_locomotive_count",
+    "timetable_density",
+    "storage_throughput_cost",
+    "storage_cost_accounting"
+   ],
+   "downstream": [
+    "投资建议"
+   ],
+   "status_rule": "维持 conditional 而非 open：算法本身（搜索、排序、结算、年化）已被 23 条断言锁住且有逐位复现证据，不确定的是**输入口径**（甲方 0.326 是否已含磨损），属「数值依赖一条未确认输入」；该输入一旦确认，结论立刻落定。"
+  },
+  {
+   "id": "heavy_empty_dispatch",
+   "name": "重空车协同调度优化",
+   "status": "conditional",
+   "summary": "网络优化、滚动重调度、扰动回放、随机差分等 40+ 项测试全部通过；但能耗结算以净值输入，净值未定案时收益类结论同样带条件。",
+   "evidence": [
+    {
+     "path": "tests/smoke/verify_heavy_empty_network_optimizer.py",
+     "claim": "五类调度方案的可行性与目标值"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count"
+   ],
+   "downstream": [
+    "调度方案收益排序"
+   ]
+  },
+  {
+   "id": "interface_contract",
+   "name": "平台与数据库接口契约",
+   "status": "locked",
+   "summary": "接口冻结面 1.6.0 已对齐实现与 DDL：6 类 run_type、15 个平台操作、状态机与结果投影。",
+   "evidence": [
+    {
+     "path": "database/interface_contract_freeze.json",
+     "claim": "freeze_version 1.6.0"
+    },
+    {
+     "path": "tests/smoke/verify_interface_contract_freeze.py",
+     "claim": "实现与 DDL 一致性核验"
+    }
+   ],
+   "assumption_ids": [],
+   "downstream": [
+    "前端联调"
+   ]
+  },
+  {
+   "id": "speed_profile_bound",
+   "name": "最优剖面（网格最优参考，偏差拆分的基准）",
+   "status": "conditional",
+   "summary": "**2026-11-08 降级（编组与目标双双重置）**：本文引用的实绩目标 **10,874 kWh 已作废**（那是「电表读数 ×2 × 0.86」，前提「读数只是双机之一」已被 `use_ygdn ≡ a+b+c`（1,904/1,904）推翻）；现行目标为实测毛牵引 **5,539 kWh 电网侧 / 4,764 轮周**。同时编组由 DP 写死的 2 台纠正为 1 台（见 `meter_reading_scope`），而单台 + 标准阻力下 `plan_speed_profile_dual.py` 报「图定不可满足」（对偶下界 23,524 kWh），所以本文的绝对值在当前编组上**没有对应的可行解**。保留的只有方法性结论：DP 网格与加减速上限的取法、前馈跟踪律的形式、「有计划但没执行力」的对照组设计。**升级回 locked 的条件**：先用独立数据定下阻力（见 `freight_basic_resistance`），再在单台编组上重跑出可行解。\n\n把 396 km 按 100 m × 0.25 m/s 离散做 DP 最短路，在「能耗 / 时分」上求拉格朗日最优前沿。加减速度上限**取自列车模型**（牵引 1,401 kN ÷ 有效质量 23,532 t = 0.0595 m/s²；制动取黏着允许的 1.362 m/s²），阻力按逐位置二次拟合 w0(v)=a+b·v+c·v² 随速度变化。407 min 处最优轮周牵引 **10,759 kWh**，反应式控制器 18,716、实绩 10,874。**注意这 10,759 不能直接与实绩相减**：本工具算的是纯运行时分，而图定 410 min 含 241.77 km 处 25 min 站停，同口径下实绩的纯运行只有 383.4 min。按纯运行 383.4 min 重算最优值是 **11,954 kWh**，相对实绩 **+9.9%**。所以结论是「模型仍偏高约 10%，但已远离 20%」，而不是「物理量完全没偏差」。**2026-11-06 更正**：首版给出 12,919 kWh 并把偏差拆成「策略 74% / 物理 26%」，该结论作废——首版有三处实现错误（加速度凭经验取 0.35 m/s²，比实际大 5.9 倍；加减速窗口把 a_acc/a_brk 用反，一步能从 0 冲到 60 km/h；阻力固定按 15 m/s 取值，在 70–80 km/h 段低估约 20%）。修正后最优值下降 16%，与实绩重合。本工具给的是**网格最优参考**而非严格下界（离散带约 3% 误差），可实现性由 `speed_profile_realizable` 独立验证。",
+   "status_rule": "判为 conditional（2026-11-08 由 locked 降级）：目标值 10,874 作废、编组由 2 台改为 1 台后，本文的绝对数值在当前编组上没有可行解可对照；方法性结论（DP 网格取法、前馈跟踪律、对照组设计）仍有效。",
+   "evidence": [
+    {
+     "path": "outputs/speed_profile_bound/speed_profile_bound.json",
+     "claim": "10,759 kWh / 406.9 min；前沿 6 档 λ 覆盖 324–6,665 min；记录 a_acc/a_brk 来源与牵引力"
+    },
+    {
+     "path": "outputs/speed_profile_bound/最优剖面下界与偏差拆分.md",
+     "claim": "控制律占超额 100%；三处实现错误的更正表"
+    },
+    {
+     "path": "outputs/speed_profile_bound/optimal_speed_profile.csv",
+     "claim": "逐步速度/限速/坡度/基本阻力/加速度/牵引电量，可逐行复算"
+    },
+    {
+     "path": "outputs/speed_profile_bound/最优速度剖面.png",
+     "claim": "最优剖面：上坡前抢速、陡坡掉速"
+    },
+    {
+     "path": "outputs/speed_profile_sectioned/speed_profile_sectioned.json",
+     "claim": "同口径（含停站 25 min）下的逐区间硬约束规划：16,782 kWh / 407.2 min"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "gradient_profile_source"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "净值",
+    "储能收益"
+   ]
+  },
+  {
+   "id": "speed_profile_realizable",
+   "name": "最优剖面的可实现性（前馈跟踪复核）",
+   "status": "conditional",
+   "summary": "**2026-11-08 降级（编组与目标双双重置）**：本文引用的实绩目标 **10,874 kWh 已作废**（那是「电表读数 ×2 × 0.86」，前提「读数只是双机之一」已被 `use_ygdn ≡ a+b+c`（1,904/1,904）推翻）；现行目标为实测毛牵引 **5,539 kWh 电网侧 / 4,764 轮周**。同时编组由 DP 写死的 2 台纠正为 1 台（见 `meter_reading_scope`），而单台 + 标准阻力下 `plan_speed_profile_dual.py` 报「图定不可满足」（对偶下界 23,524 kWh），所以本文的绝对值在当前编组上**没有对应的可行解**。保留的只有方法性结论：DP 网格与加减速上限的取法、前馈跟踪律的形式、「有计划但没执行力」的对照组设计。**升级回 locked 的条件**：先用独立数据定下阻力（见 `freight_basic_resistance`），再在单台编组上重跑出可行解。\n\n把 DP 最优剖面喂给完整运动学仿真器，用**前馈跟踪**跑一遍，检验规划值是不是可实现的轨迹。跟踪律按「前视点上应达到的计划速度」用运动学反算所需合力：a = (v_plan(x+Δ)² − v²)/(2Δ)，F = m_eff·a + 基本阻力 + 坡道阻力，再按牵引/制动/功率上限截断；Δ = max(v·Δt, 50 m)。结果：407.5 min / 10,408 kWh（计划 406.9 min / 10,759 kWh，差 +0.1% / −3.3%），轨迹与计划速度的平均绝对偏差 0.01 m/s；把积分步长从 10 s 缩到 1 s 结果只差 1.2%，与步长无关。关键对照：把**同一份计划**只当速度上限、内部仍走反应式逻辑，电量虽降到 8,408 kWh 但时分涨到 471 min——**有计划但没执行力**。所以省电不是靠开得慢，是靠按计划开；反应式控制器只能在「费电」与「晚点」之间二选一。同时如实记录一条未解决的合规问题：DP 只约束总时分，会把余量在区间之间搬运（前半程最多提前 44.7 min、末段再还回去），**不满足逐区间图定时刻**；若要严格逐区间，需把图定时刻作为硬约束加入规划。",
+   "status_rule": "判为 conditional（2026-11-08 由 locked 降级）：目标值 10,874 作废、编组由 2 台改为 1 台后，本文的绝对数值在当前编组上没有可行解可对照；方法性结论（DP 网格取法、前馈跟踪律、对照组设计）仍有效。",
+   "evidence": [
+    {
+     "path": "outputs/speed_profile_realizable/speed_profile_realizable.json",
+     "claim": "五条口径的牵引/时分 + 跟踪偏差 + 逐区间时刻合规"
+    },
+    {
+     "path": "outputs/speed_profile_realizable/最优剖面可实现性.md",
+     "claim": "可实现性判定、控制律对照、对上一轮「物理 26%」的更正"
+    },
+    {
+     "path": "outputs/speed_profile_realizable/轨迹对比.png",
+     "claim": "同一份计划下三种控制律的速度轨迹：反应式在长下坡反复锯齿制动"
+    },
+    {
+     "path": "outputs/speed_profile_realizable/cases.csv",
+     "claim": "五条口径汇总表"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "净值",
+    "储能收益"
+   ]
+  },
+  {
+   "id": "section_deadline_plan",
+   "name": "逐区间图定时刻规划（按点运行策略，非最优）",
+   "status": "superseded",
+   "summary": "顺序分解（逐区间求解 + 累积预算）给出的可行剖面：**16,782 kWh / 407.2 min**，比现网反应式控制器（18,716 kWh / 412.7 min）省 10.3%。**2026-11-07 降级**：这个数不是「守图定时刻」的最优值，而是「**按点运行**」这个更严策略的代价。原因在求解器口径——每区间贪心是「把当下可用时间全部花掉」（慢行省电），于是必须把前面攒下的领先量挥霍掉才能不超累计预算；翻产物可见 84.47→108.44 km 图定 22.0 min 它跑了 41.6 min（λ=0.3，纯爬行）、219.30→241.77 km 图定 25.0 min 跑了 35.6 min。领先量在站停前花光，站停后 241.77→256.57 km 的 λ 顶到上限 4000 仍晚 3.16 min。所以它既贵 24%，又**自身不可行**（2 段晚点）。「早到合法、等待免费」的正确口径下最优值是 13,538–13,559 kWh，见 `deadline_dual_bound`。",
+   "status_rule": "判为 superseded：方法（顺序分解）在「不晚点」口径下是错的——它隐含了「恰好按点到达」这个更强约束，而报告当时写的是「早到是合规的」。该工具保留作为「按点运行」策略的对照，不再用于回答「守图定要花多少钱」。",
+   "evidence": [
+    {
+     "path": "outputs/speed_profile_sectioned/speed_profile_sectioned.json",
+     "claim": "22 段逐检查点表：图定/计划/累计/晚点/λ，含 2 段不可达标注"
+    },
+    {
+     "path": "outputs/speed_profile_sectioned/逐区间硬约束规划.md",
+     "claim": "约束口径说明、「守图定」代价拆解、图定不可达段定位"
+    },
+    {
+     "path": "outputs/speed_profile_sectioned/sections.csv",
+     "claim": "逐区间结果表"
+    },
+    {
+     "path": "outputs/speed_profile_sectioned/sectioned_speed_profile.csv",
+     "claim": "3961 点速度剖面，可用于前馈跟踪复核"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "dwell_calibrated_items"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "运行图优化",
+    "净值"
+   ],
+   "successor": "deadline_dual_bound"
+  },
+  {
+   "id": "deadline_dual_bound",
+   "name": "守图定时刻的真实代价（对偶下界 + 可行解）",
+   "status": "conditional",
+   "summary": "把「每个检查点不晚于图定」当硬约束，用拉格朗日对偶给**可证下界**，再用构造法给**可行解**，两头一夹定死答案。结果：**下界 13,538 / 可行解 13,559 kWh（383.1 min，22 个检查点全部不晚点）**，对偶间隙仅 **0.15%**。同口径（含 241.77 km 强制停车、窗口末端给动能抵免）的无区间约束最优是 13,516 kWh，所以「守图定」的真实价格只有 **+43 kWh（+0.32%）**，不是上一轮算出的 +4,828 kWh（+40%）。机制：逐边时间罚取 λ(x)=Σ_{j:c_j≥x} μ_j 的**非增阶梯**——这是「时间可在区间之间搬运」的数学表达，也是顺序分解（每区间一个常数 λ）做不到的。乘子结构显示只有 2 个活跃：15.93 km 起步段（μ=74.7，19 min 跑 15.93 km 必须抢速）与窗口末端（μ=57.7，总时分）。其余 20 个检查点 μ=0，余量 +0.3～+29.0 min。**结论**：图定的区间时分普遍带恢复余量，列车按经济速度跑就自然领先；「守图定」几乎不要钱，要钱的只是起步段与总时分。 **可实现性已独立复核**（`outputs/speed_profile_dual_realizable/`）：把这条剖面喂给完整运动学仿真器的前馈跟踪器，实跑 **13,138 kWh / 382.5 min**（10 s 步长）、**13,257 kWh / 382.4 min**（1 s 步长，差 +0.9%），与规划值差 −3.1%，轨迹与计划速度的平均绝对偏差 0.026 m/s——网格值确实开得出来。按**仿真轨迹**第一次到达各站的时刻与图定到站时刻比：唯一晚点是 15.93 km 起步段 **+1.0 min**（实际 20.0 vs 图定 19.0），正是乘子最大（μ=74.7）、计划余量恰好为 0 的那一处，任何跟踪误差都会直接显形；总时分 382.5 min 仍不超图定 383.3 min，该晚点可在后续区间追回或由站停吸收。要彻底消除，只能把该处图定放宽约 1 min或提高起步段牵引能力。 **2026-11-08 补记（编组纠正后的重跑结果）**：台数由「DP 写死 2 台」纠正为数据口径的 1 台后，本工具**构造不出满足全部检查点的剖面**——对偶下界涨到 **23,524 kWh**，并在可行解阶段报「图定约束可能本身不可满足」。这不是求解器退化，而是**功率可达性**的直接体现：单台 12 轴 14,400 kW 拉 21,900 t，在模型的标准阻力下跑不到图定 383.3 min 纯运行；**而实测单台能正常跑 409 min**。这条矛盾是本轮唯一一条不依赖拟合的「阻力偏大」证据。旧的 13,538 / 13,559（383.1 min）是 2 台口径的产物，与当前编组不可混用。 **2026-11-07 补充：上一段「单台 + 标准阻力 → 图定不可满足」的判据失效。** 编组实为 1+1 两台（功率上限翻倍），不可行结论是单台配置的产物，不能作为「阻力偏大」的证据。本工具需按两台编组重跑后才能给出结论。",
+   "status_rule": "判为 conditional（2026-11-08 由 locked 降级）：本工具的 13,538 / 13,559 是 2 台口径的产物，改成 1 台后直接报「无法构造满足全部检查点的剖面」（下界 23,524 kWh）。在阻力定案之前，本工具在当前编组上给不出答案，数值不得引用；能保留的是方法本身（非增阶梯 λ、构造可行解、逐坐标二分下压）。",
+   "evidence": [
+    {
+     "path": "outputs/speed_profile_dual/speed_profile_dual.json",
+     "claim": "下界 13,538 / 可行解 13,559 / 无约束 13,516 / 价格 +43 kWh / 55 轮轨迹"
+    },
+    {
+     "path": "outputs/speed_profile_dual/守图定代价.md",
+     "claim": "对偶推导、「不晚点 vs 按点运行」的口径辨析、乘子结构、对上轮 +40% 的撤回"
+    },
+    {
+     "path": "outputs/speed_profile_dual/对偶收敛.png",
+     "claim": "下界向上收敛与两个活跃乘子"
+    },
+    {
+     "path": "outputs/speed_profile_dual/dual_speed_profile.csv",
+     "claim": "3960 点可行剖面，可逐行复算时分与能耗"
+    },
+    {
+     "path": "outputs/speed_profile_dual/cp_bounds.csv",
+     "claim": "23 个检查点的图定时刻、实际累计、余量、乘子"
+    },
+    {
+     "path": "outputs/speed_profile_dual_realizable/speed_profile_realizable.json",
+     "claim": "五条口径的牵引/时分 + 计划纸面合规 + 仿真轨迹到站合规"
+    },
+    {
+     "path": "outputs/speed_profile_dual_realizable/最优剖面可实现性.md",
+     "claim": "可实现性判定、起步段 1 min 晚点的定位、与实绩 21% 残差的归因（再生缺失）"
+    },
+    {
+     "path": "outputs/speed_profile_dual_realizable/轨迹对比.png",
+     "claim": "同一份计划下四种控制律：跟踪贴合计划，反应式在下坡锯齿制动"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "dwell_calibrated_items"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "运行图优化",
+    "储能收益"
+   ]
+  },
+  {
+   "id": "energy_residual_attribution",
+   "name": "牵引电量残差归因（放大倍数 + 杠杆反解）",
+   "status": "conditional",
+   "summary": "**2026-11-08 降级**：本文的目标值 10,874 kWh 已作废（那是「电表 ×2 × 0.86」），现行目标为实测毛牵引 6,248 kWh（轮周 5,374）。因此文中所有「比实绩高 20.8%」的差额与杠杆反解**只在错误目标上成立**，数值不可引用。保留的结论只有两条方法性的：（1）牵引是两个十万量级之差，放大倍数 6.9×，所以牵引对任何一项能量误差都极敏感；（2）再生不能解释缺口——这一条现在有更硬的证据：电表本身就是双向表（`fk_dn` 单独计量反馈），重车方向实测反馈 14,666 kWh，**是真的净发电**，因此「电表读数是毛牵引」成立，把再生计入净值不是「补上一个漏项」，而是重复计算已经计量过的量。",
+   "status_rule": "判为 conditional：方法（放大倍数、杠杆反解）有效且被实测支持，但全部数值结论建立在已作废的目标 10,874 上；在正确目标 5,374 上重跑前不得引用任何「需改 −x%」的数字。",
+   "evidence": [
+    {
+     "path": "outputs/energy_residual/energy_residual.json",
+     "claim": "逐项能量、放大倍数、五个杠杆的反解与判定、再生反证"
+    },
+    {
+     "path": "outputs/energy_residual/牵引残差归因.md",
+     "claim": "「20.8% 不是模型误差 20.8%」的论证链、杠杆排序、下一步该查高程"
+    },
+    {
+     "path": "outputs/energy_residual/能量平衡.png",
+     "claim": "输入/输出两端堆叠对比：牵引只占输入的 12.6%"
+    },
+    {
+     "path": "outputs/energy_residual/levers.csv",
+     "claim": "五个杠杆的现状/所需值/改动量/是否可信"
+    }
+   ],
+   "assumption_ids": [
+    "traction_efficiency",
+    "two_wan_ton_locomotive_count"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "净值",
+    "储能收益"
+   ]
+  },
+  {
+   "id": "section_energy_attribution",
+   "name": "逐区间电量对照与偏差归因",
+   "status": "conditional",
+   "summary": "把「模型与实测差 N 倍」这个整趟数字拆到 23 个站间区间上，用实测逐区间表（`nhtj_jkfile_station`，一行 = 一趟车的一个区间，带 `use_ygdn` / `use_fkdn` / `toltal_use_time`）与模型逐段能量并排。1,853 趟两万吨完整行程取中位后：**下坡段的再生已吻合（实测反馈 13,270 / 模型 14,324，1.1 倍），平缓段的牵引是 2.9 倍（1,874 / 5,390），全趟 3.02 倍。**由此得到两条可用的推论：① 级位 0.48 在 1 台配置下是正确的（配平值 0.458）；② 剩下的偏差不是「下坡多回收」也不是「台数不对」，而是**平缓段多牵引**。 **补一条比总量更要紧的发现：总量吻合但分布不对。** 段 1–3（宁武西→原平南，陡下坡）模型再生是实测的 1.6–2.3 倍；而段 15–17、21–22（坡度平缓）实测有 79–293 kWh 反馈、**模型为 0**。整体 1.05 倍是这两头相互抵消的结果。原因是模型在需求制动力小的段上把制动整体交给空气制动（电制动力上限高、级位 0.48 分不到小份额），而实测每个缓坡段都有回收。**这对储能布点有直接影响**：若真实再生摊在全程，候选站就不该只押在陡坡段。 **2026-11-07 更正：本条目全部倍率按「台账 = 整列」计算，已作废。** 台账实为一台机车（3 节），整列目标需 ×2。方法（用 `nhtj_jkfile_station` 逐区间并排）仍有效，但**分段倍率需按整列口径重算**，尤其「平缓段牵引 2.9 倍」这一条不再成立。",
+   "status_rule": "判为 conditional：对照表本身是实测与仿真的直接并排，可复算；但「平缓段为什么多牵引 2.9 倍」尚未定因（候选：阻力系数、控制律的定速倾向、坡度细结构），所以本条目只提供定位，不提供校准值。",
+   "evidence": [
+    {
+     "path": "outputs/section_energy/section_compare.json",
+     "claim": "23 段逐项对照（时分、速度、牵引、反馈、制动、坡道功、站停步数）"
+    },
+    {
+     "path": "outputs/section_energy/逐区间电量对照.md",
+     "claim": "对照表、两类偏差拆分、级位扫描、首段作业与第 12 段站停的口径说明"
+    },
+    {
+     "path": "outputs/section_energy/逐区间对照.png",
+     "claim": "逐段牵引与反馈的双栏柱状图"
+    },
+    {
+     "path": "tests/smoke/verify_section_energy.py",
+     "claim": "对照口径与量级断言"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "electrical_brake_level"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "储能可回收量",
+    "速度剖面规划"
+   ]
+  },
+  {
+   "id": "resistance_scale_probe",
+   "name": "阻力系数缩放的可检验性扫描",
+   "status": "superseded",
+   "summary": "牵引 3.02 倍偏差的三个物理候选里，阻力最好检验（乘性、缩放一次就能看响应）。把货车基本阻力三个系数同乘一个因子扫（×1.00 → ×0.25）：牵引 16,726 → 5,170、再生 14,324 → 19,904、时分 417.3 → 408.2 min。**×0.35 处三项同时贴近实测**（牵引 6,087 vs 轮周 6,440 → 0.95 倍；再生 18,635 vs 轮周 15,924 → 1.17 倍；时分 410.5 vs 409 → +1.5 min）。**但这不能读成「阻力只该是标准值的 35%」**：缩放阻力会同时改变速度剖面形态——阻力小，速度不易被拖慢，反应式控制器就不用频繁「掉了补、超了刹」。「缩小阻力」与「改好控制律」在一维路径上不可分辨，两者都能把牵引拉下来。牵引是三项收支的差额（`牵引 = 制动 + 阻力 + 回收 − 坡道放能`），坡道放能约 91,000、阻力约 48,000，相差 6.9 倍，**坡道功 1% 的偏差就是牵引 6.9%**，所以任何一项的百分之几都能被牵引的百分之几十吸收，拟合牵引反推不出是哪一项。",
+   "status_rule": "判为 conditional：扫描可复算、单调性可断言，但**不可用于校准**。仅当出现独立证据（功率可达性、分区段电表、厂家实测阻力曲线）时才可升级。",
+   "evidence": [
+    {
+     "path": "outputs/resistance_scale/resistance_scale.json",
+     "claim": "5 档缩放的牵引/再生/制动/时分，含 best_fit 与 caveat"
+    },
+    {
+     "path": "outputs/resistance_scale/阻力缩放扫描.md",
+     "claim": "「×0.35 最贴近但不能定案」的完整论证与功率可达性独立证据"
+    },
+    {
+     "path": "outputs/resistance_scale/resistance_scale.csv",
+     "claim": "可复算的扫描表"
+    },
+    {
+     "path": "tests/smoke/verify_resistance_scale.py",
+     "claim": "17 条断言，含单调性与「不可分辨」告诫的文本检查"
+    }
+   ],
+   "assumption_ids": [
+    "freight_basic_resistance",
+    "two_wan_ton_locomotive_count"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "储能可回收量"
+   ],
+   "superseded_reason": "本扫描的前提是「整列牵引应为 5,539 kWh（单机读数）」，该前提已被推翻（整列应为 12,456）。×0.35 命中的是错误目标。方法本身（乘性缩放看响应、单调性断言）保留，结论作废。"
+  },
+  {
+   "id": "data_inventory",
+   "name": "朔黄数据目录清点与数据源优先级",
+   "status": "locked",
+   "summary": "`shuohuang_data/` 43 个文件、1.8 GB，逐个登记格式、可解析性、主流程是否使用：**15 个此前从未被读取**，包括加密的运行图资料（口令 Seldom，42 页）、国标扫描件（155 页）、单车台账、编组模式文档、平曲线表、验证方案修订版。其中三份直接改写了结论：① 运行图 PDF 首次给出权威的区间运行时分与 14 个变电所供电范围；② 单车台账证明电表台账计的是「一台机车 3 节」；③ 验证方案修订版把「特殊路段速度曲线优化」整条移出验证范围。",
+   "status_rule": "判为 locked：清点本身是文件系统事实，可复算。**方法性教训单列**：判定编组台数时，字段个数（表数、机型代码、终端数）一律不可作为依据，必须以一手文档为准，并用能量守恒做独立校核。",
+   "evidence": [
+    {
+     "path": "outputs/data_inventory/数据清点报告.md",
+     "claim": "43 个文件清单、5 类新读内容、3 处口径冲突"
+    },
+    {
+     "path": "outputs/data_inventory/data_inventory.json",
+     "claim": "结构化清点结果与交叉核对数值"
+    },
+    {
+     "path": "data/real_shuohuang/section_run_times_2026.json",
+     "claim": "区间运行时分权威转录（PDF 第 22–23 页）"
+    },
+    {
+     "path": "tools/audit_data_inventory.py",
+     "claim": "可复算的清点与三项交叉核对"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "meter_reading_subject"
+   ],
+   "downstream": [
+    "全部能耗绝对值",
+    "储能容量",
+    "速度剖面规划"
+   ]
+  },
+  {
+   "id": "flight_strategy_frontier",
+   "name": "动能飞行参数前沿（控制律能否靠调参闭合能耗缺口）",
+   "status": "conditional",
+   "summary": "把 `BrakeStrategy` 的两个操纵旋钮扫到底，回答「牵引 1.52 倍能不能调回来」。\n\n**掉速容差（traction_droop）有用但付费**：0 → 4 m/s 时牵引 18,959 → **12,448 kWh**（实测 12,456，几乎相同），但时分 421.7 → **450.3 min，超图定 40 min**。全程单调：每加 1 m/s 掉速，省约 1,700 kWh、多花约 8 min。\n\n**惰行带（coast_band）不能放宽，反而有害**：0.02 → 2.0 m/s，制动功几乎不变（57,503 → 56,330，差 2%），但再生 **23,278 → 8,299（−64%）**、净值由 −4,318 转为 **+10,132**。机制是电制动受**每步受力上限**约束而非能量上限：放宽 band 后制动从「连续轻刹」变成「到限速才硬刹」，刹得越短越吃不下，余量全进空气制动且不可回收。\n\n**结论：能耗与时分在反应式控制律下是硬冲突，不存在两全的参数点。**司机在同一区间同时做到 12,456 kWh 与 409 min，模型在更慢的 421.7 min 下仍要 18,959 kWh——**慢却更费电，说明差的是剖面形状，不是速度高低。**\n\n**2026-11-08 后续**：本条否定的是「调两个操纵旋钮」。随后做了真正的前瞻剖面（`tools/build_flight_profile.py`），结论更进一步：**不只是调参不行，任何剖面都不行**——模型的可达域本身覆盖不到实测点，详见 `flight_profile_frontier`。",
+   "status_rule": "判为 conditional：扫描可复算、单调性可断言、两条机制都有量化证据；但「前瞻式剖面能把缺口闭合多少」尚未验证，所以本条目只否定「调参可解」，不给出可行方案。",
+   "evidence": [
+    {
+     "path": "outputs/flight_strategy/flight_strategy.json",
+     "claim": "掉速 9 档 + 惰行带 4 档的完整扫描"
+    },
+    {
+     "path": "outputs/flight_strategy/动能飞行参数扫描.md",
+     "claim": "两根旋钮的机制解释与结论"
+    },
+    {
+     "path": "outputs/flight_strategy/flight_strategy.csv",
+     "claim": "可复算的扫描表"
+    },
+    {
+     "path": "tests/smoke/verify_flight_strategy.py",
+     "claim": "12 条断言，含单调性与「band 有害」的量化判据"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "freight_basic_resistance",
+    "electrical_brake_level"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "储能可回收量",
+    "速度剖面规划"
+   ]
+  },
+  {
+   "id": "flight_profile_frontier",
+   "name": "前瞻速度剖面与能耗—时分前沿",
+   "status": "conditional",
+   "summary": "把图定逐区间时分（`section_run_times.csv` 上行 20000t，22 段 393 min / 406.5 km）算成剖面喂给控制器，回答两个问题：前瞻能不能省电、能不能对上实测。\n\n**① 能省电，但必须用时间换。** 用「惰行包络」（手柄回零、只在超限速时制动、只在下限以下才补牵引）扫出一条前沿：反应式 **18,959 kWh / 421.7 min**；目标时分 370 min → 12,163 kWh / 450.2 min；392 min → **10,340 kWh / 467.0 min**。斜率约 590 kWh/min。\n\n**② 换不到实测那一点。** 实测整列（409 min / 12,456 kWh）落在前沿的**左下方**：模型最快也只能 423.3 min（比实测慢 14.3 min），而在自己最快的点上牵引还要 17,626 kWh（比实测高 42%）。**两个维度同时越界**，因此缺口不是控制策略问题。\n\n**③ 一条反直觉但必须记下的机制。** 按坡度给「形状」（下坡调快、上坡调慢）看起来最像司机的动能飞行，实测却**越像越糟**（gain 0.35 → 29,285 kWh，gain 0.70 → 38,264 kWh）。原因在控制律：制动分支的触发条件是 `当前速度 > 目标 + coast_band`，**一个低于当前速度的目标就是一道制动指令**；把上坡目标压低，等于在进坡前先把下坡攒的动能刹掉，再牵引爬坡，把要消除的往复放大了。惰行包络反过来——它就是「放开手柄后列车本来会走出来的速度」，控制器跟它时既不用反复制动也不用反复补能。\n\n**④ 为什么牵引这么难对齐。** `牵引 = 制动 + 阻力 − 势能释放`，这条线上势能释放约 91,453 kWh，耗散约 109,078 kWh，两者之差才是 10,340–18,959 kWh 的牵引。模型与实测的总耗散只差 +5.0%，折算成牵引就是 +42%——**耗散量的百分之几等于牵引的百分之几十**，所以「用牵引反推是阻力错了还是操纵错了」在数学上就是病态的。",
+   "status_rule": "判为 conditional：前沿可复算、单调性可断言，「实测点越界」这一条不依赖任何标定；但前沿的绝对位置取决于 `electrical_level`（再生分摊）与整列目标 12,456 本身（后者是「单机台账 × 2」的等分假设，见 `meter_reading_scope`）。**用途限定：只用来说明「控制策略已排除」，不得用于论证物理参数的正确值。**",
+   "evidence": [
+    {
+     "path": "outputs/flight_profile/前瞻剖面报告.md",
+     "claim": "前沿表、闭环校正过程、势能—耗散口径与形状剖面为何有害"
+    },
+    {
+     "path": "outputs/flight_profile/能耗时分前沿.png",
+     "claim": "前沿曲线与实测点的位置（实测在左下方，越界）"
+    },
+    {
+     "path": "outputs/flight_profile/flight_profile.json",
+     "claim": "前沿 5 档 + 反应式基线 + 4 轮闭环校正的结构化结果"
+    },
+    {
+     "path": "outputs/flight_profile/flight_profile.csv",
+     "claim": "图定档剖面（406.5 km，100 m 网格，62.2 km/h）"
+    },
+    {
+     "path": "tools/build_flight_profile.py",
+     "claim": "惰行包络积分 + 二分下限 + 闭环校正 + 前沿扫描"
+    },
+    {
+     "path": "tests/smoke/verify_flight_profile.py",
+     "claim": "18 条断言，含剖面来源、求解方向、前沿单调性与越界结论"
+    }
+   ],
+   "assumption_ids": [
+    "two_wan_ton_locomotive_count",
+    "freight_basic_resistance",
+    "electrical_brake_level",
+    "meter_reading_subject"
+   ],
+   "downstream": [
+    "重车方向牵引电量",
+    "储能可回收量",
+    "速度剖面规划",
+    "验收基准"
+   ]
+  }
+ ],
+ "regime_note": "**2026-11-08 口径变更**：电表读数确认为全列汇总（`whole_train`），两万吨列车按 3 台机车建模；目标毛牵引由 12,644（电网）/ 10,874（轮周）改为实测 6,248 / 5,374。所有以 10,874 为基准的数值（`speed_profile_bound`、`speed_profile_realizable`、`section_deadline_plan`、`deadline_dual_bound`、`energy_residual_attribution`）都需要在统一台数与正确目标上重算后重新签署。"
+}

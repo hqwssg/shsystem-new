@@ -1,0 +1,12 @@
+{
+  "capacity_kwh": 20000.0,
+  "round_trip_efficiency": 0.9,
+  "depreciation_cost_per_kwh": 0.25,
+  "grid_price_per_kwh": 0.65,
+  "max_charge_power_kW": 10000.0,
+  "max_discharge_power_kW": 10000.0,
+  "data_status": "planning_virtual_preset_pending_official_storage_parameters",
+  "scenario_name": "two_storage_sections_virtual_preset",
+  "planning_assumption": true,
+  "note": "虚拟预设：两段规划储能区段 K145-K164 / K164-K200.7。容量 20 MWh、充放电功率 10 MW、往返效率 0.90。电价 0.65 元/kWh 参考华北工商业用电量级；折旧 0.25 元/kWh 为储能吞吐磨损虚拟成本。正式设备参数到位后替换。"
+}

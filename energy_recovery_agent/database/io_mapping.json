@@ -1,0 +1,114 @@
+{
+  "mapping_version": "1.12",
+  "database": "carbon_emissions",
+  "schema": "energy_recovery",
+  "table_prefix": "simulation_",
+  "lossless_rule": "Every source file is stored in simulation_dataset_file before structured projection.",
+  "input_files": [
+    {"path": "route_metadata.json", "target": "simulation_project_version", "projection": "route metadata and source_note"},
+    {"path": "stations.csv", "target": "simulation_station", "key": ["station_id"], "columns": ["station_id", "name", "position_km"]},
+    {"path": "station_resources.csv", "target": "simulation_station_resource", "key": ["station_name"], "columns": ["station_name", "track_capacity", "throat_capacity", "is_terminal"]},
+    {"path": "segments.csv", "target": "simulation_route_segment", "key": ["segment_id"], "columns": ["segment_id", "start_km", "end_km", "gradient_per_mille", "curve_radius_m", "terrain", "speed_limit_kmh"]},
+    {"path": "gradients.csv", "target": "simulation_route_segment", "mode": "raw_preserved_supporting_projection"},
+    {"path": "curves.csv", "target": "simulation_route_segment", "mode": "raw_preserved_supporting_projection"},
+    {"path": "trains.csv", "target": "simulation_train_type_parameter", "key": ["name"]},
+    {"path": "battery.json", "target": "simulation_storage_device", "mode": "combined_with_energy_transfer_zones"},
+    {"path": "storage_devices.json", "target": "simulation_storage_device", "mode": "authoritative_per_device_static_parameters_when_present"},
+    {"path": "energy_transfer_zones.csv", "target": "simulation_storage_device", "key": ["storage_section_id"]},
+    {"path": "power_arm_intervals.csv", "target": "simulation_power_arm", "key": ["section_id"]},
+    {"path": "signaling_blocks.csv", "target": "simulation_signaling_block", "key": ["block_id"], "optional_until_official_data_arrives": true},
+    {"path": "resource_config.json", "target": "simulation_station_resource", "mode": "defaults_in_extra_rules_json"},
+    {"path": "headway_constraints.csv", "target": "simulation_project_version", "mode": "raw_preserved_constraint_source"},
+    {"path": "station_operation_assignments.csv", "target": "simulation_station_resource", "mode": "extra_rules_json"},
+    {"path": "technical_operation_times.csv", "target": "simulation_station_resource", "mode": "extra_rules_json"},
+    {"path": "train_formation_modes_2025.csv", "target": "simulation_train_type_parameter", "mode": "raw_preserved_catalog"},
+    {"path": "operating_conditions.json", "target": "simulation_project_version", "mode": "raw_preserved_operating_profile"},
+    {"path": "energy_calibration_factors.json", "target": "simulation_project_version", "mode": "raw_preserved_calibration"},
+    {"path": "smart_meter_calibration_samples.csv", "target": "simulation_dataset_file", "mode": "raw_preserved_calibration_evidence"},
+    {"path": "smart_meter_representative_interval_samples.csv", "target": "simulation_dataset_file", "mode": "raw_preserved_calibration_evidence"},
+    {"path": "platform/*.xlsx", "target": "simulation_dataset_file", "mode": "lossless_timetable_input"},
+    {"path": "platform/historical_disturbance_replay*.json", "target": "simulation_dataset_file", "mode": "immutable_historical_disturbance_replay_input"},
+    {"path": "platform/joint_parameter_ranges*.json", "target": "simulation_dataset_file", "mode": "immutable_joint_parameter_interval_contract"},
+    {"path": "*.json|*.csv", "target": "simulation_dataset_file", "mode": "lossless_fallback"}
+  ],
+  "run_parameters": {
+    "target": "simulation_run_parameter.parameters_json",
+    "dispatch": {
+      "required": [],
+      "optional": ["energy_scenario", "objective_mode", "objective_priority", "search_profile", "search_method", "population_size", "generations", "seed", "heavy_count", "empty_count", "baseline_phase_s", "baseline_heavy_headway_s", "baseline_empty_headway_s", "min_depart_gap_s", "horizon_s", "execute_window_s", "settlement_step_s", "wasted_energy_penalty_per_kwh", "search_min_headway_s", "search_max_headway_s", "search_max_phase_s", "search_max_hold_s", "search_max_storage_align_shift_s", "empty_mass_tons", "disable_storage_preset_search", "disable_energy_observability"]
+    },
+    "timetable_audit": {
+      "required": ["timetable_relative_path"],
+      "optional": ["strict_visualizations"]
+    },
+    "timetable_optimization": {
+      "required": ["timetable_relative_path"],
+      "optional": ["mode", "max_shift_min", "step_min", "max_dwell_extension_min", "max_candidates", "population_size", "generations", "crossover_rate", "mutation_rate", "seed", "strict_visualizations"]
+    },
+    "rolling_rescheduling": {
+      "required": [],
+      "optional": ["population_size", "generations", "seed", "disable_recovery", "disable_safety_retry", "max_safety_retries", "manual_after_withheld", "storage_devices", "disturbance_history_relative_path"],
+      "disturbance_history_schema": {
+        "storage": "simulation_dataset_file",
+        "parameter": "disturbance_history_relative_path",
+        "schema_version": "1.3",
+        "rule": "路径必须指向冻结运行快照内的UTF-8 JSON；与storage_devices运行时参数互斥"
+      },
+      "storage_devices_schema": {
+        "type": "array",
+        "required_item_fields": ["storage_section_id", "soc_kwh"],
+        "optional_item_fields": ["available", "max_charge_power_kw", "max_discharge_power_kw"],
+        "coverage": "all_configured_storage_devices"
+      }
+    },
+    "joint_parameter_robustness": {
+      "required": ["parameter_ranges_relative_path"],
+      "optional": ["heavy_count", "empty_count", "baseline_heavy_headway_s", "baseline_empty_headway_s", "baseline_phase_s", "settlement_step_s"],
+      "claim_scope": "tested_discrete_joint_scenarios_only",
+      "rule": "区间合同必须属于冻结运行快照；输出不得表述为连续参数区间的数学证明"
+    }
+  },
+  "run_lifecycle": {
+    "task_table": "simulation_run",
+    "state_event_table": "simulation_run_state_event",
+    "creation_identity": ["project_id", "idempotency_key", "request_sha256"],
+    "worker_ownership": ["worker_id", "lease_token", "lease_expires_at", "heartbeat_at"],
+    "recovery_control": ["attempt_count", "state_version"],
+    "rule": "任务状态、状态事件和结果明细在同一事务中提交；工作进程写入必须持有未过期租约；设备静态参数从simulation_storage_device生成storage_devices.json并进入输入快照"
+  },
+  "output_files": [
+    {"path": "solver_resource_report.json", "targets": ["simulation_result_artifact"], "artifact_type": "solver_resource_audit"},
+    {"path": "summary.json", "targets": ["simulation_timetable_audit_summary", "simulation_optimization_decision", "simulation_result_kpi"], "artifact_type": "summary"},
+    {"path": "audit_summary.json", "targets": ["simulation_timetable_audit_summary", "simulation_optimization_decision"], "artifact_type": "summary"},
+    {"path": "optimizer_summary.json", "targets": ["simulation_timetable_audit_summary", "simulation_optimization_decision"], "artifact_type": "summary"},
+    {"path": "benchmark_summary.json", "targets": ["simulation_timetable_audit_summary", "simulation_optimization_decision", "simulation_rolling_control_event"], "artifact_type": "summary"},
+    {"path": "rolling_cycles.csv", "targets": ["simulation_rolling_control_event"], "artifact_type": "table"},
+    {"path": "disturbance_replay_manifest.json", "targets": ["simulation_result_artifact"], "artifact_type": "replay_provenance"},
+    {"path": "disturbance_replay_cycles.csv", "targets": ["simulation_result_artifact"], "artifact_type": "replay_cycle_result"},
+    {"path": "joint_robustness_summary.json", "targets": ["simulation_timetable_audit_summary", "simulation_optimization_decision"], "artifact_type": "joint_robustness_summary"},
+    {"path": "joint_parameter_scenarios.csv", "targets": ["simulation_result_artifact"], "artifact_type": "joint_parameter_scenario"},
+    {"path": "joint_robustness_results.csv", "targets": ["simulation_result_artifact"], "artifact_type": "joint_robustness_result"},
+    {"path": "kpi_summary.csv", "targets": ["simulation_result_kpi"], "artifact_type": "table"},
+    {"path": "ranked_candidates.csv", "targets": ["simulation_optimization_candidate", "simulation_candidate_train_adjustment"], "artifact_type": "table"},
+    {"path": "pareto_candidates.csv", "targets": ["simulation_optimization_candidate"], "artifact_type": "table"},
+    {"path": "candidate_scenario_scores.csv", "targets": ["simulation_optimization_candidate", "simulation_scenario_result"], "artifact_type": "table"},
+    {"path": "energy_timeline.csv", "targets": ["simulation_energy_time_slice"], "artifact_type": "table"},
+    {"path": "time_space_arcs.csv", "targets": ["simulation_timetable_running_arc"], "artifact_type": "table"},
+    {"path": "timetable_running_arcs.csv", "targets": ["simulation_timetable_running_arc"], "artifact_type": "table"},
+    {"path": "timetable_energy_time_slices.csv", "targets": ["simulation_energy_time_slice"], "artifact_type": "table"},
+    {"path": "scenario_summary.csv", "targets": ["simulation_scenario_result"], "artifact_type": "table"},
+    {"path": "resource_conflicts.csv", "targets": ["simulation_resource_conflict"], "artifact_type": "table"},
+    {"path": "selected_plan_scenario_diagnostics.csv", "targets": ["simulation_scenario_result"], "artifact_type": "table"},
+    {"path": "audit_issues.csv", "targets": ["simulation_audit_issue"], "artifact_type": "table"},
+    {"path": "optimization_suggestions.csv", "targets": ["simulation_optimization_suggestion"], "artifact_type": "table"},
+    {"path": "timetable_power_arm_settlement.csv", "targets": ["simulation_power_arm_settlement"], "artifact_type": "table"},
+    {"path": "optimization_attribution_summary.json", "targets": ["simulation_optimization_decision", "simulation_result_artifact"], "artifact_type": "optimization_attribution_summary"},
+    {"path": "optimization_kpi_attribution.csv", "targets": ["simulation_result_artifact"], "artifact_type": "optimization_kpi_attribution"},
+    {"path": "optimization_candidate_decisions.csv", "targets": ["simulation_result_artifact"], "artifact_type": "optimization_candidate_decision"},
+    {"path": "optimization_candidate_funnel.csv", "targets": ["simulation_result_artifact"], "artifact_type": "optimization_candidate_funnel"},
+    {"path": "optimization_bottlenecks.csv", "targets": ["simulation_result_artifact"], "artifact_type": "optimization_bottleneck"},
+    {"path": "optimization_dimension_attribution.csv", "targets": ["simulation_result_artifact"], "artifact_type": "optimization_dimension_attribution"},
+    {"path": "OPTIMIZATION_ATTRIBUTION_REPORT.md", "targets": ["simulation_result_artifact"], "artifact_type": "optimization_attribution_report"},
+    {"path": "*.json|*.csv|*.md|*.png", "targets": ["simulation_result_artifact"], "artifact_type": "lossless_fallback"}
+  ]
+}

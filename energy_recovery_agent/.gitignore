@@ -1,0 +1,47 @@
+# Python runtime caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local virtual environments
+.venv/
+venv/
+env/
+
+# Spreadsheet/editor temporary files
+~$*
+*.tmp
+*.bak
+*.inspect.ndjson
+
+# Generated smoke/intermediate outputs
+outputs/question_list_build/
+outputs/smart_meter_calibration/
+outputs/smart_meter_calibration_builder_smoke/
+outputs/smart_meter_match_analyzer_smoke/
+outputs/smart_meter_time_matching_smoke/
+outputs/timetable_energy_audit_phase_boundary_check/
+outputs/timetable_energy_audit_real_shuohuang_check/
+outputs/dispatch_direct_no_storage_smoke/
+outputs/dispatch_real_shuohuang_smoke/
+outputs/energy_calibration_alignment_smoke/
+outputs/energy_calibration_error_analyzer_smoke/
+outputs/energy_calibration_factor_builder_smoke/
+outputs/energy_calibration_pipeline_smoke/
+outputs/energy_calibration_sensitivity_smoke/
+outputs/timetable_optimizer_nsga2_smoke/
+
+# Local logs
+*.log
+
+# Historical probes and local smoke artefacts (reproducible; keep reports in archive when needed)
+outputs/_*/
+outputs/_*.py
+outputs/_*.out
+outputs/_*.err
+outputs/_*.pid
+outputs/__pycache__/
+outputs/run_manifests/
+outputs/dataset_build_isolation_smoke/
+outputs/smart_meter_representative_interval_samples.csv
+outputs/smart_meter_representative_interval_samples_summary.json

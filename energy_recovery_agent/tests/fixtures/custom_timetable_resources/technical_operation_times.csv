@@ -1,0 +1,42 @@
+﻿station_name,source_station_name,operation_location,cars,operation_type,spotting_min,loading_unloading_min,pickup_min,total_min,source_pages,confidence,note
+神池南,神池南,煤1、2,66,装车,60,240,63,363,29,high,
+宁武西,宁武西站,宁静线,66,装车,57,289,69,415,29,high,
+宁武西,宁武西站,旭阳专用线,108,装车,60,180,80,320,29,high,
+龙宫,龙宫,13道,66,装车,40,180,70,290,29,high,
+滴流磴,滴流磴,煤1、2,66,装车（卸车）,50,300,80,430,29,high,
+滴流磴,滴流磴,12、13道,33,装车（卸车）,60,240,60,720,29,medium,Page layout carries station name from previous row.
+东冶,东冶,陆港专用线,66,装车（卸车）,30,360,30,420,29,high,
+西柏坡,西柏坡站,电厂,66,卸车,65,730,77,872,29,medium,Station grouping inferred from table continuation.
+西柏坡,西柏坡站,南货场,66,卸车,105,1597,70,1772,29,medium,Station grouping inferred from table continuation.
+西柏坡,西柏坡站,东货场,33,卸车,230,654,200,1084,29,high,
+西柏坡,西柏坡站,西货场,66,卸车,65,297,108,470,29,high,
+三汲,三汲站,敬业专用线,66,卸车（装车）,80,240,60,380,30,medium,Page layout carries station name across rows.
+三汲,三汲站,5道,66,卸车,30,270,50,350,30,high,
+三汲,三汲站,7道,66,卸车,30,270,50,350,30,high,
+三汲,三汲站,货场,33,卸（煤）,90,612,60,762,30,medium,Page layout carries station name from previous rows.
+灵寿,灵寿站,货场,33,卸（铜精粉）,85,744,60,889,30,high,
+灵寿,灵寿站,货场,5-25,装（研磨球）,75,372,60,507,30,high,
+行唐,行唐站,专用线,66,卸车,90,270,90,450,30,medium,Page layout carries station name across rows.
+行唐,行唐站,货场,33,卸车,90,270,90,450,30,high,
+行唐,行唐站,货场,22,装车,90,686,90,866,30,high,
+新曲,新曲站,6道,22,装车,50,140,50,240,30,high,
+新曲,新曲站,石渣厂,32,装车,90,130,90,310,30,high,
+新曲,新曲站,站内,33,卸车,60,300,60,420,30,high,
+定州西,定州西站,电厂,66(C64)/58(C70)/54(C80)/54(KM81)/52(KM98),卸车,60,360,60,480,30,high,
+蠡县,蠡县站,货场,58(C70)/66(C64),卸车,120,1140,120,1380,30,high,
+肃宁北,肃宁北,货线,22/58(C70),卸车,120,375,180,675,30,high,
+太师庄,太师庄站,货场,66(C64)/58(C70),装卸车,50,360,50,460,30,high,
+河间,河间站,货场,66(C64),卸车,180,720,180,1080,30,high,
+沧州西,沧州西,货场,22/58(C70),卸车,80,420,60,560,30,high,
+沧州西,沧州西,电厂,54(C80),卸车,65,360,65,490,30,high,
+李天木,李天木,电厂,54(C80)/58(C70),卸车,90,378,100,568,30,high,
+李天木,李天木,电厂,108(C80)/116(C70)/58(C70),卸车,180,756,200,1136,30,high,
+黄骅南,黄骅南站,货3线,66(C64)/58(C70),装卸车,170,1740,170,2080,30,high,
+黄骅港,黄骅港港口作业区,1F、3F、6F,66(C64),卸车,35,90,42,167,30,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,1F、3F、6F,58(C70),卸车,30,90,36,156,30,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,2F、4F、5F、7F、8F、9F,54(C80),卸车,30,90,36,156,31,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,10F、11F、12F、13F,108(C80),卸车,36,90,56,182,31,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,货2线,66(C64)/58(C70),装车/卸车,70,579,80,729,31,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,1F、2F、4F,54,卸车,40,85,40,165,31,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,3F,66(C64),卸车,45,90,50,185,31,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.
+黄骅港,黄骅港港口作业区,3F,58(C70),卸车,40,85,40,165,31,,PDF uses 黄骅港站; mapped to current Shuohuang station 黄骅港港口作业区. Mapped from PDF station 黄骅港港口作业区 to current mainline terminal 黄骅港.

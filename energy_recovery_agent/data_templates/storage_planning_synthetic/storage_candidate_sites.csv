@@ -1,0 +1,5 @@
+site_code,site_name,position_km,power_arm_code,storage_section_start_km,storage_section_end_km,direction,buildable,max_connection_power_kw,max_capacity_kwh,fixed_site_cost_cny,allowed_technology_codes,data_status,source_note
+SYN-SITE-145,合成候选站K145,150,朔黄线:上行:PA-018-PA-020,145,164,both,true,12000,30000,4000000,SYN-LFP|SYN-HIGH-POWER,synthetic,仅用于验证两类技术可选和站点固定成本；供电臂编码与冻结运行视图一致
+SYN-SITE-180,合成候选站K180,180,朔黄线:上行:PA-020-PA-022,164,200.7,both,true,18000,45000,5500000,SYN-LFP,synthetic,仅用于验证第二候选位置和更高容量上限；供电臂编码与冻结运行视图一致
+SYN-SITE-330,合成不可建设热点K330,330,朔黄线:上行:PA-036-PA-038,320,340,both,false,15000,40000,3000000,SYN-LFP,synthetic,用于验证能量热点不能越过buildable门禁；供电臂编码与冻结运行视图一致
+

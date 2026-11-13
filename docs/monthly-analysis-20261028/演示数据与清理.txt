@@ -1,0 +1,26 @@
+本地演示初始化与清理
+
+脚本 scripts/energy-analysis/monthly_demo.py。使用Python3及已安装PyMySQL。凭据通过MYSQL_HOST/MYSQL_PORT/MYSQL_DATABASE/MYSQL_USER/MYSQL_PASSWORD读取；没有密码环境变量时交互输入，不写入脚本或清单。
+仅允许localhost/127.0.0.1/::1；不提供远程生产导入模式。执行前自行确认数据库并保留备份。
+
+初始化（在仓库根目录）：
+python scripts/energy-analysis/monthly_demo.py init --database carbon_emissions --user root --manifest monthly-analysis-demo-manifest.json
+
+复核：
+python scripts/energy-analysis/monthly_demo.py verify --database carbon_emissions --user root --manifest monthly-analysis-demo-manifest.json
+
+清理：
+python scripts/energy-analysis/monthly_demo.py clean --database carbon_emissions --user root --manifest monthly-analysis-demo-manifest.json
+
+同一数据库请始终保留并复用同一manifest文件。初始化幂等，已有ID碰撞或已创建行发生变化时拒绝覆盖。清单绑定MySQL实例及库名，记录每条创建记录的主键和指纹。
+清理只删清单列出的记录，逆序执行；不按公司或名字批量删除。若行被修改、模板已有核算任务、采集点已有新增月度/采集记录或另一个模板引用它，以及外键引用可能影响清单外记录时，清理会拒绝，需人工评估。
+清理可重复执行；保留清单也可以重新初始化。不要删掉清单再以同一ID重复初始化。
+
+内容
+复用已登记的肃宁、原平、机辆公司（按公司名称查询实际ID），为每家公司新增专用演示模板、核算点、物理采集范围、只读范围授权，以及两个演示部门、两个站点。
+五种能源覆盖2025、2026月度，预期357条月度结果、462条总演示记录。模板ID910028010/910029010/910030010。
+2026年11月天然气故意没有月度行；2026年9月柴油data_status=2；6月电力模拟估算；2026年5月热力原始字段为空但修正字段有值；2025年1月汽油是真实零值，用于同比零基数；12月柴油归属为空。
+偶数月多数采用原始值、奇数月采用修正值；热力采用修正值。同一电表另有重复节点引用，验证汇总不重计。
+所有演示模板/采集点均带“本地演示-月度统计20261028”标记，不改原模板、不覆盖现有月度值、不修改统计基准。
+
+当前工作区的实际清单：output/monthly-analysis-acceptance/demo-manifest.json。它只用于当前本地库，没有放进交付包，其他同事运行init会生成自己的清单。

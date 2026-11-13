@@ -1,0 +1,168 @@
+{
+  "contract_id": "storage_siting_sizing_phase_a",
+  "schema_version": "1.0",
+  "status": "implemented",
+  "encoding": "UTF-8",
+  "units": {
+    "distance": "km",
+    "power": "kW",
+    "energy": "kWh",
+    "money": "CNY",
+    "relative_time": "s"
+  },
+  "required_files": [
+    "storage_candidate_sites.csv",
+    "storage_technologies.csv",
+    "storage_site_technology_options.csv",
+    "storage_planning_scenarios.json",
+    "storage_planning_policy.json"
+  ],
+  "csv_schemas": {
+    "storage_candidate_sites.csv": [
+      "site_code",
+      "site_name",
+      "position_km",
+      "power_arm_code",
+      "storage_section_start_km",
+      "storage_section_end_km",
+      "direction",
+      "buildable",
+      "max_connection_power_kw",
+      "max_capacity_kwh",
+      "fixed_site_cost_cny",
+      "allowed_technology_codes",
+      "data_status",
+      "source_note"
+    ],
+    "storage_technologies.csv": [
+      "technology_code",
+      "technology_name",
+      "min_capacity_kwh",
+      "max_capacity_kwh",
+      "capacity_step_kwh",
+      "min_charge_power_kw",
+      "max_charge_power_kw",
+      "charge_power_step_kw",
+      "min_discharge_power_kw",
+      "max_discharge_power_kw",
+      "discharge_power_step_kw",
+      "charge_efficiency",
+      "discharge_efficiency",
+      "min_soc_ratio",
+      "max_soc_ratio",
+      "self_discharge_rate_per_hour",
+      "calendar_life_years",
+      "cycle_life",
+      "fixed_device_cost_cny",
+      "cost_per_kwh_cny",
+      "charge_power_cost_per_kw_cny",
+      "discharge_power_cost_per_kw_cny",
+      "annual_om_rate",
+      "throughput_degradation_cost_per_kwh",
+      "data_status",
+      "source_note"
+    ],
+    "storage_site_technology_options.csv": [
+      "site_code",
+      "technology_code",
+      "min_capacity_kwh",
+      "max_capacity_kwh",
+      "max_charge_power_kw",
+      "max_discharge_power_kw",
+      "max_unit_count",
+      "available",
+      "source_note"
+    ]
+  },
+  "json_contracts": {
+    "storage_planning_scenarios.json": {
+      "root_required": ["schema_version", "scenario_set_code", "scenarios"],
+      "scenario_required": [
+        "scenario_code",
+        "scenario_name",
+        "weight",
+        "core_for_feasibility",
+        "grid_price_per_kwh",
+        "demand_charge_per_kw_year",
+        "wasted_energy_penalty_per_kwh",
+        "parameter_overrides",
+        "data_status"
+      ],
+      "scenario_optional": ["timetable_relative_path", "schedule_template", "storage_outage_site_codes", "source_note"],
+      "schedule_template_required": [
+        "heavy_count",
+        "empty_count",
+        "heavy_headway_s",
+        "empty_headway_s",
+        "heavy_empty_phase_s"
+      ]
+    },
+    "storage_planning_policy.json": {
+      "required": [
+        "schema_version",
+        "policy_code",
+        "planning_horizon_years",
+        "discount_rate",
+        "analysis_days_per_year",
+        "max_site_count",
+        "total_budget_cny",
+        "allow_no_build",
+        "target_final_soc_rule",
+        "final_soc_tolerance_kwh",
+        "objective_mode",
+        "include_demand_charge",
+        "allow_timetable_coordination",
+        "coordination_shortlist_size",
+        "core_scenarios_must_all_be_feasible",
+        "risk_measure",
+        "cvar_alpha",
+        "minimum_grid_reduction_kwh",
+        "minimum_annual_saving_cny",
+        "solver_profile",
+        "max_wall_clock_s",
+        "seed",
+        "data_status"
+      ],
+      "optional": ["source_note"]
+    }
+  },
+  "enums": {
+    "data_status": ["official", "derived_from_official", "planning_placeholder", "synthetic"],
+    "direction": ["forward", "reverse", "both"],
+    "target_final_soc_rule": ["cyclic", "not_below_initial", "priced_deviation"],
+    "objective_mode": ["annualized_cost", "energy_first", "balanced"],
+    "risk_measure": ["expected", "worst_case", "cvar"],
+    "solver_profile": ["quick", "standard", "fine"],
+    "parameter_override": [
+      "heavy_mass_factor",
+      "empty_mass_factor",
+      "traction_power_factor",
+      "brake_power_factor",
+      "davis_resistance_factor",
+      "storage_efficiency_factor",
+      "power_arm_capacity_factor"
+      ,"storage_power_factor"
+    ]
+  },
+  "cross_file_rules": [
+    "site_code and technology_code are unique inside their master files",
+    "every option references an existing site and technology",
+    "every buildable site has at least one available allowed technology option",
+    "when a power-arm catalog is supplied, every site matches an existing interval by code, kilometer range and direction",
+    "site and technology capacity domains have a non-empty intersection",
+    "site-specific charge and discharge limits do not exceed site connection power",
+    "scenario probability weights sum to one and at least one scenario is core",
+    "each scenario provides exactly one of timetable_relative_path and schedule_template",
+    "max_site_count does not exceed the number of buildable sites",
+    "timetable coordination shortlist is positive only when coordination is enabled"
+  ],
+  "fingerprint": {
+    "algorithm": "SHA-256",
+    "canonicalization": "UTF-8 JSON, sorted object keys, compact separators, entities sorted by business key, local source path excluded",
+    "includes": ["sites", "technologies", "site-technology options", "scenarios", "policy"]
+  },
+  "examples": {
+    "fillable_template": "data_templates/storage_planning_template",
+    "synthetic_test_data": "data_templates/storage_planning_synthetic"
+  }
+}

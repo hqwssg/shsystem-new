@@ -1,0 +1,2181 @@
+[
+  {
+    "package": "carbon-accounting-period-validation-statistics-20261112-a51f29c",
+    "filesRead": 8,
+    "checksumsVerified": 7,
+    "files": [
+      {
+        "path": "AI合并提示词.md",
+        "bytes": 2875,
+        "sha256": "70fb6b1defcc112f2d3b7bf5247eb1b7d66d5c51d18c28ca658647d3c68871eb",
+        "lines": 35
+      },
+      {
+        "path": "patches/01-non-cumulative-billing-period-adjustment.patch",
+        "bytes": 14395,
+        "sha256": "2324f8d7e206a9b96aa601fe04a2313bfa1402b925e1c6fe03a9a9a8b87d5462",
+        "lines": 229
+      },
+      {
+        "path": "patches/02-manual-reading-nonnegative-validation.patch",
+        "bytes": 1515,
+        "sha256": "c90a768cfc935c7fb706da857ac3771147877b7ea719fe0e23b133c607b87679",
+        "lines": 21
+      },
+      {
+        "path": "patches/03-business-emission-statistics-factor-resolution.patch",
+        "bytes": 9537,
+        "sha256": "8474a7cb325ed18eea1bc272c0524ba009db9999a3d55abeaa8adb55f47cabb6",
+        "lines": 156
+      },
+      {
+        "path": "patches/04-collection-point-delete-conflict-message.patch",
+        "bytes": 2038,
+        "sha256": "29d6d4a2cf385ab6eb8d2137f4c6355863cda2ae2ac0f13403a1c9d7d462647e",
+        "lines": 44
+      },
+      {
+        "path": "patches/05-carbon-accounting-product-tests-recommended.patch",
+        "bytes": 21046,
+        "sha256": "3d69822fb3d2e254fd548d3c52e64b7ca6c06e0754163c9d0cc865bdb76c7e8e",
+        "lines": 368
+      },
+      {
+        "path": "README.md",
+        "bytes": 4381,
+        "sha256": "a7affe71afaa19fcb4e4821e841e2e58b75d278c1b28fcd5868288271edfc7f3",
+        "lines": 41
+      },
+      {
+        "path": "SHA256SUMS.txt",
+        "bytes": 789,
+        "sha256": "1ab20ae375f131ca53350ccbd1a714055560948a49827a9603d4285c365c1f3d",
+        "lines": 7
+      }
+    ]
+  },
+  {
+    "package": "Vue3版本统一升级补丁_20261113",
+    "filesRead": 220,
+    "checksumsVerified": 218,
+    "files": [
+      {
+        "path": "changed-files/docs/vue3-upgrade/README.txt",
+        "bytes": 5410,
+        "sha256": "5d8c7213c12c6c8ed2b68e821ed9f0d1806d6a3bab11cb656360a5e89038b339",
+        "lines": 82
+      },
+      {
+        "path": "changed-files/docs/vue3-upgrade/VALIDATION.txt",
+        "bytes": 3704,
+        "sha256": "2309b124e085c517c831407b37c4038ed6e49b801265d1bd7d9621bcfcbe78bb",
+        "lines": 43
+      },
+      {
+        "path": "changed-files/ruoyi-ui/.gitignore",
+        "bytes": 260,
+        "sha256": "80f261363cb94a71c1916b2768b3c3847876af4f491c6dc8399b85db34c5789a"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/index.html",
+        "bytes": 5311,
+        "sha256": "2ddd6fc07e2cf4f40689c1f553fbc781e1c7e1223cc9ce6026ff664a2385b192"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/package-lock.json",
+        "bytes": 123761,
+        "sha256": "8e87261883e71f4f04d5ccb588c477e40ab205a223dc1174a6593e6a6e6699d2",
+        "lines": 3442
+      },
+      {
+        "path": "changed-files/ruoyi-ui/package.json",
+        "bytes": 1521,
+        "sha256": "744b30dbc09e4eedb2d459085dc4b9e1fc26425e7ab8a5453dae5daf5cd265e8",
+        "lines": 67
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/api/carbon.js",
+        "bytes": 12712,
+        "sha256": "ec61ba1d028cc783645eda3023fd8e625a53eed0a928f3063fa9e5fe7ef1832c",
+        "lines": 339
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/App.vue",
+        "bytes": 493,
+        "sha256": "8d3947a76cff7a266ab1643d14a339eac26db43920492036bbbf4bba3f580fb8",
+        "lines": 24
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/icons/index.js",
+        "bytes": 626,
+        "sha256": "1097226141afec37f6d2d66c80cba0aa08fcecae6031fee1f966f73880b6a7e6",
+        "lines": 9
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/element-plus.scss",
+        "bytes": 1463,
+        "sha256": "67a134f0e5c62739c9795c14e6b6561022fa27b0fe8c7f8fa63daa8bb474b8e9"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/element-variables.scss",
+        "bytes": 691,
+        "sha256": "cee19357397098043525c6f3687c680b7c8d0f23b15d0fc93a2fa34072eebe1f"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/index.scss",
+        "bytes": 2758,
+        "sha256": "8f84f25f2b766dc50f91dcbf5e911a5e32256bd9e09fdf4bcdaaf04107cafe03"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/sidebar.scss",
+        "bytes": 7064,
+        "sha256": "a3a9f13d9373e8e4362d76a2d77e5e6f79a52cbb5fc33bff99271617d11411f5"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/transition.scss",
+        "bytes": 801,
+        "sha256": "947f215e38e2d1ec36fa71270150ff16c0c7962a11b782ffdf4da077f6ea0f40"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/variables.module.scss",
+        "bytes": 595,
+        "sha256": "25494489cabc3a48afc0a9360a96f8f45fbc9865e3661f3655536cd25cc280da"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/assets/styles/variables.scss",
+        "bytes": 562,
+        "sha256": "91cc6ca059dca30f6ec6abe1fcb27f513a0d21d647ade3e8671833d33e035461"
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/CountTo/index.vue",
+        "bytes": 1051,
+        "sha256": "6af716f1e22f2a95ed95d50a8b8328301edf9454d5637c3c466fb7da37fd3c49",
+        "lines": 10
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/day.vue",
+        "bytes": 4020,
+        "sha256": "9745875d3e1a7e0f72c97dc016f92b8018a10636e6c2bdf7accc70a623b32dc4",
+        "lines": 161
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/hour.vue",
+        "bytes": 3093,
+        "sha256": "aa15047f5056199786faa0f1dd040a6de959e4dfd110e177ea66e13461b8c3d0",
+        "lines": 120
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/min.vue",
+        "bytes": 2961,
+        "sha256": "408f4fb624fc1f34f1f32e4a86c3b4d7c36c774c7585c6c6c13f4149f19d5c25",
+        "lines": 116
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/month.vue",
+        "bytes": 3007,
+        "sha256": "16196a8c3b189976e142f6ff5e71fed782be0ad516e31baefa4687bc2d39a61d",
+        "lines": 114
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/second.vue",
+        "bytes": 2999,
+        "sha256": "fb6bd2ec2251c6cc4388e16d7c064f0cccf4158605f546ee609a635d9d9e75f7",
+        "lines": 117
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/week.vue",
+        "bytes": 4800,
+        "sha256": "869fff492195bb56d72cc58828399ea01c9be5db0d58461363a1cee41c61dcd7",
+        "lines": 202
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Crontab/year.vue",
+        "bytes": 3351,
+        "sha256": "19712d3040b9c78f19701866628482e94abb189f608cd760ffe5f027d918d99d",
+        "lines": 131
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/DictData/index.js",
+        "bytes": 1189,
+        "sha256": "9c9160d1bd0dc1d0bfd6aea683683e6ebc022d4f3cbea8f4241dc9bee4a77610",
+        "lines": 48
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/DictTag/index.vue",
+        "bytes": 2115,
+        "sha256": "baa64998bbd410aae0a5424663bea86859dadf3226543fd31158a8e17bfa00b2",
+        "lines": 76
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Editor/index.vue",
+        "bytes": 9714,
+        "sha256": "8ad8ab77fb3ee56b1abfc30d3aefd2a371ee094753032bc55995caf81569ed63",
+        "lines": 298
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/ExcelImportDialog/index.vue",
+        "bytes": 3967,
+        "sha256": "69eaaa2ec4ecd5a9482c762525d45ff14c9acee1660c5016eee62c58c5d8394b",
+        "lines": 126
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/FileUpload/index.vue",
+        "bytes": 7794,
+        "sha256": "ea6bd6deff616bf85e4f5bb0ca7ab40274b2ae643a1c18b4413e5618d21f29ae",
+        "lines": 261
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/HeaderSearch/index.vue",
+        "bytes": 9967,
+        "sha256": "c5e6304329bcea505b9026035dcd3fe33b070a8b2d6b501664cf9a62ad51ccaf",
+        "lines": 374
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/IconSelect/index.vue",
+        "bytes": 2693,
+        "sha256": "2b9da117cb9f07785bab61b44187d48acaf985463e708a64f6920a598ad491c3",
+        "lines": 104
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/IconSelect/requireIcons.js",
+        "bytes": 156,
+        "sha256": "9e54bd50898826295c7d66ac5adbe81932e175d27a2cf0808e655b4ff45fc627",
+        "lines": 2
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/ImagePreview/index.vue",
+        "bytes": 1653,
+        "sha256": "599b96fbb71e381109dca7d3390670207b6ba01c91f60ad9d624f3acccf8e205",
+        "lines": 82
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/ImageUpload/index.vue",
+        "bytes": 7417,
+        "sha256": "d93ad7b9374de6910b14fde40422be6ea94fbd3255eda84cc4afbe5601faf550",
+        "lines": 261
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Pagination/index.vue",
+        "bytes": 2281,
+        "sha256": "7868faed3fb85d9b1203809005ee6dc9348bf47d819b3c5072e7124f3a4bea78",
+        "lines": 113
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/RightToolbar/index.vue",
+        "bytes": 8335,
+        "sha256": "b21f772111049997751fddd419674a2a9e818030b387ef6a95f3a804f13a576f",
+        "lines": 253
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/Screenfull/index.vue",
+        "bytes": 1090,
+        "sha256": "5cbf89e9cc0f76c29e8e8ba610d70472850c410997bdb0f5d3831de82d84cebe",
+        "lines": 57
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/SizeSelect/index.vue",
+        "bytes": 1336,
+        "sha256": "8eb39b5434bdac1946d6dfb5ca6285fe1168adcdffcb97532cdc20ea31638fd2",
+        "lines": 54
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/SvgIcon/index.vue",
+        "bytes": 1345,
+        "sha256": "fc66cc9c4fe56d09d5a1b9fb115d1efea7fc4c43f8565fb06efbc0aafdc0943b",
+        "lines": 62
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/ThemePicker/index.vue",
+        "bytes": 721,
+        "sha256": "3e7743e7cc17f400d520203f020b552173c64e7d505513eb859843d192766cce",
+        "lines": 13
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/TreePanel/index.vue",
+        "bytes": 17883,
+        "sha256": "6bb972dc59514508bf5a7b80d456c68cddd64ab94d6e2cadc0d3c1761d02f794",
+        "lines": 709
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/components/TreeSelect/index.vue",
+        "bytes": 829,
+        "sha256": "c610957278f64a54d71aa155f504af62bf986eabe9a5a89baaec0ff7a15f91d1",
+        "lines": 14
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/directive/index.js",
+        "bytes": 304,
+        "sha256": "3639135bfbaeef745528233e494bfc99333f37d9f2faf853204a672980a0b19c",
+        "lines": 11
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/directive/module/clipboard.js",
+        "bytes": 1534,
+        "sha256": "3d83d12e54cbe97b286defcaf186d873db8324681af6f818fa58ed9c823ca1a6",
+        "lines": 54
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/directive/permission/hasPermi.js",
+        "bytes": 633,
+        "sha256": "84ec4fa73fb9fd55df43d1c9670b8372cba16f4d4f02b466b56ef5b1efd6e476",
+        "lines": 24
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/directive/permission/hasRole.js",
+        "bytes": 589,
+        "sha256": "c56740651b119963b343fd3282fc25b7225624c275a5841e414e590319fecbb4",
+        "lines": 24
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/AppMain.vue",
+        "bytes": 3436,
+        "sha256": "7a27fc0b36db9c79d2f7c01c954a9b3e1624931777938f9b3bda6ef1008ffb3c",
+        "lines": 147
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/HeaderNotice/index.vue",
+        "bytes": 7849,
+        "sha256": "05b10782587bb27fc72f0098405196a1ab14c8dc37c87efd8c665c6c8cd5a28a",
+        "lines": 231
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/IframeToggle/index.vue",
+        "bytes": 798,
+        "sha256": "08994612cda5bdc6688f1659fbfae1fe8cb26b27fca4ce82f6ffee29b0aa92ee",
+        "lines": 33
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/Navbar.vue",
+        "bytes": 3202,
+        "sha256": "f0b6958fa66da6a54a44f12085c199381b2f36fa5dfc5615ec4b0a8c00f80d4b",
+        "lines": 141
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/Settings/index.vue",
+        "bytes": 12633,
+        "sha256": "d414cd2ed7749712e762bfbb16ef60e541ab65ad66d9a0f5279bf65ed3722f78",
+        "lines": 430
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/Sidebar/index.vue",
+        "bytes": 2140,
+        "sha256": "e0f0e18fd02f358296c0273399da618835a15bf43642ea48d4b0782f2137a41b",
+        "lines": 57
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/Sidebar/Item.vue",
+        "bytes": 303,
+        "sha256": "4e1362479cd27212d139a15472c5071c095bdbdf47674a2fc2eeb37342ff52cc",
+        "lines": 7
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/Sidebar/Logo.vue",
+        "bytes": 2482,
+        "sha256": "aaf953b298fefc26afc2fdae482166d39b390a397c9b1d92379ff0bfc425ad63",
+        "lines": 95
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/Sidebar/SidebarItem.vue",
+        "bytes": 2876,
+        "sha256": "fd106f6ad09bc0c036345e59e5c58d775c28260b61ee56234187eaacbbcf40d9",
+        "lines": 99
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/TagsView/index.vue",
+        "bytes": 22987,
+        "sha256": "20abd5ed3d5f99871b1413379193e96a2fdda0b663ad6fb550253d94f3f2bed1",
+        "lines": 760
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/TagsView/ScrollPane.vue",
+        "bytes": 4598,
+        "sha256": "b272e04d389088a91ddf76e3a2fa86306ff90909ef2caa9248308bbd5b4fe742",
+        "lines": 146
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/TopBar/index.vue",
+        "bytes": 2738,
+        "sha256": "5ef082f4d84f3254458a24c0bb0b8528d60cc7c5f323ae0adf4a64d4700683df",
+        "lines": 98
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/components/TopNav/index.vue",
+        "bytes": 5925,
+        "sha256": "13ad99c4a055eecccccac8f6050dadb061832d3d044804bfca4e9ffd20cba800",
+        "lines": 193
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/index.vue",
+        "bytes": 2948,
+        "sha256": "a3d417679bae05d3874e73585a8eff8fd9d84c050767c8d8a352ae2d1efe26e8",
+        "lines": 116
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/layout/mixin/ResizeHandler.js",
+        "bytes": 1280,
+        "sha256": "3cb7249854fd805e3768e111a6a68bc71a42e978721766572dee8bd824f2c79a",
+        "lines": 45
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/main.js",
+        "bytes": 3084,
+        "sha256": "044471ef1dad48c6af89ab8d89ba769eb9984cfbafc9dc517cfa60dd143ebdcd",
+        "lines": 87
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/permission.js",
+        "bytes": 3123,
+        "sha256": "fbe5495bae5506a1922d66539151711282bcf4498cf79e7c0a2dede3ef4eea97",
+        "lines": 103
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/plugins/download.js",
+        "bytes": 1446,
+        "sha256": "0c578d20240d471aecf3a5d2d825580849693ffa041f66ac1f7590893fdd0df1",
+        "lines": 45
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/plugins/index.js",
+        "bytes": 539,
+        "sha256": "9e5923de4f12cb9b42f260580f5936daabbeefff980ca4ee069f6ba7b0026300",
+        "lines": 20
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/plugins/modal.js",
+        "bytes": 1944,
+        "sha256": "611ae86fe59b5868b1a2abc6bd351e2b52d3d03a3c5e0579244cbad5f89c6a2f",
+        "lines": 82
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/plugins/tab.js",
+        "bytes": 2394,
+        "sha256": "a41b810e766426fcedea8d9963687b94b56b0f39fc40f37bd556589d768484c0",
+        "lines": 75
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/router/index.js",
+        "bytes": 12674,
+        "sha256": "534d6431c8651e4814de070f9916cfe9fa39a5a3a1c036e2fce718a7eef97fc4",
+        "lines": 347
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/settings.js",
+        "bytes": 993,
+        "sha256": "889077f1bd38a4913c4b71f8655db548827a470eb216c2776bcf22719bf9bb46",
+        "lines": 66
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/store/index.js",
+        "bytes": 521,
+        "sha256": "c146553d06ef71932963ef1f1e14c1f371af555c93f226c26b563912dbce1495",
+        "lines": 25
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/store/modules/app.js",
+        "bytes": 1614,
+        "sha256": "4b51061b8bee5c30c789ce3de1e38303028d33a59351dea3b847412bf312ef76",
+        "lines": 66
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/store/modules/permission.js",
+        "bytes": 3927,
+        "sha256": "197dbf212f243f20ce35c9e3f5b7fe8b83f823cff359ec31c7d29cf5cdfe1d04",
+        "lines": 118
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/store/modules/user.js",
+        "bytes": 4557,
+        "sha256": "74887c9c56990ebefa2e31f92d63217945965a9814158e0b82ed8afeabbb1422",
+        "lines": 147
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/carbonAccess.js",
+        "bytes": 9058,
+        "sha256": "a89732c0d8c9cab6797b616d8772a7fcf3f0017b0aade690de20ce98f3f14f3c",
+        "lines": 258
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/dict/Dict.js",
+        "bytes": 2315,
+        "sha256": "aef76d9e203d8815785df1dd0499da37479b904c1ed54658d69b9429fd99da41",
+        "lines": 81
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/dict/index.js",
+        "bytes": 961,
+        "sha256": "e96aa2cac69ddfa9460e7b245e397b389b61f3f317058a7edad20660127ca61a",
+        "lines": 33
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/generator/config.js",
+        "bytes": 10168,
+        "sha256": "26a2b1cb31a216bb089c8c20882ef0b1ee0c5de4be44a4596318dd7531325646",
+        "lines": 438
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/generator/html.js",
+        "bytes": 15320,
+        "sha256": "5d1a1cc4ecf34e266d554a3ab5a8493da3a0afdbc2fe4ccb823f49f2a7b906a2",
+        "lines": 359
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/generator/js.js",
+        "bytes": 6677,
+        "sha256": "d9d5516809b09cdfdfb23fa0e066f0bf1b5b15338810a5f3c2c51b540b7bd4ef",
+        "lines": 237
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/generator/render.js",
+        "bytes": 1716,
+        "sha256": "2f655e89e49979ba8d173e7eae513929f0b9ae7a26c0be5a7b2448372c3382d7",
+        "lines": 23
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/icons.js",
+        "bytes": 1248,
+        "sha256": "374123073ff44f6c919020faa243d37e2835f4e1461abe930a1c0dcea038ab6f",
+        "lines": 7
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/request.js",
+        "bytes": 6373,
+        "sha256": "1fe9e65396def8b3133a30a25d0da74a301bc778ed6377994d6db5def178019e",
+        "lines": 161
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/routePath.js",
+        "bytes": 322,
+        "sha256": "a58c6662113b62c8ad8e029295b6b466d2d13ff6f1280dd30fc908ddfb1884f5",
+        "lines": 10
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/utils/theme.js",
+        "bytes": 556,
+        "sha256": "13b73d52134304802c8614ab106ea9e23b6d5eea487bbccea8bb7d00023b7983",
+        "lines": 9
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/data-entry.vue",
+        "bytes": 65353,
+        "sha256": "0279b0e1741a676182e735e5a7f4d2c3c610cb46f23be7f564a46f1a01dea764",
+        "lines": 1666
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energy/create.vue",
+        "bytes": 21830,
+        "sha256": "06c20d59229151bdd7be2ce9586c020490962b17690c2e92045ccd7ce6d8d0e4",
+        "lines": 481
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energy/index.vue",
+        "bytes": 6061,
+        "sha256": "0c899c94b88b078cfee0fcc2178fe9bd632aab8514f6e648292f68e45f5a1430",
+        "lines": 155
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energy/run.vue",
+        "bytes": 23320,
+        "sha256": "33474d79dcf739e995f253e6898582d415bc9d139081960ef75e3691c048a837",
+        "lines": 640
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energy/StoragePlanningResults.vue",
+        "bytes": 7532,
+        "sha256": "6b240cf62473e257892803499ddd4cb14ed70dd749c9b479aab09ace0b236a32",
+        "lines": 85
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energy/versionEdit.vue",
+        "bytes": 20011,
+        "sha256": "919e8bd9f5de48a594b7d2380569d11bf51837d9fe190f23d20cdbdbb4fef470",
+        "lines": 569
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energy/versions.vue",
+        "bytes": 15087,
+        "sha256": "fe75792727f1eaf59e9002d1d27e750cbd155cb8532727c881bb80234942977e",
+        "lines": 378
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/energyAnalysis.vue",
+        "bytes": 30953,
+        "sha256": "748f553aa548bb222cbf153b8ae3b85460cd6caf8933d47c0be1e70d883f7634",
+        "lines": 441
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/index.vue",
+        "bytes": 3860,
+        "sha256": "d48e1291a02aef89b3ac75aae4c10771e10047f02386fcfd422dc4b17d920288",
+        "lines": 168
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/model.vue",
+        "bytes": 2900,
+        "sha256": "b9af76ccc4597c230c80e6ea2f8d4cd25b131fb6f15352fa9034e7f6adeecca5",
+        "lines": 109
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/params.vue",
+        "bytes": 2790,
+        "sha256": "537e0a67f8c60eab23e243fd2c0fc98a8cfd8fc687d00d8a83b44ea2a43a1f19",
+        "lines": 105
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/prediction.vue",
+        "bytes": 2076,
+        "sha256": "ae029321e23c7754f62a9a78e7cf7688bd914bac6ae446e7eb22b58b35ce9b2c",
+        "lines": 63
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/create.vue",
+        "bytes": 11444,
+        "sha256": "ceb77a641ab1303b6d275243b9202350388c8a8560a7490eb12915cb1a07be3e",
+        "lines": 200
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/index.vue",
+        "bytes": 3374,
+        "sha256": "b9b3a8c7408781c8c18b26e277bb15ab8a523eba744b4202acbd397cdfc66eff",
+        "lines": 83
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/query.vue",
+        "bytes": 14567,
+        "sha256": "83b440aead4b3988eb3a70900a8217d447748e463b0c1639a21b4d999e6e2ea8",
+        "lines": 478
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/steps/ActivityStep.vue",
+        "bytes": 14030,
+        "sha256": "284f2259f1f9999bc90cdb43f0d9f332c4275ea1e205cba591c83bd26594062d",
+        "lines": 302
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/steps/AssetsStep.vue",
+        "bytes": 18465,
+        "sha256": "c74715516f52c2ea5c60760503600b8a35e2ea1b45953363f7a6d7184bbd745c",
+        "lines": 471
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/steps/BoundaryStep.vue",
+        "bytes": 9255,
+        "sha256": "b87a436ead698ce95fb5f69a1c90ca73c57c112ac9a8075576dda13a387bf987",
+        "lines": 229
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/steps/ExcelImportBox.vue",
+        "bytes": 3954,
+        "sha256": "989fd2459e79bc7c5962e1ee616e4159c29c4c4f4c38fc6ab716b62d13b026ce",
+        "lines": 101
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/steps/ReviewStep.vue",
+        "bytes": 22458,
+        "sha256": "fcca63caa7c27478b9e696b668f6a0628976b86dd7cb3a801b90a5376671d371",
+        "lines": 446
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report/SubjectConfiguration.vue",
+        "bytes": 3605,
+        "sha256": "31013fbbdc53403b0c5136492a9f5da17dff8e984108c705b6dc4d00a955e077",
+        "lines": 68
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/report.vue",
+        "bytes": 14435,
+        "sha256": "eb2aea88d945949d263f9bf72578151e2c74dd3ef9a6df972a72f9e2b5b83420",
+        "lines": 480
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/scopes.vue",
+        "bytes": 10919,
+        "sha256": "146a6b357959e3673bc456abad19eb843bbb8693e7bf887d331ea62e851337ea",
+        "lines": 115
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/screen.vue",
+        "bytes": 1034,
+        "sha256": "14b3928596e1bbeb3318ddddd9693ecd846da2958dd860a07ae0521b3f038062",
+        "lines": 49
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/singleTrain/create.vue",
+        "bytes": 6841,
+        "sha256": "115342b536373b05587eb78ad275c93335a538a6a4cb69b2d81680add6ea4d10",
+        "lines": 43
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/singleTrain/index.vue",
+        "bytes": 2141,
+        "sha256": "375800f6bbbf2eb25de616655b8d2dc404d9fe7e5436537241f7b4803d5515b2",
+        "lines": 27
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/singleTrain/run.vue",
+        "bytes": 13168,
+        "sha256": "da021864694b4634b3e118c284974ca12c364e478862a04cec5bdcc591d0cb2e",
+        "lines": 84
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/singleTrain/VersionMaintenance.vue",
+        "bytes": 14214,
+        "sha256": "c721b8bb5de69b60826acee2a0a88f1cf2e5c5ec0ed5ed82fa571eb8fdf8f664",
+        "lines": 100
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/singleTrain/versions.vue",
+        "bytes": 582,
+        "sha256": "eba87db1ecded06cdee55da214ea1c6fd79bb30947cd8f9485a6c8659b73ae51",
+        "lines": 13
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/statistics.vue",
+        "bytes": 25995,
+        "sha256": "e742dff02f9c8fa9fa0a8bbcf51b5801041f186e1538e74458324f88b9eddcb7",
+        "lines": 615
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/carbon/system.vue",
+        "bytes": 12843,
+        "sha256": "5b41f8d2958dca558fe77e3031446875e517c4ea3e103bce79e895aed083c9fd",
+        "lines": 555
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/dashboard/BarChart.vue",
+        "bytes": 2258,
+        "sha256": "c504e597e10a117bf9d8da04927d9dc027a4e8cece0df0933fb856b4f3455531",
+        "lines": 102
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/dashboard/LineChart.vue",
+        "bytes": 2845,
+        "sha256": "7ad5f2b659948790b8ad33c2f72cbddf6ec827c3edfde2078e4566249d709eb9",
+        "lines": 135
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/dashboard/mixins/resize.js",
+        "bytes": 1474,
+        "sha256": "4207b30ff977daaa4701946e69c4ae239fa80f9090628013a0aec1585c2cc66c",
+        "lines": 56
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/dashboard/PanelGroup.vue",
+        "bytes": 4436,
+        "sha256": "e00b1bd4e3eec0176cea637fdb7a8920b3c45e68e4dd16baf060271968163dd6",
+        "lines": 181
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/dashboard/PieChart.vue",
+        "bytes": 1762,
+        "sha256": "86b2b5fc7455f84b86c277860854303c0baf2def5defda06a993c43907ddd2a6",
+        "lines": 79
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/dashboard/RaddarChart.vue",
+        "bytes": 2900,
+        "sha256": "08de23755dae38311e06df5928c6a5c8d8c236efd0855ab1a77d5f9dcc2671d7",
+        "lines": 116
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/lock.vue",
+        "bytes": 9113,
+        "sha256": "9d7bb49fbdf14d0e5a415cdd6d9879dda0733139a275afc4586ccbef646a78d1",
+        "lines": 375
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/login.vue",
+        "bytes": 7133,
+        "sha256": "5eacb557d5fb3c0c2488e200132e5e0a5dbbc68fc200a3c88303c73f3d0f8499",
+        "lines": 241
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/monitor/job/detail.vue",
+        "bytes": 9294,
+        "sha256": "4ad1eafc2349772f1be707b60da124b40589dccf6b0406825ab198fa5704bef2",
+        "lines": 197
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/monitor/job/index.vue",
+        "bytes": 16679,
+        "sha256": "d3504704f02e8d7576d79cf30385fdb560d1adce5b1eb8adb0e414014609eab3",
+        "lines": 471
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/monitor/job/log.vue",
+        "bytes": 8558,
+        "sha256": "66540fd4d24b127a075bf42676dc10d906dcd806e9b9f1f60541305ed96a6af3",
+        "lines": 265
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/monitor/online/index.vue",
+        "bytes": 3764,
+        "sha256": "84bb87827398bbdc0b8512b75fc9638c72ca33cf90e2807688bf4d0949f1e85b",
+        "lines": 118
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/register.vue",
+        "bytes": 8214,
+        "sha256": "e7c3ac4ed6d3681c182693fbdda1fa45a089d772e26fea1c0a89a285d02a8935",
+        "lines": 274
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/config/index.vue",
+        "bytes": 11310,
+        "sha256": "6a05f88ac7dfde7867d982999c8360a66e1311407a14d1f24b335a556caa5d36",
+        "lines": 343
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/dept/index.vue",
+        "bytes": 13059,
+        "sha256": "714ec7e9dcc6eacf351eb99eb9003d4e9f8207d3f32cf56e3309d3d9ec3330d7",
+        "lines": 393
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/dict/data.vue",
+        "bytes": 13352,
+        "sha256": "6a77818be8827af40a627829909e991e1142a2e1f365185bd10f76d951401980",
+        "lines": 402
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/dict/detail.vue",
+        "bytes": 4994,
+        "sha256": "bf9f8c2d7150ac7019debd4b0db9b1798f9fe4d9c696f6cbdb3716ae2f89138c",
+        "lines": 203
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/dict/index.vue",
+        "bytes": 12188,
+        "sha256": "7d563e9d742cda3b6fdaa96876f483f233b921cd604eaab733986e6ef53869de",
+        "lines": 375
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/logininfor/index.vue",
+        "bytes": 8104,
+        "sha256": "f2418de1325721ed7e8ead340d3cb69eb08d6bc02e101b802be206653dd9f2d9",
+        "lines": 243
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/menu/index.vue",
+        "bytes": 20115,
+        "sha256": "4ad9dc6b3ce3ff72775eead553a99fe996d6691b7fbf5caa9da6f68af8100311",
+        "lines": 531
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/notice/index.vue",
+        "bytes": 10110,
+        "sha256": "7109e0161e81c110eb0f6b9fe96d4847df13f5d82cec79bf326197182074209d",
+        "lines": 312
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/operlog/detail.vue",
+        "bytes": 6336,
+        "sha256": "492befef6db00f390339e94896cb3c6b6504c0c75c0ccfb8eac28dca19abcb41",
+        "lines": 147
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/operlog/index.vue",
+        "bytes": 9482,
+        "sha256": "5b909bb5f7a34db85c83e4ba937e1bdad515b264fcdb5cceed7357f608eb4637",
+        "lines": 279
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/post/index.vue",
+        "bytes": 10073,
+        "sha256": "c715cea7bf83ddc69be26debe8f69334f972e0dbce0a64d07598aed88aa97c8c",
+        "lines": 311
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/role/authUser.vue",
+        "bytes": 6552,
+        "sha256": "505fc8ae2d88657436e155c1b014fe685f839b4fe95ac0d4ae5f449ab0d99d08",
+        "lines": 199
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/role/index.vue",
+        "bytes": 20858,
+        "sha256": "42a1f4ec6947daecabf857cec93c45cfe623c2590bf3019cd313915f655cc849",
+        "lines": 619
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/role/selectUser.vue",
+        "bytes": 4502,
+        "sha256": "bcbe363fc7418a5c1eed1935f1a4187ae6fcd31efdce59b1ebafdc8ad7502bab",
+        "lines": 136
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/authRole.vue",
+        "bytes": 4003,
+        "sha256": "6c6c5110e8d509373e349259e39ef30d74ee4c19cce6162457a9adaadc297402",
+        "lines": 123
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/index.vue",
+        "bytes": 20565,
+        "sha256": "ee955d3fe20f68170324963456dc2142da3be38edd662b8bbc53dd9204f3389c",
+        "lines": 506
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/profile/index.vue",
+        "bytes": 2977,
+        "sha256": "f00b385310ec0db6482a91e1a764fccdc326796b49f3e5fe4df9c68d2bc9d7b9",
+        "lines": 95
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/profile/resetPwd.vue",
+        "bytes": 2382,
+        "sha256": "16534440a6004db1be46f62bb1d2eb718d12e8921d2dd0923e45d88ef2b589df",
+        "lines": 69
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/profile/userAvatar.vue",
+        "bytes": 5983,
+        "sha256": "4e5e27c7dae221a1862bfd463b06fb178cebec72ad803a8e3d4fb5aad623c6e4",
+        "lines": 185
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/profile/userInfo.vue",
+        "bytes": 2511,
+        "sha256": "74da771243c5bcb920bc093becc78d473ba5a324dfa07d2ea4def077e970a063",
+        "lines": 88
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/system/user/view.vue",
+        "bytes": 6138,
+        "sha256": "3ab84f81c88c8d1d035a0eb8b374c5f54704e8684782476bde5407a76495129c",
+        "lines": 177
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/build/CodeTypeDialog.vue",
+        "bytes": 2847,
+        "sha256": "6790b286872bf92c5ffa7684000767bdde95476cc3ba8780e6209726e809021e",
+        "lines": 109
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/build/DraggableItem.vue",
+        "bytes": 3440,
+        "sha256": "0acce81b3a546f30d2606bbaa803a8198cadaf4a6942d50ffb18d5989a048c28",
+        "lines": 95
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/build/IconsDialog.vue",
+        "bytes": 2696,
+        "sha256": "8034204eabfedd2b95149c64659024ea7cce0aeefe7c4869e88e646367b402fe",
+        "lines": 122
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/build/index.vue",
+        "bytes": 19942,
+        "sha256": "6f0430f7800644ec52733f93bd70d0890aad7bdd8c5bc146f0957cefa007b2ca",
+        "lines": 775
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/build/RightPanel.vue",
+        "bytes": 36734,
+        "sha256": "9f97a780275bc1131a8efc917952c4315d9015097047bd967cebdc8c4d0c42d4",
+        "lines": 929
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/build/TreeNodeDialog.vue",
+        "bytes": 3772,
+        "sha256": "ef70a078902d9a7c11dc790b66a5d0961429fde84e3e4dfd742136f08b4ff47f",
+        "lines": 151
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/gen/editTable.vue",
+        "bytes": 9339,
+        "sha256": "d92fca277376d7027a9b4ef6bca23a2ece26731208deaa8428f7a0ab4e5389ea",
+        "lines": 230
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/gen/genInfoForm.vue",
+        "bytes": 12298,
+        "sha256": "d5794eaff42cbb8f7effbbaa52bc37b9f0a7262655cb714e8cba6aacbdf21ba1",
+        "lines": 333
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/gen/importTable.vue",
+        "bytes": 3840,
+        "sha256": "bd3d093db86a038d32be2bb58e39b5523bb554172b58ecd6e61cfcb7532e5e26",
+        "lines": 120
+      },
+      {
+        "path": "changed-files/ruoyi-ui/src/views/tool/gen/index.vue",
+        "bytes": 11927,
+        "sha256": "061d45fd0067799e14975ad203e167a32b878b814d6fa33084c2f82f56a6656e",
+        "lines": 339
+      },
+      {
+        "path": "changed-files/ruoyi-ui/vite.config.mjs",
+        "bytes": 1393,
+        "sha256": "beaed9c2f798f5675604e8864f3779611373f322af70373482124a4673914247",
+        "lines": 24
+      },
+      {
+        "path": "changed-files/scripts/energy-analysis/test_artifact_downloads.cjs",
+        "bytes": 4623,
+        "sha256": "c8aad22bba7ca358f458e8e873211cea5e8c4f48e05d864d674c50451f6c7600",
+        "lines": 70
+      },
+      {
+        "path": "changed-files/scripts/energy-analysis/test_document_downloads.cjs",
+        "bytes": 2204,
+        "sha256": "65a0f72219ef15b815712d30f7f59fe7f84c96083f9e94d9af37153e7678ca42",
+        "lines": 36
+      },
+      {
+        "path": "changed-files/scripts/energy-analysis/test_navigation.cjs",
+        "bytes": 5915,
+        "sha256": "49cf512663178a03554305d9d57983c3d8f2142b208e58225a6ae4aabdcf8ae5",
+        "lines": 55
+      },
+      {
+        "path": "changed-files/scripts/test-heavy-upgrade-20261109.cjs",
+        "bytes": 3190,
+        "sha256": "c4837cce66848259ae89e5e148a473fe04c075c548cb77372f342fd273530f36",
+        "lines": 41
+      },
+      {
+        "path": "changed-files/scripts/test-single-upgrade-20261109.cjs",
+        "bytes": 2434,
+        "sha256": "a40b352de1b0da358adbb3d011bb6aa996fe5e0a9798a96b865db9c879de370f",
+        "lines": 33
+      },
+      {
+        "path": "changed-files/scripts/vue3/check.cjs",
+        "bytes": 5785,
+        "sha256": "12c580421a2421f01397f2c03db1b48bb710c7d415016e36b83a29fa7c9db617",
+        "lines": 76
+      },
+      {
+        "path": "changed-files/scripts/vue3/compiler.cjs",
+        "bytes": 529,
+        "sha256": "b1b3aabdf9e49f890df650bdf579f4c9398267035e2a7e87c67a07c97a48c182",
+        "lines": 12
+      },
+      {
+        "path": "changed-files/scripts/vue3/test_request.cjs",
+        "bytes": 3263,
+        "sha256": "b7d05a8f6ea2e43fdfc66019b5195291904468920728b25cea917dec625cc2f6",
+        "lines": 32
+      },
+      {
+        "path": "changed-files/scripts/vue3/test_router.cjs",
+        "bytes": 1893,
+        "sha256": "e62d29280f1a55504cca5d71518b80894bb8d4fd4217a8e9a67137e1c82e24f5",
+        "lines": 20
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/package-lock.json",
+        "bytes": 60409,
+        "sha256": "14ae2ce80ad6e34f85990d50eff74d8c10a1809d19091cf318efb88e38d2a136",
+        "lines": 1743
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/package.json",
+        "bytes": 610,
+        "sha256": "7b36d5400fbdb9e0c9cd1e063d19169931376dc6b286cdc27c9a3ac0d12dda7c",
+        "lines": 25
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/App.vue",
+        "bytes": 61692,
+        "sha256": "9620f51de9b338258499937a40bccdbb1abb5d5a794acc9da9f554c61390dcfe",
+        "lines": 1750
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/CarbonEmissionFactorDialog.vue",
+        "bytes": 10151,
+        "sha256": "4f5fccb8257ae986bb4091b5f63baa7074ffe16b23c85010cdc90a410dcc8550",
+        "lines": 342
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/CollectionPointSelectDialog.vue",
+        "bytes": 36424,
+        "sha256": "b6e5667f1bc54b28d3137726d722edd25cfce0267b2bd5fdcaa1cd24040c374a",
+        "lines": 1107
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/ConfigPanel.vue",
+        "bytes": 24788,
+        "sha256": "611380596664b6cd8b3902fd494447503c42cbcd56dd968a150b01e6b49eebed",
+        "lines": 664
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/DataSourceSystemDialog.vue",
+        "bytes": 11169,
+        "sha256": "26e567ed705ae62ef9eec4434379ad0fef3a5cf2dc884f7e6bff87d0c76a51c1",
+        "lines": 453
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/ElectricMeterSettings.vue",
+        "bytes": 103360,
+        "sha256": "a6f5efc137105116877ba4c9f6af23b627c822f4809c34c4545097f8a0b1bf48",
+        "lines": 2857
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/EnergyAttributionDepartmentSelector.vue",
+        "bytes": 2302,
+        "sha256": "09da29ce17580b88eaabca3de90fbbb8883a07e3b5c8ecca7185709568f317d0",
+        "lines": 28
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/EnergyAttributionStationSelector.vue",
+        "bytes": 3425,
+        "sha256": "f4736a6bbcfa07d64bd6e7cb88b12ec8fe215fedc891636b994c577d64465585",
+        "lines": 59
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/EnergyCategorySettings.vue",
+        "bytes": 24476,
+        "sha256": "e478bbb3ebde2322404d843f5151f70bcf31941df533bb233d0479e036d4dcdb",
+        "lines": 820
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/FossilFuelCollectionSettings.vue",
+        "bytes": 69973,
+        "sha256": "5b49113967c2bf2a120c0d5a337cc9386afaaf678d5f9ac6ca46d5492208963f",
+        "lines": 2014
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/MeterModelSelector.vue",
+        "bytes": 11411,
+        "sha256": "0c4a6c7d3549bc9908b31cbb2465d7cc771ee93eef874cdad64d0ae8d3d22714",
+        "lines": 448
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/PurchasedHeatCollectionSettings.vue",
+        "bytes": 67035,
+        "sha256": "d7e7676cfed9b874971448cc0f95870bd949b333c9c245f342c0a2cb052a7aca",
+        "lines": 1963
+      },
+      {
+        "path": "changed-files/tpfhs-9/frontend/src/components/TemplateList.vue",
+        "bytes": 56270,
+        "sha256": "620c2230513ece8a891324f5b1225c5d0178a813460d2ab6dae3d7f3c619814a",
+        "lines": 1426
+      },
+      {
+        "path": "clean-validation.json",
+        "bytes": 1320,
+        "sha256": "12208278e7015fcc6d1c75af5f3ded2798625009e5ea5ed0c4a35411f318ee65",
+        "lines": 82
+      },
+      {
+        "path": "deleted-files.txt",
+        "bytes": 321,
+        "sha256": "73106a11df50fc7773dfe0ac02e026866405e7853d1cce6bd30b54ed512485ed",
+        "lines": 9
+      },
+      {
+        "path": "evidence/report-period.png",
+        "bytes": 23082,
+        "sha256": "efdf764a3e7973c11d51a70817bd482acf33e3e7a9d6a3ac26c7c27a97ac1771"
+      },
+      {
+        "path": "evidence/statistics.png",
+        "bytes": 58889,
+        "sha256": "fc2bd63400a3e94d1b560e1328620e9497833e67845d0dc61a0dac9c8e75ed7f"
+      },
+      {
+        "path": "final-validation.json",
+        "bytes": 1216,
+        "sha256": "fc4b3a716e5d8c522a27287b2b0df785b453de1b258dd165f5ddd5d5349b2a2f",
+        "lines": 67
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 49570,
+        "sha256": "168dc3a4ec35970c4ddb09a38267045b79dcbdeae6116c022a33462e5bc52b1e",
+        "lines": 1185
+      },
+      {
+        "path": "README.txt",
+        "bytes": 5410,
+        "sha256": "5d8c7213c12c6c8ed2b68e821ed9f0d1806d6a3bab11cb656360a5e89038b339",
+        "lines": 82
+      },
+      {
+        "path": "rollback.patch",
+        "bytes": 1013349,
+        "sha256": "1cc9f846fe0aea813e7182385a5a7f2fb91a44bd492a228fabc64aca54a1e98d",
+        "lines": 17656
+      },
+      {
+        "path": "SHA256SUMS.txt",
+        "bytes": 26122,
+        "sha256": "71cca0ede920e3547ad9b52fc066b80199188f28e2ab69e3c4dbdcaabb0a5fe0",
+        "lines": 218
+      },
+      {
+        "path": "upgrade.patch",
+        "bytes": 1013305,
+        "sha256": "1559c50f4f6fa24c06f5768524273333abcb656f9cbb8eb707060547ff6edf8e",
+        "lines": 17656
+      },
+      {
+        "path": "validation-logs/clean-test-1.log",
+        "bytes": 722,
+        "sha256": "f68a535ecd2c309fd9d06c8a27b469082fcd6e39667ebd0eff120ab4fd1c96e6"
+      },
+      {
+        "path": "validation-logs/clean-test-10.log",
+        "bytes": 699,
+        "sha256": "bc345842f79bfd14f87d9e9155dbdb0983039ef1d794b4fd7f7e90260cf84d47"
+      },
+      {
+        "path": "validation-logs/clean-test-11.log",
+        "bytes": 714,
+        "sha256": "abeb06aa740fb3fe5a3fdcae4329aa611e2bbdd1edb0d12cd5edf56f3ed6501c"
+      },
+      {
+        "path": "validation-logs/clean-test-2.log",
+        "bytes": 91,
+        "sha256": "ddb65aef6f187c43a80405175b01ce63f24a2e31dbb1d33e04d7efca4b385776"
+      },
+      {
+        "path": "validation-logs/clean-test-3.log",
+        "bytes": 192,
+        "sha256": "91826cbe318f9f87ad07c168b4c5d50fab785ffa764370c099a55051aa6d2b67"
+      },
+      {
+        "path": "validation-logs/clean-test-4.log",
+        "bytes": 106,
+        "sha256": "a2994711c6103bbfca5d4b5e79b013964ce9c19fb3fa6ef7c7fc4a70ded982d2"
+      },
+      {
+        "path": "validation-logs/clean-test-5.log",
+        "bytes": 95,
+        "sha256": "a3940d1e918280e4db48d212803d448b96eef200015d809a1e0ee9879171d297"
+      },
+      {
+        "path": "validation-logs/clean-test-6.log",
+        "bytes": 160,
+        "sha256": "b1e8edf8253e5677ff3d9a504ae84e5651406bcc029bf635dc0b4ddb36fca9e2"
+      },
+      {
+        "path": "validation-logs/clean-test-7.log",
+        "bytes": 96,
+        "sha256": "564981036ae308a47128d3bed0c10e711959272dd8ff0dd3af0ebaabd0c0f6bc"
+      },
+      {
+        "path": "validation-logs/clean-test-8.log",
+        "bytes": 127,
+        "sha256": "8a58283f4dac9c4fe645d4f39f258658595a80d523bcb60516e91c789bb7c82f"
+      },
+      {
+        "path": "validation-logs/clean-test-9.log",
+        "bytes": 750,
+        "sha256": "dc329c67daec03500acc5ca32a8a1b7287ed21c40027b66e484ac525b3605351"
+      },
+      {
+        "path": "validation-logs/final-clean-main-build.log",
+        "bytes": 56478,
+        "sha256": "e055001ce75407468dbffde937448ea2432952185caace79acfb9efa60fe6689"
+      },
+      {
+        "path": "validation-logs/final-clean-model-build.log",
+        "bytes": 908,
+        "sha256": "3b5178ec95eecebb5ce2acbbe29533eec4d4242a679e336507648c65d39bff70"
+      },
+      {
+        "path": "validation-logs/final-clean-stage-build.log",
+        "bytes": 71345,
+        "sha256": "d9facec4900ffae820b5ebe057ea4cb7ed428cd112ffbb62b3282371db90d964"
+      },
+      {
+        "path": "validation-logs/final-local-check.cjs.log",
+        "bytes": 722,
+        "sha256": "8f4ae61570a29c4bee0e4ba6e7c915200f8240e2bdec1546ef8398ea89f0949e"
+      },
+      {
+        "path": "validation-logs/final-local-main-build.log",
+        "bytes": 53697,
+        "sha256": "539160a60b63a6b110eed0d89a0de4926b9065cd8e7b150634e9fce9af5231f0"
+      },
+      {
+        "path": "validation-logs/final-local-model-build.log",
+        "bytes": 908,
+        "sha256": "246a06932194fd95bfde7e213fd08b3c51c0b34483047a3423ab909a252ba5dc"
+      },
+      {
+        "path": "validation-logs/final-local-navigation.log",
+        "bytes": 192,
+        "sha256": "91826cbe318f9f87ad07c168b4c5d50fab785ffa764370c099a55051aa6d2b67"
+      },
+      {
+        "path": "validation-logs/final-local-test_request.cjs.log",
+        "bytes": 122,
+        "sha256": "c68a0330d9119284868f623891cfa7ff58acca0b27380308ea8ad1b66cabdc73"
+      },
+      {
+        "path": "validation-logs/final-local-test_router.cjs.log",
+        "bytes": 97,
+        "sha256": "7fab203d46c2618aeebca670db633b303fe7b68322c9e889bd9452bc9e7cb780"
+      },
+      {
+        "path": "validation-logs/final-remote-check.cjs.log",
+        "bytes": 722,
+        "sha256": "f68a535ecd2c309fd9d06c8a27b469082fcd6e39667ebd0eff120ab4fd1c96e6"
+      },
+      {
+        "path": "validation-logs/final-remote-navigation.log",
+        "bytes": 192,
+        "sha256": "91826cbe318f9f87ad07c168b4c5d50fab785ffa764370c099a55051aa6d2b67"
+      },
+      {
+        "path": "validation-logs/final-remote-test_request.cjs.log",
+        "bytes": 91,
+        "sha256": "ddb65aef6f187c43a80405175b01ce63f24a2e31dbb1d33e04d7efca4b385776"
+      },
+      {
+        "path": "validation-logs/final-remote-test_router.cjs.log",
+        "bytes": 97,
+        "sha256": "7fab203d46c2618aeebca670db633b303fe7b68322c9e889bd9452bc9e7cb780"
+      },
+      {
+        "path": "VALIDATION.txt",
+        "bytes": 3704,
+        "sha256": "2309b124e085c517c831407b37c4038ed6e49b801265d1bd7d9621bcfcbe78bb",
+        "lines": 43
+      },
+      {
+        "path": "Vue3版本统一升级补丁_20261113.zip.sha256",
+        "bytes": 109,
+        "sha256": "99fa87a8c198087445e47abec240132d0e5022d9249e5ed2b1d7a7989baceb86"
+      }
+    ]
+  },
+  {
+    "package": "算法全任务测试数据初始化_20261113",
+    "filesRead": 59,
+    "checksumsVerified": 57,
+    "files": [
+      {
+        "path": "artifact-validation.json",
+        "bytes": 1538,
+        "sha256": "dc3da3b402e2afe5903c8b611a5ebee3d768635bebc03ce405724278a39c91d3",
+        "lines": 69
+      },
+      {
+        "path": "CHECK_PACKAGE.py",
+        "bytes": 1049,
+        "sha256": "091fa4c337b50870332265cf27e9ad7034123ed0fab7ec9ff1650791fe6e42f3",
+        "lines": 20
+      },
+      {
+        "path": "data/assumptions.json",
+        "bytes": 45737,
+        "sha256": "391fe3f167597d1c275693487b37485a5020a2e2f9f293538f36184440904b1b",
+        "lines": 750
+      },
+      {
+        "path": "data/battery.json",
+        "bytes": 1104,
+        "sha256": "14abe775c7ff81b256d687411ee411e0950864fbf79cef7daf1d6540ce995cf5",
+        "lines": 24
+      },
+      {
+        "path": "data/build_summary.json",
+        "bytes": 578,
+        "sha256": "267429dfec9b7eb3fd7a7b86dd140e7696e13a008c285fd07aa5dd892d706b3e",
+        "lines": 17
+      },
+      {
+        "path": "data/curves.csv",
+        "bytes": 20683,
+        "sha256": "0b633733bc88c318ef6e1bea9aaf0e0a6f8c6f0854ca81661c2a291493476b7e",
+        "lines": 332,
+        "rows": 331
+      },
+      {
+        "path": "data/DATASET_README.md",
+        "bytes": 4028,
+        "sha256": "15c599cbcbbd49bd4a2b864b5192fbcd404a2da9b9b3eb4d14127f2c3213a5bc",
+        "lines": 44
+      },
+      {
+        "path": "data/energy_calibration_factors.json",
+        "bytes": 2775,
+        "sha256": "8c1f4c7a1a5f214f8e95c326963e11efb795aef73fd5f69a5782713dbb15c155",
+        "lines": 85
+      },
+      {
+        "path": "data/energy_transfer_zones.csv",
+        "bytes": 637,
+        "sha256": "87438ad15225e42c068c43cced110869a12bdfaac7b6896376105ca78456571b",
+        "lines": 3,
+        "rows": 2
+      },
+      {
+        "path": "data/gradients.csv",
+        "bytes": 33101,
+        "sha256": "ed4cc7815dce6d63dbd7a3ef1a4d621b085a0c6287b96fe3c824cbbf3c1c7392",
+        "lines": 729,
+        "rows": 728
+      },
+      {
+        "path": "data/headway_constraints.csv",
+        "bytes": 283,
+        "sha256": "9263d140357c0f9b50944f7ec12ebcf4b2e5bb629e3e534b0e88fc11f956acb6",
+        "lines": 7,
+        "rows": 6
+      },
+      {
+        "path": "data/line_speed_limits.csv",
+        "bytes": 582,
+        "sha256": "6c67599fed8eec45ef23d5d8063ac9a588398aa36c95724a8e75cc8ea64f650c",
+        "lines": 6,
+        "rows": 5
+      },
+      {
+        "path": "data/locomotive_curves.json",
+        "bytes": 25673,
+        "sha256": "60474784c5404e33607ee282729b16bea4d070a03b1974930f43fcecec79326f",
+        "lines": 1422
+      },
+      {
+        "path": "data/locomotive_curves_README.md",
+        "bytes": 14497,
+        "sha256": "630f32c5653a82a8f3c016e6e981cf87aa96e92d9ffe5e3f111edbc7e15fc5a1",
+        "lines": 219
+      },
+      {
+        "path": "data/operating_conditions.json",
+        "bytes": 546,
+        "sha256": "507bfe3cbc49e8f8540f833b13470d04f80c98aa9b26064b87f65f85f82e6dec",
+        "lines": 18
+      },
+      {
+        "path": "data/pdf_station_master.csv",
+        "bytes": 3404,
+        "sha256": "d5345c71a2c2eb7b1767b2c5080d68ba8900ae552201d365d66f47a37413033f",
+        "lines": 34,
+        "rows": 33
+      },
+      {
+        "path": "data/pdf_station_out_of_scope.csv",
+        "bytes": 2502,
+        "sha256": "81a53451ca38daaff5fc80ac5e0fa41b1f20db212c6d9ece759f7f3ca54b901b",
+        "lines": 21,
+        "rows": 20
+      },
+      {
+        "path": "data/platform/historical_disturbance_replay.json",
+        "bytes": 2767,
+        "sha256": "fd586ff9c63edeada5d8cf81f843bbdc3f47887d38880e2724ec64bd401ef911",
+        "lines": 95
+      },
+      {
+        "path": "data/platform/joint_parameter_ranges.json",
+        "bytes": 203,
+        "sha256": "c24f6a08b3631e5797356f72d812d21bf93d5341bc3ef545a4274cf1e7bc7672",
+        "lines": 1
+      },
+      {
+        "path": "data/platform/timetable.xlsx",
+        "bytes": 10410,
+        "sha256": "a94bd8378b6c5b9341d071169707ae85f677068c5ff138da3727b3ca1525208f"
+      },
+      {
+        "path": "data/power_arm_intervals.csv",
+        "bytes": 53825,
+        "sha256": "613e7460199160dfa6b42710aab443ff38890efca6d33265e5b31563b7bb7220",
+        "lines": 77,
+        "rows": 76
+      },
+      {
+        "path": "data/resource_config.json",
+        "bytes": 1704,
+        "sha256": "d3753e5cb487c19425357540b4f3ca3a5ac9904c220279f3749ea8164e4888b7",
+        "lines": 33
+      },
+      {
+        "path": "data/route_metadata.json",
+        "bytes": 3292,
+        "sha256": "8b9ef5d73fddef15384bd32b4380f4925732798e74413f74437150e7b0006c52",
+        "lines": 47
+      },
+      {
+        "path": "data/section_run_times.csv",
+        "bytes": 104029,
+        "sha256": "174f92a026ddaa0a710a19cf0895180177a3f0f1e857fa436f1f88f09a8c97b0",
+        "lines": 1154,
+        "rows": 1153
+      },
+      {
+        "path": "data/section_run_times_2026.json",
+        "bytes": 4619,
+        "sha256": "3460b6b4c54780ff20705ce7b8027749aa1588a014594bf9b5295115408dcbb2",
+        "lines": 294
+      },
+      {
+        "path": "data/segments.csv",
+        "bytes": 85241,
+        "sha256": "1cd13c0dc13bb824479433e63a130411af1ebe457dd0dbb5033661e5bd50cd72",
+        "lines": 1391,
+        "rows": 1390
+      },
+      {
+        "path": "data/smart_meter_calibration_samples.csv",
+        "bytes": 275607,
+        "sha256": "d80dcf06b0d5efb369cda3993e97a4813be120d40fbc9b331b5d74d75bbaa411",
+        "lines": 533,
+        "rows": 532
+      },
+      {
+        "path": "data/smart_meter_calibration_samples_summary.json",
+        "bytes": 953,
+        "sha256": "45a32dc5d676b5dd2fadc7c99244fd4db21234408e86187e396884adb5fc37c3",
+        "lines": 25
+      },
+      {
+        "path": "data/smart_meter_catenary_voltage.csv",
+        "bytes": 372,
+        "sha256": "c0b6e0c3dd6b75b686b74de5c2e6a74b0db88a593978b6df74142c4d1aeb39be",
+        "lines": 7,
+        "rows": 6
+      },
+      {
+        "path": "data/smart_meter_field_dictionary.csv",
+        "bytes": 1473,
+        "sha256": "dd9e89712a613e57206fd11c8b5e39d019ba437c5180bac4df590cddd5bb46c6",
+        "lines": 32,
+        "rows": 31
+      },
+      {
+        "path": "data/smart_meter_interval_feedback.csv",
+        "bytes": 13275,
+        "sha256": "3380cebaf6dca2521a2f5c22101e7fb8833675e45713519d0d223d18ff98775b",
+        "lines": 193,
+        "rows": 192
+      },
+      {
+        "path": "data/smart_meter_representative_interval_samples.csv",
+        "bytes": 52687,
+        "sha256": "3271cf54fbb0af254a9b2b289e3bf8c131b9a9172ef79412c973c00049b45d74",
+        "lines": 101,
+        "rows": 100
+      },
+      {
+        "path": "data/station_dwell.csv",
+        "bytes": 450,
+        "sha256": "e796f893be72df7ff1eb4aa4ade413af89a5349bb4d4c750da7c3771f9c884b5",
+        "lines": 4,
+        "rows": 3
+      },
+      {
+        "path": "data/station_operation_assignments.csv",
+        "bytes": 516,
+        "sha256": "d861af7b5db8cbc4a7682da2a7fce992961def3d6ea08ffee99381f9477f0825",
+        "lines": 3,
+        "rows": 2
+      },
+      {
+        "path": "data/station_resources.csv",
+        "bytes": 706,
+        "sha256": "21ffd0863cb18479c8ab5a8a4733c16e0a545b5e2276fcc9beb7fef558fb9123",
+        "lines": 34,
+        "rows": 33
+      },
+      {
+        "path": "data/stations.csv",
+        "bytes": 800,
+        "sha256": "f89e0180a6dd167007f52ece1d6cdd51778e56d3a9ba4ed32729baaf9b4cc50a",
+        "lines": 34,
+        "rows": 33
+      },
+      {
+        "path": "data/storage_candidate_sites.csv",
+        "bytes": 407,
+        "sha256": "b34c856e2ed67aea2221e7ee67b95f079fbad185480d6069b57de896b1c086f7",
+        "lines": 2,
+        "rows": 1
+      },
+      {
+        "path": "data/storage_planning_policy.json",
+        "bytes": 880,
+        "sha256": "a7fa5e8a840f05c21ac267adaef365a9dea68477e9b09e752c3e0987a50fddcd",
+        "lines": 1
+      },
+      {
+        "path": "data/storage_planning_scenarios.json",
+        "bytes": 674,
+        "sha256": "6c01aa0bbc438db61e2f4b99feccfa9536ab3ba9a1e0d420309988b7662537b3",
+        "lines": 1
+      },
+      {
+        "path": "data/storage_site_technology_options.csv",
+        "bytes": 227,
+        "sha256": "3a9cf61b2981ac0837e2f72779ad8c753118d0605ccd15c46e4f0599df6f8cc5",
+        "lines": 2,
+        "rows": 1
+      },
+      {
+        "path": "data/storage_technologies.csv",
+        "bytes": 723,
+        "sha256": "53499dca6dc3fdcdfaa34224d10f535a8d1a862c2dc933a90db5cc1fe9803e96",
+        "lines": 2,
+        "rows": 1
+      },
+      {
+        "path": "data/technical_operation_times.csv",
+        "bytes": 4801,
+        "sha256": "b3d2f8be31b21866a3993c123f686803be2295f9a9727f2b028ba421925badd3",
+        "lines": 42,
+        "rows": 41
+      },
+      {
+        "path": "data/technical_operation_times_out_of_scope.csv",
+        "bytes": 1647,
+        "sha256": "87c87d629fc3b5dd2cd1005b1706c3ebd6643e0dd4c8108c979ba18a91228251",
+        "lines": 12,
+        "rows": 11
+      },
+      {
+        "path": "data/train_formation_modes_2025.csv",
+        "bytes": 2449,
+        "sha256": "69fbff9a3d4a7bd68308abd28a72bd8b94563776eb6b35ffb888ed4de1cbb0af",
+        "lines": 17,
+        "rows": 16
+      },
+      {
+        "path": "data/trains.csv",
+        "bytes": 1648,
+        "sha256": "e906aa7ae928d5687488692fd44730d9112f54360430499faf04f64e67e6e626",
+        "lines": 3,
+        "rows": 2
+      },
+      {
+        "path": "data-manifest.json",
+        "bytes": 9437,
+        "sha256": "bd859ea7fadfa3b28b5bf8121a213b2da081e6cdf41a1eca29cec19dd3bb07de",
+        "lines": 292
+      },
+      {
+        "path": "init_algorithm_demo.sh",
+        "bytes": 3670818,
+        "sha256": "97c07f0654981f2c8b1133292bd8ae25215606e15faef6007d9a2b35a4404f34",
+        "lines": 1816
+      },
+      {
+        "path": "init_algorithm_demo.sql",
+        "bytes": 3662911,
+        "sha256": "71e90a55f492ba830087fb976f2c9142388b321fd330764cb596ac22a2d5ee07",
+        "lines": 1724
+      },
+      {
+        "path": "rollback_visibility.sql",
+        "bytes": 687,
+        "sha256": "31b1c119efb5b12caa6f68ff5bea92c0c04d7969bdca35154c6bff5ec86da1e8",
+        "lines": 8
+      },
+      {
+        "path": "scope.json",
+        "bytes": 1718,
+        "sha256": "26d92107deeb915f756b2b28388acfea0dd88d8d5ab2f32352d6b0308097135b",
+        "lines": 59
+      },
+      {
+        "path": "SHA256SUMS",
+        "bytes": 5405,
+        "sha256": "036ddc3c5310454433f8df13302d76bef942c5ef156dba5411e31e561aee3118"
+      },
+      {
+        "path": "task-validation.json",
+        "bytes": 3679,
+        "sha256": "70f10ea04f755b14c66cdcf8130113ed31f05a4656726146d556191250f6187a",
+        "lines": 134
+      },
+      {
+        "path": "validation.json",
+        "bytes": 1204,
+        "sha256": "47c2d9273afdb7412e90d4b49f37ee6c326c8a9e5bdef251f83e840658d26786",
+        "lines": 24
+      },
+      {
+        "path": "verify_algorithm_demo.sql",
+        "bytes": 2495,
+        "sha256": "a7420b3ef8f9c80f050d0a11250930faa22675e5abe834815c19ddec66cdd54c",
+        "lines": 10
+      },
+      {
+        "path": "使用说明.txt",
+        "bytes": 7123,
+        "sha256": "7dc050ae3eb926c214a36b4a4f22f694958047fcf41d8531f4c495c4dfadb8ae",
+        "lines": 81
+      },
+      {
+        "path": "推荐测试参数.json",
+        "bytes": 4202,
+        "sha256": "5e29f55ae5dcbf1c2be1f834814db7e574b651b4d1a7808e45f02c5a8e86903f",
+        "lines": 135
+      },
+      {
+        "path": "算法全任务测试数据初始化_20261113.zip.sha256",
+        "bytes": 117,
+        "sha256": "dde6f33b2191ed36135e94ef643efdcc64cb29bf2b93c03b5a231f7aad699892"
+      },
+      {
+        "path": "给整合AI的说明.txt",
+        "bytes": 564,
+        "sha256": "59325cd3cf68745409eab165f7e8b9c36c187fb4827acd00a640e91d8af17b83",
+        "lines": 4
+      },
+      {
+        "path": "验证记录.txt",
+        "bytes": 3174,
+        "sha256": "8894f8f98a80262a4e8dfb46d041db8f9391993c24f432edd425ad0c89b9133e",
+        "lines": 38
+      }
+    ]
+  },
+  {
+    "package": "算法新版11-12整合补丁_20261113",
+    "filesRead": 74,
+    "checksumsVerified": 72,
+    "files": [
+      {
+        "path": "CHECK_PACKAGE.py",
+        "bytes": 1943,
+        "sha256": "b29c30feb896f790d8c3153596dab1b62ff7701668c61b605a215f493da22647",
+        "lines": 28
+      },
+      {
+        "path": "code.patch",
+        "bytes": 326191,
+        "sha256": "08d7568843bc142803ec5ba0b869b590f7b1f01707f2859bd43f1c4c13fd2725",
+        "lines": 5798
+      },
+      {
+        "path": "MANIFEST.json",
+        "bytes": 17581,
+        "sha256": "b03a918a47cf031c2b596db0b5a6b7a0c4eefb1884840084855876f9985eb4e8",
+        "lines": 393
+      },
+      {
+        "path": "patch-validation.json",
+        "bytes": 411,
+        "sha256": "be041badb78c15eddbce8852f07b57f881b0f42c55e5a18892097c23238329ed",
+        "lines": 13
+      },
+      {
+        "path": "README-先读这里.txt",
+        "bytes": 1720,
+        "sha256": "db6459c6c32cb2526ef07850b8c182d502e3b78697b08483212fc52281896bfe",
+        "lines": 21
+      },
+      {
+        "path": "rollback.patch",
+        "bytes": 326323,
+        "sha256": "25be8e90ff9909d89e36369f2672c4eff72efb2cc6967354245f0413ae3cb4a8",
+        "lines": 5798
+      },
+      {
+        "path": "SHA256SUMS",
+        "bytes": 9854,
+        "sha256": "c5d97c142aba1d68d7d77df1ad4e5fc0e83adc9ed9dce1ffecc41aa4d2dcd3ef"
+      },
+      {
+        "path": "source/docs/algorithm-upgrade-20261112.txt",
+        "bytes": 4503,
+        "sha256": "4ff8b3496707384748d7095fe1421d3a648738c7af2831bc9f98b15e1a7b8a4f",
+        "lines": 43
+      },
+      {
+        "path": "source/energy_recovery_agent/data_ingestion.py",
+        "bytes": 101020,
+        "sha256": "1b58a88e69b12bf4ba3a55f6c2eba7f25a820dd9f6891a1befa1072b0c4ec2ad",
+        "lines": 2492
+      },
+      {
+        "path": "source/energy_recovery_agent/database/storage_planning_platform_contract.json",
+        "bytes": 1817,
+        "sha256": "1aafa80263203ec146de6fdacfcd1e9c6e15bf8d6ae65986cdefc258ada34519",
+        "lines": 36
+      },
+      {
+        "path": "source/energy_recovery_agent/database/worker.py",
+        "bytes": 22336,
+        "sha256": "fac45d8ca8c3e4445f236898826e0d037a84e674f633390a6384b007a0554281",
+        "lines": 504
+      },
+      {
+        "path": "source/energy_recovery_agent/energy_settlement.py",
+        "bytes": 97775,
+        "sha256": "74b0007e052393bdddea2d5055403a1f7a101ef1d51b8a1ed131f12dfdb0802c",
+        "lines": 2110
+      },
+      {
+        "path": "source/energy_recovery_agent/locomotive_curves.py",
+        "bytes": 11601,
+        "sha256": "4111b4b5430f5f9b81c5ffa2a540255229438908f6c26580d9958813feb002b5",
+        "lines": 297
+      },
+      {
+        "path": "source/energy_recovery_agent/operating_conditions.py",
+        "bytes": 21397,
+        "sha256": "61eda1d063337db117f06ff1e933f6547fd5e01738904d6ee3a50ead338a8863",
+        "lines": 515
+      },
+      {
+        "path": "source/energy_recovery_agent/rolling_optimizer.py",
+        "bytes": 227208,
+        "sha256": "a6ad7078503eaa6cd0b76f208d21a5ee76bdd3ec32a546cf5b1062cf2b076c79",
+        "lines": 4801
+      },
+      {
+        "path": "source/energy_recovery_agent/run_dispatch_case.py",
+        "bytes": 145012,
+        "sha256": "4e13d1762038ff66e6e7b38f0f74520045f2f297130539d5a3353a1cfea7ec29",
+        "lines": 3245
+      },
+      {
+        "path": "source/energy_recovery_agent/run_project.py",
+        "bytes": 143892,
+        "sha256": "3b69a87b37b91273d01017bf23021bbecd371bad262094ccc4d6bcc1703f4e5d",
+        "lines": 2968
+      },
+      {
+        "path": "source/energy_recovery_agent/scheduler_nsga2.py",
+        "bytes": 72618,
+        "sha256": "c1d73745687f8d582a011bf969052c04ac8ebf0a48801ed31c33da7ba3604045",
+        "lines": 1751
+      },
+      {
+        "path": "source/energy_recovery_agent/storage_planning_contract.py",
+        "bytes": 50895,
+        "sha256": "0debda69e0e88008f68c68ca46a5d1b09ed5611ce67597f42451f615d2f91dba",
+        "lines": 986
+      },
+      {
+        "path": "source/energy_recovery_agent/storage_planning_mixed.py",
+        "bytes": 14557,
+        "sha256": "9acd52cf279aa645aae936ec019e09255d228c7c38ca9cfc7aea8909a5f7bea0",
+        "lines": 281
+      },
+      {
+        "path": "source/energy_recovery_agent/storage_planning_mvp.py",
+        "bytes": 75352,
+        "sha256": "8adb6d5f1b906a09cc5062ed905866cbf25af11f98777bf95e5ab305be2f8b67",
+        "lines": 1509
+      },
+      {
+        "path": "source/energy_recovery_agent/tests/test_storage_planning_platform.py",
+        "bytes": 12708,
+        "sha256": "96334682f3f14efd63a9067ec3850ad1d825d4234f8a0dd32d9414c465de500e",
+        "lines": 204
+      },
+      {
+        "path": "source/energy_recovery_agent/train_simulator.py",
+        "bytes": 122794,
+        "sha256": "173ea5a9bec377ab0d127dcdc1cf7215eb05c4f51c6c39ce83b178b4e8a13a8d",
+        "lines": 2623
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/__init__.py",
+        "bytes": 228,
+        "sha256": "87519e803b6c284813348506644e793a84e176fe9767d49c5f900ee9b00df9ed",
+        "lines": 5
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/__init__.py",
+        "bytes": 46,
+        "sha256": "4b853f15ca97b69b1ca64d6bfccacc8673cdd6ac0c093dd0895d245daf7f7102",
+        "lines": 1
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/energy_model.py",
+        "bytes": 3496,
+        "sha256": "a536bec0662fdb8b0f9fe116ddbdcc5e4fb96d740c68e24cc0d88b60bd73161a",
+        "lines": 83
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/resistance_model.py",
+        "bytes": 228,
+        "sha256": "884ac4a9a6f64001e018ee18196f02bc640346d52f40e2c6956f1ecd3af27792",
+        "lines": 8
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/dynamics/train_longitudinal_model.py",
+        "bytes": 5409,
+        "sha256": "2fae33356049d7baec8371e90d2231e03911c12af98cf0eca6961026d19329e3",
+        "lines": 124
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/integration/__init__.py",
+        "bytes": 316,
+        "sha256": "25b9dab8d871615103da9bb453ab286c3cfa9d0ddfcee6db4713cc19ede5a637",
+        "lines": 13
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/integration/regenerative_interface.py",
+        "bytes": 10092,
+        "sha256": "6892680019a1aa46f37c51cdd6a36e14d6bd7da0473288a96057dbe12f42a371",
+        "lines": 244
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/io/__init__.py",
+        "bytes": 304,
+        "sha256": "5209ab9367fe8a345be07a823c3372f478a53efaca44a0dda8003c75c9ed08b3",
+        "lines": 13
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/io/data_loader.py",
+        "bytes": 4322,
+        "sha256": "24879982f05ef8b380855728a7fd857d68ca9605bb2e866e33871eb32508bade",
+        "lines": 100
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/io/heavy_empty_interface.py",
+        "bytes": 3998,
+        "sha256": "f7ae94a95cc6a721eabefca2838f9440b0212517a15c95b208870bd0c6bd2627",
+        "lines": 108
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/io/output_contract.py",
+        "bytes": 2236,
+        "sha256": "4f91392815315c91cd33aa6afa4cc5127303cafa4378ea36dadabb52c113c2e8",
+        "lines": 59
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/io/profile_writer.py",
+        "bytes": 1777,
+        "sha256": "0971fdddbcc2f31c8c610830086b2408368867cf6f202abd683b988b32068265",
+        "lines": 44
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/metrics/__init__.py",
+        "bytes": 28,
+        "sha256": "1d1b5298d4f7e681b8696cae47e7be01058af7eb16162182d63f346121b2dd6f",
+        "lines": 1
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/metrics/eco_driving_metrics.py",
+        "bytes": 694,
+        "sha256": "871dae644ec8bbf7cd018ae4c1f7514bfe44b10ca0404805cc1e670c04246084",
+        "lines": 22
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/models.py",
+        "bytes": 2110,
+        "sha256": "211bf710f06228ba17195410f288f217aada4ede04bfab7e640ce6562739b09f",
+        "lines": 78
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/optimizer/__init__.py",
+        "bytes": 37,
+        "sha256": "870d61d56485bf203c712e3f115f6fa19987105acc17f7c774e43a2ca57a36b8",
+        "lines": 1
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/optimizer/baseline.py",
+        "bytes": 6588,
+        "sha256": "5cb1dc90250ab67363adbf003713ba644a294317927fa3668190d2f9843f0be4",
+        "lines": 133
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/optimizer/eco_driving_optimizer.py",
+        "bytes": 37625,
+        "sha256": "1893f7aeebc3f92d9367ca8f530423e9a1d6e65e7f33d102a273a6d0a593a20e",
+        "lines": 726
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/simulation/__init__.py",
+        "bytes": 31,
+        "sha256": "5d1db4d622ca402ac1616dc9b0c6b80e16fc2ffd911b3c1050a03a068e913e3c",
+        "lines": 1
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/simulation/train_run_simulator.py",
+        "bytes": 6476,
+        "sha256": "95ecaccf86644b7fc6f14ee4d37af1404467b0d7e5938dca934b00925957aed9",
+        "lines": 141
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/speed_profile/__init__.py",
+        "bytes": 37,
+        "sha256": "9e22a1f1095df5beebd1f800d05dbeceb8de8e7d14d95d7ab3e52e5f7791be98",
+        "lines": 1
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/speed_profile/profile_validator.py",
+        "bytes": 3622,
+        "sha256": "0fcfdc19ca34589bdb64abe58934547e83b994d8cb4886725041e1907b4ceb06",
+        "lines": 82
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/__init__.py",
+        "bytes": 177,
+        "sha256": "17be34a23c0a65185ed02e28ab35003032071d72b68f3559b46bb0ab3f826748",
+        "lines": 5
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/comparison.py",
+        "bytes": 1756,
+        "sha256": "d4f307bd924ab160eb8cdf10e2b0db3419536c6614a6accb4f27a06e4a5ec739",
+        "lines": 51
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/delivery.py",
+        "bytes": 8269,
+        "sha256": "0a65b36fa5c1a447449eb4b4cbb0da8ae84a8cae367c01776bacfaf1e885abfd",
+        "lines": 159
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/end_to_end.py",
+        "bytes": 4977,
+        "sha256": "994fb8bec5e17c493dce915576c04a60a0e336cfbb360643cad140b2ca58becc",
+        "lines": 108
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/scenario_runner.py",
+        "bytes": 1011,
+        "sha256": "ecec6579947e0cf197cdd05f11edd855468dfa7a74bfc2f75817c06a33749f5a",
+        "lines": 24
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/eco_driving/validation/scenarios.py",
+        "bytes": 865,
+        "sha256": "b1fd8ba20d330f2596ae3638af7a79ebbc8d07dde354659533a1b3001bb73972",
+        "lines": 18
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/regenerative_braking/control/nsmc.py",
+        "bytes": 65581,
+        "sha256": "5f0002d8f2bf422d92d3a36ae170fe62b16aef71b2e26645972e1568c8a56168",
+        "lines": 1215
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/regenerative_braking/dynamics/motor_model.py",
+        "bytes": 14132,
+        "sha256": "0ce852a4de28196675e6e1a2cf1535778309e09877e87e9565b9b6b25d55c66f",
+        "lines": 317
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/regenerative_braking/identification/storage_resistance.py",
+        "bytes": 10061,
+        "sha256": "ef69af3ee2aa14a2f7b6f16745085fb480417915b6fe66d10dd06d9bf3188ad1",
+        "lines": 217
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/regenerative_braking/simulation/closed_loop.py",
+        "bytes": 44730,
+        "sha256": "715ae4709336889ef7553b8161d36f3c7f59e37782fc6da695a96f14866836bf",
+        "lines": 770
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/regenerative_braking/simulation/projected_current_reference.py",
+        "bytes": 7071,
+        "sha256": "068724697d176de0cae7c83aff1e4d5a91e4bd266513f10d452ff5138224820d",
+        "lines": 128
+      },
+      {
+        "path": "source/new_function/single_train_energy_optimization-f6d1797/regenerative_braking/simulation/sink_current_filter.py",
+        "bytes": 1960,
+        "sha256": "392e44a653cf803f886dcd798744b28000b2f5423aa8039c752ee734ca85b031",
+        "lines": 39
+      },
+      {
+        "path": "source/ruoyi-ui/src/api/carbon/singleTrain.js",
+        "bytes": 2122,
+        "sha256": "fbae161ee72b752cf21d90116f66cc955e1ef50aa520446a984346d9722ed768",
+        "lines": 28
+      },
+      {
+        "path": "source/ruoyi-ui/src/utils/energyParameters.js",
+        "bytes": 35349,
+        "sha256": "8fd746482e5297988317ed6be10afb5d42a120c19a6b777e2cf04cefab6e7e45",
+        "lines": 870
+      },
+      {
+        "path": "source/ruoyi-ui/src/utils/singleTrainScenarios.js",
+        "bytes": 942,
+        "sha256": "147049598940d4bd93900e84d5b9cfded674aeb588b8223079d11c17eca10412",
+        "lines": 15
+      },
+      {
+        "path": "source/ruoyi-ui/src/views/carbon/energy/StoragePlanningResults.vue",
+        "bytes": 7656,
+        "sha256": "beed816c95414564a9d8c1a024e81e0a7d169bf51dfe5e6e4cc33c9c55a45737",
+        "lines": 85
+      },
+      {
+        "path": "source/ruoyi-ui/src/views/carbon/singleTrain/create.vue",
+        "bytes": 9033,
+        "sha256": "7de18426db0d677fe9e7f609adde4a8a8bb8b08aeda7960d30d481ea9eeede1e",
+        "lines": 51
+      },
+      {
+        "path": "source/ruoyi-ui/src/views/carbon/singleTrain/run.vue",
+        "bytes": 14828,
+        "sha256": "7e6d1acc15c512b7e7ae77b46d4968e9533ee03b18b24bf537f4dc89f53ab88b",
+        "lines": 88
+      },
+      {
+        "path": "source/scripts/test-single-upgrade-20261109.cjs",
+        "bytes": 3728,
+        "sha256": "961f01a0c9d25344b8054d6e32366c1c16671c47d0621ea9ce89d91b11693e62",
+        "lines": 52
+      },
+      {
+        "path": "source/single_train_recovery_agent/core.py",
+        "bytes": 18565,
+        "sha256": "76d30cc5dbf48a7dae5eff781ce713bd25e7c26ce33067b2c4b0c300c55a3d69",
+        "lines": 277
+      },
+      {
+        "path": "source/single_train_recovery_agent/eco.py",
+        "bytes": 11244,
+        "sha256": "53398d5a14a2d2668e5c32958aee6c3eef7d1030cd47acfc88475245022efab4",
+        "lines": 171
+      },
+      {
+        "path": "source/single_train_recovery_agent/repository.py",
+        "bytes": 20559,
+        "sha256": "32e3397dd1ab21eda153eeea4d35db83e98ee65045b126a67cb5605817c88d7f",
+        "lines": 326
+      },
+      {
+        "path": "source/single_train_recovery_agent/tests/test_algorithm_refresh.py",
+        "bytes": 4159,
+        "sha256": "197b32965f27b93f9080e3f1a15b7b10ee1d86bd17c1cc45a81832be8852bb10",
+        "lines": 84
+      },
+      {
+        "path": "source/single_train_recovery_agent/tests/test_eco_platform.py",
+        "bytes": 4177,
+        "sha256": "d2c1bc49e733c911ccbdbc26c12e56d2564de13f32e5bc6230fbe99ee5da0ce7",
+        "lines": 83
+      },
+      {
+        "path": "source/single_train_recovery_agent/worker.py",
+        "bytes": 11272,
+        "sha256": "3e3c76898011e9ef34e7807e5c075f49725401ed92ef67b4d3cb60aa6189c069",
+        "lines": 163
+      },
+      {
+        "path": "整合部署与回退.txt",
+        "bytes": 3862,
+        "sha256": "24e38f09952d48ca3c71abde4ea96b1b2c5f16758b43c3a66743e6212bff7559",
+        "lines": 40
+      },
+      {
+        "path": "算法新版11-12整合补丁_20261113.zip.sha256",
+        "bytes": 110,
+        "sha256": "6e13d8c658e6eb7c534fced8e272340230fdd3e66c27b213542ec0ba98f82606"
+      },
+      {
+        "path": "给整合AI的说明.txt",
+        "bytes": 699,
+        "sha256": "6dba419e65378a34e1ec80668299123489f8023133c99572964862f9e9861d15",
+        "lines": 6
+      },
+      {
+        "path": "验证记录.txt",
+        "bytes": 2824,
+        "sha256": "7d001839708f39a2e600aeb0166f7a56d5ee5dee93bd17031801e94a6d551150",
+        "lines": 36
+      }
+    ]
+  }
+]

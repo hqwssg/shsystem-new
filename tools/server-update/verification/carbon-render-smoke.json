@@ -1,0 +1,43 @@
+{
+  "entity_code": "jiliang",
+  "metadata": {
+    "entity_name": "Synthetic renderer smoke test",
+    "report_year": 2025,
+    "report_period": "2025 annual test",
+    "compiler": "Smoke test",
+    "compile_date": "2026-10-19"
+  },
+  "entity_profile": {
+    "short_name": "Synthetic test",
+    "business_description": "Synthetic data for renderer verification",
+    "carbon_department": "Test"
+  },
+  "organization_boundary": {
+    "boundary_description": "Synthetic test only",
+    "emission_sources": [
+      "Purchased electricity"
+    ],
+    "accounting_method": "Test activity and factor"
+  },
+  "fuel_activity": [],
+  "electricity_activity": [
+    {
+      "scope": "test",
+      "quantity_mwh": 1.0,
+      "factor_tco2_per_unit": 0.5306,
+      "source_emission_tco2": 0.5306,
+      "data_origin": "CALCULATION",
+      "source_name": "Synthetic meter"
+    }
+  ],
+  "heat_activity": [],
+  "monitoring_devices": [],
+  "workload": [
+    {
+      "name": "Synthetic workload",
+      "quantity": 1,
+      "unit": "test unit"
+    }
+  ],
+  "images": []
+}

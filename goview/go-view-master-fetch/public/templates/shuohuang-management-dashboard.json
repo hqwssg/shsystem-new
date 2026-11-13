@@ -1,0 +1,4741 @@
+{
+  "editCanvasConfig": {
+    "projectName": "朔黄铁路能碳数据可视化大屏",
+    "width": 1920,
+    "height": 1080,
+    "background": "#071525",
+    "backgroundImage": null,
+    "selectColor": true,
+    "chartThemeColor": "dark",
+    "chartThemeSetting": {},
+    "vChartThemeName": "vScreenVolcanoBlue",
+    "previewScaleType": "fit",
+    "projectId": null,
+    "remarks": "能碳数据可视化版 · 演示/正式双模式 · 默认演示数据"
+  },
+  "requestGlobalConfig": {
+    "requestInterval": 0,
+    "requestIntervalUnit": "second",
+    "requestOriginUrl": "",
+    "requestDataPond": [],
+    "requestParams": {
+      "Body": {
+        "form-data": {},
+        "x-www-form-urlencoded": {},
+        "json": "",
+        "xml": ""
+      },
+      "Header": {},
+      "Params": {}
+    }
+  },
+  "componentList": [
+    {
+      "id": "management-title",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 20,
+        "w": 1150,
+        "h": 55,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "朔黄铁路 · 能碳数据可视化",
+        "fontSize": 32,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-updated",
+      "isGroup": false,
+      "attr": {
+        "x": 1250,
+        "y": 32,
+        "w": 630,
+        "h": 32,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "最近核算：暂无记录",
+        "fontSize": 15,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "updated"
+      }
+    },
+    {
+      "id": "management-controls",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 96,
+        "w": 1840,
+        "h": 52,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "ManagementStatus",
+      "chartConfig": {
+        "key": "ManagementStatus",
+        "chartKey": "VManagementStatus",
+        "conKey": "VCManagementStatus",
+        "title": "能碳管理筛选与覆盖",
+        "category": "Mores",
+        "categoryName": "Mores",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "table_scrollboard.png"
+      },
+      "option": {
+        "mode": "controls",
+        "dataMode": "demo"
+      }
+    },
+    {
+      "id": "management-basis",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 164,
+        "w": 1840,
+        "h": 40,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "正在连接正式核算数据…",
+        "fontSize": 14,
+        "fontColor": "#a4bdd6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "basis"
+      }
+    },
+    {
+      "id": "management-border-kpi-carbon",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 222,
+        "w": 445,
+        "h": 125,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-kpi-carbon",
+      "isGroup": false,
+      "attr": {
+        "x": 60,
+        "y": 234,
+        "w": 405,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "年度排放量 · tCO₂e",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-kpi-carbon",
+      "isGroup": false,
+      "attr": {
+        "x": 60,
+        "y": 273,
+        "w": 405,
+        "h": 52,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无数据",
+        "fontSize": 34,
+        "fontColor": "#49d6c5",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "carbon"
+      }
+    },
+    {
+      "id": "management-border-kpi-electricity",
+      "isGroup": false,
+      "attr": {
+        "x": 505,
+        "y": 222,
+        "w": 445,
+        "h": 125,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-kpi-electricity",
+      "isGroup": false,
+      "attr": {
+        "x": 525,
+        "y": 234,
+        "w": 405,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "购入电力消耗",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-kpi-electricity",
+      "isGroup": false,
+      "attr": {
+        "x": 525,
+        "y": 273,
+        "w": 405,
+        "h": 52,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无数据",
+        "fontSize": 28,
+        "fontColor": "#46a8fa",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "electricity"
+      }
+    },
+    {
+      "id": "management-border-kpi-fuel",
+      "isGroup": false,
+      "attr": {
+        "x": 970,
+        "y": 222,
+        "w": 445,
+        "h": 125,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-kpi-fuel",
+      "isGroup": false,
+      "attr": {
+        "x": 990,
+        "y": 234,
+        "w": 405,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "化石燃料消耗 · 按单位分别汇总",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-kpi-fuel",
+      "isGroup": false,
+      "attr": {
+        "x": 990,
+        "y": 273,
+        "w": 405,
+        "h": 52,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无数据",
+        "fontSize": 28,
+        "fontColor": "#9a91fa",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "fuel"
+      }
+    },
+    {
+      "id": "management-border-kpi-heat",
+      "isGroup": false,
+      "attr": {
+        "x": 1435,
+        "y": 222,
+        "w": 445,
+        "h": 125,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-kpi-heat",
+      "isGroup": false,
+      "attr": {
+        "x": 1455,
+        "y": 234,
+        "w": 405,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "购入热力消耗",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-kpi-heat",
+      "isGroup": false,
+      "attr": {
+        "x": 1455,
+        "y": 273,
+        "w": 405,
+        "h": 52,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无数据",
+        "fontSize": 28,
+        "fontColor": "#f4bc71",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "heat"
+      }
+    },
+    {
+      "id": "management-border-rank",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 371,
+        "w": 475,
+        "h": 317,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-rank",
+      "isGroup": false,
+      "attr": {
+        "x": 60,
+        "y": 383,
+        "w": 435,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "公司排放量排行",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-sub-rank",
+      "isGroup": false,
+      "attr": {
+        "x": 60,
+        "y": 418,
+        "w": 435,
+        "h": 23,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "年度汇总 · tCO₂e",
+        "fontSize": 13,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-rank",
+      "isGroup": false,
+      "attr": {
+        "x": 52,
+        "y": 446,
+        "w": 450,
+        "h": 225,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "BarCrossrange",
+      "chartConfig": {
+        "key": "BarCrossrange",
+        "chartKey": "VBarCrossrange",
+        "conKey": "VCBarCrossrange",
+        "title": "横向柱状图",
+        "category": "Bars",
+        "categoryName": "Bars",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "bar_x.png"
+      },
+      "option": {
+        "tooltip": {
+          "show": true,
+          "trigger": "axis",
+          "axisPointer": {
+            "type": "line"
+          }
+        },
+        "xAxis": {
+          "type": "value",
+          "axisLabel": {
+            "color": "#8faac6"
+          },
+          "splitLine": {
+            "lineStyle": {
+              "color": "#1d3b55"
+            }
+          }
+        },
+        "yAxis": {
+          "type": "category",
+          "axisLabel": {
+            "color": "#bcd4eb",
+            "width": 120,
+            "overflow": "truncate"
+          }
+        },
+        "legend": {
+          "show": false
+        },
+        "dataset": {
+          "dimensions": [
+            "公司",
+            "排放量"
+          ],
+          "source": []
+        },
+        "series": [
+          {
+            "type": "bar",
+            "encode": {
+              "x": "排放量",
+              "y": "公司"
+            },
+            "barMaxWidth": 24,
+            "itemStyle": {
+              "color": "#49d6c5",
+              "borderRadius": [
+                0,
+                5,
+                5,
+                0
+              ]
+            },
+            "label": {
+              "show": true,
+              "position": "right",
+              "color": "#dcefff"
+            }
+          }
+        ],
+        "grid": {
+          "left": 130,
+          "right": 70,
+          "top": 12,
+          "bottom": 30
+        },
+        "managementRole": "rank"
+      }
+    },
+    {
+      "id": "management-border-trend",
+      "isGroup": false,
+      "attr": {
+        "x": 535,
+        "y": 371,
+        "w": 817,
+        "h": 317,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-trend",
+      "isGroup": false,
+      "attr": {
+        "x": 555,
+        "y": 383,
+        "w": 777,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "月度碳排放趋势",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-sub-trend",
+      "isGroup": false,
+      "attr": {
+        "x": 555,
+        "y": 418,
+        "w": 777,
+        "h": 23,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "来自月度任务；缺失月份留空；不拆分年度和跨月结果",
+        "fontSize": 13,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-trend",
+      "isGroup": false,
+      "attr": {
+        "x": 550,
+        "y": 446,
+        "w": 785,
+        "h": 225,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "LineCommon",
+      "chartConfig": {
+        "key": "LineCommon",
+        "chartKey": "VLineCommon",
+        "conKey": "VCLineCommon",
+        "title": "折线图",
+        "category": "Lines",
+        "categoryName": "折线图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "line.png"
+      },
+      "option": {
+        "tooltip": {
+          "show": true,
+          "trigger": "axis",
+          "axisPointer": {
+            "type": "line"
+          }
+        },
+        "xAxis": {
+          "show": true,
+          "type": "category",
+          "axisLabel": {
+            "color": "#8faac6",
+            "rotate": 25
+          }
+        },
+        "yAxis": {
+          "type": "value",
+          "name": "tCO₂e",
+          "nameTextStyle": {
+            "color": "#8faac6"
+          },
+          "axisLabel": {
+            "color": "#8faac6"
+          },
+          "splitLine": {
+            "lineStyle": {
+              "color": "#1d3b55"
+            }
+          }
+        },
+        "legend": {
+          "show": false
+        },
+        "dataset": {
+          "dimensions": [
+            "月份",
+            "碳排放量"
+          ],
+          "source": [
+            [
+              "2026-01",
+              null
+            ],
+            [
+              "2026-02",
+              null
+            ],
+            [
+              "2026-03",
+              null
+            ],
+            [
+              "2026-04",
+              null
+            ],
+            [
+              "2026-05",
+              null
+            ],
+            [
+              "2026-06",
+              null
+            ],
+            [
+              "2026-07",
+              null
+            ],
+            [
+              "2026-08",
+              null
+            ],
+            [
+              "2026-09",
+              null
+            ],
+            [
+              "2026-10",
+              null
+            ],
+            [
+              "2026-11",
+              null
+            ],
+            [
+              "2026-12",
+              null
+            ]
+          ]
+        },
+        "series": [
+          {
+            "type": "line",
+            "name": "碳排放量",
+            "encode": {
+              "x": "月份",
+              "y": "碳排放量"
+            },
+            "connectNulls": false,
+            "showSymbol": true,
+            "symbolSize": 6,
+            "lineStyle": {
+              "color": "#46a8fa",
+              "width": 3
+            },
+            "itemStyle": {
+              "color": "#46a8fa"
+            },
+            "areaStyle": {
+              "color": "#173d5c"
+            }
+          }
+        ],
+        "grid": {
+          "left": 70,
+          "right": 20,
+          "top": 28,
+          "bottom": 55
+        },
+        "managementRole": "trend"
+      }
+    },
+    {
+      "id": "management-border-sources",
+      "isGroup": false,
+      "attr": {
+        "x": 1372,
+        "y": 371,
+        "w": 508,
+        "h": 317,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-sources",
+      "isGroup": false,
+      "attr": {
+        "x": 1392,
+        "y": 383,
+        "w": 468,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "排放来源构成",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-sub-sources",
+      "isGroup": false,
+      "attr": {
+        "x": 1392,
+        "y": 418,
+        "w": 468,
+        "h": 23,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "年度各能源排放量占比",
+        "fontSize": 13,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-sources",
+      "isGroup": false,
+      "attr": {
+        "x": 1385,
+        "y": 448,
+        "w": 480,
+        "h": 222,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "PieCommon",
+      "chartConfig": {
+        "key": "PieCommon",
+        "chartKey": "VPieCommon",
+        "conKey": "VCPieCommon",
+        "title": "饼图",
+        "category": "Pies",
+        "categoryName": "饼图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "pie.png"
+      },
+      "option": {
+        "isCarousel": false,
+        "type": "ring",
+        "tooltip": {
+          "show": false,
+          "trigger": "item"
+        },
+        "legend": {
+          "show": true,
+          "orient": "vertical",
+          "right": 0,
+          "top": "middle",
+          "textStyle": {
+            "color": "#adc6e0"
+          }
+        },
+        "dataset": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": []
+        },
+        "series": [
+          {
+            "type": "pie",
+            "radius": [
+              "48%",
+              "70%"
+            ],
+            "center": [
+              "34%",
+              "50%"
+            ],
+            "roseType": false,
+            "avoidLabelOverlap": false,
+            "itemStyle": {
+              "show": true,
+              "borderRadius": 10,
+              "borderColor": "#fff",
+              "borderWidth": 2
+            },
+            "label": {
+              "show": false,
+              "position": "outside"
+            },
+            "labelLine": {
+              "show": false
+            },
+            "emphasis": {
+              "scale": true,
+              "scaleSize": 6,
+              "label": {
+                "show": true,
+                "position": "outside",
+                "formatter": "{b} {d}%",
+                "fontSize": 13,
+                "fontWeight": "normal",
+                "color": "#e6f7ff"
+              },
+              "labelLine": {
+                "show": true,
+                "length": 10,
+                "length2": 8,
+                "lineStyle": {
+                  "color": "rgba(230, 247, 255, 0.6)"
+                }
+              }
+            },
+            "encode": {
+              "itemName": "name",
+              "value": "value"
+            },
+            "stillShowZeroSum": false,
+            "showEmptyCircle": false
+          }
+        ],
+        "color": [
+          "#49d6c5",
+          "#46a8fa",
+          "#9a91fa",
+          "#f4bc71",
+          "#ee859c"
+        ],
+        "managementRole": "sources"
+      }
+    },
+    {
+      "id": "management-rank-empty",
+      "isGroup": false,
+      "attr": {
+        "x": 180,
+        "y": 535,
+        "w": 300,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无可展示的年度数据",
+        "fontSize": 16,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "rankEmpty"
+      }
+    },
+    {
+      "id": "management-trend-empty",
+      "isGroup": false,
+      "attr": {
+        "x": 800,
+        "y": 530,
+        "w": 340,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无月度核算数据",
+        "fontSize": 16,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "trendEmpty"
+      }
+    },
+    {
+      "id": "management-sources-empty",
+      "isGroup": false,
+      "attr": {
+        "x": 1500,
+        "y": 535,
+        "w": 340,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无可展示的年度数据",
+        "fontSize": 16,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "sourcesEmpty"
+      }
+    },
+    {
+      "id": "management-border-energy-compare",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 712,
+        "w": 580,
+        "h": 326,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-energy-compare",
+      "isGroup": false,
+      "attr": {
+        "x": 60,
+        "y": 724,
+        "w": 540,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "公司能源消耗对比",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-energy-unit",
+      "isGroup": false,
+      "attr": {
+        "x": 60,
+        "y": 759,
+        "w": 540,
+        "h": 25,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "能源：电力 · 单位：暂无数据",
+        "fontSize": 14,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "energyUnitLabel"
+      }
+    },
+    {
+      "id": "management-energy-compare",
+      "isGroup": false,
+      "attr": {
+        "x": 55,
+        "y": 794,
+        "w": 550,
+        "h": 225,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "BarLine",
+      "chartConfig": {
+        "key": "BarLine",
+        "chartKey": "VBarLine",
+        "conKey": "VCBarLine",
+        "title": "柱状图 & 折线图",
+        "category": "Bars",
+        "categoryName": "柱状图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "bar_line.png"
+      },
+      "option": {
+        "tooltip": {
+          "show": true,
+          "trigger": "axis",
+          "axisPointer": {
+            "type": "line"
+          }
+        },
+        "xAxis": {
+          "type": "value",
+          "axisLabel": {
+            "color": "#8faac6"
+          },
+          "splitLine": {
+            "lineStyle": {
+              "color": "#1d3b55"
+            }
+          }
+        },
+        "yAxis": {
+          "type": "category",
+          "axisLabel": {
+            "color": "#bcd4eb",
+            "width": 125,
+            "overflow": "truncate"
+          }
+        },
+        "legend": {
+          "show": false
+        },
+        "dataset": {
+          "dimensions": [
+            "公司",
+            "消耗量"
+          ],
+          "source": []
+        },
+        "series": [
+          {
+            "type": "bar",
+            "encode": {
+              "x": "消耗量",
+              "y": "公司"
+            },
+            "barMaxWidth": 24,
+            "itemStyle": {
+              "color": "#9a91fa",
+              "borderRadius": [
+                0,
+                5,
+                5,
+                0
+              ]
+            },
+            "label": {
+              "show": true,
+              "position": "right",
+              "color": "#dcefff"
+            }
+          }
+        ],
+        "grid": {
+          "left": 135,
+          "right": 65,
+          "top": 12,
+          "bottom": 30
+        },
+        "managementRole": "energyCompare"
+      }
+    },
+    {
+      "id": "management-border-company-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 640,
+        "y": 712,
+        "w": 600,
+        "h": 326,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-company-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 660,
+        "y": 724,
+        "w": 560,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "公司排放来源对比",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-sub-company-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 660,
+        "y": 759,
+        "w": 560,
+        "h": 23,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "同一公司各能源的排放贡献 · tCO₂e",
+        "fontSize": 13,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-company-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 655,
+        "y": 794,
+        "w": 570,
+        "h": 225,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "BarLine",
+      "chartConfig": {
+        "key": "BarLine",
+        "chartKey": "VBarLine",
+        "conKey": "VCBarLine",
+        "title": "柱状图 & 折线图",
+        "category": "Bars",
+        "categoryName": "柱状图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "bar_line.png"
+      },
+      "option": {
+        "tooltip": {
+          "show": true,
+          "trigger": "axis",
+          "axisPointer": {
+            "type": "line"
+          }
+        },
+        "xAxis": {
+          "type": "value",
+          "axisLabel": {
+            "color": "#8faac6"
+          },
+          "splitLine": {
+            "lineStyle": {
+              "color": "#1d3b55"
+            }
+          }
+        },
+        "yAxis": {
+          "type": "category",
+          "axisLabel": {
+            "color": "#bcd4eb",
+            "width": 110,
+            "overflow": "truncate"
+          }
+        },
+        "legend": {
+          "show": true,
+          "top": 0,
+          "textStyle": {
+            "color": "#adc6e0"
+          }
+        },
+        "dataset": {
+          "dimensions": [
+            "公司",
+            "电力",
+            "燃料",
+            "热力",
+            "其他"
+          ],
+          "source": []
+        },
+        "series": [
+          {
+            "name": "电力",
+            "type": "bar",
+            "stack": "carbon",
+            "encode": {
+              "x": "电力",
+              "y": "公司"
+            },
+            "barMaxWidth": 28,
+            "itemStyle": {
+              "color": "#49d6c5"
+            }
+          },
+          {
+            "name": "燃料",
+            "type": "bar",
+            "stack": "carbon",
+            "encode": {
+              "x": "燃料",
+              "y": "公司"
+            },
+            "barMaxWidth": 28,
+            "itemStyle": {
+              "color": "#46a8fa"
+            }
+          },
+          {
+            "name": "热力",
+            "type": "bar",
+            "stack": "carbon",
+            "encode": {
+              "x": "热力",
+              "y": "公司"
+            },
+            "barMaxWidth": 28,
+            "itemStyle": {
+              "color": "#9a91fa"
+            }
+          },
+          {
+            "name": "其他",
+            "type": "bar",
+            "stack": "carbon",
+            "encode": {
+              "x": "其他",
+              "y": "公司"
+            },
+            "barMaxWidth": 28,
+            "itemStyle": {
+              "color": "#f4bc71"
+            }
+          }
+        ],
+        "grid": {
+          "left": 120,
+          "right": 25,
+          "top": 42,
+          "bottom": 30
+        },
+        "managementRole": "companyStructure"
+      }
+    },
+    {
+      "id": "management-border-monthly-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 1260,
+        "y": 712,
+        "w": 620,
+        "h": 326,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#234762",
+          "#2c657a"
+        ],
+        "backgroundColor": "#0c2036"
+      }
+    },
+    {
+      "id": "management-title-monthly-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 1280,
+        "y": 724,
+        "w": 580,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "月度能源排放构成",
+        "fontSize": 19,
+        "fontColor": "#d7e9ff",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-sub-monthly-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 1280,
+        "y": 759,
+        "w": 580,
+        "h": 23,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "各能源排放量变化 · tCO₂e",
+        "fontSize": 13,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "management-monthly-structure",
+      "isGroup": false,
+      "attr": {
+        "x": 1275,
+        "y": 794,
+        "w": 590,
+        "h": 225,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "LineCommon",
+      "chartConfig": {
+        "key": "LineCommon",
+        "chartKey": "VLineCommon",
+        "conKey": "VCLineCommon",
+        "title": "折线图",
+        "category": "Lines",
+        "categoryName": "折线图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "line.png"
+      },
+      "option": {
+        "tooltip": {
+          "show": true,
+          "trigger": "axis",
+          "axisPointer": {
+            "type": "line"
+          }
+        },
+        "xAxis": {
+          "show": true,
+          "type": "category",
+          "axisLabel": {
+            "color": "#8faac6",
+            "rotate": 30
+          }
+        },
+        "yAxis": {
+          "type": "value",
+          "axisLabel": {
+            "color": "#8faac6"
+          },
+          "splitLine": {
+            "lineStyle": {
+              "color": "#1d3b55"
+            }
+          }
+        },
+        "legend": {
+          "show": true,
+          "top": 0,
+          "textStyle": {
+            "color": "#adc6e0"
+          }
+        },
+        "dataset": {
+          "dimensions": [
+            "月份",
+            "电力",
+            "燃料",
+            "热力",
+            "其他"
+          ],
+          "source": [
+            [
+              "2026-01",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-02",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-03",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-04",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-05",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-06",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-07",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-08",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-09",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-10",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-11",
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "2026-12",
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        },
+        "series": [
+          {
+            "name": "电力",
+            "type": "line",
+            "stack": "carbon",
+            "encode": {
+              "x": "月份",
+              "y": "电力"
+            },
+            "connectNulls": false,
+            "showSymbol": false,
+            "lineStyle": {
+              "color": "#49d6c5",
+              "width": 2
+            },
+            "itemStyle": {
+              "color": "#49d6c5"
+            },
+            "areaStyle": {
+              "color": "#49d6c5",
+              "opacity": 0.2
+            }
+          },
+          {
+            "name": "燃料",
+            "type": "line",
+            "stack": "carbon",
+            "encode": {
+              "x": "月份",
+              "y": "燃料"
+            },
+            "connectNulls": false,
+            "showSymbol": false,
+            "lineStyle": {
+              "color": "#46a8fa",
+              "width": 2
+            },
+            "itemStyle": {
+              "color": "#46a8fa"
+            },
+            "areaStyle": {
+              "color": "#46a8fa",
+              "opacity": 0.2
+            }
+          },
+          {
+            "name": "热力",
+            "type": "line",
+            "stack": "carbon",
+            "encode": {
+              "x": "月份",
+              "y": "热力"
+            },
+            "connectNulls": false,
+            "showSymbol": false,
+            "lineStyle": {
+              "color": "#9a91fa",
+              "width": 2
+            },
+            "itemStyle": {
+              "color": "#9a91fa"
+            },
+            "areaStyle": {
+              "color": "#9a91fa",
+              "opacity": 0.2
+            }
+          },
+          {
+            "name": "其他",
+            "type": "line",
+            "stack": "carbon",
+            "encode": {
+              "x": "月份",
+              "y": "其他"
+            },
+            "connectNulls": false,
+            "showSymbol": false,
+            "lineStyle": {
+              "color": "#f4bc71",
+              "width": 2
+            },
+            "itemStyle": {
+              "color": "#f4bc71"
+            },
+            "areaStyle": {
+              "color": "#f4bc71",
+              "opacity": 0.2
+            }
+          }
+        ],
+        "grid": {
+          "left": 55,
+          "right": 15,
+          "top": 42,
+          "bottom": 50
+        },
+        "managementRole": "monthlyStructure"
+      }
+    },
+    {
+      "id": "management-energy-compare-empty",
+      "isGroup": false,
+      "attr": {
+        "x": 230,
+        "y": 890,
+        "w": 340,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无同单位能源消耗数据",
+        "fontSize": 16,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "energyCompareEmpty"
+      }
+    },
+    {
+      "id": "management-company-structure-empty",
+      "isGroup": false,
+      "attr": {
+        "x": 850,
+        "y": 890,
+        "w": 340,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无公司排放结构数据",
+        "fontSize": 16,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "companyStructureEmpty"
+      }
+    },
+    {
+      "id": "management-monthly-structure-empty",
+      "isGroup": false,
+      "attr": {
+        "x": 1450,
+        "y": 890,
+        "w": 340,
+        "h": 30,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "暂无月度能源排放数据",
+        "fontSize": 16,
+        "fontColor": "#8faac6",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "monthlyStructureEmpty"
+      }
+    },
+    {
+      "id": "management-footer",
+      "isGroup": false,
+      "attr": {
+        "x": 40,
+        "y": 1049,
+        "w": 1840,
+        "h": 23,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "演示数据｜模拟生成，非实际核算结果",
+        "fontSize": 13,
+        "fontColor": "#7492ae",
+        "paddingX": 0,
+        "paddingY": 0,
+        "textAlign": "left",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000",
+        "managementRole": "dataSource"
+      }
+    }
+  ]
+}

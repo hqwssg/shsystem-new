@@ -1,0 +1,16 @@
+{
+  "suning": {
+    "dept_id": 3020,
+    "expected_dept_name": "肃宁分公司"
+  },
+  "yuanping": {
+    "dept_id": 3010,
+    "expected_dept_name": "原平分公司",
+    "expected_existing_entity_code": "SH-3010"
+  },
+  "jiliang": {
+    "dept_id": 3030,
+    "expected_dept_name": "机辆分公司",
+    "expected_existing_entity_code": "SH-3030"
+  }
+}

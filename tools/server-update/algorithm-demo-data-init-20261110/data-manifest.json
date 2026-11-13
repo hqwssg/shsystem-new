@@ -1,0 +1,64 @@
+{
+  "package": "algorithm-demo-data-init-20261110",
+  "projectCode": "algorithm_demo_20261110",
+  "projectId": "2debb6a9-d34c-5398-8357-43847154f299",
+  "heavyVersions": [
+    {
+      "code": "demo_general_20261110",
+      "name": "新版常规任务演示（2026-11-10）",
+      "id": "07724056-fd9d-597b-b733-03a65cdd02cd",
+      "fileCount": 37,
+      "sha256": "205b5007f43dc447c949eaeb65468aee905da086a9eb92541849f247e879a742"
+    },
+    {
+      "code": "demo_planning_20261110",
+      "name": "储能选址定容演示（2026-11-10）",
+      "id": "4f29a21d-b850-5433-829d-2067436af0e4",
+      "fileCount": 17,
+      "sha256": "bd985bed743f09a558a279ab53d34069cb0a9c88e4ece9e31e5b0f56fd23aeef"
+    }
+  ],
+  "singleVersion": {
+    "id": "e91a44f0-afac-56b4-b523-66ec2efa9f23",
+    "code": "demo_single_20261110",
+    "name": "新版单列车回收演示（2026-11-10）",
+    "sha256": "876cfe9fca3af30f3ee3194b9643616de7e5b03f439387eec0a908cd98183b41"
+  },
+  "tables": {
+    "energy_project": 1,
+    "energy_project_version": 2,
+    "energy_dataset_file": 54,
+    "energy_station": 66,
+    "energy_route_segment": 1984,
+    "energy_train_type_parameter": 4,
+    "energy_power_arm": 84,
+    "energy_station_resource": 66,
+    "energy_storage_candidate_site": 1,
+    "energy_storage_technology": 1,
+    "energy_storage_site_technology_option": 1,
+    "energy_storage_planning_scenario": 1,
+    "energy_storage_planning_policy": 1,
+    "energy_storage_device": 2,
+    "energy_signaling_block": 297,
+    "single_version": 1
+  },
+  "departmentBinding": "resolved from target active sys_user account; no local dept id",
+  "localSource": "common and single snapshots verified on 2026-11-09; planning input passed latest six-type CLI test",
+  "planningPreset": {
+    "planningReady": true,
+    "planningIssues": [],
+    "planningPolicyOptions": [
+      {
+        "code": "synthetic_cost_robust_v1",
+        "label": "synthetic_cost_robust_v1"
+      }
+    ],
+    "scenarioSetOptions": [
+      {
+        "code": "synthetic_typical_days_v1",
+        "label": "synthetic_typical_days_v1"
+      }
+    ]
+  },
+  "noTasksOrResults": true
+}

@@ -1,0 +1,3 @@
+﻿station_name,train_type,direction,applies_to,min_occupancy_min,source,note
+黄骅港,Heavy,forward,destination,,technical_operation_times.csv,Loaded down-direction train occupies terminal track for PDF technical unloading/loading operation time; blank min uses station max from technical_operation_times.csv.
+神池南,Empty,reverse,destination,,technical_operation_times.csv,Return empty train occupies terminal/loading-side track after arrival; blank min uses station max from technical_operation_times.csv.

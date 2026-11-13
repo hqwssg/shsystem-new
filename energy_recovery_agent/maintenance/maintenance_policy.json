@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "policy_version": "2026.09.11.1",
+  "current_artifacts": [
+    {
+      "name": "project_documentation",
+      "directory": "deliverables/project_documentation_9_5",
+      "zip": "项目说明文档-9.5.zip",
+      "verifier": "tools/verify_project_documentation_package.py"
+    },
+    {
+      "name": "database_delivery",
+      "directory": "deliverables/database_deployment_integration_package_20260911_v4",
+      "zip": "deliverables/database_deployment_integration_package_20260911_v4.zip",
+      "verifier": "tools/verify_database_delivery_package.py"
+    },
+    {
+      "name": "production_assurance",
+      "directory": "deliverables/production_assurance_toolkit_20260911_v2",
+      "zip": "deliverables/production_assurance_toolkit_20260911_v2.zip",
+      "verifier": "tools/verify_production_assurance_package.py"
+    }
+  ],
+  "retention": {
+    "generated_output_days": 30,
+    "release_evidence_days": 365,
+    "automatic_deletion": false
+  }
+}

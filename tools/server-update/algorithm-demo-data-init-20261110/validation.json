@@ -1,0 +1,24 @@
+{
+  "checks": [
+    "fresh initialization passed",
+    "repeat initialization preserves every existing row byte/value",
+    "target account dept 73001 resolved, local dept ids not used",
+    "54 frozen files and all relational counts match",
+    "planning readiness passed from database snapshot",
+    "single readiness and visible source options passed",
+    "changed existing demo data rejected without modification",
+    "late primary-key collision rolls back all earlier inserts and preserves unrelated sentinel",
+    "missing target account rejected without data writes",
+    "real schema constraints preserved in all isolated databases",
+    "standalone Bash local-client mode, scoped mysqldump backups and SQL execution passed (password input adapted to stdin for automation)"
+  ],
+  "isolatedSchemas": [
+    "codex_alg_seed_test_20261110_224147_valid",
+    "codex_alg_seed_test_20261110_224147_collision",
+    "codex_alg_seed_test_20261110_224147_account",
+    "codex_alg_seed_test_20261110_224147_wrapper"
+  ],
+  "originalBusinessDatabaseWritten": false,
+  "mysql": "8.0.30",
+  "createdDemoTasks": false
+}

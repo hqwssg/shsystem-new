@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "status": "prototype_contract",
+  "input_fields": [
+    {"id": "timetable_version", "ui_id": "hec2-plan", "kind": "version_ref", "cli": "--timetable", "editable": true, "required": true},
+    {"id": "train_scope", "ui_id": "hec2-scope", "kind": "scenario_control", "cli": "--heavy-count/--empty-count", "editable": true, "required": true},
+    {"id": "objective", "ui_id": "hec2-objective", "kind": "scenario_control", "cli": "--objective-priority/--objective-mode", "editable": true, "required": true},
+    {"id": "search_profile", "ui_id": "hec2-profile", "kind": "scenario_control", "cli": "--search-profile", "editable": true, "required": true},
+    {"id": "storage_participation", "ui_id": "hec2-storage", "kind": "scenario_control", "cli": "--enable-storage-preset-search/--disable-storage-preset-search", "editable": true, "required": true},
+    {"id": "energy_scenario", "ui_id": "hec2-scenario", "kind": "placeholder", "cli": "--energy-scenario", "allowed_values": ["storage_no_direct", "auto"], "editable": false, "required": true},
+    {"id": "config_version", "ui_id": "hec2-config", "kind": "version_ref", "cli": null, "editable": false, "required": true},
+    {"id": "initial_state", "ui_id": "hec2-source", "kind": "placeholder", "cli": null, "editable": false, "required": false},
+    {"id": "initial_soc_percent", "ui_id": "hec2-soc", "kind": "offline_test_only", "cli": null, "range": [0, 100], "editable": false, "required": false}
+  ],
+  "derived_fields": ["prediction_window_s", "execution_window_s", "evaluation_window_s"],
+  "output_requirements": ["run_id", "input_snapshot", "code_snapshot_sha256", "validation_status", "result_quality_status", "metrics", "artifacts"],
+  "unsupported_ui_scenarios": ["delay", "weather", "device"],
+  "notes": "This contract documents the current prototype boundary. It does not authorize a backend implementation or alter algorithm behavior."
+}

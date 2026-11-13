@@ -1,0 +1,202 @@
+package com.ruoyi.carbon.report.source;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+/**
+ * Converts calculation units to GHG report units. Missing factor is a gap, not a silent guess.
+ */
+public class ReportUnitConverter
+{
+    public static final String UNIT_10K_M3 = "10k_m3";
+    public static final String UNIT_T = "t";
+    public static final String UNIT_MWH = "MWh";
+    public static final String UNIT_GJ = "GJ";
+
+    private final Map<String, BigDecimal> factors = new HashMap<>();
+
+    public ReportUnitConverter()
+    {
+        put("FF_NG", "10k_m3", UNIT_10K_M3, BigDecimal.ONE);
+        put("FF_NG", "m3", UNIT_10K_M3, new BigDecimal("0.0001"));
+        put("FF_G", "t", UNIT_T, BigDecimal.ONE);
+        put("FF_D", "t", UNIT_T, BigDecimal.ONE);
+        put("FF_G", "L", UNIT_T, new BigDecimal("0.00075"));
+        put("FF_D", "L", UNIT_T, new BigDecimal("0.00085"));
+        put("ELECTRICITY", "MWh", UNIT_MWH, BigDecimal.ONE);
+        put("ELECTRICITY", "kWh", UNIT_MWH, new BigDecimal("0.001"));
+        put("PH_HD", "GJ", UNIT_GJ, BigDecimal.ONE);
+        put("PH_HA", "m2", UNIT_GJ, new BigDecimal("0.08"));
+    }
+
+    public void register(String subcategory, String fromUnit, String toUnit, BigDecimal factor)
+    {
+        put(subcategory, fromUnit, toUnit, factor);
+    }
+
+    public Conversion convert(String subcategory, BigDecimal value, String fromUnit)
+    {
+        subcategory = ActivityClassifier.canonical(subcategory, fromUnit);
+        if (value == null)
+        {
+            return Conversion.missing(fromUnit, targetUnit(subcategory));
+        }
+        String target = targetUnit(subcategory);
+        String canonical = canonicalUnit(fromUnit);
+        if (canonical.equalsIgnoreCase(target))
+        {
+            return Conversion.ok(value, fromUnit, value, target, null);
+        }
+        BigDecimal factor = factors.get(key(subcategory, canonical, target));
+        if (factor == null && ActivityClassifier.isElectricity(subcategory))
+        {
+            factor = factors.get(key("ELECTRICITY", canonical, target));
+        }
+        if (factor == null)
+        {
+            return Conversion.missing(fromUnit, target);
+        }
+        return Conversion.ok(value, fromUnit, value.multiply(factor).setScale(6, RoundingMode.HALF_UP), target, factor);
+    }
+
+    public static boolean isAreaUnit(String unit)
+    {
+        if (unit == null || unit.isBlank())
+        {
+            return false;
+        }
+        String normalized = unit.trim()
+                .replace("㎡", "m2")
+                .replace("²", "2")
+                .replace(" ", "")
+                .toLowerCase(Locale.ROOT);
+        return "m2".equals(normalized) || "m^2".equals(normalized);
+    }
+
+    public static String targetUnit(String subcategory)
+    {
+        if ("FF_NG".equalsIgnoreCase(subcategory))
+        {
+            return UNIT_10K_M3;
+        }
+        if (subcategory != null && subcategory.startsWith("FF_"))
+        {
+            return UNIT_T;
+        }
+        if (subcategory != null && subcategory.startsWith("PH_"))
+        {
+            return UNIT_GJ;
+        }
+        return UNIT_MWH;
+    }
+
+    public static String reportFuelType(String subcategory)
+    {
+        if ("FF_NG".equalsIgnoreCase(subcategory))
+        {
+            return "natural_gas";
+        }
+        if ("FF_G".equalsIgnoreCase(subcategory))
+        {
+            return "gasoline";
+        }
+        if ("FF_D".equalsIgnoreCase(subcategory))
+        {
+            return "diesel";
+        }
+        return null;
+    }
+
+    private void put(String subcategory, String fromUnit, String toUnit, BigDecimal factor)
+    {
+        factors.put(key(subcategory, fromUnit, toUnit), factor);
+    }
+
+    static String canonicalUnit(String unit)
+    {
+        if (unit == null || unit.isBlank())
+        {
+            return "";
+        }
+        String compact = unit.trim().replace(" ", "").replace("³", "3").replace("㎡", "m2").replace("²", "2");
+        String lower = compact.toLowerCase(Locale.ROOT);
+        if ("10k_m3".equals(lower) || "wan_m3".equals(lower) || "万nm3".equals(lower) || "万m3".equals(lower) || "万立方米".equals(lower))
+        {
+            return UNIT_10K_M3;
+        }
+        if ("m3".equals(lower) || "nm3".equals(lower) || "立方米".equals(lower))
+        {
+            return "m3";
+        }
+        if ("kwh".equals(lower))
+        {
+            return "kWh";
+        }
+        if ("mwh".equals(lower))
+        {
+            return UNIT_MWH;
+        }
+        if ("l".equals(lower))
+        {
+            return "L";
+        }
+        if ("t".equals(lower) || "吨".equals(lower))
+        {
+            return UNIT_T;
+        }
+        if ("gj".equals(lower))
+        {
+            return UNIT_GJ;
+        }
+        if ("m2".equals(lower) || "m^2".equals(lower))
+        {
+            return "m2";
+        }
+        return compact;
+    }
+
+    private static String key(String subcategory, String fromUnit, String toUnit)
+    {
+        return String.valueOf(subcategory).toUpperCase(Locale.ROOT) + "|" + canonicalUnit(fromUnit) + "|" + toUnit;
+    }
+
+    public static final class Conversion
+    {
+        public final boolean ok;
+        public final BigDecimal sourceValue;
+        public final String sourceUnit;
+        public final BigDecimal normalizedValue;
+        public final String normalizedUnit;
+        public final BigDecimal factor;
+
+        private Conversion(boolean ok, BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue,
+                String normalizedUnit, BigDecimal factor)
+        {
+            this.ok = ok;
+            this.sourceValue = sourceValue;
+            this.sourceUnit = sourceUnit;
+            this.normalizedValue = normalizedValue;
+            this.normalizedUnit = normalizedUnit;
+            this.factor = factor;
+        }
+
+        public static Conversion ok(BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue, String normalizedUnit)
+        {
+            return ok(sourceValue, sourceUnit, normalizedValue, normalizedUnit, null);
+        }
+
+        public static Conversion ok(BigDecimal sourceValue, String sourceUnit, BigDecimal normalizedValue,
+                String normalizedUnit, BigDecimal factor)
+        {
+            return new Conversion(true, sourceValue, sourceUnit, normalizedValue, normalizedUnit, factor);
+        }
+
+        public static Conversion missing(String sourceUnit, String normalizedUnit)
+        {
+            return new Conversion(false, null, sourceUnit, null, normalizedUnit, null);
+        }
+    }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "package_id": "frontend_backend_code_20261108_stage_v2",
+  "generated_at_utc": "2026-11-08T21:35:00Z",
+  "compared_against": {
+    "package_id": "frontend_backend_code_20261108_v1",
+    "interface_freeze_version": "1.6.0"
+  },
+  "current_interface": {
+    "interface_freeze_version": "1.6.0",
+    "data_status": "planning_placeholder",
+    "run_types": [
+      "dispatch",
+      "timetable_audit",
+      "timetable_optimization",
+      "rolling_rescheduling",
+      "joint_parameter_robustness",
+      "storage_planning"
+    ]
+  },
+  "impact_matrix": [
+    {
+      "surface": "dispatch.summary.comparison",
+      "level": "behavior",
+      "detail": "energy_comparison_eligible 为 false 时，成本、购电、弃能的降幅为 null。基线与候选的原始评分仍可查看。",
+      "action": "标为诊断，不将空的降幅显示成零。"
+    },
+    {
+      "surface": "optimizer_summary.json",
+      "level": "additive",
+      "detail": "headway_preflight 包含当前间隔、调整量和阻断车次，时间字段单位为秒。NSGA-II 的 executed_generations 表示实际完成的进化代数。",
+      "action": "可选展示。遇到始发间隔不可修复时展示原因和基线诊断。"
+    },
+    {
+      "surface": "optimization_decision",
+      "level": "behavior",
+      "detail": "基线未通过硬约束时，action 为 no_feasible_solution，reason 为 baseline_infeasible，selected_candidate_id 为空。",
+      "action": "关闭方案采用入口。保留基线分数和诊断信息。"
+    },
+    {
+      "surface": "optimization_kpi_attribution.csv",
+      "level": "behavior",
+      "detail": "缺少选中评分时，优化值、差值和改善量为空。",
+      "action": "空值显示为未评价。"
+    },
+    {
+      "surface": "FRONTEND_HANDOFF_MANIFEST.json",
+      "level": "behavior",
+      "detail": "simulation 阶段的 ready_for_conclusions 为 false。",
+      "action": "明确标注仿真范围，并关闭正式结论与现场下发。"
+    }
+  ],
+  "breaking_changes": []
+}

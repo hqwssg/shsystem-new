@@ -1,0 +1,16 @@
+{
+  "group": "45-monthly-analysis-source-20261028",
+  "source_before": "7ff77106b7d5ec13035ac96e8b1b49294ce5d73b",
+  "source_tag": "pre-sync-45-monthly-analysis-source-20261028",
+  "private_config_before": "refs/local-config/45-monthly-analysis-source-20261028-before",
+  "upstream": "fb77c2d47c25064201f778cb0a1386e1996a744f",
+  "summary": "新增授权月度结果取数、三种数值口径及修正明细接口",
+  "checks": {
+    "backend_tests": 225,
+    "failures": 0,
+    "errors": 0,
+    "database_write": false,
+    "scope": "company/template/assigned-node/physical-point intersection; monthly table only"
+  },
+  "private_config_after": "refs/local-config/45-monthly-analysis-source-20261028-after"
+}

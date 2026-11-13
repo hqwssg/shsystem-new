@@ -1,0 +1,25 @@
+{
+  "name": "carbon-emission-frontend",
+  "version": "1.0.0",
+  "description": "碳排放模型设计系统前端",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:server": "vite build --base=/carbon-model/",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "1.16.0",
+    "element-plus": "2.13.7",
+    "pinyin-pro": "^3.28.2",
+    "vue": "3.5.34",
+    "echarts": "^5.5.1",
+    "vue-router": "^4.4.5",
+    "@element-plus/icons-vue": "^2.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.8",
+    "@vue/compiler-sfc": "3.5.34"
+  }
+}

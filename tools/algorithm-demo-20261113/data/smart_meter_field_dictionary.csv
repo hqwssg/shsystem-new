@@ -1,0 +1,32 @@
+﻿field,meaning_cn,unit,in_point_export,note
+id,主键,bigint,yes,
+terminalid,设备ID,bigint,yes,
+unitid,单位,varchar(15),yes,
+traintypeid,车型代码,int,yes,
+trainid,车号,varchar(10),yes,
+recordtime,时间,datetime,yes,
+ygdn,正向有功电能,bigint,yes,
+wgdn,正向无功电能,bigint,yes,
+wy,网压,V,yes,
+yggl,正向有功功率,W,yes,
+pl,频率,0.01 Hz,yes,
+glys,功率因数,0.01,yes,
+fk_dn,反馈有功电能,kWh,yes,
+fk_wg,反馈无功电能,bigint,yes,
+fk_yggl,反馈有功功率,W,yes,
+dl,电流,A,yes,
+ammeterid,电表号,int,yes,
+inserttime,数据插入时间,datetime,yes,
+status,数据状态,int,yes,
+lkj_time,LKJ 时间,datetime,no,数据库表结构有，三份导出均无值
+speed,速度,km/h,no,数据库表结构有，三份导出均无值
+glb,公里标,m,no,数据库表结构有，三份导出均无值
+yszb,运输种别,varchar(30),no,数据库表结构有，三份导出均无值
+jlh,交路号,int,no,数据库表结构有，三份导出均无值
+czh,车站号,int,no,数据库表结构有，三份导出均无值
+sjh,司机号,int,no,数据库表结构有，三份导出均无值
+fsjh,副司机号,int,no,数据库表结构有，三份导出均无值
+cc,车次,varchar(20),no,数据库表结构有，三份导出均无值
+zz,总重,t,no,数据库表结构有，三份导出均无值
+jc,计长,m,no,数据库表结构有，三份导出均无值
+ls,辆数,int,no,数据库表结构有，三份导出均无值

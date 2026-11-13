@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "policy_version": "2026.09.11.1",
+  "osv_ecosystem": "PyPI",
+  "maximum_vulnerability_data_age_days": 7,
+  "allowed_license_expressions": [
+    "Apache-2.0",
+    "Apache-2.0 OR BSD-3-Clause",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "LGPL-3.0-only",
+    "MIT",
+    "MIT-CMU",
+    "PSF-2.0"
+  ],
+  "runtime_policy": {
+    "production_minimum_python": "3.11",
+    "preferred_python": "3.12",
+    "validated_runtime_requires_security_review": true
+  },
+  "blocking_rules": {
+    "known_dependency_vulnerability": true,
+    "unknown_dependency_license": true,
+    "embedded_secret": true,
+    "unsafe_archive_extraction": true,
+    "shell_subprocess": true,
+    "dynamic_code_execution": true
+  },
+  "official_sources": {
+    "osv_api": "https://api.osv.dev/v1/query",
+    "python_versions": "https://devguide.python.org/versions/",
+    "cyclonedx_schema": "https://cyclonedx.org/schema/bom-1.6.schema.json"
+  }
+}

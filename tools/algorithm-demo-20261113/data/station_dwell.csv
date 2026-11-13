@@ -1,0 +1,4 @@
+﻿station,position_km,scope,heavy_2w_min,empty_2w_min,basis,source_type
+西柏坡,241.769,en_route,25,25,换班15min（PDF p.87 机车途中换班 西柏坡15）+ 起车5/停车5（PDF p.81 附加时分 2万吨档）,pdf
+神池南,0.000,terminal,363,0,煤1、2道装车 363min（PDF p.88 各主要装卸车站技术作业时间标准）,pdf
+肃宁北,406.571,terminal,270,0,出库牵引万吨 270min（PDF p.87 机车入段作业时间标准）,pdf

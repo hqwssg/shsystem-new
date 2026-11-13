@@ -1,0 +1,3 @@
+site_code,site_name,position_km,power_arm_code,storage_section_start_km,storage_section_end_km,direction,buildable,max_connection_power_kw,max_capacity_kwh,fixed_site_cost_cny,allowed_technology_codes,data_status,source_note
+PLANNING-SITE-001,待确认候选站点,150,REPLACE-WITH-OFFICIAL-POWER-ARM,145,164,both,true,10000,20000,0,PLANNING-TECH-001,planning_placeholder,示例值必须由供电和建设条件资料替换
+

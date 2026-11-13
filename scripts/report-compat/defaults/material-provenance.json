@@ -1,0 +1,173 @@
+{
+  "review_date": "2026-10-18",
+  "policy": "稳定文字和图片保留原规则；依用户要求加入历史设备表作为参考默认，注明原报告年度并提示核对；不导入工作量、年度能耗或排放结果。",
+  "companies": [
+    {
+      "company_key": "suning",
+      "source_report": "2024年度/运输-2024-005-朔黄铁路发展有限责任公司肃宁分公司-温室气体排放报告-02版.docx",
+      "source_sha256": "65b03b13f1ce691dace1470e5300e4efc6be1b83804edf0f4b6daac84ec71461",
+      "source_report_year": 2024,
+      "stable_text_blocks": [
+        71,
+        78
+      ],
+      "text_processing": "仅摘编公司沿革及通用业务/工艺，删去员工、部门、车站、设备数量、具体里程和年度断言。",
+      "method_source": "第二章 核算方法：仅保留指南名称，不复制年度排放因子、阈值和计算值。",
+      "images": [
+        {
+          "role": "cover_logo",
+          "document_member": "word/media/image1.png",
+          "description": "封面标识"
+        },
+        {
+          "role": "office_location",
+          "document_member": "word/media/image3.jpeg",
+          "description": "肃宁分公司机关所在地"
+        },
+        {
+          "role": "org_chart",
+          "document_member": "word/media/image2.png",
+          "description": "图1.1- 1  肃宁分公司组织机构图",
+          "reference_year": 2024,
+          "user_confirmed_office_location": false
+        }
+      ],
+      "excluded": [
+        "编制单位和签核人员",
+        "碳排放主管部门",
+        "员工/部门/站点数量",
+        "具体边界及排除断言",
+        "工作量及年度消耗量",
+        "活动数据计量及采购现状说明",
+        "年度结论及强度适用性",
+        "报告编号/日期/年度",
+        "年度因子/排放量/同比分析"
+      ],
+      "not_imported_images": [],
+      "equipment_defaults": {
+        "table_index": 1,
+        "table_label": "表1.3-1",
+        "rows": 9,
+        "source_year": 2024,
+        "missing_quantity": 1,
+        "duplicate_original_serials": [],
+        "policy": "历史设备参考清单，可编辑；缺失数量不补零，不按名称去重"
+      }
+    },
+    {
+      "company_key": "yuanping",
+      "source_report": "2024年度/运输-2024-006-国能朔黄铁路发展有限责任公司原平分公司-温室气体排放报告-V1.docx",
+      "source_sha256": "968a867b0a19e5eb4086d9e38e85eb3a4dd19a81066088ceecba70c3f83f8fdc",
+      "source_report_year": 2024,
+      "stable_text_blocks": [
+        66,
+        73
+      ],
+      "text_processing": "仅摘编公司沿革及通用业务/工艺，删去员工、部门、车站、设备数量、具体里程和年度断言。",
+      "method_source": "第二章 核算方法：仅保留指南名称，不复制年度排放因子、阈值和计算值。",
+      "images": [
+        {
+          "role": "cover_logo",
+          "document_member": "word/media/image1.png",
+          "description": "封面标识"
+        },
+        {
+          "role": "office_location",
+          "document_member": "word/media/image2.jpeg",
+          "description": "原平分公司场所外观照片"
+        },
+        {
+          "role": "org_chart",
+          "document_member": "word/media/image3.png",
+          "description": "图2.1- 1  原平分公司组织机构图",
+          "reference_year": 2024,
+          "user_confirmed_office_location": false
+        }
+      ],
+      "excluded": [
+        "编制单位和签核人员",
+        "碳排放主管部门",
+        "员工/部门/站点数量",
+        "具体边界及排除断言",
+        "工作量及年度消耗量",
+        "活动数据计量及采购现状说明",
+        "年度结论及强度适用性",
+        "报告编号/日期/年度",
+        "年度因子/排放量/同比分析"
+      ],
+      "not_imported_images": [
+        "线路及站点图"
+      ],
+      "equipment_defaults": {
+        "table_index": 1,
+        "table_label": "表1.3-1",
+        "rows": 4,
+        "source_year": 2024,
+        "missing_quantity": 0,
+        "duplicate_original_serials": [],
+        "policy": "历史设备参考清单，可编辑；缺失数量不补零，不按名称去重"
+      }
+    },
+    {
+      "company_key": "jiliang",
+      "source_report": "2025年度/运输-2025-007-朔黄铁路发展有限责任公司机辆分公司-温室气体排放报告-V1.docx",
+      "source_sha256": "ff86f9d31e31a20675d87ab877aab9f281b6a70d98b6f7b01e182c900ac8966c",
+      "source_report_year": 2025,
+      "stable_text_blocks": [
+        69,
+        78
+      ],
+      "text_processing": "仅摘编公司沿革及通用业务/工艺，删去员工、部门、车站、设备数量、具体里程和年度断言。",
+      "method_source": "第二章 核算方法：仅保留指南名称，不复制年度排放因子、阈值和计算值。",
+      "images": [
+        {
+          "role": "cover_logo",
+          "document_member": "word/media/image1.png",
+          "description": "封面标识"
+        },
+        {
+          "role": "org_chart",
+          "document_member": "word/media/image2.jpeg",
+          "description": "图1.1- 1 机辆分公司组织机构图",
+          "reference_year": 2025,
+          "user_confirmed_office_location": false
+        },
+        {
+          "role": "office_location",
+          "document_member": "word/media/image3.png",
+          "description": "图1.1-2 机辆分公司现场图",
+          "reference_year": 2025,
+          "user_confirmed_office_location": true
+        }
+      ],
+      "excluded": [
+        "编制单位和签核人员",
+        "碳排放主管部门",
+        "员工/部门/站点数量",
+        "具体边界及排除断言",
+        "工作量及年度消耗量",
+        "活动数据计量及采购现状说明",
+        "年度结论及强度适用性",
+        "报告编号/日期/年度",
+        "年度因子/排放量/同比分析"
+      ],
+      "not_imported_images": [
+        "平面布置图"
+      ],
+      "equipment_defaults": {
+        "table_index": 1,
+        "table_label": "表1.3-1",
+        "rows": 57,
+        "source_year": 2025,
+        "missing_quantity": 6,
+        "duplicate_original_serials": [
+          "33"
+        ],
+        "policy": "历史设备参考清单，可编辑；缺失数量不补零，不按名称去重"
+      }
+    }
+  ],
+  "equipment_review_date": "2026-10-22",
+  "image_review_date": "2026-10-22",
+  "image_review_policy": "依用户新要求补入三家历史组织图；机辆现场图经用户明确确认可作机关所在地。默认图仅供参考，保留已有人工有效图。线路图和平面图未映射到其他角色。"
+}

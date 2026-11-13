@@ -1,0 +1,7779 @@
+{
+  "schemaVersion": 1,
+  "isDemo": true,
+  "description": "演示数据：模拟生成，非实际核算；不写入业务数据库。",
+  "periodLabel": "演示数据 · 统计周期：2026年1月—2026年12月",
+  "overall": {
+    "kpi": {
+      "yearTotal": 32373.1009,
+      "monthTotal": 3104.3026,
+      "yoyPercent": 4,
+      "pointCount": 35,
+      "intensity": 0
+    },
+    "line": {
+      "dimensions": [
+        "month",
+        "actual",
+        "forecast"
+      ],
+      "source": [
+        {
+          "month": "2026-01",
+          "actual": 3066.7616,
+          "forecast": null
+        },
+        {
+          "month": "2026-02",
+          "actual": 2912.8358,
+          "forecast": null
+        },
+        {
+          "month": "2026-03",
+          "actual": 2665.9973,
+          "forecast": null
+        },
+        {
+          "month": "2026-04",
+          "actual": 2398.3215,
+          "forecast": null
+        },
+        {
+          "month": "2026-05",
+          "actual": 2324.8452,
+          "forecast": null
+        },
+        {
+          "month": "2026-06",
+          "actual": 2642.7896,
+          "forecast": null
+        },
+        {
+          "month": "2026-07",
+          "actual": 2816.8606,
+          "forecast": null
+        },
+        {
+          "month": "2026-08",
+          "actual": 2870.4264,
+          "forecast": null
+        },
+        {
+          "month": "2026-09",
+          "actual": 2499.8735,
+          "forecast": null
+        },
+        {
+          "month": "2026-10",
+          "actual": 2377.7373,
+          "forecast": null
+        },
+        {
+          "month": "2026-11",
+          "actual": 2692.3495,
+          "forecast": null
+        },
+        {
+          "month": "2026-12",
+          "actual": 3104.3026,
+          "forecast": null
+        }
+      ]
+    },
+    "surface": {
+      "timeType": "month",
+      "years": [
+        2024,
+        2025,
+        2026
+      ],
+      "times": [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月"
+      ],
+      "values": [
+        [
+          2830.8565,
+          2688.7711,
+          2460.9206,
+          2213.8354,
+          2146.0103,
+          2439.4975,
+          2600.179,
+          2649.6245,
+          2307.5753,
+          2194.8346,
+          2485.2457,
+          2865.5099
+        ],
+        [
+          2948.8094,
+          2800.8037,
+          2563.4585,
+          2306.0784,
+          2235.4275,
+          2541.1426,
+          2708.52,
+          2760.0253,
+          2403.7244,
+          2286.286,
+          2588.7976,
+          2984.9061
+        ],
+        [
+          3066.7616,
+          2912.8358,
+          2665.9973,
+          2398.3215,
+          2324.8452,
+          2642.7896,
+          2816.8606,
+          2870.4264,
+          2499.8735,
+          2377.7373,
+          2692.3495,
+          3104.3026
+        ]
+      ],
+      "unit": "tCO2e"
+    },
+    "pies": {
+      "source": {
+        "dimensions": [
+          "name",
+          "value"
+        ],
+        "source": [
+          {
+            "name": "购入电力",
+            "value": 22771.0337
+          },
+          {
+            "name": "柴油",
+            "value": 7946.7781
+          },
+          {
+            "name": "汽油",
+            "value": 76.6726
+          },
+          {
+            "name": "天然气",
+            "value": 150.0216
+          },
+          {
+            "name": "购入热力",
+            "value": 1428.5949
+          }
+        ]
+      },
+      "type": {
+        "dimensions": [
+          "name",
+          "value"
+        ],
+        "source": [
+          {
+            "name": "间接排放",
+            "value": 24199.6286
+          },
+          {
+            "name": "直接排放",
+            "value": 8173.4723
+          }
+        ]
+      },
+      "segment": {
+        "dimensions": [
+          "name",
+          "value"
+        ],
+        "source": [
+          {
+            "name": "生产用能",
+            "value": 27840.8668
+          },
+          {
+            "name": "非生产用能",
+            "value": 4532.2341
+          }
+        ]
+      }
+    }
+  },
+  "stations": {
+    "神池南站": {
+      "kpi": {
+        "yearTotal": 494.5696,
+        "monthTotal": 46.9893,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 7.5
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 46.4096,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 44.0005,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 40.1451,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 36.9513,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 35.8125,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 40.7653,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 43.4731,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 44.3015,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 38.5303,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 36.6299,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 40.5612,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 46.9893,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            42.8396,
+            40.6158,
+            37.057,
+            34.1089,
+            33.0577,
+            37.6295,
+            40.129,
+            40.8937,
+            35.5664,
+            33.8122,
+            37.4411,
+            43.3747
+          ],
+          [
+            44.6246,
+            42.3082,
+            38.601,
+            35.5301,
+            34.4351,
+            39.1974,
+            41.8011,
+            42.5976,
+            37.0483,
+            35.221,
+            39.0012,
+            45.182
+          ],
+          [
+            46.4096,
+            44.0005,
+            40.1451,
+            36.9513,
+            35.8125,
+            40.7653,
+            43.4731,
+            44.3015,
+            38.5303,
+            36.6299,
+            40.5612,
+            46.9893
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 350.8936
+            },
+            {
+              "name": "柴油",
+              "value": 126.0643
+            },
+            {
+              "name": "汽油",
+              "value": 1.0526
+            },
+            {
+              "name": "天然气",
+              "value": 3.6596
+            },
+            {
+              "name": "购入热力",
+              "value": 12.8995
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 363.7931
+            },
+            {
+              "name": "直接排放",
+              "value": 130.7765
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 425.3299
+            },
+            {
+              "name": "非生产用能",
+              "value": 69.2397
+            }
+          ]
+        }
+      }
+    },
+    "宁武西站": {
+      "kpi": {
+        "yearTotal": 693.7147,
+        "monthTotal": 65.9256,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.15
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 65.1056,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 61.7239,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 56.3189,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 51.8239,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 50.2307,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 57.1762,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 60.9691,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 62.1259,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 54.0331,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 51.3718,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 56.91,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 65.9256,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            60.0975,
+            56.9759,
+            51.9867,
+            47.8375,
+            46.3668,
+            52.778,
+            56.2792,
+            57.347,
+            49.8767,
+            47.4202,
+            52.5323,
+            60.8544
+          ],
+          [
+            62.6016,
+            59.3499,
+            54.1528,
+            49.8307,
+            48.2987,
+            54.9771,
+            58.6241,
+            59.7365,
+            51.9549,
+            49.396,
+            54.7212,
+            63.39
+          ],
+          [
+            65.1056,
+            61.7239,
+            56.3189,
+            51.8239,
+            50.2307,
+            57.1762,
+            60.9691,
+            62.1259,
+            54.0331,
+            51.3718,
+            56.91,
+            65.9256
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 487.033
+            },
+            {
+              "name": "柴油",
+              "value": 180.8632
+            },
+            {
+              "name": "汽油",
+              "value": 1.6108
+            },
+            {
+              "name": "天然气",
+              "value": 5.9187
+            },
+            {
+              "name": "购入热力",
+              "value": 18.289
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 505.322
+            },
+            {
+              "name": "直接排放",
+              "value": 188.3927
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 596.5946
+            },
+            {
+              "name": "非生产用能",
+              "value": 97.1201
+            }
+          ]
+        }
+      }
+    },
+    "龙宫站": {
+      "kpi": {
+        "yearTotal": 1145.391,
+        "monthTotal": 111.1557,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.8
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 109.8547,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 104.5889,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 96.1119,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 83.903,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 81.3485,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 92.3056,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 98.3215,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 100.1919,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 87.418,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 83.1976,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 96.9937,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 111.1557,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            101.4044,
+            96.5436,
+            88.7187,
+            77.4489,
+            75.0909,
+            85.2051,
+            90.7583,
+            92.4848,
+            80.6936,
+            76.7978,
+            89.5326,
+            102.6052
+          ],
+          [
+            105.6295,
+            100.5663,
+            92.4153,
+            80.6759,
+            78.2197,
+            88.7553,
+            94.5399,
+            96.3383,
+            84.0558,
+            79.9977,
+            93.2631,
+            106.8804
+          ],
+          [
+            109.8547,
+            104.5889,
+            96.1119,
+            83.903,
+            81.3485,
+            92.3056,
+            98.3215,
+            100.1919,
+            87.418,
+            83.1976,
+            96.9937,
+            111.1557
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 802.5944
+            },
+            {
+              "name": "柴油",
+              "value": 261.9474
+            },
+            {
+              "name": "汽油",
+              "value": 2.9162
+            },
+            {
+              "name": "天然气",
+              "value": 0.1498
+            },
+            {
+              "name": "购入热力",
+              "value": 77.7832
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 880.3776
+            },
+            {
+              "name": "直接排放",
+              "value": 265.0134
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 985.0363
+            },
+            {
+              "name": "非生产用能",
+              "value": 160.3547
+            }
+          ]
+        }
+      }
+    },
+    "北大牛站": {
+      "kpi": {
+        "yearTotal": 687.4516,
+        "monthTotal": 65.3151,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 9.45
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 64.5093,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 61.1607,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 55.8016,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 51.3623,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 49.7794,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 56.6638,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 60.4276,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 61.5791,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 53.5571,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 50.9155,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 56.3801,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 65.3151,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            59.547,
+            56.456,
+            51.5092,
+            47.4114,
+            45.9502,
+            52.305,
+            55.7794,
+            56.8423,
+            49.4373,
+            46.9989,
+            52.0432,
+            60.2908
+          ],
+          [
+            62.0282,
+            58.8084,
+            53.6554,
+            49.3869,
+            47.8648,
+            54.4844,
+            58.1035,
+            59.2107,
+            51.4972,
+            48.9572,
+            54.2116,
+            62.803
+          ],
+          [
+            64.5093,
+            61.1607,
+            55.8016,
+            51.3623,
+            49.7794,
+            56.6638,
+            60.4276,
+            61.5791,
+            53.5571,
+            50.9155,
+            56.3801,
+            65.3151
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 487.7419
+            },
+            {
+              "name": "柴油",
+              "value": 175.2294
+            },
+            {
+              "name": "汽油",
+              "value": 1.4631
+            },
+            {
+              "name": "天然气",
+              "value": 5.0869
+            },
+            {
+              "name": "购入热力",
+              "value": 17.9303
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 505.6722
+            },
+            {
+              "name": "直接排放",
+              "value": 181.7794
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 591.2084
+            },
+            {
+              "name": "非生产用能",
+              "value": 96.2432
+            }
+          ]
+        }
+      }
+    },
+    "原平南站": {
+      "kpi": {
+        "yearTotal": 933.1384,
+        "monthTotal": 88.6787,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.1
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 87.5757,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 83.0268,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 75.7564,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 69.7101,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 67.5669,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 76.9096,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 82.0115,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 83.5676,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 72.6816,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 69.102,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 76.5515,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 88.6787,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            80.8391,
+            76.6401,
+            69.929,
+            64.3478,
+            62.3695,
+            70.9935,
+            75.7029,
+            77.1393,
+            67.0907,
+            63.7864,
+            70.6629,
+            81.8573
+          ],
+          [
+            84.2074,
+            79.8335,
+            72.8427,
+            67.0289,
+            64.9682,
+            73.9515,
+            78.8572,
+            80.3535,
+            69.8862,
+            66.4442,
+            73.6072,
+            85.268
+          ],
+          [
+            87.5757,
+            83.0268,
+            75.7564,
+            69.7101,
+            67.5669,
+            76.9096,
+            82.0115,
+            83.5676,
+            72.6816,
+            69.102,
+            76.5515,
+            88.6787
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 655.1241
+            },
+            {
+              "name": "柴油",
+              "value": 243.285
+            },
+            {
+              "name": "汽油",
+              "value": 2.1667
+            },
+            {
+              "name": "天然气",
+              "value": 7.9614
+            },
+            {
+              "name": "购入热力",
+              "value": 24.6012
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 679.7253
+            },
+            {
+              "name": "直接排放",
+              "value": 253.4131
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 802.499
+            },
+            {
+              "name": "非生产用能",
+              "value": 130.6394
+            }
+          ]
+        }
+      }
+    },
+    "回凤站": {
+      "kpi": {
+        "yearTotal": 1499.9166,
+        "monthTotal": 145.561,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.75
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 143.8574,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 136.9617,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 125.8609,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 109.8729,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 106.5277,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 120.8763,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 128.7543,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 131.2037,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 114.476,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 108.9492,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 127.0155,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 145.561,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            132.7914,
+            126.4262,
+            116.1793,
+            101.4211,
+            98.3333,
+            111.5782,
+            118.8501,
+            121.111,
+            105.6701,
+            100.5685,
+            117.2451,
+            134.364
+          ],
+          [
+            138.3244,
+            131.6939,
+            121.0201,
+            105.647,
+            102.4305,
+            116.2272,
+            123.8022,
+            126.1573,
+            110.073,
+            104.7589,
+            122.1303,
+            139.9625
+          ],
+          [
+            143.8574,
+            136.9617,
+            125.8609,
+            109.8729,
+            106.5277,
+            120.8763,
+            128.7543,
+            131.2037,
+            114.476,
+            108.9492,
+            127.0155,
+            145.561
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 1051.0162
+            },
+            {
+              "name": "柴油",
+              "value": 343.0264
+            },
+            {
+              "name": "汽油",
+              "value": 3.8188
+            },
+            {
+              "name": "天然气",
+              "value": 0.1962
+            },
+            {
+              "name": "购入热力",
+              "value": 101.859
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 1152.8752
+            },
+            {
+              "name": "直接排放",
+              "value": 347.0414
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 1289.9283
+            },
+            {
+              "name": "非生产用能",
+              "value": 209.9883
+            }
+          ]
+        }
+      }
+    },
+    "东冶站": {
+      "kpi": {
+        "yearTotal": 880.3338,
+        "monthTotal": 83.6409,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 11.4
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 82.609,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 78.3209,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 71.4582,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 65.7733,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 63.7463,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 72.5622,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 77.3822,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 78.8567,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 68.5839,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 65.2012,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 72.199,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 83.6409,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            76.2545,
+            72.2962,
+            65.9614,
+            60.7139,
+            58.8427,
+            66.9805,
+            71.4297,
+            72.7908,
+            63.3082,
+            60.1857,
+            66.6452,
+            77.207
+          ],
+          [
+            79.4318,
+            75.3086,
+            68.7098,
+            63.2436,
+            61.2945,
+            69.7714,
+            74.4059,
+            75.8238,
+            65.946,
+            62.6934,
+            69.4221,
+            80.4239
+          ],
+          [
+            82.609,
+            78.3209,
+            71.4582,
+            65.7733,
+            63.7463,
+            72.5622,
+            77.3822,
+            78.8567,
+            68.5839,
+            65.2012,
+            72.199,
+            83.6409
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 624.5905
+            },
+            {
+              "name": "柴油",
+              "value": 224.3944
+            },
+            {
+              "name": "汽油",
+              "value": 1.8736
+            },
+            {
+              "name": "天然气",
+              "value": 6.5142
+            },
+            {
+              "name": "购入热力",
+              "value": 22.9611
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 647.5516
+            },
+            {
+              "name": "直接排放",
+              "value": 232.7822
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 757.0871
+            },
+            {
+              "name": "非生产用能",
+              "value": 123.2467
+            }
+          ]
+        }
+      }
+    },
+    "南湾站": {
+      "kpi": {
+        "yearTotal": 613.9069,
+        "monthTotal": 58.3413,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.05
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 57.6156,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 54.6229,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 49.8398,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 45.8619,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 44.4519,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 50.5984,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 53.9549,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 54.9787,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 47.8169,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 45.4618,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 50.3628,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 58.3413,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            53.1836,
+            50.4211,
+            46.0059,
+            42.3341,
+            41.0325,
+            46.7062,
+            49.8046,
+            50.7496,
+            44.1386,
+            41.9647,
+            46.4888,
+            53.8535
+          ],
+          [
+            55.3996,
+            52.522,
+            47.9228,
+            44.098,
+            42.7422,
+            48.6523,
+            51.8797,
+            52.8641,
+            45.9777,
+            43.7133,
+            48.4258,
+            56.0974
+          ],
+          [
+            57.6156,
+            54.6229,
+            49.8398,
+            45.8619,
+            44.4519,
+            50.5984,
+            53.9549,
+            54.9787,
+            47.8169,
+            45.4618,
+            50.3628,
+            58.3413
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 431.0026
+            },
+            {
+              "name": "柴油",
+              "value": 160.056
+            },
+            {
+              "name": "汽油",
+              "value": 1.4255
+            },
+            {
+              "name": "天然气",
+              "value": 5.2378
+            },
+            {
+              "name": "购入热力",
+              "value": 16.185
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 447.1876
+            },
+            {
+              "name": "直接排放",
+              "value": 166.7193
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 527.9599
+            },
+            {
+              "name": "非生产用能",
+              "value": 85.947
+            }
+          ]
+        }
+      }
+    },
+    "滴流蹬站": {
+      "kpi": {
+        "yearTotal": 1027.2156,
+        "monthTotal": 99.6872,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.7
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 98.5205,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 93.798,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 86.1956,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 75.2463,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 72.9554,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 82.782,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 88.1772,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 89.8546,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 78.3987,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 74.6137,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 86.9864,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 99.6872,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            90.942,
+            86.5828,
+            79.5652,
+            69.4581,
+            67.3434,
+            76.4141,
+            81.3943,
+            82.9427,
+            72.368,
+            68.8742,
+            80.2951,
+            92.019
+          ],
+          [
+            94.7313,
+            90.1904,
+            82.8804,
+            72.3522,
+            70.1494,
+            79.598,
+            84.7858,
+            86.3987,
+            75.3834,
+            71.744,
+            83.6408,
+            95.8531
+          ],
+          [
+            98.5205,
+            93.798,
+            86.1956,
+            75.2463,
+            72.9554,
+            82.782,
+            88.1772,
+            89.8546,
+            78.3987,
+            74.6137,
+            86.9864,
+            99.6872
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 719.7869
+            },
+            {
+              "name": "柴油",
+              "value": 234.9211
+            },
+            {
+              "name": "汽油",
+              "value": 2.6153
+            },
+            {
+              "name": "天然气",
+              "value": 0.1343
+            },
+            {
+              "name": "购入热力",
+              "value": 69.758
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 789.5449
+            },
+            {
+              "name": "直接排放",
+              "value": 237.6707
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 883.4054
+            },
+            {
+              "name": "非生产用能",
+              "value": 143.8102
+            }
+          ]
+        }
+      }
+    },
+    "猴刎站": {
+      "kpi": {
+        "yearTotal": 623.1576,
+        "monthTotal": 59.2065,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 7.5
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 58.4761,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 55.4406,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 50.5828,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 46.5587,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 45.1238,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 51.3643,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 54.7761,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 55.8199,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 48.5481,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 46.1536,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 51.1071,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 59.2065,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            53.9779,
+            51.176,
+            46.6918,
+            42.9772,
+            41.6527,
+            47.4132,
+            50.5626,
+            51.5261,
+            44.8136,
+            42.6034,
+            47.1758,
+            54.6521
+          ],
+          [
+            56.227,
+            53.3083,
+            48.6373,
+            44.768,
+            43.3882,
+            49.3887,
+            52.6694,
+            53.673,
+            46.6809,
+            44.3785,
+            49.1415,
+            56.9293
+          ],
+          [
+            58.4761,
+            55.4406,
+            50.5828,
+            46.5587,
+            45.1238,
+            51.3643,
+            54.7761,
+            55.8199,
+            48.5481,
+            46.1536,
+            51.1071,
+            59.2065
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 442.1259
+            },
+            {
+              "name": "柴油",
+              "value": 158.841
+            },
+            {
+              "name": "汽油",
+              "value": 1.3262
+            },
+            {
+              "name": "天然气",
+              "value": 4.6112
+            },
+            {
+              "name": "购入热力",
+              "value": 16.2533
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 458.3792
+            },
+            {
+              "name": "直接排放",
+              "value": 164.7784
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 535.9155
+            },
+            {
+              "name": "非生产用能",
+              "value": 87.2421
+            }
+          ]
+        }
+      }
+    },
+    "小觉站": {
+      "kpi": {
+        "yearTotal": 853.3305,
+        "monthTotal": 81.0943,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.15
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 80.0857,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 75.9258,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 69.2773,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 63.748,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 61.7882,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 70.3318,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 74.9974,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 76.4204,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 66.4654,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 63.1919,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 70.0043,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 81.0943,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            73.9252,
+            70.0854,
+            63.9482,
+            58.8443,
+            57.0352,
+            64.9217,
+            69.2283,
+            70.5419,
+            61.3527,
+            58.331,
+            64.6194,
+            74.8563
+          ],
+          [
+            77.0055,
+            73.0056,
+            66.6127,
+            61.2962,
+            59.4117,
+            67.6267,
+            72.1129,
+            73.4811,
+            63.9091,
+            60.7615,
+            67.3119,
+            77.9753
+          ],
+          [
+            80.0857,
+            75.9258,
+            69.2773,
+            63.748,
+            61.7882,
+            70.3318,
+            74.9974,
+            76.4204,
+            66.4654,
+            63.1919,
+            70.0043,
+            81.0943
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 599.0937
+            },
+            {
+              "name": "柴油",
+              "value": 222.4778
+            },
+            {
+              "name": "汽油",
+              "value": 1.9814
+            },
+            {
+              "name": "天然气",
+              "value": 7.2805
+            },
+            {
+              "name": "购入热力",
+              "value": 22.4971
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 621.5908
+            },
+            {
+              "name": "直接排放",
+              "value": 231.7397
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 733.8642
+            },
+            {
+              "name": "非生产用能",
+              "value": 119.4663
+            }
+          ]
+        }
+      }
+    },
+    "古月站": {
+      "kpi": {
+        "yearTotal": 1381.7416,
+        "monthTotal": 134.0925,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.8
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 132.5232,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 126.1708,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 115.9446,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 101.2163,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 98.1347,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 111.3528,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 118.61,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 120.8664,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 105.4566,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 100.3654,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 117.0083,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 134.0925,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            122.3291,
+            116.4653,
+            107.0258,
+            93.4304,
+            90.5858,
+            102.7871,
+            109.4862,
+            111.569,
+            97.3446,
+            92.645,
+            108.0076,
+            123.7777
+          ],
+          [
+            127.4261,
+            121.318,
+            111.4851,
+            97.3233,
+            94.3602,
+            107.0699,
+            114.0481,
+            116.2177,
+            101.4006,
+            96.5051,
+            112.5079,
+            128.9351
+          ],
+          [
+            132.5232,
+            126.1708,
+            115.9446,
+            101.2163,
+            98.1347,
+            111.3528,
+            118.61,
+            120.8664,
+            105.4566,
+            100.3654,
+            117.0083,
+            134.0925
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 968.2092
+            },
+            {
+              "name": "柴油",
+              "value": 316.0001
+            },
+            {
+              "name": "汽油",
+              "value": 3.5179
+            },
+            {
+              "name": "天然气",
+              "value": 0.1807
+            },
+            {
+              "name": "购入热力",
+              "value": 93.8337
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 1062.0429
+            },
+            {
+              "name": "直接排放",
+              "value": 319.6987
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 1188.2978
+            },
+            {
+              "name": "非生产用能",
+              "value": 193.4438
+            }
+          ]
+        }
+      }
+    },
+    "温塘站": {
+      "kpi": {
+        "yearTotal": 816.0398,
+        "monthTotal": 77.5323,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 9.45
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 76.5758,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 72.6008,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 66.2393,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 60.9697,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 59.0907,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 67.2628,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 71.7307,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 73.0975,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 63.5749,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 60.4393,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 66.926,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 77.5323,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            70.6853,
+            67.0161,
+            61.144,
+            56.2797,
+            54.5452,
+            62.0887,
+            66.2129,
+            67.4747,
+            58.6845,
+            55.7901,
+            61.7779,
+            71.5683
+          ],
+          [
+            73.6306,
+            69.8085,
+            63.6917,
+            58.6247,
+            56.8179,
+            64.6757,
+            68.9718,
+            70.2861,
+            61.1297,
+            58.1147,
+            64.3519,
+            74.5503
+          ],
+          [
+            76.5758,
+            72.6008,
+            66.2393,
+            60.9697,
+            59.0907,
+            67.2628,
+            71.7307,
+            73.0975,
+            63.5749,
+            60.4393,
+            66.926,
+            77.5323
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 578.9745
+            },
+            {
+              "name": "柴油",
+              "value": 208.0061
+            },
+            {
+              "name": "汽油",
+              "value": 1.7367
+            },
+            {
+              "name": "天然气",
+              "value": 6.0384
+            },
+            {
+              "name": "购入热力",
+              "value": 21.2841
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 600.2586
+            },
+            {
+              "name": "直接排放",
+              "value": 215.7812
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 701.7942
+            },
+            {
+              "name": "非生产用能",
+              "value": 114.2456
+            }
+          ]
+        }
+      }
+    },
+    "西柏坡站": {
+      "kpi": {
+        "yearTotal": 1092.7542,
+        "monthTotal": 103.8474,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.1
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 102.5558,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 97.2288,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 88.7148,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 81.6341,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 79.1244,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 90.0652,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 96.0398,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 97.8621,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 85.114,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 80.922,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 89.6458,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 103.8474,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            94.6669,
+            89.7496,
+            81.8906,
+            75.3546,
+            73.0379,
+            83.1371,
+            88.6521,
+            90.3342,
+            78.5668,
+            74.6973,
+            82.75,
+            95.8592
+          ],
+          [
+            98.6113,
+            93.4892,
+            85.3027,
+            78.4944,
+            76.0812,
+            86.6011,
+            92.346,
+            94.0981,
+            81.8404,
+            77.8097,
+            86.1979,
+            99.8533
+          ],
+          [
+            102.5558,
+            97.2288,
+            88.7148,
+            81.6341,
+            79.1244,
+            90.0652,
+            96.0398,
+            97.8621,
+            85.114,
+            80.922,
+            89.6458,
+            103.8474
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 767.1848
+            },
+            {
+              "name": "柴油",
+              "value": 284.8996
+            },
+            {
+              "name": "汽油",
+              "value": 2.5373
+            },
+            {
+              "name": "天然气",
+              "value": 9.3232
+            },
+            {
+              "name": "购入热力",
+              "value": 28.8093
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 795.9941
+            },
+            {
+              "name": "直接排放",
+              "value": 296.7601
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 939.7686
+            },
+            {
+              "name": "非生产用能",
+              "value": 152.9856
+            }
+          ]
+        }
+      }
+    },
+    "三汲站": {
+      "kpi": {
+        "yearTotal": 909.0404,
+        "monthTotal": 88.2188,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.75
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 87.1863,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 83.0071,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 76.2793,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 66.5896,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 64.5623,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 73.2584,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 78.0329,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 79.5174,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 69.3794,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 66.0298,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 76.9791,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 88.2188,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            80.4797,
+            76.6219,
+            70.4117,
+            61.4674,
+            59.5959,
+            67.6231,
+            72.0304,
+            73.4006,
+            64.0425,
+            60.9506,
+            71.0576,
+            81.4327
+          ],
+          [
+            83.833,
+            79.8145,
+            73.3455,
+            64.0285,
+            62.0791,
+            70.4407,
+            75.0316,
+            76.459,
+            66.7109,
+            63.4902,
+            74.0184,
+            84.8257
+          ],
+          [
+            87.1863,
+            83.0071,
+            76.2793,
+            66.5896,
+            64.5623,
+            73.2584,
+            78.0329,
+            79.5174,
+            69.3794,
+            66.0298,
+            76.9791,
+            88.2188
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 636.9796
+            },
+            {
+              "name": "柴油",
+              "value": 207.8948
+            },
+            {
+              "name": "汽油",
+              "value": 2.3144
+            },
+            {
+              "name": "天然气",
+              "value": 0.1189
+            },
+            {
+              "name": "购入热力",
+              "value": 61.7327
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 698.7123
+            },
+            {
+              "name": "直接排放",
+              "value": 210.3281
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 781.7747
+            },
+            {
+              "name": "非生产用能",
+              "value": 127.2657
+            }
+          ]
+        }
+      }
+    },
+    "灵寿站": {
+      "kpi": {
+        "yearTotal": 558.8637,
+        "monthTotal": 53.0979,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 11.4
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 52.4428,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 49.7206,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 45.3639,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 41.755,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 40.4682,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 46.0648,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 49.1246,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 50.0607,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 43.5392,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 41.3918,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 45.8342,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 53.0979,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            48.4087,
+            45.8959,
+            41.8744,
+            38.5431,
+            37.3552,
+            42.5213,
+            45.3458,
+            46.2099,
+            40.19,
+            38.2078,
+            42.3085,
+            49.0134
+          ],
+          [
+            50.4258,
+            47.8082,
+            43.6192,
+            40.149,
+            38.9117,
+            44.2931,
+            47.2352,
+            48.1353,
+            41.8646,
+            39.7998,
+            44.0713,
+            51.0556
+          ],
+          [
+            52.4428,
+            49.7206,
+            45.3639,
+            41.755,
+            40.4682,
+            46.0648,
+            49.1246,
+            50.0607,
+            43.5392,
+            41.3918,
+            45.8342,
+            53.0979
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 396.5098
+            },
+            {
+              "name": "柴油",
+              "value": 142.4527
+            },
+            {
+              "name": "汽油",
+              "value": 1.1894
+            },
+            {
+              "name": "天然气",
+              "value": 4.1354
+            },
+            {
+              "name": "购入热力",
+              "value": 14.5764
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 411.0862
+            },
+            {
+              "name": "直接排放",
+              "value": 147.7775
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 480.6228
+            },
+            {
+              "name": "非生产用能",
+              "value": 78.2409
+            }
+          ]
+        }
+      }
+    },
+    "行唐站": {
+      "kpi": {
+        "yearTotal": 773.5228,
+        "monthTotal": 73.51,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.05
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 72.5957,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 68.8248,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 62.7981,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 57.786,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 56.0094,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 63.754,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 67.9832,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 69.2732,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 60.2493,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 57.2819,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 63.4572,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 73.51,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            67.0114,
+            63.5306,
+            57.9675,
+            53.3409,
+            51.701,
+            58.8499,
+            62.7537,
+            63.9445,
+            55.6147,
+            52.8756,
+            58.5759,
+            67.8554
+          ],
+          [
+            69.8035,
+            66.1777,
+            60.3828,
+            55.5634,
+            53.8552,
+            61.3019,
+            65.3685,
+            66.6088,
+            57.932,
+            55.0787,
+            61.0165,
+            70.6827
+          ],
+          [
+            72.5957,
+            68.8248,
+            62.7981,
+            57.786,
+            56.0094,
+            63.754,
+            67.9832,
+            69.2732,
+            60.2493,
+            57.2819,
+            63.4572,
+            73.51
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 543.0635
+            },
+            {
+              "name": "柴油",
+              "value": 201.6705
+            },
+            {
+              "name": "汽油",
+              "value": 1.7961
+            },
+            {
+              "name": "天然气",
+              "value": 6.5996
+            },
+            {
+              "name": "购入热力",
+              "value": 20.3931
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 563.4566
+            },
+            {
+              "name": "直接排放",
+              "value": 210.0662
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 665.2296
+            },
+            {
+              "name": "非生产用能",
+              "value": 108.2932
+            }
+          ]
+        }
+      }
+    },
+    "新曲站": {
+      "kpi": {
+        "yearTotal": 1263.5664,
+        "monthTotal": 122.6241,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.7
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 121.189,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 115.3799,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 106.0283,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 92.5596,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 89.7416,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 101.8292,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 108.4658,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 110.5291,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 96.4373,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 91.7815,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 107.001,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 122.6241,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            111.8667,
+            106.5045,
+            97.8722,
+            85.4396,
+            82.8384,
+            93.9961,
+            100.1222,
+            102.0269,
+            89.0191,
+            84.7214,
+            98.7701,
+            113.1915
+          ],
+          [
+            116.5278,
+            110.9422,
+            101.9502,
+            88.9996,
+            86.29,
+            97.9126,
+            104.294,
+            106.278,
+            92.7282,
+            88.2514,
+            102.8855,
+            117.9078
+          ],
+          [
+            121.189,
+            115.3799,
+            106.0283,
+            92.5596,
+            89.7416,
+            101.8292,
+            108.4658,
+            110.5291,
+            96.4373,
+            91.7815,
+            107.001,
+            122.6241
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 885.4018
+            },
+            {
+              "name": "柴油",
+              "value": 288.9738
+            },
+            {
+              "name": "汽油",
+              "value": 3.217
+            },
+            {
+              "name": "天然气",
+              "value": 0.1653
+            },
+            {
+              "name": "购入热力",
+              "value": 85.8085
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 971.2103
+            },
+            {
+              "name": "直接排放",
+              "value": 292.3561
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 1086.6671
+            },
+            {
+              "name": "非生产用能",
+              "value": 176.8993
+            }
+          ]
+        }
+      }
+    },
+    "定州西站": {
+      "kpi": {
+        "yearTotal": 751.7457,
+        "monthTotal": 71.4237,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 7.5
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 70.5425,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 66.8808,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 61.0205,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 56.166,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 54.435,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 61.9633,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 66.0791,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 67.3383,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 58.566,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 55.6774,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 61.6531,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 71.4237,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            65.1162,
+            61.7361,
+            56.3266,
+            51.8455,
+            50.2477,
+            57.1968,
+            60.9961,
+            62.1585,
+            54.0609,
+            51.3945,
+            56.9105,
+            65.9295
+          ],
+          [
+            67.8294,
+            64.3084,
+            58.6735,
+            54.0058,
+            52.3414,
+            59.5801,
+            63.5376,
+            64.7484,
+            56.3135,
+            53.536,
+            59.2818,
+            68.6766
+          ],
+          [
+            70.5425,
+            66.8808,
+            61.0205,
+            56.166,
+            54.435,
+            61.9633,
+            66.0791,
+            67.3383,
+            58.566,
+            55.6774,
+            61.6531,
+            71.4237
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 533.3582
+            },
+            {
+              "name": "柴油",
+              "value": 191.6177
+            },
+            {
+              "name": "汽油",
+              "value": 1.5999
+            },
+            {
+              "name": "天然气",
+              "value": 5.5627
+            },
+            {
+              "name": "购入热力",
+              "value": 19.6072
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 552.9654
+            },
+            {
+              "name": "直接排放",
+              "value": 198.7803
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 646.5013
+            },
+            {
+              "name": "非生产用能",
+              "value": 105.2444
+            }
+          ]
+        }
+      }
+    },
+    "定州东站": {
+      "kpi": {
+        "yearTotal": 1012.9463,
+        "monthTotal": 96.2631,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.15
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 95.0657,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 90.1278,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 82.2356,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 75.6721,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 73.3457,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 83.4874,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 89.0256,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 90.7148,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 78.8978,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 75.012,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 83.0987,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 96.2631,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            87.753,
+            83.1949,
+            75.9098,
+            69.8512,
+            67.7037,
+            77.0653,
+            82.1775,
+            83.7368,
+            72.8288,
+            69.2418,
+            76.7065,
+            88.8582
+          ],
+          [
+            91.4094,
+            86.6613,
+            79.0727,
+            72.7616,
+            70.5247,
+            80.2763,
+            85.6016,
+            87.2258,
+            75.8633,
+            72.1269,
+            79.9026,
+            92.5607
+          ],
+          [
+            95.0657,
+            90.1278,
+            82.2356,
+            75.6721,
+            73.3457,
+            83.4874,
+            89.0256,
+            90.7148,
+            78.8978,
+            75.012,
+            83.0987,
+            96.2631
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 711.1545
+            },
+            {
+              "name": "柴油",
+              "value": 264.0923
+            },
+            {
+              "name": "汽油",
+              "value": 2.352
+            },
+            {
+              "name": "天然气",
+              "value": 8.6423
+            },
+            {
+              "name": "购入热力",
+              "value": 26.7052
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 737.8597
+            },
+            {
+              "name": "直接排放",
+              "value": 275.0866
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 871.1338
+            },
+            {
+              "name": "非生产用能",
+              "value": 141.8125
+            }
+          ]
+        }
+      }
+    },
+    "安国站": {
+      "kpi": {
+        "yearTotal": 1618.0918,
+        "monthTotal": 157.0294,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.8
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 155.1916,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 147.7526,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 135.7772,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 118.5296,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 114.9208,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 130.3999,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 138.8986,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 141.5409,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 123.4953,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 117.5331,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 137.0228,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 157.0294,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            143.2538,
+            136.387,
+            125.3328,
+            109.4119,
+            106.0808,
+            120.3692,
+            128.2141,
+            130.6531,
+            113.9957,
+            108.4921,
+            126.4826,
+            144.9502
+          ],
+          [
+            149.2227,
+            142.0698,
+            130.555,
+            113.9707,
+            110.5008,
+            125.3845,
+            133.5563,
+            136.097,
+            118.7455,
+            113.0126,
+            131.7527,
+            150.9898
+          ],
+          [
+            155.1916,
+            147.7526,
+            135.7772,
+            118.5296,
+            114.9208,
+            130.3999,
+            138.8986,
+            141.5409,
+            123.4953,
+            117.5331,
+            137.0228,
+            157.0294
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 1133.8237
+            },
+            {
+              "name": "柴油",
+              "value": 370.0527
+            },
+            {
+              "name": "汽油",
+              "value": 4.1196
+            },
+            {
+              "name": "天然气",
+              "value": 0.2116
+            },
+            {
+              "name": "购入热力",
+              "value": 109.8842
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 1243.7079
+            },
+            {
+              "name": "直接排放",
+              "value": 374.3839
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 1391.5589
+            },
+            {
+              "name": "非生产用能",
+              "value": 226.5329
+            }
+          ]
+        }
+      }
+    },
+    "博野站": {
+      "kpi": {
+        "yearTotal": 494.5696,
+        "monthTotal": 46.9893,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 9.45
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 46.4096,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 44.0005,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 40.1451,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 36.9513,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 35.8125,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 40.7653,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 43.4731,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 44.3015,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 38.5303,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 36.6299,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 40.5612,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 46.9893,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            42.8396,
+            40.6158,
+            37.057,
+            34.1089,
+            33.0577,
+            37.6295,
+            40.129,
+            40.8937,
+            35.5664,
+            33.8122,
+            37.4411,
+            43.3747
+          ],
+          [
+            44.6246,
+            42.3082,
+            38.601,
+            35.5301,
+            34.4351,
+            39.1974,
+            41.8011,
+            42.5976,
+            37.0483,
+            35.221,
+            39.0012,
+            45.182
+          ],
+          [
+            46.4096,
+            44.0005,
+            40.1451,
+            36.9513,
+            35.8125,
+            40.7653,
+            43.4731,
+            44.3015,
+            38.5303,
+            36.6299,
+            40.5612,
+            46.9893
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 350.8936
+            },
+            {
+              "name": "柴油",
+              "value": 126.0643
+            },
+            {
+              "name": "汽油",
+              "value": 1.0526
+            },
+            {
+              "name": "天然气",
+              "value": 3.6596
+            },
+            {
+              "name": "购入热力",
+              "value": 12.8995
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 363.7931
+            },
+            {
+              "name": "直接排放",
+              "value": 130.7765
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 425.3299
+            },
+            {
+              "name": "非生产用能",
+              "value": 69.2397
+            }
+          ]
+        }
+      }
+    },
+    "蠡县站": {
+      "kpi": {
+        "yearTotal": 693.7147,
+        "monthTotal": 65.9256,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.1
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 65.1056,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 61.7239,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 56.3189,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 51.8239,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 50.2307,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 57.1762,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 60.9691,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 62.1259,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 54.0331,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 51.3718,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 56.91,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 65.9256,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            60.0975,
+            56.9759,
+            51.9867,
+            47.8375,
+            46.3668,
+            52.778,
+            56.2792,
+            57.347,
+            49.8767,
+            47.4202,
+            52.5323,
+            60.8544
+          ],
+          [
+            62.6016,
+            59.3499,
+            54.1528,
+            49.8307,
+            48.2987,
+            54.9771,
+            58.6241,
+            59.7365,
+            51.9549,
+            49.396,
+            54.7212,
+            63.39
+          ],
+          [
+            65.1056,
+            61.7239,
+            56.3189,
+            51.8239,
+            50.2307,
+            57.1762,
+            60.9691,
+            62.1259,
+            54.0331,
+            51.3718,
+            56.91,
+            65.9256
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 487.033
+            },
+            {
+              "name": "柴油",
+              "value": 180.8632
+            },
+            {
+              "name": "汽油",
+              "value": 1.6108
+            },
+            {
+              "name": "天然气",
+              "value": 5.9187
+            },
+            {
+              "name": "购入热力",
+              "value": 18.289
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 505.322
+            },
+            {
+              "name": "直接排放",
+              "value": 188.3927
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 596.5946
+            },
+            {
+              "name": "非生产用能",
+              "value": 97.1201
+            }
+          ]
+        }
+      }
+    },
+    "肃宁北站": {
+      "kpi": {
+        "yearTotal": 1145.391,
+        "monthTotal": 111.1557,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.75
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 109.8547,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 104.5889,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 96.1119,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 83.903,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 81.3485,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 92.3056,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 98.3215,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 100.1919,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 87.418,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 83.1976,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 96.9937,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 111.1557,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            101.4044,
+            96.5436,
+            88.7187,
+            77.4489,
+            75.0909,
+            85.2051,
+            90.7583,
+            92.4848,
+            80.6936,
+            76.7978,
+            89.5326,
+            102.6052
+          ],
+          [
+            105.6295,
+            100.5663,
+            92.4153,
+            80.6759,
+            78.2197,
+            88.7553,
+            94.5399,
+            96.3383,
+            84.0558,
+            79.9977,
+            93.2631,
+            106.8804
+          ],
+          [
+            109.8547,
+            104.5889,
+            96.1119,
+            83.903,
+            81.3485,
+            92.3056,
+            98.3215,
+            100.1919,
+            87.418,
+            83.1976,
+            96.9937,
+            111.1557
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 802.5944
+            },
+            {
+              "name": "柴油",
+              "value": 261.9474
+            },
+            {
+              "name": "汽油",
+              "value": 2.9162
+            },
+            {
+              "name": "天然气",
+              "value": 0.1498
+            },
+            {
+              "name": "购入热力",
+              "value": 77.7832
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 880.3776
+            },
+            {
+              "name": "直接排放",
+              "value": 265.0134
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 985.0363
+            },
+            {
+              "name": "非生产用能",
+              "value": 160.3547
+            }
+          ]
+        }
+      }
+    },
+    "太师庄站": {
+      "kpi": {
+        "yearTotal": 687.4516,
+        "monthTotal": 65.3151,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 11.4
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 64.5093,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 61.1607,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 55.8016,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 51.3623,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 49.7794,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 56.6638,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 60.4276,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 61.5791,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 53.5571,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 50.9155,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 56.3801,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 65.3151,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            59.547,
+            56.456,
+            51.5092,
+            47.4114,
+            45.9502,
+            52.305,
+            55.7794,
+            56.8423,
+            49.4373,
+            46.9989,
+            52.0432,
+            60.2908
+          ],
+          [
+            62.0282,
+            58.8084,
+            53.6554,
+            49.3869,
+            47.8648,
+            54.4844,
+            58.1035,
+            59.2107,
+            51.4972,
+            48.9572,
+            54.2116,
+            62.803
+          ],
+          [
+            64.5093,
+            61.1607,
+            55.8016,
+            51.3623,
+            49.7794,
+            56.6638,
+            60.4276,
+            61.5791,
+            53.5571,
+            50.9155,
+            56.3801,
+            65.3151
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 487.7419
+            },
+            {
+              "name": "柴油",
+              "value": 175.2294
+            },
+            {
+              "name": "汽油",
+              "value": 1.4631
+            },
+            {
+              "name": "天然气",
+              "value": 5.0869
+            },
+            {
+              "name": "购入热力",
+              "value": 17.9303
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 505.6722
+            },
+            {
+              "name": "直接排放",
+              "value": 181.7794
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 591.2084
+            },
+            {
+              "name": "非生产用能",
+              "value": 96.2432
+            }
+          ]
+        }
+      }
+    },
+    "河间站": {
+      "kpi": {
+        "yearTotal": 933.1384,
+        "monthTotal": 88.6787,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.05
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 87.5757,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 83.0268,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 75.7564,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 69.7101,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 67.5669,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 76.9096,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 82.0115,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 83.5676,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 72.6816,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 69.102,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 76.5515,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 88.6787,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            80.8391,
+            76.6401,
+            69.929,
+            64.3478,
+            62.3695,
+            70.9935,
+            75.7029,
+            77.1393,
+            67.0907,
+            63.7864,
+            70.6629,
+            81.8573
+          ],
+          [
+            84.2074,
+            79.8335,
+            72.8427,
+            67.0289,
+            64.9682,
+            73.9515,
+            78.8572,
+            80.3535,
+            69.8862,
+            66.4442,
+            73.6072,
+            85.268
+          ],
+          [
+            87.5757,
+            83.0268,
+            75.7564,
+            69.7101,
+            67.5669,
+            76.9096,
+            82.0115,
+            83.5676,
+            72.6816,
+            69.102,
+            76.5515,
+            88.6787
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 655.1241
+            },
+            {
+              "name": "柴油",
+              "value": 243.285
+            },
+            {
+              "name": "汽油",
+              "value": 2.1667
+            },
+            {
+              "name": "天然气",
+              "value": 7.9614
+            },
+            {
+              "name": "购入热力",
+              "value": 24.6012
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 679.7253
+            },
+            {
+              "name": "直接排放",
+              "value": 253.4131
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 802.499
+            },
+            {
+              "name": "非生产用能",
+              "value": 130.6394
+            }
+          ]
+        }
+      }
+    },
+    "行别营站": {
+      "kpi": {
+        "yearTotal": 1499.9166,
+        "monthTotal": 145.561,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.7
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 143.8574,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 136.9617,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 125.8609,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 109.8729,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 106.5277,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 120.8763,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 128.7543,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 131.2037,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 114.476,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 108.9492,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 127.0155,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 145.561,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            132.7914,
+            126.4262,
+            116.1793,
+            101.4211,
+            98.3333,
+            111.5782,
+            118.8501,
+            121.111,
+            105.6701,
+            100.5685,
+            117.2451,
+            134.364
+          ],
+          [
+            138.3244,
+            131.6939,
+            121.0201,
+            105.647,
+            102.4305,
+            116.2272,
+            123.8022,
+            126.1573,
+            110.073,
+            104.7589,
+            122.1303,
+            139.9625
+          ],
+          [
+            143.8574,
+            136.9617,
+            125.8609,
+            109.8729,
+            106.5277,
+            120.8763,
+            128.7543,
+            131.2037,
+            114.476,
+            108.9492,
+            127.0155,
+            145.561
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 1051.0162
+            },
+            {
+              "name": "柴油",
+              "value": 343.0264
+            },
+            {
+              "name": "汽油",
+              "value": 3.8188
+            },
+            {
+              "name": "天然气",
+              "value": 0.1962
+            },
+            {
+              "name": "购入热力",
+              "value": 101.859
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 1152.8752
+            },
+            {
+              "name": "直接排放",
+              "value": 347.0414
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 1289.9283
+            },
+            {
+              "name": "非生产用能",
+              "value": 209.9883
+            }
+          ]
+        }
+      }
+    },
+    "黎民居站": {
+      "kpi": {
+        "yearTotal": 880.3338,
+        "monthTotal": 83.6409,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 7.5
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 82.609,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 78.3209,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 71.4582,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 65.7733,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 63.7463,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 72.5622,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 77.3822,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 78.8567,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 68.5839,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 65.2012,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 72.199,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 83.6409,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            76.2545,
+            72.2962,
+            65.9614,
+            60.7139,
+            58.8427,
+            66.9805,
+            71.4297,
+            72.7908,
+            63.3082,
+            60.1857,
+            66.6452,
+            77.207
+          ],
+          [
+            79.4318,
+            75.3086,
+            68.7098,
+            63.2436,
+            61.2945,
+            69.7714,
+            74.4059,
+            75.8238,
+            65.946,
+            62.6934,
+            69.4221,
+            80.4239
+          ],
+          [
+            82.609,
+            78.3209,
+            71.4582,
+            65.7733,
+            63.7463,
+            72.5622,
+            77.3822,
+            78.8567,
+            68.5839,
+            65.2012,
+            72.199,
+            83.6409
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 624.5905
+            },
+            {
+              "name": "柴油",
+              "value": 224.3944
+            },
+            {
+              "name": "汽油",
+              "value": 1.8736
+            },
+            {
+              "name": "天然气",
+              "value": 6.5142
+            },
+            {
+              "name": "购入热力",
+              "value": 22.9611
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 647.5516
+            },
+            {
+              "name": "直接排放",
+              "value": 232.7822
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 757.0871
+            },
+            {
+              "name": "非生产用能",
+              "value": 123.2467
+            }
+          ]
+        }
+      }
+    },
+    "杜生站": {
+      "kpi": {
+        "yearTotal": 613.9069,
+        "monthTotal": 58.3413,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.15
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 57.6156,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 54.6229,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 49.8398,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 45.8619,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 44.4519,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 50.5984,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 53.9549,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 54.9787,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 47.8169,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 45.4618,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 50.3628,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 58.3413,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            53.1836,
+            50.4211,
+            46.0059,
+            42.3341,
+            41.0325,
+            46.7062,
+            49.8046,
+            50.7496,
+            44.1386,
+            41.9647,
+            46.4888,
+            53.8535
+          ],
+          [
+            55.3996,
+            52.522,
+            47.9228,
+            44.098,
+            42.7422,
+            48.6523,
+            51.8797,
+            52.8641,
+            45.9777,
+            43.7133,
+            48.4258,
+            56.0974
+          ],
+          [
+            57.6156,
+            54.6229,
+            49.8398,
+            45.8619,
+            44.4519,
+            50.5984,
+            53.9549,
+            54.9787,
+            47.8169,
+            45.4618,
+            50.3628,
+            58.3413
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 431.0026
+            },
+            {
+              "name": "柴油",
+              "value": 160.056
+            },
+            {
+              "name": "汽油",
+              "value": 1.4255
+            },
+            {
+              "name": "天然气",
+              "value": 5.2378
+            },
+            {
+              "name": "购入热力",
+              "value": 16.185
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 447.1876
+            },
+            {
+              "name": "直接排放",
+              "value": 166.7193
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 527.9599
+            },
+            {
+              "name": "非生产用能",
+              "value": 85.947
+            }
+          ]
+        }
+      }
+    },
+    "沧州西站": {
+      "kpi": {
+        "yearTotal": 1027.2156,
+        "monthTotal": 99.6872,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 8.8
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 98.5205,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 93.798,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 86.1956,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 75.2463,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 72.9554,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 82.782,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 88.1772,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 89.8546,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 78.3987,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 74.6137,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 86.9864,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 99.6872,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            90.942,
+            86.5828,
+            79.5652,
+            69.4581,
+            67.3434,
+            76.4141,
+            81.3943,
+            82.9427,
+            72.368,
+            68.8742,
+            80.2951,
+            92.019
+          ],
+          [
+            94.7313,
+            90.1904,
+            82.8804,
+            72.3522,
+            70.1494,
+            79.598,
+            84.7858,
+            86.3987,
+            75.3834,
+            71.744,
+            83.6408,
+            95.8531
+          ],
+          [
+            98.5205,
+            93.798,
+            86.1956,
+            75.2463,
+            72.9554,
+            82.782,
+            88.1772,
+            89.8546,
+            78.3987,
+            74.6137,
+            86.9864,
+            99.6872
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 719.7869
+            },
+            {
+              "name": "柴油",
+              "value": 234.9211
+            },
+            {
+              "name": "汽油",
+              "value": 2.6153
+            },
+            {
+              "name": "天然气",
+              "value": 0.1343
+            },
+            {
+              "name": "购入热力",
+              "value": 69.758
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 789.5449
+            },
+            {
+              "name": "直接排放",
+              "value": 237.6707
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 883.4054
+            },
+            {
+              "name": "非生产用能",
+              "value": 143.8102
+            }
+          ]
+        }
+      }
+    },
+    "李天木站": {
+      "kpi": {
+        "yearTotal": 623.1576,
+        "monthTotal": 59.2065,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 9.45
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 58.4761,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 55.4406,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 50.5828,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 46.5587,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 45.1238,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 51.3643,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 54.7761,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 55.8199,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 48.5481,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 46.1536,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 51.1071,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 59.2065,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            53.9779,
+            51.176,
+            46.6918,
+            42.9772,
+            41.6527,
+            47.4132,
+            50.5626,
+            51.5261,
+            44.8136,
+            42.6034,
+            47.1758,
+            54.6521
+          ],
+          [
+            56.227,
+            53.3083,
+            48.6373,
+            44.768,
+            43.3882,
+            49.3887,
+            52.6694,
+            53.673,
+            46.6809,
+            44.3785,
+            49.1415,
+            56.9293
+          ],
+          [
+            58.4761,
+            55.4406,
+            50.5828,
+            46.5587,
+            45.1238,
+            51.3643,
+            54.7761,
+            55.8199,
+            48.5481,
+            46.1536,
+            51.1071,
+            59.2065
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 442.1259
+            },
+            {
+              "name": "柴油",
+              "value": 158.841
+            },
+            {
+              "name": "汽油",
+              "value": 1.3262
+            },
+            {
+              "name": "天然气",
+              "value": 4.6112
+            },
+            {
+              "name": "购入热力",
+              "value": 16.2533
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 458.3792
+            },
+            {
+              "name": "直接排放",
+              "value": 164.7784
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 535.9155
+            },
+            {
+              "name": "非生产用能",
+              "value": 87.2421
+            }
+          ]
+        }
+      }
+    },
+    "黄骅南站": {
+      "kpi": {
+        "yearTotal": 853.3305,
+        "monthTotal": 81.0943,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.1
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 80.0857,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 75.9258,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 69.2773,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 63.748,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 61.7882,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 70.3318,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 74.9974,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 76.4204,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 66.4654,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 63.1919,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 70.0043,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 81.0943,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            73.9252,
+            70.0854,
+            63.9482,
+            58.8443,
+            57.0352,
+            64.9217,
+            69.2283,
+            70.5419,
+            61.3527,
+            58.331,
+            64.6194,
+            74.8563
+          ],
+          [
+            77.0055,
+            73.0056,
+            66.6127,
+            61.2962,
+            59.4117,
+            67.6267,
+            72.1129,
+            73.4811,
+            63.9091,
+            60.7615,
+            67.3119,
+            77.9753
+          ],
+          [
+            80.0857,
+            75.9258,
+            69.2773,
+            63.748,
+            61.7882,
+            70.3318,
+            74.9974,
+            76.4204,
+            66.4654,
+            63.1919,
+            70.0043,
+            81.0943
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 599.0937
+            },
+            {
+              "name": "柴油",
+              "value": 222.4778
+            },
+            {
+              "name": "汽油",
+              "value": 1.9814
+            },
+            {
+              "name": "天然气",
+              "value": 7.2805
+            },
+            {
+              "name": "购入热力",
+              "value": 22.4971
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 621.5908
+            },
+            {
+              "name": "直接排放",
+              "value": 231.7397
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 733.8642
+            },
+            {
+              "name": "非生产用能",
+              "value": 119.4663
+            }
+          ]
+        }
+      }
+    },
+    "段庄站": {
+      "kpi": {
+        "yearTotal": 1381.7416,
+        "monthTotal": 134.0925,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 10.75
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 132.5232,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 126.1708,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 115.9446,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 101.2163,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 98.1347,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 111.3528,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 118.61,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 120.8664,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 105.4566,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 100.3654,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 117.0083,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 134.0925,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            122.3291,
+            116.4653,
+            107.0258,
+            93.4304,
+            90.5858,
+            102.7871,
+            109.4862,
+            111.569,
+            97.3446,
+            92.645,
+            108.0076,
+            123.7777
+          ],
+          [
+            127.4261,
+            121.318,
+            111.4851,
+            97.3233,
+            94.3602,
+            107.0699,
+            114.0481,
+            116.2177,
+            101.4006,
+            96.5051,
+            112.5079,
+            128.9351
+          ],
+          [
+            132.5232,
+            126.1708,
+            115.9446,
+            101.2163,
+            98.1347,
+            111.3528,
+            118.61,
+            120.8664,
+            105.4566,
+            100.3654,
+            117.0083,
+            134.0925
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 968.2092
+            },
+            {
+              "name": "柴油",
+              "value": 316.0001
+            },
+            {
+              "name": "汽油",
+              "value": 3.5179
+            },
+            {
+              "name": "天然气",
+              "value": 0.1807
+            },
+            {
+              "name": "购入热力",
+              "value": 93.8337
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 1062.0429
+            },
+            {
+              "name": "直接排放",
+              "value": 319.6987
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 1188.2978
+            },
+            {
+              "name": "非生产用能",
+              "value": 193.4438
+            }
+          ]
+        }
+      }
+    },
+    "黄骅港站": {
+      "kpi": {
+        "yearTotal": 816.0398,
+        "monthTotal": 77.5323,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 11.4
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 76.5758,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 72.6008,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 66.2393,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 60.9697,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 59.0907,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 67.2628,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 71.7307,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 73.0975,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 63.5749,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 60.4393,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 66.926,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 77.5323,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            70.6853,
+            67.0161,
+            61.144,
+            56.2797,
+            54.5452,
+            62.0887,
+            66.2129,
+            67.4747,
+            58.6845,
+            55.7901,
+            61.7779,
+            71.5683
+          ],
+          [
+            73.6306,
+            69.8085,
+            63.6917,
+            58.6247,
+            56.8179,
+            64.6757,
+            68.9718,
+            70.2861,
+            61.1297,
+            58.1147,
+            64.3519,
+            74.5503
+          ],
+          [
+            76.5758,
+            72.6008,
+            66.2393,
+            60.9697,
+            59.0907,
+            67.2628,
+            71.7307,
+            73.0975,
+            63.5749,
+            60.4393,
+            66.926,
+            77.5323
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 578.9745
+            },
+            {
+              "name": "柴油",
+              "value": 208.0061
+            },
+            {
+              "name": "汽油",
+              "value": 1.7367
+            },
+            {
+              "name": "天然气",
+              "value": 6.0384
+            },
+            {
+              "name": "购入热力",
+              "value": 21.2841
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 600.2586
+            },
+            {
+              "name": "直接排放",
+              "value": 215.7812
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 701.7942
+            },
+            {
+              "name": "非生产用能",
+              "value": 114.2456
+            }
+          ]
+        }
+      }
+    },
+    "港口站": {
+      "kpi": {
+        "yearTotal": 1092.7542,
+        "monthTotal": 103.8474,
+        "yoyPercent": 4,
+        "pointCount": 0,
+        "intensity": 12.05
+      },
+      "line": {
+        "dimensions": [
+          "month",
+          "actual",
+          "forecast"
+        ],
+        "source": [
+          {
+            "month": "2026-01",
+            "actual": 102.5558,
+            "forecast": null
+          },
+          {
+            "month": "2026-02",
+            "actual": 97.2288,
+            "forecast": null
+          },
+          {
+            "month": "2026-03",
+            "actual": 88.7148,
+            "forecast": null
+          },
+          {
+            "month": "2026-04",
+            "actual": 81.6341,
+            "forecast": null
+          },
+          {
+            "month": "2026-05",
+            "actual": 79.1244,
+            "forecast": null
+          },
+          {
+            "month": "2026-06",
+            "actual": 90.0652,
+            "forecast": null
+          },
+          {
+            "month": "2026-07",
+            "actual": 96.0398,
+            "forecast": null
+          },
+          {
+            "month": "2026-08",
+            "actual": 97.8621,
+            "forecast": null
+          },
+          {
+            "month": "2026-09",
+            "actual": 85.114,
+            "forecast": null
+          },
+          {
+            "month": "2026-10",
+            "actual": 80.922,
+            "forecast": null
+          },
+          {
+            "month": "2026-11",
+            "actual": 89.6458,
+            "forecast": null
+          },
+          {
+            "month": "2026-12",
+            "actual": 103.8474,
+            "forecast": null
+          }
+        ]
+      },
+      "surface": {
+        "timeType": "month",
+        "years": [
+          2024,
+          2025,
+          2026
+        ],
+        "times": [
+          "1月",
+          "2月",
+          "3月",
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月",
+          "9月",
+          "10月",
+          "11月",
+          "12月"
+        ],
+        "values": [
+          [
+            94.6669,
+            89.7496,
+            81.8906,
+            75.3546,
+            73.0379,
+            83.1371,
+            88.6521,
+            90.3342,
+            78.5668,
+            74.6973,
+            82.75,
+            95.8592
+          ],
+          [
+            98.6113,
+            93.4892,
+            85.3027,
+            78.4944,
+            76.0812,
+            86.6011,
+            92.346,
+            94.0981,
+            81.8404,
+            77.8097,
+            86.1979,
+            99.8533
+          ],
+          [
+            102.5558,
+            97.2288,
+            88.7148,
+            81.6341,
+            79.1244,
+            90.0652,
+            96.0398,
+            97.8621,
+            85.114,
+            80.922,
+            89.6458,
+            103.8474
+          ]
+        ],
+        "unit": "tCO2e"
+      },
+      "pies": {
+        "source": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "购入电力",
+              "value": 767.1848
+            },
+            {
+              "name": "柴油",
+              "value": 284.8996
+            },
+            {
+              "name": "汽油",
+              "value": 2.5373
+            },
+            {
+              "name": "天然气",
+              "value": 9.3232
+            },
+            {
+              "name": "购入热力",
+              "value": 28.8093
+            }
+          ]
+        },
+        "type": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "间接排放",
+              "value": 795.9941
+            },
+            {
+              "name": "直接排放",
+              "value": 296.7601
+            }
+          ]
+        },
+        "segment": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "生产用能",
+              "value": 939.7686
+            },
+            {
+              "name": "非生产用能",
+              "value": 152.9856
+            }
+          ]
+        }
+      }
+    }
+  },
+  "mapEmissions": {
+    "神池南站": {
+      "carbonEmission": 494.5696,
+      "carbonIntensity": 7.5
+    },
+    "宁武西站": {
+      "carbonEmission": 693.7147,
+      "carbonIntensity": 8.15
+    },
+    "龙宫站": {
+      "carbonEmission": 1145.391,
+      "carbonIntensity": 8.8
+    },
+    "北大牛站": {
+      "carbonEmission": 687.4516,
+      "carbonIntensity": 9.45
+    },
+    "原平南站": {
+      "carbonEmission": 933.1384,
+      "carbonIntensity": 10.1
+    },
+    "回凤站": {
+      "carbonEmission": 1499.9166,
+      "carbonIntensity": 10.75
+    },
+    "东冶站": {
+      "carbonEmission": 880.3338,
+      "carbonIntensity": 11.4
+    },
+    "南湾站": {
+      "carbonEmission": 613.9069,
+      "carbonIntensity": 12.05
+    },
+    "滴流蹬站": {
+      "carbonEmission": 1027.2156,
+      "carbonIntensity": 12.7
+    },
+    "猴刎站": {
+      "carbonEmission": 623.1576,
+      "carbonIntensity": 7.5
+    },
+    "小觉站": {
+      "carbonEmission": 853.3305,
+      "carbonIntensity": 8.15
+    },
+    "古月站": {
+      "carbonEmission": 1381.7416,
+      "carbonIntensity": 8.8
+    },
+    "温塘站": {
+      "carbonEmission": 816.0398,
+      "carbonIntensity": 9.45
+    },
+    "西柏坡站": {
+      "carbonEmission": 1092.7542,
+      "carbonIntensity": 10.1
+    },
+    "三汲站": {
+      "carbonEmission": 909.0404,
+      "carbonIntensity": 10.75
+    },
+    "灵寿站": {
+      "carbonEmission": 558.8637,
+      "carbonIntensity": 11.4
+    },
+    "行唐站": {
+      "carbonEmission": 773.5228,
+      "carbonIntensity": 12.05
+    },
+    "新曲站": {
+      "carbonEmission": 1263.5664,
+      "carbonIntensity": 12.7
+    },
+    "定州西站": {
+      "carbonEmission": 751.7457,
+      "carbonIntensity": 7.5
+    },
+    "定州东站": {
+      "carbonEmission": 1012.9463,
+      "carbonIntensity": 8.15
+    },
+    "安国站": {
+      "carbonEmission": 1618.0918,
+      "carbonIntensity": 8.8
+    },
+    "博野站": {
+      "carbonEmission": 494.5696,
+      "carbonIntensity": 9.45
+    },
+    "蠡县站": {
+      "carbonEmission": 693.7147,
+      "carbonIntensity": 10.1
+    },
+    "肃宁北站": {
+      "carbonEmission": 1145.391,
+      "carbonIntensity": 10.75
+    },
+    "太师庄站": {
+      "carbonEmission": 687.4516,
+      "carbonIntensity": 11.4
+    },
+    "河间站": {
+      "carbonEmission": 933.1384,
+      "carbonIntensity": 12.05
+    },
+    "行别营站": {
+      "carbonEmission": 1499.9166,
+      "carbonIntensity": 12.7
+    },
+    "黎民居站": {
+      "carbonEmission": 880.3338,
+      "carbonIntensity": 7.5
+    },
+    "杜生站": {
+      "carbonEmission": 613.9069,
+      "carbonIntensity": 8.15
+    },
+    "沧州西站": {
+      "carbonEmission": 1027.2156,
+      "carbonIntensity": 8.8
+    },
+    "李天木站": {
+      "carbonEmission": 623.1576,
+      "carbonIntensity": 9.45
+    },
+    "黄骅南站": {
+      "carbonEmission": 853.3305,
+      "carbonIntensity": 10.1
+    },
+    "段庄站": {
+      "carbonEmission": 1381.7416,
+      "carbonIntensity": 10.75
+    },
+    "黄骅港站": {
+      "carbonEmission": 816.0398,
+      "carbonIntensity": 11.4
+    },
+    "港口站": {
+      "carbonEmission": 1092.7542,
+      "carbonIntensity": 12.05
+    }
+  },
+  "rank": [
+    [
+      "安国站",
+      "1618.0918",
+      "8.8"
+    ],
+    [
+      "回凤站",
+      "1499.9166",
+      "10.75"
+    ],
+    [
+      "行别营站",
+      "1499.9166",
+      "12.7"
+    ],
+    [
+      "古月站",
+      "1381.7416",
+      "8.8"
+    ],
+    [
+      "段庄站",
+      "1381.7416",
+      "10.75"
+    ],
+    [
+      "新曲站",
+      "1263.5664",
+      "12.7"
+    ],
+    [
+      "龙宫站",
+      "1145.391",
+      "8.8"
+    ],
+    [
+      "肃宁北站",
+      "1145.391",
+      "10.75"
+    ],
+    [
+      "西柏坡站",
+      "1092.7542",
+      "10.1"
+    ],
+    [
+      "港口站",
+      "1092.7542",
+      "12.05"
+    ],
+    [
+      "滴流蹬站",
+      "1027.2156",
+      "12.7"
+    ],
+    [
+      "沧州西站",
+      "1027.2156",
+      "8.8"
+    ],
+    [
+      "定州东站",
+      "1012.9463",
+      "8.15"
+    ],
+    [
+      "原平南站",
+      "933.1384",
+      "10.1"
+    ],
+    [
+      "河间站",
+      "933.1384",
+      "12.05"
+    ],
+    [
+      "三汲站",
+      "909.0404",
+      "10.75"
+    ],
+    [
+      "东冶站",
+      "880.3338",
+      "11.4"
+    ],
+    [
+      "黎民居站",
+      "880.3338",
+      "7.5"
+    ],
+    [
+      "小觉站",
+      "853.3305",
+      "8.15"
+    ],
+    [
+      "黄骅南站",
+      "853.3305",
+      "10.1"
+    ],
+    [
+      "温塘站",
+      "816.0398",
+      "9.45"
+    ],
+    [
+      "黄骅港站",
+      "816.0398",
+      "11.4"
+    ],
+    [
+      "行唐站",
+      "773.5228",
+      "12.05"
+    ],
+    [
+      "定州西站",
+      "751.7457",
+      "7.5"
+    ],
+    [
+      "宁武西站",
+      "693.7147",
+      "8.15"
+    ],
+    [
+      "蠡县站",
+      "693.7147",
+      "10.1"
+    ],
+    [
+      "北大牛站",
+      "687.4516",
+      "9.45"
+    ],
+    [
+      "太师庄站",
+      "687.4516",
+      "11.4"
+    ],
+    [
+      "猴刎站",
+      "623.1576",
+      "7.5"
+    ],
+    [
+      "李天木站",
+      "623.1576",
+      "9.45"
+    ],
+    [
+      "南湾站",
+      "613.9069",
+      "12.05"
+    ],
+    [
+      "杜生站",
+      "613.9069",
+      "8.15"
+    ],
+    [
+      "灵寿站",
+      "558.8637",
+      "11.4"
+    ],
+    [
+      "神池南站",
+      "494.5696",
+      "7.5"
+    ],
+    [
+      "博野站",
+      "494.5696",
+      "9.45"
+    ]
+  ]
+}

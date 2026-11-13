@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>碳排放数据不确定性分析 · 四步向导（DQI+MCS）</title>
+<style>
+  :root {
+    --primary: #409eff;
+    --success: #67c23a;
+    --warning: #e6a23c;
+    --danger: #f56c6c;
+    --info: #909399;
+    --border: #dcdfe6;
+    --border-light: #ebeef5;
+    --text-main: #303133;
+    --text-sub: #606266;
+    --text-muted: #909399;
+    --bg: #f5f7fa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; background: var(--bg); color: var(--text-main); font-size: 14px; }
+
+  .page { max-width: 1280px; margin: 0 auto; padding: 20px 24px 40px; }
+
+  /* ===== 顶部 ===== */
+  .page-header { background: #fff; border-radius: 8px; padding: 18px 24px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 16px; }
+  .page-header h1 { font-size: 18px; margin-bottom: 4px; }
+  .page-header .subtitle { color: var(--text-muted); font-size: 12px; margin-bottom: 14px; }
+  .global-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .global-bar label { color: var(--text-sub); white-space: nowrap; }
+  .global-bar .tip { color: var(--text-muted); font-size: 12px; }
+  .task-picker { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1 1 620px; }
+  .task-picker input { width: 180px; }
+  .task-picker select { min-width: 420px; max-width: min(620px, 70vw); }
+
+  /* ===== 步骤条 ===== */
+  .stepper { display: flex; background: #fff; border-radius: 8px; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 16px; gap: 0; }
+  .step-item { flex: 1; display: flex; align-items: center; cursor: pointer; user-select: none; position: relative; }
+  .step-item:not(:last-child)::after { content: ""; flex: 1; height: 2px; background: var(--border-light); margin: 0 12px; }
+  .step-item.done:not(:last-child)::after { background: var(--primary); }
+  .step-item .dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; background: #fff; transition: all .2s; flex-shrink: 0; }
+  .step-item.active .dot { border-color: var(--primary); color: #fff; background: var(--primary); }
+  .step-item.done .dot { border-color: var(--primary); color: var(--primary); }
+  .step-item .label { margin-left: 8px; color: var(--text-muted); font-size: 13px; white-space: nowrap; }
+  .step-item.active .label { color: var(--primary); font-weight: 600; }
+  .step-item.done .label { color: var(--text-main); }
+  .step-item .label small { display: block; font-weight: 400; font-size: 11px; color: var(--text-muted); }
+
+  /* ===== 卡片与面板 ===== */
+  .card { background: #fff; border-radius: 8px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 16px; }
+  .card h2 { font-size: 15px; margin-bottom: 14px; padding-left: 8px; border-left: 3px solid var(--primary); }
+  .card .desc { color: var(--text-muted); font-size: 12px; margin: -8px 0 12px; }
+  .hidden { display: none !important; }
+
+  /* ===== 表单 ===== */
+  .form-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .form-item { display: flex; flex-direction: column; gap: 4px; }
+  .form-item > label { color: var(--text-sub); font-size: 13px; }
+  input[type=text], input[type=number], select {
+    height: 32px; padding: 0 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; color: var(--text-main); background: #fff; outline: none; min-width: 120px;
+  }
+  input:focus, select:focus { border-color: var(--primary); }
+  textarea { padding: 6px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; font-family: inherit; outline: none; }
+  textarea:focus { border-color: var(--primary); }
+  .score-input { width: 64px !important; min-width: 64px !important; text-align: center; }
+
+  /* ===== 按钮 ===== */
+  .btn { display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 14px; border: 1px solid var(--border); border-radius: 4px; background: #fff; color: var(--text-sub); font-size: 13px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .btn:hover { border-color: var(--primary); color: var(--primary); }
+  .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn.primary:hover { opacity: .85; }
+  .btn.success { background: var(--success); border-color: var(--success); color: #fff; }
+  .btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.sm { height: 26px; padding: 0 10px; font-size: 12px; }
+  .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+  /* ===== 表格 ===== */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--border-light); border-radius: 6px; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border-light); white-space: nowrap; }
+  th { background: #f7f9fc; color: var(--text-sub); font-weight: 600; }
+  tbody tr:hover { background: #f5faff; }
+  td.wrap { white-space: normal; min-width: 160px; }
+  .empty { text-align: center; color: var(--text-muted); padding: 24px 0; }
+  /* 滚动框：固定高度、超出滚动 */
+  .scroll-box {
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+  }
+  .scroll-box .tbl-wrap {
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+  }
+  .scroll-box details { margin-bottom: 8px; }
+  .filter-bar {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
+  }
+  .filter-bar .filter-count { color: var(--text-muted); font-size: 12px; margin-left: auto; }
+  .filter-bar .seg {
+    display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+  }
+  .filter-bar .seg button {
+    border: none; background: #fff; color: var(--text-sub); padding: 4px 14px; font-size: 12px; cursor: pointer;
+  }
+  .filter-bar .seg button.active { background: var(--primary); color: #fff; }
+
+  /* ===== 徽标 ===== */
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; line-height: 18px; }
+  .badge.blue { background: #ecf5ff; color: var(--primary); }
+  .badge.green { background: #f0f9eb; color: var(--success); }
+  .badge.red { background: #fef0f0; color: var(--danger); }
+  .badge.orange { background: #fdf6ec; color: var(--warning); }
+  .badge.gray { background: #f4f4f5; color: var(--info); }
+
+  /* ===== 指标卡片 ===== */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 6px; }
+  .stat-box { background: #f7f9fc; border-radius: 6px; padding: 12px 14px; }
+  .stat-box .k { color: var(--text-muted); font-size: 12px; margin-bottom: 4px; }
+  .stat-box .v { font-size: 17px; font-weight: 600; color: var(--text-main); word-break: break-all; }
+  .stat-box.hl { background: #ecf5ff; }
+  .stat-box.hl .v { color: var(--primary); }
+
+  /* ===== 折叠面板 ===== */
+  details { border: 1px solid var(--border-light); border-radius: 6px; margin-bottom: 10px; background: #fff; }
+  details summary { padding: 10px 14px; cursor: pointer; font-weight: 600; color: var(--text-sub); list-style: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  details summary::before { content: "▸"; transition: transform .15s; color: var(--text-muted); }
+  details[open] summary::before { transform: rotate(90deg); }
+  details .inner { padding: 0 14px 14px; }
+
+  /* ===== 警告与提示 ===== */
+  .warn-list { background: #fdf6ec; border: 1px solid #faecd8; border-radius: 6px; padding: 8px 12px; color: var(--warning); font-size: 12px; margin: 6px 0; }
+  .warn-list div { line-height: 1.8; }
+  .hint { color: var(--text-muted); font-size: 12px; }
+  .divider { height: 1px; background: var(--border-light); margin: 16px 0; }
+
+  /* ===== 底部导航 ===== */
+  .footer-nav { display: flex; justify-content: space-between; margin-top: 4px; }
+
+  /* ===== Toast ===== */
+  #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .toast-item { padding: 10px 20px; border-radius: 6px; color: #fff; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,.15); animation: fadein .2s; max-width: 640px; word-break: break-all; }
+  .toast-item.success { background: var(--success); }
+  .toast-item.error { background: var(--danger); }
+  .toast-item.info { background: var(--info); }
+  @keyframes fadein { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+  .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: rot .8s linear infinite; vertical-align: -2px; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  .loading-mask { text-align: center; color: var(--text-muted); padding: 30px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <!-- 顶部 -->
+  <div class="page-header">
+    <h1>碳排放数据不确定性分析（DQI+MCS）四步向导</h1>
+    <div class="subtitle">数据质量评分（DQI）→ Scope 完整性 → 蒙特卡洛模拟（MCS）→ 结果与报告（O5）</div>
+    <div class="global-bar">
+      <div class="task-picker">
+        <label>核算任务</label>
+        <input type="text" id="taskFilter" placeholder="按模板名称筛选" oninput="filterTaskOptions()">
+        <select id="calcTaskSelect" onchange="onTaskSelected()">
+          <option value="">正在加载成功核算任务...</option>
+        </select>
+        <input type="hidden" id="calcTemplateId">
+        <button class="btn primary" onclick="refreshCalculationTasks()">刷新任务</button>
+      </div>
+      <label>规则库版本</label>
+      <select id="rulesetVersion" style="min-width:180px" onchange="onRulesetChange()"><option value="">最新版本</option></select>
+      <span class="tip">仅显示当前账号可访问且已成功的核算任务；按模板名称筛选后选择任务。</span>
+    </div>
+  </div>
+
+  <!-- 步骤条 -->
+  <div class="stepper" id="stepper"></div>
+
+  <!-- ============ 步骤1：排放源与DQI评分 ============ -->
+  <div id="step1" class="step-pane hidden">
+    <div class="card">
+      <h2>排放源元信息（I1）</h2>
+      <div class="desc">从核算结果快照导入排放源元信息（幂等），并查看 AD/EF 名义值与排放量。</div>
+      <div class="btn-row" style="margin-bottom:12px">
+        <button class="btn primary" onclick="importSources()">导入 / 刷新排放源元信息</button>
+        <button class="btn" onclick="loadStep1()">刷新列表</button>
+        <span class="hint" id="srcCount"></span>
+      </div>
+      <div class="scroll-box">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>ID</th><th>排放源名称</th><th>Scope</th><th>品种小类</th>
+              <th>AD 名义值</th><th>AD单位</th><th>EF 名义值</th><th>EF单位</th><th>排放量 E=AD×EF (tCO₂)</th><th>数据来源</th>
+            </tr></thead>
+            <tbody id="sourcesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>DQI 建议分与人工复核（M2a + I2）</h2>
+      <div class="desc">五步算法自动生成建议分；分值缺失（需人工判定）或需覆盖时，直接修改"最终分"并填写覆盖理由，按排放源+参数类型提交复核。</div>
+      <div class="btn-row" style="margin-bottom:8px">
+        <button class="btn primary" onclick="loadSuggestions()">生成 / 刷新建议分</button>
+        <span class="hint">"最终分"留空表示沿用建议分提交；与建议分不一致时"覆盖理由"必填。</span>
+      </div>
+      <div class="filter-bar">
+        <span>过滤：</span>
+        <div class="seg">
+          <button id="filterAll" class="active" onclick="setSuggestionFilter('all')">显示全部</button>
+          <button id="filterNeedReview" onclick="setSuggestionFilter('need_review')">仅显示需人工复核</button>
+        </div>
+        <span id="filterCount" class="filter-count"></span>
+      </div>
+      <div class="scroll-box">
+        <div id="suggestionsBox"><div class="empty">暂无数据，请先导入排放源并生成建议分</div></div>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <span></span>
+      <button class="btn primary" onclick="goStep(2)">下一步：Scope基准与完整性 →</button>
+    </div>
+  </div>
+
+  <!-- ============ 步骤2：Scope基准与完整性 ============ -->
+  <div id="step2" class="step-pane hidden">
+    <div class="card">
+      <h2>Scope 独立基准维护（I6）</h2>
+      <div class="desc">为每个 Scope 录入独立自上而下基准量（必须为正）。留空基准的 Scope 将按"仅计量"或"未启用"判据处理。</div>
+      <div class="form-row">
+        <div class="form-item"><label>Scope 类别</label><input type="text" id="blScope" list="scopeOptions" placeholder="如 scope1" style="width:140px"><datalist id="scopeOptions"></datalist></div>
+        <div class="form-item"><label>基准量</label><input type="number" id="blQty" placeholder="> 0" style="width:160px" step="any" min="0"></div>
+        <div class="form-item"><label>基准量单位</label><input type="text" id="blUnit" placeholder="如 万kWh / t" style="width:140px"></div>
+        <div class="form-item"><label>基准来源</label><input type="text" id="blSource" placeholder="如 供电局结算单" style="width:220px"></div>
+        <div class="form-item"><label>&nbsp;</label><button class="btn primary" onclick="saveBaseline()">保存基准（upsert）</button></div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Scope</th><th>基准量</th><th>单位</th><th>基准来源</th><th>更新时间</th></tr></thead>
+          <tbody id="baselineBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Scope 级完整性评估预览（O7）</h2>
+      <div class="desc">实时计算、不落库；正式结果在模拟运行完成后落入 uncertainty_run_scope。</div>
+      <div class="btn-row" style="margin-bottom:12px">
+        <button class="btn primary" onclick="loadCompleteness()">计算完整性评估</button>
+      </div>
+      <div id="completenessBox"><div class="empty">点击"计算完整性评估"查看各 Scope 的 δ_cov 与 E[ξ_cov]</div></div>
+    </div>
+    <div class="footer-nav">
+      <button class="btn" onclick="goStep(1)">← 上一步</button>
+      <button class="btn primary" onclick="goStep(3)">下一步：模拟运行 →</button>
+    </div>
+  </div>
+
+  <!-- ============ 步骤3：模拟运行 ============ -->
+  <div id="step3" class="step-pane hidden">
+    <div class="card">
+      <h2>蒙特卡洛模拟配置（M3→M5）</h2>
+      <div class="desc">迭代次数 ≥ 100000 时异步执行：立即返回 runId，本页自动轮询状态；小样本量同步执行。</div>
+      <div class="form-row">
+        <div class="form-item"><label>迭代次数 nIterations（1000–1000000）</label><input type="number" id="cfgN" value="10000" min="1000" max="1000000" style="width:160px"></div>
+        <div class="form-item"><label>置信水平（0.90 / 0.95 / 0.99）</label><input type="number" id="cfgConf" value="0.95" min="0.5" max="0.999" step="0.001" style="width:140px"></div>
+        <div class="form-item"><label>随机种子（可空，固定可复现）</label><input type="number" id="cfgSeed" placeholder="留空自动生成" style="width:180px"></div>
+        <div class="form-item"><label>规则库版本</label><span class="hint" id="cfgRuleset" style="height:32px;display:flex;align-items:center">最新版本</span></div>
+        <div class="form-item"><label>&nbsp;</label><button class="btn primary" id="runBtn" onclick="runSimulation()">开始模拟</button></div>
+      </div>
+      <div id="runStatusBox" class="hidden">
+        <div class="divider"></div>
+        <div class="btn-row">
+          <span>运行状态：</span><span id="runStatusBadge"></span>
+          <span class="hint" id="runStatusText"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>运行历史</h2>
+      <div class="btn-row" style="margin-bottom:12px"><button class="btn" onclick="loadRuns()">刷新历史</button></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>runId</th><th>状态</th><th>迭代次数</th><th>置信水平</th><th>规则库版本</th><th>随机种子</th><th>开始时间</th><th>完成时间</th><th>失败原因</th><th>操作</th>
+          </tr></thead>
+          <tbody id="runsBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <button class="btn" onclick="goStep(2)">← 上一步</button>
+      <button class="btn primary" onclick="goStep(4)">下一步：结果与报告 →</button>
+    </div>
+  </div>
+
+  <!-- ============ 步骤4：结果与报告 ============ -->
+  <div id="step4" class="step-pane hidden">
+    <div class="card">
+      <h2>选择运行记录（O5 报告）</h2>
+      <div class="form-row">
+        <div class="form-item"><label>运行记录</label>
+          <select id="reportRunSelect" style="min-width:280px" onchange="loadReport()"><option value="">请选择 SUCCESS 状态的运行</option></select>
+        </div>
+        <div class="form-item"><label>&nbsp;</label>
+          <div class="btn-row">
+            <button class="btn" onclick="loadRunOptions()">刷新列表</button>
+            <a class="btn success" id="pdfLink" href="javascript:void(0)" onclick="downloadPdf()" style="text-decoration:none">下载 PDF 报告</a>
+            <a class="btn" href="uncertainty-report-metrics-guide-v2.pdf" download="不确定性分析报告指标解释-V2.pdf" style="text-decoration:none">下载不确定性分析报告指标解释</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="reportBox"><div class="card"><div class="empty">请选择一次模拟运行以查看 O5 不确定性报告</div></div></div>
+
+    <div class="footer-nav">
+      <button class="btn" onclick="goStep(3)">← 上一步</button>
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ============================== 基础工具 ============================== */
+const API = "/api/uncertainty";
+let S = { calcTemplateId: null, rulesetVersion: "", suggestions: [], pollTimer: null, lastRunId: null, currentStep: 1, suggestionFilter: "all", tasks: [], selectedTask: null };
+
+function $(id) { return document.getElementById(id); }
+function esc(v) { return v == null ? "" : String(v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function fmt(v) {
+  if (v == null || v === "") return "—";
+  if (typeof v === "number") return Number.isInteger(v) ? String(v) : String(parseFloat(v.toFixed(6)));
+  return String(v);
+}
+function yn(v) { return v == null ? "—" : (v ? "是" : "否"); }
+function fmtTime(t) { return t ? String(t).replace("T", " ").substring(0, 19) : "—"; }
+function statusBadge(s) {
+  const map = { RUNNING: "blue", SUCCESS: "green", FAILED: "red" };
+  return `<span class="badge ${map[s] || "gray"}">${esc(s || "—")}</span>`;
+}
+function basisLabel(b) { return { benchmark_measured: "基准+计量", measured: "仅计量", disabled: "未启用" }[b] || b || "—"; }
+
+function toast(msg, type = "info", ms = 3500) {
+  const el = document.createElement("div");
+  el.className = "toast-item " + type;
+  el.textContent = msg;
+  $("toast").appendChild(el);
+  setTimeout(() => el.remove(), ms);
+}
+
+async function api(path, opts = {}) {
+  const tokenCookie = document.cookie.split(";").map(v => v.trim()).find(v => v.startsWith("Admin-Token="));
+  const token = tokenCookie ? decodeURIComponent(tokenCookie.substring("Admin-Token=".length)) : "";
+  const res = await fetch(API + path, {
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+    ...opts
+  });
+  if (!res.ok) {
+    let msg = `HTTP ${res.status}`;
+    try { const body = await res.json(); if (body.message) msg = body.message; } catch (e) { /* ignore */ }
+    throw new Error(msg);
+  }
+  const ct = res.headers.get("content-type") || "";
+  return ct.includes("json") ? res.json() : res.text();
+}
+
+function requireTask() {
+  if (!S.calcTemplateId) { toast("请先选择一个成功的核算任务", "error"); return false; }
+  return true;
+}
+
+/* ============================== 步骤条导航 ============================== */
+const STEPS = [
+  { n: 1, title: "排放源与DQI评分", sub: "I1 导入 + M2a/I2 评分复核" },
+  { n: 2, title: "Scope基准与完整性", sub: "I6 基准 + O7 完整性预览" },
+  { n: 3, title: "模拟运行", sub: "MCS 配置 + 状态轮询" },
+  { n: 4, title: "结果与报告", sub: "O5 报告 + PDF 下载" }
+];
+function renderStepper() {
+  $("stepper").innerHTML = STEPS.map(st => `
+    <div class="step-item ${st.n === S.currentStep ? "active" : (st.n < S.currentStep ? "done" : "")}" onclick="goStep(${st.n})">
+      <div class="dot">${st.n < S.currentStep ? "✓" : st.n}</div>
+      <div class="label">${st.title}<small>${st.sub}</small></div>
+    </div>`).join("");
+}
+function goStep(n) {
+  if ((n === 1 || n === 2 || n === 3) && !S.calcTemplateId) { toast("请先选择一个成功的核算任务", "error"); return; }
+  S.currentStep = n;
+  document.querySelectorAll(".step-pane").forEach(p => p.classList.add("hidden"));
+  $("step" + n).classList.remove("hidden");
+  renderStepper();
+  if (n === 1) { if (S.calcTemplateId) loadStep1(); }
+  if (n === 2) { if (S.calcTemplateId) loadStep2(); }
+  if (n === 3) { if (S.calcTemplateId) loadRuns(); }
+  if (n === 4) { loadRunOptions(); }
+}
+
+/* ============================== 全局加载 ============================== */
+async function refreshCalculationTasks() {
+  const select = $("calcTaskSelect");
+  select.disabled = true;
+  select.innerHTML = `<option value="">正在加载成功核算任务...</option>`;
+  try {
+    S.tasks = await api("/calculation-tasks") || [];
+    renderTaskOptions();
+    if (!S.tasks.length) toast("暂无可用于不确定性分析的成功核算任务", "info");
+  } catch (e) {
+    select.innerHTML = `<option value="">任务加载失败</option>`;
+    toast("成功核算任务加载失败：" + e.message, "error", 6000);
+  } finally { select.disabled = false; }
+}
+function renderTaskOptions() {
+  const query = ($( "taskFilter").value || "").trim().toLowerCase();
+  const list = S.tasks.filter(t => !query || String(t.templateName || "").toLowerCase().includes(query)
+      || String(t.companyName || "").toLowerCase().includes(query));
+  const select = $("calcTaskSelect");
+  select.innerHTML = `<option value="">请选择成功核算任务</option>` + list.map(t => {
+    const period = `${t.cycleStart || ""} 至 ${t.cycleEnd || ""}`;
+    const company = t.companyName ? `｜${t.companyName}` : "";
+    return `<option value="${esc(t.taskId)}">任务 ${esc(t.taskId)}｜${esc(t.templateName || "未命名模板")}${esc(company)}｜${esc(period)}</option>`;
+  }).join("");
+  if (S.selectedTask && list.some(t => String(t.taskId) === String(S.selectedTask.taskId))) select.value = S.selectedTask.taskId;
+}
+function filterTaskOptions() { renderTaskOptions(); }
+async function onTaskSelected() {
+  const id = $("calcTaskSelect").value;
+  if (!id) return;
+  S.selectedTask = S.tasks.find(t => String(t.taskId) === String(id)) || null;
+  $("calcTemplateId").value = id;
+  await loadTask();
+}
+async function loadTask() {
+  const v = parseInt($("calcTemplateId").value, 10);
+  if (!v || v <= 0) { toast("请输入有效的核算任务ID（正整数）", "error"); return; }
+  S.calcTemplateId = v;
+  S.rulesetVersion = $("rulesetVersion").value;
+  S.lastRunId = null;
+  stopPolling();
+  await loadRulesets();
+  toast(`核算任务 ${v} 已加载`, "success");
+  goStep(1);
+}
+
+async function loadRulesets() {
+  try {
+    const list = await api("/rulesets");
+    const sel = $("rulesetVersion");
+    const cur = S.rulesetVersion;
+    sel.innerHTML = `<option value="">最新版本</option>` +
+      (list || []).map(r => `<option value="${esc(r.rulesetVersion)}">${esc(r.rulesetVersion)}（${esc(r.rulesetName || r.description || "")}）</option>`).join("");
+    if (cur) sel.value = cur;
+    S.rulesetVersion = sel.value;
+    $("cfgRuleset").textContent = S.rulesetVersion || "最新版本";
+  } catch (e) { toast("规则库版本加载失败：" + e.message, "error"); }
+}
+function onRulesetChange() {
+  S.rulesetVersion = $("rulesetVersion").value;
+  $("cfgRuleset").textContent = S.rulesetVersion || "最新版本";
+}
+
+/* ============================== 步骤1：排放源与DQI ============================== */
+async function importSources() {
+  if (!requireTask()) return;
+  try {
+    const r = await api(`/${S.calcTemplateId}/sources/import`, { method: "POST" });
+    toast(`排放源元信息导入完成：${r.imported ?? "?"} 条`, "success");
+    await loadStep1();
+  } catch (e) { toast("导入失败：" + e.message, "error", 6000); }
+}
+
+async function loadStep1() {
+  if (!requireTask()) return;
+  try {
+    const sources = await api(`/${S.calcTemplateId}/sources`);
+    $("srcCount").textContent = `共 ${sources.length} 个排放源`;
+    // scope 候选（步骤2 datalist 复用）
+    $("scopeOptions").innerHTML = [...new Set(sources.map(s => s.scope).filter(Boolean))]
+      .map(s => `<option value="${esc(s)}">`).join("");
+    $("sourcesBody").innerHTML = sources.length === 0
+      ? `<tr><td colspan="10" class="empty">暂无排放源，请点击"导入 / 刷新排放源元信息"</td></tr>`
+      : sources.map(s => `<tr>
+          <td>${fmt(s.id)}</td>
+          <td class="wrap">${esc(s.sourceName)}</td>
+          <td>${esc(s.scope || "—")}</td>
+          <td>${esc(s.emissionSubcategory || "—")}</td>
+          <td>${fmt(s.adValue)}</td><td>${esc(s.adUnit || "—")}</td>
+          <td>${fmt(s.efValue)}</td><td>${esc(s.efUnit || "—")}</td>
+          <td>${fmt(s.emissionValue)}</td>
+          <td class="wrap">${esc(s.dataSource || "—")}</td>
+        </tr>`).join("");
+    await loadSuggestions();
+  } catch (e) { toast("排放源列表加载失败：" + e.message, "error"); }
+}
+
+async function loadSuggestions() {
+  if (!requireTask()) return;
+  try {
+    const q = (S.rulesetVersion ? "?rulesetVersion=" + encodeURIComponent(S.rulesetVersion) : "");
+    const list = await api(`/${S.calcTemplateId}/dqi/suggestions${q}`);
+    S.suggestions = list || [];
+    renderSuggestions();
+  } catch (e) { toast("建议分生成失败：" + e.message, "error", 6000); }
+}
+
+function setSuggestionFilter(mode) {
+  S.suggestionFilter = mode;
+  const allBtn = $("filterAll"), revBtn = $("filterNeedReview");
+  if (allBtn) allBtn.classList.toggle("active", mode === "all");
+  if (revBtn) revBtn.classList.toggle("active", mode === "need_review");
+  renderSuggestions();
+}
+
+function renderSuggestions() {
+  const box = $("suggestionsBox");
+  const countEl = $("filterCount");
+  if (!S.suggestions.length) {
+    box.innerHTML = `<div class="empty">暂无建议分数据</div>`;
+    if (countEl) countEl.textContent = "";
+    return;
+  }
+  // "需人工复核"判定：该排放源任一维度 suggested == null
+  const needsReview = sg => (sg.dimensions || []).some(d => d.suggested == null);
+  const filtered = S.suggestionFilter === "need_review"
+    ? S.suggestions.filter(needsReview)
+    : S.suggestions;
+  if (countEl) countEl.textContent = `共 ${S.suggestions.length} 个排放源，当前显示 ${filtered.length} 个（${S.suggestionFilter === "need_review" ? "仅需人工复核" : "全部"}）`;
+  if (!filtered.length) {
+    box.innerHTML = `<div class="empty">没有符合当前过滤条件的排放源</div>`;
+    return;
+  }
+  box.innerHTML = filtered.map(sg => {
+    const groups = {};
+    (sg.dimensions || []).forEach(d => { (groups[d.paramType] = groups[d.paramType] || []).push(d); });
+    const groupHtml = Object.keys(groups).sort().map(pt => {
+      const rows = groups[pt].map((d, i) => `<tr>
+          <td>${esc(d.dimCode)}</td>
+          <td style="text-align:center">${d.suggested == null ? `<input type="number" class="score-input" min="1" max="5" step="1" data-src="${sg.sourceMetaId}" data-pt="${esc(pt)}" data-dim="${esc(d.dimCode)}" data-i="${i}" placeholder="需人工">` : `<input type="number" class="score-input" min="1" max="5" step="1" value="${d.suggested}" data-src="${sg.sourceMetaId}" data-pt="${esc(pt)}" data-dim="${esc(d.dimCode)}" data-i="${i}">`}</td>
+          <td class="wrap">${esc(d.evidence || "—")}${d.defaultFilled ? ' <span class="badge orange">默认填充</span>' : ""}</td>
+          <td>${d.status === "complete" ? '<span class="badge green">complete</span>' : '<span class="badge orange">partial</span>'}</td>
+          <td class="wrap">${(d.warnings && d.warnings.length) ? d.warnings.map(esc).join("；") : "—"}</td>
+        </tr>`).join("");
+      return `
+        <div style="margin:10px 0 6px"><span class="badge blue">${esc(pt)}</span>
+          <button class="btn sm primary" style="margin-left:10px" onclick="submitReview(${sg.sourceMetaId},'${esc(pt)}')">提交${esc(pt)}人工复核</button>
+          <span class="hint" id="revTip-${sg.sourceMetaId}-${esc(pt)}"></span>
+        </div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>维度</th><th>建议分 / 最终分</th><th>判定依据</th><th>状态</th><th>警告</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table></div>`;
+    }).join("");
+    const taskWarn = (sg.warnings && sg.warnings.length)
+      ? `<div class="warn-list">${sg.warnings.map(w => `<div>${esc(w)}</div>`).join("")}</div>` : "";
+    return `<details open>
+      <summary>${esc(sg.sourceName)} <span class="badge gray">metaId=${sg.sourceMetaId}</span> <span class="badge gray">核算年度 ${fmt(sg.calcYear)}</span> <span class="badge gray">规则库 ${esc(sg.rulesetVersion)}</span></summary>
+      <div class="inner">${taskWarn}${groupHtml}</div>
+    </details>`;
+  }).join("");
+}
+
+async function submitReview(sourceMetaId, paramType) {
+  // 收集该 source+paramType 下全部维度输入
+  const inputs = [...document.querySelectorAll(`input.score-input[data-src="${sourceMetaId}"][data-pt="${paramType}"]`)];
+  const items = [];
+  for (const inp of inputs) {
+    const dimCode = inp.dataset.dim;
+    const sug = S.suggestions.find(s => s.sourceMetaId === sourceMetaId)
+      ?.dimensions?.find(d => d.paramType === paramType && d.dimCode === dimCode)?.suggested;
+    const raw = inp.value.trim();
+    let finalScore;
+    if (raw === "") {
+      if (sug == null) { toast(`${dimCode} 需人工评分，最终分不能为空`, "error"); return; }
+      finalScore = sug; // 沿用建议分
+    } else {
+      finalScore = parseInt(raw, 10);
+      if (!(finalScore >= 1 && finalScore <= 5)) { toast(`${dimCode} 最终分须为 1-5 整数`, "error"); return; }
+    }
+    const overrideReason = sug != null && finalScore !== sug ? (prompt(`${dimCode} 最终分(${finalScore})与建议分(${sug})不一致，请输入人工覆盖理由：`) || "").trim() : "";
+    if (sug != null && finalScore !== sug && !overrideReason) { toast(`${dimCode} 覆盖理由必填`, "error"); return; }
+    items.push({ dimCode, finalScore, overrideReason: overrideReason || undefined });
+  }
+  if (!items.length) { toast("该参数类型下无维度评分项", "error"); return; }
+  try {
+    const q = `?paramType=${encodeURIComponent(paramType)}`;
+    await api(`/sources/${sourceMetaId}/dqi${q}`, { method: "POST", body: JSON.stringify({ items }) });
+    toast(`${paramType} 人工复核提交成功（${items.length} 个维度）`, "success");
+    const tip = $(`revTip-${sourceMetaId}-${paramType}`);
+    if (tip) tip.textContent = `已提交 ${new Date().toLocaleTimeString()}`;
+    loadSuggestions();
+  } catch (e) { toast("提交失败：" + e.message, "error", 6000); }
+}
+
+/* ============================== 步骤2：Scope基准与完整性 ============================== */
+function loadStep2() { loadBaselines(); }
+
+async function loadBaselines() {
+  if (!requireTask()) return;
+  try {
+    const list = await api(`/${S.calcTemplateId}/scope-baseline`);
+    $("baselineBody").innerHTML = (list || []).length === 0
+      ? `<tr><td colspan="5" class="empty">暂无基准记录，请使用上方表单保存（每个 Scope 一条，重复保存即更新）</td></tr>`
+      : list.map(b => `<tr>
+          <td>${esc(b.scope)}</td><td>${fmt(b.benchmarkQty)}</td><td>${esc(b.benchmarkUnit || "—")}</td>
+          <td class="wrap">${esc(b.benchmarkSource || "—")}</td><td>${fmtTime(b.updatedAt)}</td>
+        </tr>`).join("");
+  } catch (e) { toast("基准列表加载失败：" + e.message, "error"); }
+}
+
+async function saveBaseline() {
+  if (!requireTask()) return;
+  const scope = $("blScope").value.trim();
+  const qty = $("blQty").value;
+  if (!scope) { toast("Scope 类别不能为空", "error"); return; }
+  if (!(qty && parseFloat(qty) > 0)) { toast("基准量必须为正数", "error"); return; }
+  try {
+    await api(`/${S.calcTemplateId}/scope-baseline`, {
+      method: "POST",
+      body: JSON.stringify({
+        scope, benchmarkQty: parseFloat(qty),
+        benchmarkUnit: $("blUnit").value.trim() || null,
+        benchmarkSource: $("blSource").value.trim() || null
+      })
+    });
+    toast(`Scope ${scope} 基准已保存`, "success");
+    loadBaselines();
+  } catch (e) { toast("基准保存失败：" + e.message, "error", 6000); }
+}
+
+async function loadCompleteness() {
+  if (!requireTask()) return;
+  const box = $("completenessBox");
+  box.innerHTML = `<div class="loading-mask">计算中…</div>`;
+  try {
+    const q = S.rulesetVersion ? "?rulesetVersion=" + encodeURIComponent(S.rulesetVersion) : "";
+    const list = await api(`/${S.calcTemplateId}/scope-completeness${q}`);
+    box.innerHTML = list.length === 0
+      ? `<div class="empty">无可评估的 Scope（请先完成步骤1的排放源导入）</div>`
+      : `<div class="tbl-wrap"><table>
+          <thead><tr>
+            <th>Scope</th><th>排放量E[g]</th><th>判据</th><th>基准量</th><th>基准来源</th>
+            <th>r_benchmark</th><th>r_measured</th><th>点数比x/n</th><th>δ_cov(%)</th><th>E[ξ_cov]</th><th>强制披露</th>
+          </tr></thead>
+          <tbody>${list.map(r => `<tr>
+            <td>${esc(r.scope)}</td><td>${fmt(r.scopeEmission)}</td>
+            <td>${basisLabel(r.basis)}</td><td>${fmt(r.benchmarkQty)}</td><td class="wrap">${esc(r.benchmarkSource || "—")}</td>
+            <td>${fmt(r.rBenchmark)}</td><td>${fmt(r.rMeasured)}</td><td>${fmt(r.pointRatioXn)}</td>
+            <td>${fmt(r.deltaCovPercent)}</td><td>${fmt(r.eXiCov)}</td><td class="wrap">${esc(r.disclosure || "—")}</td>
+          </tr>`).join("")}</tbody>
+        </table></div>
+          ${(list.some(r => (r.warnings || []).length))
+            ? `<div class="warn-list">${list.filter(r => (r.warnings || []).length)
+                .flatMap(r => r.warnings.map(w => `<div>[${esc(r.scope)}] ${esc(w)}</div>`)).join("")}</div>`
+            : ""}`;
+  } catch (e) { box.innerHTML = `<div class="empty">计算失败：${esc(e.message)}</div>`; }
+}
+
+/* ============================== 步骤3：模拟运行 ============================== */
+async function runSimulation() {
+  if (!requireTask()) return;
+  const n = parseInt($("cfgN").value, 10);
+  const conf = parseFloat($("cfgConf").value);
+  if (!(n >= 1000 && n <= 1000000)) { toast("迭代次数须在 [1000, 1000000] 范围内", "error"); return; }
+  if (!(conf > 0 && conf < 1)) { toast("置信水平须在 (0, 1) 范围内", "error"); return; }
+  const cfg = { nIterations: n, confidenceLevel: conf, completenessScopeLevel: "scope" };
+  if ($("cfgSeed").value.trim() !== "") cfg.randomSeed = parseInt($("cfgSeed").value, 10);
+  if (S.rulesetVersion) cfg.rulesetVersion = S.rulesetVersion;
+
+  const btn = $("runBtn");
+  btn.disabled = true; btn.innerHTML = `<span class="spin"></span> 提交中…`;
+  try {
+    const r = await api(`/${S.calcTemplateId}/simulation/run`, { method: "POST", body: JSON.stringify(cfg) });
+    S.lastRunId = r.runId;
+    $("runStatusBox").classList.remove("hidden");
+    toast(`模拟已提交，runId=${r.runId}${n >= 100000 ? "（大样本量，异步执行中）" : ""}`, "success");
+    startPolling(r.runId);
+    loadRuns();
+  } catch (e) { toast("模拟提交失败：" + e.message, "error", 6000); }
+  finally { btn.disabled = false; btn.textContent = "开始模拟"; }
+}
+
+function startPolling(runId) {
+  stopPolling();
+  renderRunStatus("RUNNING", null);
+  S.pollTimer = setInterval(async () => {
+    try {
+      const detail = await api(`/runs/${runId}`);
+      const run = detail.run || {};
+      renderRunStatus(run.status, run.errorMessage);
+      if (run.status === "SUCCESS") { stopPolling(); toast(`运行 ${runId} 完成，可前往"结果与报告"查看`, "success", 6000); loadRuns(); }
+      if (run.status === "FAILED") { stopPolling(); toast(`运行 ${runId} 失败：${run.errorMessage || "未知原因"}`, "error", 8000); loadRuns(); }
+    } catch (e) { /* 轮询中单次失败不打断 */ }
+  }, 2000);
+}
+function stopPolling() { if (S.pollTimer) { clearInterval(S.pollTimer); S.pollTimer = null; } }
+
+function renderRunStatus(status, errMsg) {
+  $("runStatusBadge").innerHTML = statusBadge(status);
+  $("runStatusText").textContent = status === "RUNNING"
+    ? "（每 2 秒自动刷新，蒙特卡洛抽样进行中…）"
+    : (status === "SUCCESS" ? "（模拟完成，可前往下一步查看 O5 报告）" : `（失败：${errMsg || "未知原因"}）`);
+}
+
+async function loadRuns() {
+  if (!requireTask()) return;
+  try {
+    const list = await api(`/${S.calcTemplateId}/runs`);
+    $("runsBody").innerHTML = (list || []).length === 0
+      ? `<tr><td colspan="10" class="empty">暂无运行记录</td></tr>`
+      : list.map(r => `<tr>
+          <td><b>${fmt(r.id)}</b></td><td>${statusBadge(r.status)}</td>
+          <td>${fmt(r.nIterations)}</td><td>${fmt(r.confidenceLevel)}</td>
+          <td>${esc(r.rulesetVersion || "—")}</td><td>${fmt(r.randomSeed)}</td>
+          <td>${fmtTime(r.startedAt)}</td><td>${fmtTime(r.finishedAt)}</td>
+          <td class="wrap">${esc(r.errorMessage || "—")}</td>
+          <td>${r.status === "SUCCESS" ? `<button class="btn sm" onclick="viewReport(${r.id})">查看报告</button>` : ""}</td>
+        </tr>`).join("");
+  } catch (e) { toast("运行历史加载失败：" + e.message, "error"); }
+}
+
+function viewReport(runId) {
+  S.lastRunId = runId;
+  goStep(4);
+  $("reportRunSelect").value = String(runId);
+  loadReport();
+}
+
+/* ============================== 步骤4：结果与报告（O5） ============================== */
+async function loadRunOptions() {
+  if (!requireTask()) return;
+  try {
+    const list = (await api(`/${S.calcTemplateId}/runs`)).filter(r => r.status === "SUCCESS");
+    const sel = $("reportRunSelect");
+    const cur = S.lastRunId;
+    sel.innerHTML = `<option value="">请选择 SUCCESS 状态的运行</option>` +
+      list.map(r => `<option value="${r.id}">runId=${r.id} · ${r.nIterations}次迭代 · ${esc(r.rulesetVersion)} · ${fmtTime(r.finishedAt)}</option>`).join("");
+    if (cur && list.some(r => r.id === cur)) sel.value = String(cur);
+    if (sel.value) loadReport();
+  } catch (e) { toast("运行列表加载失败：" + e.message, "error"); }
+}
+
+function downloadPdf() {
+  const runId = $("reportRunSelect").value;
+  if (!runId) { toast("请先选择一次运行", "error"); return; }
+  window.open(`${API}/runs/${runId}/report/pdf`, "_blank");
+}
+
+async function loadReport() {
+  const runId = $("reportRunSelect").value;
+  const box = $("reportBox");
+  $("pdfLink").style.opacity = runId ? "1" : ".5";
+  if (!runId) { box.innerHTML = `<div class="card"><div class="empty">请选择一次模拟运行以查看 O5 不确定性报告</div></div>`; return; }
+  box.innerHTML = `<div class="card"><div class="loading-mask">报告生成中…</div></div>`;
+  try {
+    const rp = await api(`/runs/${runId}/report`);
+    box.innerHTML = renderReportHtml(rp, runId);
+  } catch (e) {
+    box.innerHTML = `<div class="card"><div class="empty">报告生成失败：${esc(e.message)}<br><span class="hint">仅 SUCCESS 状态的运行可生成报告</span></div></div>`;
+  }
+}
+
+function renderReportHtml(rp, runId) {
+  const ti = rp.taskInfo || {}, pe = rp.pointEstimate || {}, ms = rp.mcsStatistics || {}, v = rp.verification || {};
+  const quantileKeys = Object.keys(ms.quantiles || {});
+  const stat = (k, val, hl) => `<div class="stat-box ${hl ? "hl" : ""}"><div class="k">${k}</div><div class="v">${val}</div></div>`;
+
+  return `
+  <div class="card">
+    <h2>① 任务信息与配置快照</h2>
+    <div class="stat-grid">
+      ${stat("runId", fmt(ti.runId))}${stat("核算任务ID", fmt(ti.calculationTemplateId))}
+      ${stat("规则库版本", esc(ti.rulesetVersion || "—"))}${stat("迭代次数", fmt(ti.nIterations))}
+      ${stat("置信水平", fmt(ti.confidenceLevel))}${stat("随机种子", fmt(ti.randomSeed))}
+      ${stat("完整性作用范围", esc(ti.completenessScopeLevel || "—"))}
+      ${stat("开始时间", fmtTime(ti.startedAt))}${stat("完成时间", fmtTime(ti.finishedAt))}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>② 点估计与上抬</h2>
+    <div class="stat-grid">
+      ${stat("记录下锚点估计 E_point_raw", fmt(pe.ePointRaw))}${stat("完整性修正后 E_point_cov", fmt(pe.ePointCov), true)}
+      ${stat("上抬百分比 uplift(%)", fmt(pe.upliftPercent), true)}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>③ MCS 统计量与置信区间</h2>
+    <div class="stat-grid">
+      ${stat("样本均值 μ_E", fmt(ms.totalMean), true)}${stat("样本中位数", fmt(ms.totalMedian))}
+      ${stat("样本标准差 σ_E", fmt(ms.totalStd))}${stat("变异系数 CV(%)", fmt(ms.cvPercent), true)}
+      ${stat("置信区间下界", fmt(ms.ciLower))}${stat("置信区间上界", fmt(ms.ciUpper))}
+    </div>
+    ${quantileKeys.length ? `<div class="tbl-wrap" style="margin-top:12px"><table>
+      <thead><tr>${quantileKeys.map(k => `<th style="text-align:center">${esc(k)}</th>`).join("")}</tr></thead>
+      <tbody><tr>${quantileKeys.map(k => `<td style="text-align:center">${fmt(ms.quantiles[k])}</td>`).join("")}</tr></tbody>
+    </table></div>` : ""}
+  </div>
+
+  <div class="card">
+    <h2>④ 无偏性验证与不确定性等级（O4）</h2>
+    <div class="stat-grid">
+      ${stat("均值偏差 dev_mean(%)", fmt(v.devMeanPercent))}${stat("中位数偏差 dev_median(%)", fmt(v.devMedianPercent))}
+      ${stat("E_point_cov 落入CI", yn(v.pointCovInCi))}${stat("下锚关系 raw≤cov", yn(v.rawLeCov))}
+      ${stat("不确定性等级", esc(v.uncertaintyLevel || "—"), true)}
+    </div>
+    ${v.verificationConclusion ? `<div class="warn-list" style="background:#f0f9eb;border-color:#e1f3d8;color:#529b2e"><div>${esc(v.verificationConclusion)}</div></div>` : ""}
+  </div>
+
+  <div class="card">
+    <h2>⑤ Scope 级完整性披露（O7）</h2>
+    ${(rp.scopeCompleteness || []).length === 0 ? `<div class="empty">无数据</div>` : `
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Scope</th><th>排放量E[g]</th><th>判据</th><th>基准量</th><th>基准来源</th>
+        <th>r_benchmark</th><th>r_measured</th><th>点数比x/n</th><th>δ_cov(%)</th><th>E[ξ_cov]</th><th>强制披露</th>
+      </tr></thead>
+      <tbody>${rp.scopeCompleteness.map(s => `<tr>
+        <td>${esc(s.scope)}</td><td>${fmt(s.scopeEmission)}</td><td>${basisLabel(s.basis)}</td>
+        <td>${fmt(s.benchmarkQty)}</td><td class="wrap">${esc(s.benchmarkSource || "—")}</td>
+        <td>${fmt(s.rBenchmark)}</td><td>${fmt(s.rMeasured)}</td><td>${fmt(s.pointRatioXn)}</td>
+        <td>${fmt(s.deltaCovPercent)}</td><td>${fmt(s.eXiCov)}</td><td class="wrap">${esc(s.disclosure || "—")}</td>
+      </tr>`).join("")}</tbody>
+    </table></div>`}
+  </div>
+
+  <div class="card">
+    <h2>⑥ 参数级归一化与分布参数明细（O1）</h2>
+    ${(rp.paramDetails || []).length === 0 ? `<div class="empty">无数据</div>` : `
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>排放源</th><th>参数类型</th><th>∑Q_w</th><th>∑Qmin_w</th><th>∑Qmax_w</th><th>x(%)</th>
+        <th>SDQI</th><th>α</th><th>β</th><th>δ(%)</th><th>支撑区间</th><th>警告</th>
+      </tr></thead>
+      <tbody>${rp.paramDetails.map(p => `<tr>
+        <td class="wrap">${esc(p.sourceName || p.sourceMetaId)}</td><td>${esc(p.paramType)}</td>
+        <td>${fmt(p.sumQW)}</td><td>${fmt(p.sumQMinW)}</td><td>${fmt(p.sumQMaxW)}</td><td>${fmt(p.xPercent)}</td>
+        <td>${fmt(p.sdqi)}</td><td>${fmt(p.betaAlpha)}</td><td>${fmt(p.betaBeta)}</td><td>${fmt(p.deltaPercent)}</td>
+        <td>[${fmt(p.supportLowFactor)}, ${fmt(p.supportHighFactor)}]</td><td class="wrap">${esc(p.warnings || "—")}</td>
+      </tr>`).join("")}</tbody>
+    </table></div>`}
+  </div>
+
+  <div class="card">
+    <h2>⑦ 警告集合</h2>
+    ${(rp.warnings || []).length === 0
+      ? `<div class="hint">本次运行未触发任何警告。</div>`
+      : `<div class="warn-list">${rp.warnings.map((w, i) => `<div>${i + 1}. ${esc(w)}</div>`).join("")}</div>`}
+  </div>
+  <div class="hint" style="text-align:center">报告生成时间：${fmtTime(rp.generatedAt)} · runId=${esc(runId)}</div>`;
+}
+
+/* ============================== 初始化 ============================== */
+renderStepper();
+refreshCalculationTasks();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "output_dir": "data\\real_shuohuang",
+  "source_dir": "data/source",
+  "gradient_count": 728,
+  "curve_count": 331,
+  "segment_count": 1390,
+  "copied_structured_real_extracts": "only files whose source metadata says PDF/user-provided real data or explicit assumptions",
+  "omitted_virtual_files": [
+    "signaling_blocks.csv"
+  ],
+  "preserved_derived_files": [
+    "smart_meter_calibration_samples.csv",
+    "smart_meter_calibration_samples_summary.json",
+    "smart_meter_representative_interval_samples.csv",
+    "energy_calibration_factors.json"
+  ]
+}

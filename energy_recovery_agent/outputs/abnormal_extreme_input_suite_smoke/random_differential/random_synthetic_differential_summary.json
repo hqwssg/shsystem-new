@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "passed": true,
+  "seeds": [
+    707
+  ],
+  "case_configuration_per_seed": {
+    "energy_bucket": 20,
+    "energy_time_slicing": 15,
+    "resource_overlap": 20,
+    "pareto_front": 15
+  },
+  "total_case_count": 70,
+  "passed_count": 70,
+  "failed_count": 0,
+  "case_set_sha256": "3e51c3b6e914f9e5432cfc9a0f543e70f12cd5ce1bb71c767dff8089d9e9b6ac",
+  "absolute_tolerance": 1e-08,
+  "suites": {
+    "energy_bucket": {
+      "case_count": 20,
+      "passed_count": 20,
+      "failed_count": 0,
+      "max_absolute_error": 1.1368683772161603e-13
+    },
+    "energy_time_slicing": {
+      "case_count": 15,
+      "passed_count": 15,
+      "failed_count": 0,
+      "max_absolute_error": 1.5631940186722204e-13
+    },
+    "resource_overlap": {
+      "case_count": 20,
+      "passed_count": 20,
+      "failed_count": 0,
+      "max_absolute_error": 0.0
+    },
+    "pareto_front": {
+      "case_count": 15,
+      "passed_count": 15,
+      "failed_count": 0,
+      "max_absolute_error": 0.0
+    }
+  },
+  "outputs": {
+    "report": "RANDOM_SYNTHETIC_DIFFERENTIAL_REPORT.md",
+    "case_results": "random_synthetic_differential_cases.csv",
+    "failure_replay": "random_synthetic_differential_failures.json",
+    "summary": "random_synthetic_differential_summary.json"
+  }
+}

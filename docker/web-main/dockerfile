@@ -1,0 +1,41 @@
+FROM eclipse-temurin:17-jre
+MAINTAINER ruoyi
+
+COPY ./requirements-cli.txt /tmp/carbon-report-requirements.txt
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nginx redis-server python3 python3-venv libreoffice-writer libxinerama1 fonts-noto-cjk \
+    && python3 -m venv /opt/carbon-report-venv \
+    && /opt/carbon-report-venv/bin/pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r /tmp/carbon-report-requirements.txt \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /home/ruoyi /home/ruoyi/projects/ruoyi-ui /home/ruoyi/projects/carbon-model /home/ruoyi/uploadPath/reports \
+    /home/ruoyi/uploadPath/energy /home/ruoyi/report-work /home/ruoyi/renderer /home/ruoyi/energy-engine /home/ruoyi/uncertainty \
+    /home/ruoyi/projects/prediction /home/ruoyi/prediction-engine /data /run/nginx
+WORKDIR /home/ruoyi
+
+COPY ./jar/ruoyi-admin.jar /home/ruoyi/ruoyi-admin.jar
+COPY ./jar/carbon-emission-model.jar /home/ruoyi/carbon-emission-model.jar
+COPY ./jar/uncertainty-app.jar /home/ruoyi/uncertainty-app.jar
+COPY ./jar/prediction-platform.jar /home/ruoyi/prediction-platform.jar
+COPY ./html/dist /home/ruoyi/projects/ruoyi-ui
+COPY ./html/carbon-model /home/ruoyi/projects/carbon-model
+COPY ./html/prediction /home/ruoyi/projects/prediction
+COPY ./python/steam_calculator.py /home/ruoyi/steam_calculator.py
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./start.sh /home/ruoyi/start.sh
+COPY ./renderer/carbon_report_agent /home/ruoyi/renderer/carbon_report_agent
+COPY ./energy-engine /home/ruoyi/energy-engine
+COPY ./prediction-engine /home/ruoyi/prediction-engine
+
+ENV CARBON_REPORT_PYTHON=/opt/carbon-report-venv/bin/python \
+    CARBON_REPORT_RENDERER_ROOT=/home/ruoyi/renderer \
+    CARBON_REPORT_SOFFICE_PATH=/usr/bin/libreoffice \
+    CARBON_REPORT_WORK_DIR=/home/ruoyi/report-work \
+    CARBON_REPORT_ARTIFACT_DIR=/home/ruoyi/uploadPath/reports \
+    ENERGY_PYTHON=/opt/carbon-report-venv/bin/python \
+    ENERGY_PROJECT_ROOT=/home/ruoyi/energy-engine \
+    ENERGY_UPLOAD_DIR=/home/ruoyi/uploadPath/energy
+
+EXPOSE 80 8081 8082 8085 8086
+ENTRYPOINT ["sh", "/home/ruoyi/start.sh"]

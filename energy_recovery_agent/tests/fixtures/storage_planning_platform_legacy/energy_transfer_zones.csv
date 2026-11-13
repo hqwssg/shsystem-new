@@ -1,0 +1,3 @@
+﻿zone_id,name,start_km,end_km,max_transfer_power_kW,efficiency
+F001,flexible_power_zone_001,145.000,164.000,,
+F002,flexible_power_zone_002,164.000,200.700,,

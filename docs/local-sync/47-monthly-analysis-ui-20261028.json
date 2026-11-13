@@ -1,0 +1,15 @@
+{
+  "group": "47-monthly-analysis-ui-20261028",
+  "source_before": "17817f979fc701ab5da016e00eb3533ce59f663f",
+  "source_tag": "pre-sync-47-monthly-analysis-ui-20261028",
+  "private_config_before": "refs/local-config/47-monthly-analysis-ui-20261028-before",
+  "upstream": "fb77c2d47c25064201f778cb0a1386e1996a744f",
+  "summary": "接入月度统计页面、口径切换与修正明细导出联动",
+  "checks": {
+    "frontend_build": "PASS",
+    "interaction_test": "PASS",
+    "legacy_template_tests": "PASS",
+    "database_write": false
+  },
+  "private_config_after": "refs/local-config/47-monthly-analysis-ui-20261028-after"
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.3",
+  "replay_code": "example-four-cycle-001",
+  "data_status": "synthetic",
+  "source_system": "dispatch-history-export",
+  "source_note": "接口联调样例；正式回放时替换为经确认的历史观测快照。",
+  "execute_window_s": 3300,
+  "cycles": [
+    {
+      "cycle_index": 0,
+      "current_time_s": 0,
+      "observed_at": "2026-01-01T00:00:00+08:00",
+      "source_record_ids": ["example-record-0001"],
+      "observed_heavy_delay_s": 0,
+      "observed_empty_delay_s": 0,
+      "events": [
+        {
+          "event_id": "example-event-train-delay-0001",
+          "event_type": "train_delay",
+          "entity_id": "H001",
+          "payload": {
+            "delay_s": 30
+          }
+        },
+        {
+          "event_id": "example-event-storage-state-0001",
+          "event_type": "storage_device_state",
+          "entity_id": "storage_section_1:K145-K164",
+          "payload": {
+            "soc_kwh": 2500.0,
+            "available": true
+          }
+        },
+        {
+          "event_id": "example-event-storage-state-0002",
+          "event_type": "storage_device_state",
+          "entity_id": "storage_section_2:K164-K200.7",
+          "payload": {
+            "soc_kwh": 2500.0,
+            "available": true
+          }
+        }
+      ]
+    },
+    {
+      "cycle_index": 1,
+      "current_time_s": 3300,
+      "observed_at": "2026-01-01T00:55:00+08:00",
+      "source_record_ids": ["example-record-0002"],
+      "observed_heavy_delay_s": 180,
+      "observed_empty_delay_s": 0,
+      "events": [
+        {
+          "event_id": "example-event-speed-restriction-0001",
+          "event_type": "temporary_speed_restriction",
+          "entity_id": "TSR-K0-K5",
+          "payload": {
+            "start_km": 0.0,
+            "end_km": 5.0,
+            "speed_limit_kmh": 40.0,
+            "start_time_s": 3300,
+            "end_time_s": 6600,
+            "direction": "down",
+            "reason": "接口联调限速事件"
+          }
+        }
+      ]
+    },
+    {
+      "cycle_index": 2,
+      "current_time_s": 6600,
+      "observed_at": "2026-01-01T01:50:00+08:00",
+      "source_record_ids": ["example-record-0003", "example-record-0004"],
+      "observed_heavy_delay_s": 60,
+      "observed_empty_delay_s": 240
+    },
+    {
+      "cycle_index": 3,
+      "current_time_s": 9900,
+      "observed_at": "2026-01-01T02:45:00+08:00",
+      "source_record_ids": ["example-record-0005"],
+      "observed_heavy_delay_s": 0,
+      "observed_empty_delay_s": 0
+    }
+  ]
+}

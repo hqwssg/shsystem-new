@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "passed": true,
+  "case_count": 40,
+  "passed_count": 40,
+  "failed_count": 0,
+  "categories": {
+    "字段与时钟": {
+      "case_count": 16,
+      "passed_count": 16,
+      "failed_count": 0
+    },
+    "顺序与位置": {
+      "case_count": 6,
+      "passed_count": 6,
+      "failed_count": 0
+    },
+    "断流与恢复": {
+      "case_count": 9,
+      "passed_count": 9,
+      "failed_count": 0
+    },
+    "设备状态": {
+      "case_count": 4,
+      "passed_count": 4,
+      "failed_count": 0
+    },
+    "滚动恢复": {
+      "case_count": 5,
+      "passed_count": 5,
+      "failed_count": 0
+    }
+  },
+  "production_actions": {
+    "invalid_or_stale_message": "reject_and_preserve_trusted_cursor",
+    "stream_outage": "hold_new_decisions_and_keep_last_trusted_state",
+    "fresh_message_after_outage": "recover_and_use_accepted_snapshot",
+    "infeasible_schedule": "withhold_new_departures",
+    "repeated_infeasibility": "manual_intervention_required"
+  },
+  "limitations": [
+    "当前阈值是离线测试策略，不代表现场调度规章。",
+    "本矩阵不连接消息中间件、现场时钟或真实设备。",
+    "通过矩阵不代表正式数据已验收或可下发控制指令。"
+  ],
+  "outputs": {
+    "report": "REALTIME_STATE_ANOMALY_MATRIX_REPORT.md",
+    "summary": "realtime_state_anomaly_matrix_summary.json",
+    "cases": "realtime_state_anomaly_matrix_cases.csv",
+    "failures": "realtime_state_anomaly_matrix_failures.json"
+  }
+}

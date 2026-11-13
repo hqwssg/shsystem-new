@@ -1,0 +1,69 @@
+{
+  "heavy": [
+    {
+      "task": "timetable_audit",
+      "files": 21,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    },
+    {
+      "task": "timetable_optimization",
+      "files": 26,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    },
+    {
+      "task": "dispatch",
+      "files": 38,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    },
+    {
+      "task": "rolling_rescheduling",
+      "files": 20,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    },
+    {
+      "task": "historical_replay",
+      "files": 22,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    },
+    {
+      "task": "joint_parameter_robustness",
+      "files": 10,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    },
+    {
+      "task": "storage_planning",
+      "files": 17,
+      "zeroBytes": 1,
+      "expectedEmptyErrorLogs": [
+        "database_worker_stderr.txt"
+      ],
+      "hashMismatches": 0
+    }
+  ],
+  "single": "Every registered artifact passed artifact_path length/SHA256 validation during the real task run",
+  "businessDatabaseWritten": false
+}

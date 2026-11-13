@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "shuohuang_regen_motor_placeholder",
+  "label": "牵引电机再生制动特性（占位包络，非实测特性曲线）",
+  "data_status": "placeholder",
+  "field_data_status": {
+    "max_regen_power_w": "derived",
+    "max_regen_force_n": "derived",
+    "regen_efficiency": "assumed",
+    "dc_link_voltage_window": "placeholder",
+    "min_regen_speed_m_per_s": "assumed",
+    "overvoltage_derate_start_v": "assumed",
+    "overvoltage_derate_end_v": "assumed"
+  },
+  "provenance": {
+    "max_regen_power_w": "全列再生功率上限 24000 kW = 神华号 12 轴 14400 kW × 1 + 神华号 8 轴 9600 kW × 1，逐型取自各自 locomotive_curves.json 的 params.continuous_power_kW，编组取自 trains.csv:locomotive_consist。装配时由共享数据重算并校验；控制侧（本字段）与结算侧（dc_dc.power_rating_w）共用同一来源，不得各维护一份常数。**不能用「首型功率 × 总台数」**：8 轴补机是 9600 kW 而不是 14400 kW，那样会算成 28800 kW（高估 20%）。",
+    "max_regen_force_n": "全列电制动力峰值 1152.5 kN = SHENHUA_12 691.5 kN + SHENHUA_8 461.0 kN，两条曲线都在 10–20 km/h 达峰，按并集速度栅格逐点求和。SHENHUA_8 的曲线沿用 HXD1_25t 平台（2(B0-B0)、200 t），属工程推导值，拿到厂家资料后应替换。该值只描述各台电机+变流器的电制动能力之和，与全列 6200 kN 空气+电制动总量不是同一口径。",
+    "regen_efficiency": "文献量级的工程预设（重载机车再生制动电效率峰值约 0.90，低速段下降），非实测",
+    "dc_link_voltage_window": "占位：待正式牵引传动系统资料（网压、中间直流电压、变流器额定）到位后替换",
+    "min_regen_speed_m_per_s": "最低可再生速度 1.0 m/s（约 3.6 km/h）：低于该速度再生包络归零，制动力全部转由摩擦承担；工程预设",
+    "overvoltage_derate_start_v": "过压降额起点 1530 V（约 1.02 倍额定网压）：超过后再生能力随母线电压线性衰减；工程预设",
+    "overvoltage_derate_end_v": "过压降额终点 1800 V：到达该电压再生能力降为零并退出，与 dc_dc_parameters.json 的母线窗口上界 1800 V 配套；工程预设"
+  },
+  "note": "本模块只负责“机械制动力 -> 电机再生电功率”的包络与效率，不承担变流器与储能动态。",
+  "max_regen_power_w": 24000000.0,
+  "max_regen_force_n": 1152500.0,
+  "base_speed_m_per_s": null,
+  "base_speed_note": "若为 null，由 max_regen_power_w / max_regen_force_n 自动推导恒功率拐点速度。",
+  "min_regen_speed_m_per_s": 1.0,
+  "min_regen_speed_note": "低于该速度再生制动基本失效，能量转入机械（摩擦）制动。",
+  "regen_efficiency": {
+    "peak": 0.9,
+    "peak_load_ratio": 1.0,
+    "low_load_penalty": 0.35,
+    "low_speed_penalty": 0.25,
+    "low_speed_reference_m_per_s": 5.0,
+    "note": "r = min(load_ratio, peak_load_ratio) / peak_load_ratio；eta(load_ratio, v) = peak - low_load_penalty*(1-r)^2 - low_speed_penalty*max(0, (v_ref - v)/v_ref)^2，截断到 [0.05, peak]。为可解释的工程近似，非实测效率云图。",
+    "peak_load_ratio_note": "占位值 1.0 = 「效率随负载单调升到额定点后走平」，此时 r 恒等于 load_ratio，公式退化为历史文档口径 eta = peak - low_load_penalty*(1-load_ratio)^2，交付能量数字不受影响。取更小的值（如 0.75）即把峰值前移到部分负载，供实测效率云图到位后标定（方案问题 26：该字段此前被声明但从未进入公式，属静默口径）。"
+  },
+  "dc_link_voltage_window": {
+    "nominal_v": 1500.0,
+    "min_v": 1200.0,
+    "max_v": 1800.0,
+    "note": "placeholder：占位中间直流母线电压窗口，用于变流器安全边界与 PWM 约束校验。"
+  },
+  "overvoltage_derate_start_v": 1530.0,
+  "overvoltage_derate_end_v": 1800.0,
+  "overvoltage_derate_note": "母线电压超过 1.02 倍额定后，再生电制动能力线性衰减，到 1800 V 完全退出并转由摩擦制动承担。这是真实牵引传动的过压保护行为，保证物理模型自洽且有界。"
+}

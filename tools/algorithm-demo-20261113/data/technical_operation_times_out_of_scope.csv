@@ -1,0 +1,12 @@
+﻿line,station_name,operation_location,cars,operation_type,spotting_min,loading_unloading_min,pickup_min,total_min,source_pages,note
+黄万线,神港站,2F/4F/5F/7F/8F/9F,54(C80),卸车,30,90,36,156,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,10F/11F/12F/13F,108(C80),卸车,36,90,56,182,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,货2线,66(C64)/58(C70),装车/卸车,70,579,80,729,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,1F/2F/4F,54,卸车,40,85,40,165,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,IV场15道,66(C64)/58(C70),装车,45,360,40,445,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,IV场15道,54(C80B),装车,45,410,40,495,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,货1线,54(C80B),装车,45,450,40,535,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,神港站,货1线,66(C64)/58(C70),装车/卸车,45,400,40,485,31,Project scope is Shuohuang only; retained as PDF background data.
+黄万线,郭庄子站,4道,66(C64)/58(C70)/50(P70)/48(P80),卸车,50,2320,30,2400,31,Project scope is Shuohuang only; retained as PDF background data.
+黄大线,滨城站,滨州物流中心临时接卸线,30,装车/卸车,60,600,60,720,31,Project scope is Shuohuang only; retained as PDF background data.
+黄大线,滨城站,人工卸煤线,66,卸车,60,480,60,600,31,Project scope is Shuohuang only; retained as PDF background data.

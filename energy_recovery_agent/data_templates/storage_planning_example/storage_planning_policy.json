@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "policy_code": "synthetic_cost_robust_v1",
+  "planning_horizon_years": 12,
+  "discount_rate": 0.06,
+  "analysis_days_per_year": 365,
+  "max_site_count": 2,
+  "total_budget_cny": 80000000,
+  "allow_no_build": true,
+  "target_final_soc_rule": "cyclic",
+  "final_soc_tolerance_kwh": 0,
+  "objective_mode": "annualized_cost",
+  "include_demand_charge": true,
+  "allow_timetable_coordination": false,
+  "coordination_shortlist_size": 0,
+  "core_scenarios_must_all_be_feasible": true,
+  "risk_measure": "expected",
+  "cvar_alpha": null,
+  "minimum_grid_reduction_kwh": 1,
+  "minimum_annual_saving_cny": 1,
+  "solver_profile": "standard",
+  "max_wall_clock_s": 600,
+  "seed": 20260915,
+  "data_status": "synthetic",
+  "source_note": "阶段A合成策略；预算、电价、寿命和收益门槛不得用于正式结论"
+}
+

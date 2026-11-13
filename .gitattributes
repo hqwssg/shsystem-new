@@ -1,0 +1,7 @@
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.Dockerfile text eol=lf
+# Preserve the delivery's exact bytes so its nested SHA-256 manifest stays valid.
+tools/algorithm-demo-20261113/** -text whitespace=cr-at-eol
+# Dataset hashes must not depend on Windows checkout line-ending conversion.
+zhongkong_data/data/** -text

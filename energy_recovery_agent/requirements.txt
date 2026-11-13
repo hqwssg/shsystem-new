@@ -1,0 +1,7 @@
+PyMySQL>=1.1.0
+# 交付包冻结在 numpy==2.0.2 / scipy==1.13.1（CPython 3.12）。本机 3.13 使用有 wheel 的兼容版本。
+numpy>=2.1.0
+scipy>=1.14.0
+matplotlib>=3.9.0
+openpyxl>=3.1.5
+psutil>=6.0.0

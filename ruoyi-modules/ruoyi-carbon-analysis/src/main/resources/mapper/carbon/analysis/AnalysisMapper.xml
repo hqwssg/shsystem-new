@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.analysis.mapper.AnalysisMapper">
+
+    <select id="selectNodes" resultType="com.ruoyi.carbon.analysis.domain.AnalysisNode">
+        select
+            ct.id as templateId,
+            cn.id as calcNodeId,
+            cn.node_id as sourceNodeId,
+            cn.parent_id as parentCalcNodeId,
+            cn.name as nodeName,
+            coalesce(cn.node_category, ni.node_category) as nodeCategory
+        from emission_calculation_node cn
+        inner join emission_calculation_template ct on ct.id = cn.calculation_template_id
+        left join emission_node_info ni on ni.node_id = cn.node_id
+        where ct.status = 2
+          and ct.calculation_cycle_end_date &gt;= #{rangeStart}
+          and ct.calculation_cycle_start_date &lt;= #{rangeEnd}
+    </select>
+
+    <select id="selectFacts" resultType="com.ruoyi.carbon.analysis.domain.AnalysisFact">
+        select
+            ct.id as templateId,
+            date_format(ct.calculation_cycle_start_date, '%Y-%m-%d') as cycleStart,
+            date_format(ct.calculation_cycle_end_date, '%Y-%m-%d') as cycleEnd,
+            date_format(ct.calculation_end_time, '%Y-%m-%d %H:%i:%s') as calculationEndTime,
+            cn.id as calcNodeId,
+            cn.node_id as sourceNodeId,
+            cn.name as nodeName,
+            coalesce(cn.node_category, ni.node_category) as nodeCategory,
+            s.energy_category_l1 as energyCategoryL1,
+            s.energy_category_l2 as energyCategoryL2,
+            s.energy_category_l3 as energyCategoryL3,
+            s.emission_subcategory as subcategory,
+            u.subcategory_name as subcategoryName,
+            coalesce(s.calculation_unit_code, u.calculation_unit) as unitCode,
+            us.unit_name as unitName,
+            s.subtotal_energy_value as energyValue,
+            s.subtotal_carbon_emission as carbonValue
+        from emission_calc_node_summary s
+        inner join emission_calculation_node cn on cn.id = s.calculation_node_id
+        inner join emission_calculation_template ct on ct.id = s.calculation_template_id
+        left join emission_node_info ni on ni.node_id = cn.node_id
+        left join emission_calc_unit_default u on u.subcategory_code collate utf8mb4_general_ci = s.emission_subcategory collate utf8mb4_general_ci
+        left join emission_unit_standard us on us.unit_code collate utf8mb4_general_ci = coalesce(s.calculation_unit_code, u.calculation_unit) collate utf8mb4_general_ci
+        where ct.status = 2
+          and ct.calculation_cycle_end_date &gt;= #{rangeStart}
+          and ct.calculation_cycle_start_date &lt;= #{rangeEnd}
+    </select>
+
+    <select id="selectDirectFacts" resultType="com.ruoyi.carbon.analysis.domain.AnalysisFact">
+        select
+            ct.id as templateId,
+            date_format(ct.calculation_cycle_start_date, '%Y-%m-%d') as cycleStart,
+            date_format(ct.calculation_cycle_end_date, '%Y-%m-%d') as cycleEnd,
+            date_format(ct.calculation_end_time, '%Y-%m-%d %H:%i:%s') as calculationEndTime,
+            cn.id as calcNodeId,
+            cn.node_id as sourceNodeId,
+            cn.name as nodeName,
+            coalesce(cn.node_category, ni.node_category) as nodeCategory,
+            d.energy_category_l1 as energyCategoryL1,
+            d.energy_category_l2 as energyCategoryL2,
+            d.energy_category_l3 as energyCategoryL3,
+            d.emission_subcategory as subcategory,
+            coalesce(u.subcategory_name, di.item_value, d.emission_subcategory) as subcategoryName,
+            coalesce(d.measurement_unit, u.calculation_unit) as unitCode,
+            coalesce(us.unit_name, d.measurement_unit, u.calculation_unit) as unitName,
+            coalesce(d.adjusted_energy_value, d.energy_measurement_value) as energyValue,
+            coalesce(d.adjusted_carbon_emission, d.carbon_emission) as carbonValue
+        from emission_collection_node_data d
+        inner join emission_calculation_node cn on cn.id = d.calculation_node_id
+        inner join emission_calculation_template ct on ct.id = cn.calculation_template_id
+        left join emission_node_info ni on ni.node_id = cn.node_id
+        left join emission_calc_unit_default u on u.subcategory_code collate utf8mb4_general_ci = d.emission_subcategory collate utf8mb4_general_ci
+        left join emission_data_dict_item di on di.item_code collate utf8mb4_general_ci = d.emission_subcategory collate utf8mb4_general_ci
+            and di.dict_id = (select id from emission_data_dict where dict_code = 'emission_subcategory' limit 1)
+        left join emission_unit_standard us on us.unit_code collate utf8mb4_general_ci = coalesce(d.measurement_unit, u.calculation_unit) collate utf8mb4_general_ci
+        where ct.status = 2
+          and ct.calculation_cycle_end_date &gt;= #{rangeStart}
+          and ct.calculation_cycle_start_date &lt;= #{rangeEnd}
+    </select>
+
+    <select id="selectOrgs" resultType="com.ruoyi.carbon.analysis.domain.AnalysisOrgOption">
+        select n.id as id, n.name as name, n.parent_id as parentId, i.node_category as nodeCategory
+        from emission_node n
+        inner join emission_node_info i on i.node_id = n.id
+        where i.node_category in ('BRANCH', 'REGION', 'STATION')
+        order by n.sort_order, n.name, n.id
+    </select>
+
+    <select id="selectCategories" resultType="com.ruoyi.carbon.analysis.domain.AnalysisCategoryOption">
+        select id, category_code as categoryCode, category_name as categoryName, parent_id as parentId, level
+        from emission_energy_category
+        where status = 1
+        order by level, sort_order, id
+    </select>
+
+    <select id="selectSubcategories" resultType="com.ruoyi.carbon.analysis.domain.AnalysisSubcategoryOption">
+        select code, max(name) as name, max(unitCode) as unitCode
+        from (
+            select subcategory_code collate utf8mb4_general_ci as code,
+                   subcategory_name collate utf8mb4_general_ci as name,
+                   calculation_unit collate utf8mb4_general_ci as unitCode
+            from emission_calc_unit_default
+            union all
+            select d.emission_subcategory collate utf8mb4_general_ci,
+                   coalesce(di.item_value collate utf8mb4_general_ci, d.emission_subcategory collate utf8mb4_general_ci),
+                   d.measurement_unit collate utf8mb4_general_ci
+            from emission_collection_node_data d
+            left join emission_data_dict_item di on di.item_code collate utf8mb4_general_ci = d.emission_subcategory collate utf8mb4_general_ci
+                and di.dict_id = (select id from emission_data_dict where dict_code collate utf8mb4_general_ci = 'emission_subcategory' limit 1)
+            where d.emission_subcategory is not null and d.emission_subcategory collate utf8mb4_general_ci &lt;&gt; ''
+            union all
+            select s.emission_subcategory collate utf8mb4_general_ci,
+                   coalesce(u.subcategory_name collate utf8mb4_general_ci, s.emission_subcategory collate utf8mb4_general_ci),
+                   s.calculation_unit_code collate utf8mb4_general_ci
+            from emission_calc_node_summary s
+            left join emission_calc_unit_default u on u.subcategory_code collate utf8mb4_general_ci = s.emission_subcategory collate utf8mb4_general_ci
+            where s.emission_subcategory is not null and s.emission_subcategory collate utf8mb4_general_ci &lt;&gt; ''
+        ) names
+        where code is not null and code collate utf8mb4_general_ci &lt;&gt; ''
+        group by code
+        order by code
+    </select>
+</mapper>

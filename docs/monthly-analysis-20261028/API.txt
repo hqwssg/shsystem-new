@@ -1,0 +1,59 @@
+月度分析接口 v1
+
+模型后端路径 /api/monthly-analysis，统一使用登录态和 carbon:analysis:view 权限。
+主前端代理路径 /carbon-api/monthly-analysis（代理会加 /api）。所有接口只读，export 返回文件字节。
+
+GET /options
+返回 companies[{id,name,defaultTemplateId,templates[{id,name,nodes[{id,name,parentId}]}]}]、categories[{code,name,level}]、departments[{id,name}]、stations[{id,name}]、energies[]、basis。
+公司、模板、节点与物理采集点权限取交集。不可用基准返回null，不随意选另一个模板。
+
+POST /query 普通汇总
+POST /compare 组织、同比、环比
+POST /details 分页修正明细
+POST /export Excel
+Content-Type: application/json
+
+共同条件示例（本地机辆演示公司ID是303，线上请从options获取，不能硬编码）：
+{
+  "selections":[{"companyId":303,"templateId":910030010,"nodeId":null}],
+  "startMonth":"2026-01", "endMonth":"2026-12",
+  "grain":"MONTH", "dimension":"ENERGY", "categoryLevel":1,
+  "energy":null, "category":null,
+  "valueMode":"ADOPTED", "compareType":"NONE",
+  "departmentIds":[], "stationIds":[], "page":0, "size":50
+}
+
+selections: 1至20家公司，每家公司一个模板；nodeId可选，限定该节点及下级有效采集点。
+grain: MONTH/QUARTER/YEAR。季度与年度必须完整自然边界；MONTH支持连续整月。起止月包含两端，最长十年。
+dimension: ENERGY/SCENE/DEPARTMENT/STATION。SCENE支持categoryLevel=1或2，category为对应分类编码。
+energy: 月度表的emission_subcategory值。能源单位分别分组，不转换。
+departmentIds/stationIds: 多选归属筛选，0表示未明确归属。
+valueMode: ADOPTED(default)/RAW/ADJUSTED。
+compareType: NONE(default)/ORGANIZATION/YOY/MOM。/compare需要显式选择后三者。
+ORGANIZATION至少两个公司，或在部门/站点维度至少选两个归属组织。
+同比移12月；环比依grain移1/3/12月，逐期配对。
+page从0起，size默认20、最大500。查询超过十万采集点月份会提示缩小范围，导出本期+基期超过十万行会提示缩小范围。
+
+/query 响应主要字段
+rows[]: companyId/companyName/groupKey/groupName/energy/energyName/unit/period，
+rawEnergy/rawCarbon/adjustedEnergy/adjustedCarbon/adoptedEnergy/adoptedCarbon/selectedEnergy/selectedCarbon，
+energyDifference/carbonDifference，expectedCount/generatedCount/missingCount/abnormalCount/missingMonths/incomplete。
+summary: 全范围去重合计及energies[]。没有跨单位能耗总数；selectedCarbon是总排放。
+periods[]: 完整横轴。notices[]: 缺失/异常/重叠说明。并返回valueMode/grain/dimension/startMonth/endMonth/unit。
+所有数值允许null，客户端不得使用“值||0”吞掉缺失，也不得重算采用值。
+
+/compare 同期比较另返回
+rows的previousPeriod/previousEnergy/previousCarbon/deltaEnergy/deltaCarbon/rateEnergy/rateCarbon/previousIncomplete，
+previousSummary、previousStartMonth、previousEndMonth、compareType。
+变化率为百分数（12表示12%）。缺本期、缺基期或基期0时为null。部分有效值可计算，但标明本期/基期不完整。
+
+/details 返回 {content:[],totalElements}
+明细含公司、模板、pointType/pointId/pointName、month、energy、unit、carbonUnit、departmentId、stationId、上述三套/所选数值、差额、method、dataStatus、generated、missing、description。
+generated=false 表示查询范围内未生成月度行。dataStatus=2的数值不当作真实零值。查看基期明细时用/compare返回的基期月份请求同一个/details。
+
+/export 返回application/vnd.openxmlformats-officedocument.spreadsheetml.sheet。
+分组统计与期间合计分开工作表，避免重叠公司范围的分组数被误认为全局去重总量。空值导出空单元格。
+
+错误
+400 条件/时间不正确，或结果过大；403 没有统计权限，或公司/模板/节点越权；503 月度表读取失败（核对迁移和数据库连接）。
+没有加入旧核算任务、回退旧接口或因子一致性校验。

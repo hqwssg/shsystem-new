@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "policy_code": "planning_policy_replace_me",
+  "planning_horizon_years": 10,
+  "discount_rate": 0.05,
+  "analysis_days_per_year": 365,
+  "max_site_count": 1,
+  "total_budget_cny": 0,
+  "allow_no_build": true,
+  "target_final_soc_rule": "cyclic",
+  "final_soc_tolerance_kwh": 0,
+  "objective_mode": "annualized_cost",
+  "include_demand_charge": false,
+  "allow_timetable_coordination": false,
+  "coordination_shortlist_size": 0,
+  "core_scenarios_must_all_be_feasible": true,
+  "risk_measure": "expected",
+  "cvar_alpha": null,
+  "minimum_grid_reduction_kwh": 0,
+  "minimum_annual_saving_cny": 0,
+  "solver_profile": "standard",
+  "max_wall_clock_s": 600,
+  "seed": 20260915,
+  "data_status": "planning_placeholder",
+  "source_note": "规划期、预算、折现率和收益门槛均待项目口径确认"
+}
+

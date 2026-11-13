@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "line_name": "shuohuang_virtual_template",
+  "data_status": "virtual_template_waiting_for_official_data",
+  "route": {
+    "total_length_km": 594.0,
+    "max_speed_kmh": 120.0,
+    "long_downhill_range_km": [
+      62.0,
+      302.0
+    ],
+    "signaling_system": {
+      "mode": "hybrid",
+      "fixed_block_length_km": 2.0,
+      "fixed_block_protection_blocks": 2,
+      "moving_block_base_buffer_m": 500.0,
+      "moving_block_reaction_time_s": 30.0,
+      "moving_block_follower_service_decel_mps2": 0.28,
+      "moving_block_lead_emergency_decel_mps2": 0.5,
+      "check_step_s": 5
+    }
+  }
+}

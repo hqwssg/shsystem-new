@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.EmissionCalculationMapper">
+    <select id="selectTask" resultType="com.ruoyi.carbon.report.domain.CalculationCandidate">
+        select ct.id, ct.template_id as templateId, ct.company_dept_id as companyDeptId,
+               ct.status, t.name as templateName, ct.calculation_cycle_start_date as cycleStart,
+               ct.calculation_cycle_end_date as cycleEnd, ct.calculation_end_time as finishedAt
+        from emission_calculation_template ct left join emission_template t on t.id=ct.template_id
+        where ct.id=#{id}
+    </select>
+    <select id="selectCandidates" resultType="com.ruoyi.carbon.report.domain.CalculationCandidate">
+        select distinct
+            ct.id as id,
+            ct.template_id as templateId,
+            ct.company_dept_id as companyDeptId,
+            ct.status as status,
+            t.name as templateName,
+            ct.calculation_cycle_start_date as cycleStart,
+            ct.calculation_cycle_end_date as cycleEnd,
+            ct.calculation_end_time as finishedAt
+        from emission_calculation_template ct
+        left join emission_template t on t.id = ct.template_id
+        inner join emission_calculation_node cn on cn.calculation_template_id = ct.id
+        where (
+            cn.node_id = #{subjectNodeId}
+            or exists (
+                select 1
+                from emission_node source_node
+                where source_node.id = cn.node_id
+                  and source_node.source_node_id = #{subjectNodeId}
+            )
+
+        )
+          and (select count(*) from report_dept_subject s join sys_carbon_company c on c.dept_id=s.dept_id
+               where s.subject_node_id=#{subjectNodeId}) = 1
+          and t.template_type = 2
+          <if test="periodStart != null and periodEnd != null">
+          and ct.calculation_cycle_start_date &lt;= #{periodEnd}
+          and ct.calculation_cycle_end_date &gt;= #{periodStart}
+          </if>
+        order by ct.calculation_end_time desc
+    </select>
+
+    <select id="selectCompanyCandidates" resultType="com.ruoyi.carbon.report.domain.CalculationCandidate">
+        select ct.id, ct.template_id as templateId, ct.company_dept_id as companyDeptId,
+               ct.status, t.name as templateName,
+               ct.calculation_cycle_start_date as cycleStart,
+               ct.calculation_cycle_end_date as cycleEnd, ct.calculation_end_time as finishedAt
+        from emission_calculation_template ct
+        inner join emission_template t on t.id = ct.template_id
+        where ct.company_dept_id = #{companyDeptId} and ct.status = 2 and t.template_type = 2
+          <if test="periodStart != null and periodEnd != null">
+          and ct.calculation_cycle_start_date &lt;= #{periodEnd}
+          and ct.calculation_cycle_end_date &gt;= #{periodStart}
+          </if>
+        order by ct.calculation_end_time desc, ct.id desc
+    </select>
+    <select id="selectAttributionTables" resultType="string">
+        select table_name from information_schema.columns
+        where table_schema = database() and column_name = 'energy_attribution_dept_id'
+          and table_name in ('emission_fossil_fuel_meter_info', 'emission_meter_info', 'emission_purchased_heat_meter_info')
+    </select>
+    <sql id="attributionDepartment">
+        case d.collection_point_type
+            when -1 then null
+            <if test="attributionTables.contains('emission_fossil_fuel_meter_info')">when 2 then fm.energy_attribution_dept_id</if>
+            <if test="attributionTables.contains('emission_meter_info')">when 1 then em.energy_attribution_dept_id</if>
+            <if test="attributionTables.contains('emission_purchased_heat_meter_info')">when 3 then hm.energy_attribution_dept_id</if>
+            else null
+        end
+    </sql>
+    <select id="selectNodeDataCompatible" resultType="com.ruoyi.carbon.report.domain.CalculationNodeDataRow">
+        select
+            d.id as id,
+            cn.calculation_template_id as calculationTemplateId,
+            d.emission_category as emissionCategory,
+            d.emission_subcategory as emissionSubcategory,
+            d.energy_measurement_value as energyMeasurementValue,
+            d.adjusted_energy_value as adjustedEnergyValue,
+            d.carbon_emission as carbonEmission,
+            d.adjusted_carbon_emission as adjustedCarbonEmission,
+            d.carbon_emission_factor as carbonEmissionFactor,
+            d.carbon_emission_factor_unit as carbonEmissionFactorUnit,
+            d.carbon_emission_unit as carbonEmissionUnit,
+            d.data_status as dataStatus,
+            d.data_missing_description as dataMissingDescription,
+            nc.carbon_emission_factor as configuredFactor,
+            nc.carbon_emission_factor_unit as configuredFactorUnit,
+            df.factor_value as templateFactor,
+            df.factor_unit as templateFactorUnit,
+            d.measurement_unit as measurementUnit,
+            d.collection_point_id as collectionPointId,
+            d.collection_point_type as collectionPointType,
+            coalesce(fm.energy_allocation, em.energy_allocation, hm.energy_allocation) as energyAllocation,
+            coalesce(fm.name, em.name, hm.name) as facilityName,
+            <include refid="attributionDepartment"/> as attributionDeptId,
+            (select case when company.status='0' and company.del_flag='0' then c.dept_id else null end
+               from sys_dept md
+               join sys_carbon_company c
+               join sys_dept company on company.dept_id=c.dept_id
+              where md.dept_id=(<include refid="attributionDepartment"/>)
+                and md.status='0' and md.del_flag='0'
+                and (c.dept_id=md.dept_id or find_in_set(c.dept_id, md.ancestors) &gt; 0)
+              order by (c.dept_id=md.dept_id) desc,
+                       find_in_set(c.dept_id, md.ancestors) desc, c.dept_id
+              limit 1) as attributionCompanyDeptId
+        from emission_collection_node_data d
+        inner join emission_calculation_node cn on cn.id = d.calculation_node_id
+        left join emission_node_config nc on nc.node_id = cn.node_id
+        left join emission_calculation_template ct on ct.id = cn.calculation_template_id
+        left join emission_template et on et.id = ct.template_id
+        left join emission_default_factor df on df.id = (
+            select min(f.id) from emission_default_factor f
+            where f.template_id = et.factor_template_id and f.status = 1
+              and (f.subcategory_name = d.emission_subcategory collate utf8mb4_general_ci
+                   or f.subcategory_code = d.emission_subcategory collate utf8mb4_general_ci)
+        )
+        left join emission_fossil_fuel_meter_info fm
+            on d.collection_point_type = 2 and fm.id = d.collection_point_id
+        left join emission_meter_info em
+            on d.collection_point_type = 1 and em.id = d.collection_point_id
+        left join emission_purchased_heat_meter_info hm
+            on d.collection_point_type = 3 and hm.id = d.collection_point_id
+        where cn.calculation_template_id = #{calculationTemplateId}
+          and cn.include_in_calculation = 1 and cn.excluded_by_node_id is null
+    </select>
+
+
+    <select id="selectFactorTemplateLink" resultType="com.ruoyi.carbon.report.domain.FactorTemplateLink">
+        select
+            ct.id as calculationTemplateId,
+            ct.template_id as emissionTemplateId,
+            t.name as emissionTemplateName,
+            t.factor_template_id as factorTemplateId,
+            ft.template_name as factorTemplateName
+        from emission_calculation_template ct
+        left join emission_template t on t.id = ct.template_id
+        left join emission_factor_template ft on ft.id = t.factor_template_id
+        where ct.id = #{calculationTemplateId}
+    </select>
+
+    <select id="selectDefaultFactors" resultType="com.ruoyi.carbon.report.domain.DefaultFactorRow">
+        select
+            id as id,
+            template_id as templateId,
+            subcategory_code as subcategoryCode,
+            subcategory_name as subcategoryName,
+            factor_source as factorSource,
+            factor_id as factorId,
+            factor_name as factorName,
+            factor_value as factorValue,
+            factor_unit as factorUnit,
+            status as status
+        from emission_default_factor
+        where template_id = #{templateId}
+          and (status is null or status = 1)
+    </select>
+
+    <select id="selectFossilFactor" resultType="com.ruoyi.carbon.report.domain.FossilFactorRow">
+        select
+            id as id,
+            fuel_type as fuelType,
+            unit as unit,
+            lower_heating_value as lowerHeatingValue,
+            carbon_content_per_unit_heat as carbonContentPerUnitHeat,
+            fuel_oxidation_rate as fuelOxidationRate,
+            emission_factor as emissionFactor,
+            factor_unit as factorUnit
+        from emission_fossil_fuel_emission_factor
+        where id = #{id}
+    </select>
+
+    <select id="selectMonthlyCollection" resultType="com.ruoyi.carbon.report.domain.MonthlyCollectionActivityRow">
+        select collection_point_type as collectionPointType,
+               collection_point_id as collectionPointId,
+               year as year, month as month,
+               emission_category as emissionCategory,
+               emission_subcategory as emissionSubcategory,
+               measurement_unit as measurementUnit,
+               energy_measurement_value as energyMeasurementValue,
+               adjusted_energy_value as adjustedEnergyValue,
+               carbon_emission as carbonEmission,
+               adjusted_carbon_emission as adjustedCarbonEmission,
+               data_status as dataStatus
+        from emission_collection_node_data_month
+        where year = #{year}
+          and month &gt;= #{startMonth}
+          and month &lt;= #{endMonth}
+          and (
+            1 = 0
+            <if test="electricIds != null and electricIds.size() &gt; 0">
+              or (collection_point_type = 1 and collection_point_id in
+                <foreach collection="electricIds" item="id" open="(" separator="," close=")">#{id}</foreach>)
+            </if>
+            <if test="fossilIds != null and fossilIds.size() &gt; 0">
+              or (collection_point_type = 2 and collection_point_id in
+                <foreach collection="fossilIds" item="id" open="(" separator="," close=")">#{id}</foreach>)
+            </if>
+            <if test="heatIds != null and heatIds.size() &gt; 0">
+              or (collection_point_type = 3 and collection_point_id in
+                <foreach collection="heatIds" item="id" open="(" separator="," close=")">#{id}</foreach>)
+            </if>
+          )
+    </select>
+
+    <select id="selectMonthlyCollectionBetween" resultType="com.ruoyi.carbon.report.domain.MonthlyCollectionActivityRow">
+        select collection_point_type as collectionPointType,
+               collection_point_id as collectionPointId,
+               year as year, month as month,
+               emission_category as emissionCategory,
+               emission_subcategory as emissionSubcategory,
+               measurement_unit as measurementUnit,
+               energy_measurement_value as energyMeasurementValue,
+               adjusted_energy_value as adjustedEnergyValue,
+               carbon_emission as carbonEmission,
+               adjusted_carbon_emission as adjustedCarbonEmission,
+               data_status as dataStatus
+        from emission_collection_node_data_month
+        where (year * 12 + month) between (#{startYear} * 12 + #{startMonth}) and (#{endYear} * 12 + #{endMonth})
+          and (
+            1 = 0
+            <if test="electricIds != null and electricIds.size() &gt; 0">
+              or (collection_point_type = 1 and collection_point_id in
+                <foreach collection="electricIds" item="id" open="(" separator="," close=")">#{id}</foreach>)
+            </if>
+            <if test="fossilIds != null and fossilIds.size() &gt; 0">
+              or (collection_point_type = 2 and collection_point_id in
+                <foreach collection="fossilIds" item="id" open="(" separator="," close=")">#{id}</foreach>)
+            </if>
+            <if test="heatIds != null and heatIds.size() &gt; 0">
+              or (collection_point_type = 3 and collection_point_id in
+                <foreach collection="heatIds" item="id" open="(" separator="," close=")">#{id}</foreach>)
+            </if>
+          )
+    </select>
+</mapper>

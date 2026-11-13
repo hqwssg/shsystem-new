@@ -1,0 +1,24 @@
+{
+  "capacity_kwh": 145.0,
+  "round_trip_efficiency": 0.9,
+  "depreciation_cost_per_kwh": 0.326,
+  "depreciation_cost_basis": "total_throughput",
+  "grid_price_per_kwh": 0.6818,
+  "max_charge_power_kW": 2000.0,
+  "max_discharge_power_kW": 0.0,
+  "planning_max_discharge_power_assumption_kW": 2000.0,
+  "data_status": "provided_document_partial_real_parameters",
+  "scenario_name": "provided_storage_system_parameters_20260918",
+  "planning_assumption": false,
+  "field_data_status": {
+    "capacity_kwh": "provided_45kwh_flywheel_plus_100kwh_lto",
+    "round_trip_efficiency": "provided",
+    "depreciation_cost_per_kwh": "provided",
+    "grid_price_per_kwh": "provided",
+    "max_charge_power_kW": "provided",
+    "max_discharge_power_kW": "missing_conservative_zero"
+  },
+  "source_document": "shuohuang_data/5.储能系统参数.doc",
+  "source_sha256": "59df2cf3fadba1e4ae8a6979a9e05cd290f1211dedd7cbd0eb66ac041c981357",
+  "note": "飞轮45kWh与钛酸锂100kWh合计145kWh；最大放电功率、站址和接入供电臂未提供，运行基线按0kW放电保守处理。"
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "extreme_cases": {
+    "passed": true,
+    "checks": {
+      "empty_series_zero_ledger": true,
+      "no_regen_no_charge": true,
+      "zero_storage_no_exchange": true,
+      "full_soc_regen_wasted": true,
+      "outside_arm_not_absorbed": true,
+      "zero_efficiency_disables_exchange": true,
+      "exact_power_limit_no_violation": true,
+      "huge_finite_energy_stays_finite": true,
+      "tiny_finite_energy_preserved": true,
+      "multiple_storage_sections_isolated": true
+    },
+    "observed": {
+      "no_regen": {
+        "charge": 0.0,
+        "wasted": 0.0
+      },
+      "zero_storage": {
+        "charge": 0.0,
+        "discharge": 0.0
+      },
+      "full_soc": {
+        "charge": 0.0,
+        "wasted": 10.0
+      },
+      "outside_arm": {
+        "charge": 0.0,
+        "wasted": 1.0
+      },
+      "zero_efficiency": {
+        "charge": 0.0,
+        "discharge": 0.0
+      },
+      "exact_limit": {
+        "traction_excess": 0.0
+      },
+      "huge_finite": {
+        "generated": 24000000000000.0,
+        "wasted": 24000000000000.0
+      },
+      "tiny_finite": {
+        "consumed": 2.7777777777777777e-10,
+        "grid": 2.7777777777777777e-10
+      },
+      "isolated_sections": {
+        "S1": 9.0,
+        "S2": 9.0
+      }
+    }
+  },
+  "resolution_consistency": {
+    "passed": true,
+    "differences": {
+      "total_gen_kwh": 0.0,
+      "total_con_kwh": 0.0,
+      "battery_charge_kwh": 0.0,
+      "battery_discharge_kwh": 0.0,
+      "wasted_kwh": 0.0,
+      "grid_kwh": 0.0,
+      "final_soc_kwh": 0.0
+    }
+  },
+  "deterministic_replay": {
+    "passed": true,
+    "differences": {
+      "total_gen_kwh": 0.0,
+      "total_con_kwh": 0.0,
+      "battery_charge_kwh": 0.0,
+      "battery_discharge_kwh": 0.0,
+      "wasted_kwh": 0.0,
+      "grid_kwh": 0.0,
+      "final_soc_kwh": 0.0,
+      "total_cost": 0.0
+    }
+  },
+  "passed": true
+}

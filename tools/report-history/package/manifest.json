@@ -1,0 +1,27 @@
+{
+    "package":  "ruoyi-business-history",
+    "generated_at":  "2026-10-19T23:18:40+08:00",
+    "source_database":  "carbon_emissions",
+    "import_policy":  "insert-only, preflight conflicts, transaction rollback",
+    "sql_sha256":  "8affb50e979907b73b255207129f7fff9b04c16f471c0a3f7926e01d40d0188f",
+    "counts":  {
+                   "emission_collection_record":  325,
+                   "emission_collection_record_audit":  10,
+                   "emission_calculation_template":  40,
+                   "emission_calculation_data_state":  24,
+                   "emission_calculation_node":  582,
+                   "emission_collection_node_data":  1551,
+                   "emission_calc_node_summary":  29,
+                   "report_task":  4,
+                   "report_emission_source":  0,
+                   "report_activity_fuel":  0,
+                   "report_activity_electricity":  1,
+                   "report_activity_heat":  0,
+                   "report_workload":  1,
+                   "report_equipment":  1,
+                   "report_monitoring_device":  1,
+                   "report_import_batch":  0,
+                   "report_file":  0,
+                   "report_generation_job":  1
+               }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "line_name": "shuohuang_real",
+  "data_status": "real_mainline_stations_from_line_diagrams_1_2_3",
+  "route": {
+    "total_length_km": 583.003,
+    "max_speed_kmh": 120.0,
+    "long_downhill_range_km": [
+      0.0,
+      0.001
+    ],
+    "signaling_system": {
+      "mode": "hybrid",
+      "check_step_s": 5
+    }
+  },
+  "source_metadata": {
+    "description": "Shuohuang real-data bundle generated from reviewed project data. Virtual route geometry and virtual energy-transfer zones are not copied.",
+    "real_sources": [
+      "stations.csv: real mainline stations from line diagrams 1/2/3 and PDF station table (terminal 黄骅港 K583+003)",
+      "data/source/geometry/gradients.xlsx -> gradients.csv and segments.csv gradient_per_mille",
+      "data/source/geometry/curves.xlsx -> curves.csv and segments.csv curve_radius_m",
+      "data/source/power_arm/power_arm_continuous_intervals.xlsx -> power_arm_intervals.csv",
+      "previously structured station/headway/technical-operation/train-formation files extracted from provided PDF or user files"
+    ],
+    "explicit_assumptions": [
+      "stations.csv contains only real Shuohuang mainline stations covered by line diagrams 1/2/3; terminal is 黄骅港 at K583+003.",
+      "Storage is represented by planning placeholder parameters because official storage equipment capacity/power data is not available.",
+      "No official signaling block boundaries are available; signaling_blocks.csv is intentionally omitted.",
+      "route.signaling_system.mode keeps the loader-compatible value 'hybrid'; real signaling details are not confirmed.",
+      "route.long_downhill_range_km keeps a minimal loader-compatible range; the optimizer uses the reviewed gradient table instead.",
+      "energy_transfer_zones.csv is a planning virtual preset for the two storage ranges; replace with official flexible-zone boundaries when available.",
+      "Train traction/brake/Davis/max_power use engineering virtual presets in trains.csv; replace when official traction data arrives.",
+      "Power-arm electrical traction/absorption/feed-back limits use large non-binding defaults until official limits are available.",
+      "Direct up/down regenerative energy use is disabled for Shuohuang; storage reuse is limited to two planning-assumption storage ranges K145-K164 and K164-K200.7 until official storage boundaries are available."
+    ],
+    "needs_confirmation": [
+      "Bare K / 黄K / 朔黄K chainage equivalence in the current Shuohuang K0-K583.003 model.",
+      "SK/准池K connection-line chainage conversion only if future cross-line modeling is required.",
+      "Official running diagram format and real timetable.",
+      "Smart meter units, multipliers, phase aggregation and direction code sxx=0.",
+      "Official traction/brake/resistance parameters if dispatch energy numbers need calibration."
+    ]
+  }
+}

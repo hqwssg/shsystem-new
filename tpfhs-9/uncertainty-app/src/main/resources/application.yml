@@ -1,0 +1,32 @@
+server:
+  port: ${UNCERTAINTY_SERVER_PORT:8085}
+
+spring:
+  datasource:
+    url: ${UNCERTAINTY_DB_URL:jdbc:mysql://127.0.0.1:3306/carbon_emissions?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci&tinyInt1isBit=false}
+    username: ${UNCERTAINTY_DB_USERNAME:root}
+    password: ${UNCERTAINTY_DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+logging:
+  level:
+    com.example.carbon.emission.model: INFO
+  file:
+    name: logs/uncertainty-app.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+integration:
+  ruoyi-security:
+    enabled: ${RUOYI_SECURITY_ENABLED:true}
+    endpoint: ${RUOYI_SECURITY_ENDPOINT:http://127.0.0.1:8081/internal/security/context}

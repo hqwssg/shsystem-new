@@ -1,0 +1,134 @@
+{
+  "schema": "codex_alg_seed_test_20261113_093126_wrapper",
+  "results": [
+    {
+      "task": "timetable_audit",
+      "runId": "2f8e22ea-491e-529f-9dd9-501515e23ce9",
+      "status": "succeeded",
+      "artifacts": 21,
+      "seconds": 9.98,
+      "error": null
+    },
+    {
+      "task": "timetable_optimization",
+      "runId": "8b83284d-9850-5f05-a60a-67531b8ceb99",
+      "status": "succeeded",
+      "artifacts": 26,
+      "seconds": 4.56,
+      "error": null
+    },
+    {
+      "task": "dispatch",
+      "runId": "799274b2-58b3-5446-8378-a2ccef0be9fe",
+      "status": "succeeded",
+      "artifacts": 38,
+      "seconds": 16.05,
+      "error": null
+    },
+    {
+      "task": "rolling_rescheduling",
+      "runId": "b566b370-4ed0-52a7-9159-b3c1abd09050",
+      "status": "succeeded",
+      "artifacts": 20,
+      "seconds": 77.61,
+      "error": null
+    },
+    {
+      "task": "historical_replay",
+      "runId": "8fd1759e-f86c-5b9f-b4b9-a4712efde43a",
+      "status": "succeeded",
+      "artifacts": 22,
+      "seconds": 113.84,
+      "error": null
+    },
+    {
+      "task": "joint_parameter_robustness",
+      "runId": "0fcfd5ef-1a2d-5394-ad47-f73105d52dcc",
+      "status": "succeeded",
+      "artifacts": 10,
+      "seconds": 12.65,
+      "error": null
+    },
+    {
+      "task": "storage_planning",
+      "runId": "ded4a169-fefd-5914-a15c-44307be8aafd",
+      "status": "succeeded",
+      "artifacts": 17,
+      "seconds": 14.55,
+      "error": null
+    },
+    {
+      "task": "simulation",
+      "runId": "4b852204-10ba-4f93-acd7-f023c6b16e8b",
+      "status": "completed",
+      "cases": 1,
+      "expectedCases": 1,
+      "artifacts": 3,
+      "seconds": 50.99,
+      "error": null,
+      "parameters": {
+        "scenarioKeys": [
+          "s1_flat_braking[nominal]"
+        ],
+        "initialSpeedKmh": 18,
+        "initialSoc": 0.5
+      }
+    },
+    {
+      "task": "comparison",
+      "runId": "6dce9fba-67c1-43c7-b8ec-7e7d999344cd",
+      "status": "completed",
+      "cases": 9,
+      "expectedCases": 9,
+      "artifacts": 19,
+      "seconds": 118.37,
+      "error": null,
+      "parameters": {
+        "scenarioKeys": [
+          "s1_flat_braking[nominal]"
+        ],
+        "initialSpeedKmh": 18,
+        "initialSoc": 0.5
+      }
+    },
+    {
+      "task": "validation",
+      "runId": "feaf3cc7-f470-4b48-acb0-ae472adcfd7f",
+      "status": "completed",
+      "cases": 18,
+      "expectedCases": 18,
+      "artifacts": 37,
+      "seconds": 248.32,
+      "error": null,
+      "parameters": {
+        "scenarioKeys": [
+          "s1_flat_braking[nominal]",
+          "s3_mass_variation[mass_0.6x]"
+        ],
+        "initialSoc": 0.5
+      }
+    },
+    {
+      "task": "eco_driving",
+      "runId": "638c8c35-5120-4f4f-9f2d-f86d76c74bf5",
+      "status": "completed",
+      "cases": 2,
+      "expectedCases": 2,
+      "artifacts": 7,
+      "seconds": 19.88,
+      "error": null,
+      "parameters": {
+        "trainName": "Heavy",
+        "routeStartKm": 108.0,
+        "routeEndKm": 108.005,
+        "initialSpeedKmh": 18.0,
+        "terminalSpeedKmh": 18.0,
+        "targetRuntimeS": 1.0,
+        "initialSoc": 0.5
+      }
+    }
+  ],
+  "businessDatabaseWritten": false,
+  "interruptionNote": "The desktop turn was interrupted during the first eco test. Its worker process stopped; the existing worker recovered that isolated task as interrupted. A new eco task with the identical version and parameters was executed; business database untouched.",
+  "interruptedRunId": "68444f0c-a4a5-4715-ab58-6f059bee6299"
+}

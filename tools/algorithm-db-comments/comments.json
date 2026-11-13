@@ -1,0 +1,938 @@
+{
+  "version": "2026-11-11",
+  "scope": "only the 53 existing energy/single tables supplied by user; missing tables are reported, never created",
+  "tables": {
+    "energy_audit_issue": {
+      "comment": "运行图审查与能耗审计问题表",
+      "columns": {
+        "issue_id": "审查问题主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "issue_type": "问题类型",
+        "severity": "问题或冲突严重程度编码，例如blocking阻断、high高、medium中、low低",
+        "power_arm_code": "供电臂编码",
+        "start_time_s": "运行弧或问题窗口的开始时刻，相对秒",
+        "end_time_s": "运行弧或问题窗口的结束时刻，相对秒",
+        "impact_kwh": "本问题关联或估计影响的电量，单位kWh",
+        "reason": "原因",
+        "details_json": "审查问题的原始字段、位置、能量和诊断JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_candidate_train_adjustment": {
+      "comment": "候选方案逐列车发车调整表",
+      "columns": {
+        "adjustment_id": "逐车发车调整主键，唯一标识本记录",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "train_id": "结果文件中的列车业务标识或车次，不是列车类型参数主键",
+        "train_type": "列车类型",
+        "sequence_no": "列车在候选方案中的顺序号",
+        "baseline_departure_s": "基线方案列车发车时刻，相对秒",
+        "optimized_departure_s": "候选方案列车发车时刻，相对秒",
+        "adjustment_s": "候选方案相对基线的发车调整量，单位秒，可为负",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_dataset_file": {
+      "comment": "算法输入源文件留档表",
+      "columns": {
+        "dataset_file_id": "源文件留档主键",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "relative_path": "文件在版本或任务内的相对路径，不含存储根目录",
+        "media_type": "文件媒体类型",
+        "content": "源文件原始字节内容",
+        "content_size_bytes": "原始文件字节数",
+        "content_sha256": "文件内容的SHA-256校验值，64位十六进制字符串",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_dept_project": {
+      "comment": "部门与算法项目关联表",
+      "columns": {
+        "id": "主键ID",
+        "dept_id": "可访问该项目或任务的部门ID，对应sys_dept.dept_id",
+        "project_code": "算法项目业务编码，与energy_project.project_code对应",
+        "enabled": "项目访问绑定是否启用：1启用，0禁用",
+        "create_by": "创建人账号",
+        "create_time": "记录创建时间",
+        "update_by": "最后修改人账号",
+        "update_time": "记录最后更新时间"
+      }
+    },
+    "energy_od_demand": {
+      "comment": "重空列车OD需求表",
+      "columns": {
+        "od_id": "OD需求主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "origin_station_id": "起点车站ID，对应energy_station.station_id",
+        "destination_station_id": "终点车站ID，对应energy_station.station_id",
+        "train_type": "列车类型",
+        "demand_count": "有效期内OD运输需求的列车数量",
+        "valid_from": "有效期开始时间",
+        "valid_to": "有效期结束时间",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_optimization_candidate": {
+      "comment": "运行图优化候选方案表",
+      "columns": {
+        "candidate_id": "优化候选方案主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "source_candidate_code": "来源候选方案编码",
+        "candidate_set": "候选方案集合名称",
+        "rank": "排序名次",
+        "feasible": "是否可行",
+        "pareto": "是否为帕累托候选",
+        "energy_scenario": "能量评价场景",
+        "storage_preset_id": "储能预设编码",
+        "objective_priority": "目标优先级",
+        "objective_1": "第一目标值；运行图优化通常为有效再生损失kWh，按原始结果解释",
+        "objective_2": "第二目标值；运行图优化通常为购电量kWh，按原始结果解释",
+        "objective_3": "第三目标值；可为能力/间隔或调整量，单位由原始结果定义",
+        "constraint_violation": "算法汇总的约束违反量，组成和量纲见原始指标；0表示未记录违反",
+        "total_cost": "算法目标使用的总成本或总代价值，计价及组成见原始指标",
+        "grid_kwh": "从电网购入或供给牵引的电量，单位kWh",
+        "wasted_kwh": "未被利用或吸收的再生电量，单位kWh",
+        "recovered_energy_kwh": "当前结果口径下有效回收电量，单位kWh，计算分解见metrics_json",
+        "final_soc_kwh": "仿真或场景结束时的储能电量，单位kWh",
+        "resource_conflict_count": "资源占用冲突条数",
+        "parameters_json": "候选方案的发车间隔、相位、持停等参数JSON",
+        "metrics_json": "原始候选指标、目标函数值及诊断JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_optimization_decision": {
+      "comment": "运行图优化最终决策表",
+      "columns": {
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "action": "决策动作：optimize仿真选中优化方案、keep_baseline保留基线、no_feasible_solution无可行方案",
+        "selected_candidate_id": "选中候选ID，关联energy_optimization_candidate.candidate_id；未选中时为空",
+        "reason": "原因",
+        "baseline_effective_regen_loss_kwh": "基线方案有效再生损失电量，单位kWh",
+        "baseline_grid_kwh": "基线方案电网供电量，单位kWh",
+        "effective_regen_loss_improvement_kwh": "相对基线的有效再生损失改善量，单位kWh；不可评价时为空",
+        "grid_improvement_kwh": "相对基线的购电改善量，单位kWh；不可评价时为空",
+        "decision_json": "决策、基线比较条件、候选选择及诊断的原始JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_optimization_suggestion": {
+      "comment": "运行图优化建议表",
+      "columns": {
+        "suggestion_id": "优化建议主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "source_issue_id": "产生本建议的审查问题ID，对应energy_audit_issue.issue_id，可为空",
+        "suggestion_type": "建议类型",
+        "target_train_id": "建议调整的目标列车业务标识",
+        "shift_s": "建议的列车时刻平移量，单位秒，可为负",
+        "reason": "原因",
+        "status": "建议处理状态：proposed提出、evaluated已评估、accepted已接受、rejected已拒绝",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_power_arm": {
+      "comment": "供电臂及电气能力参数表",
+      "columns": {
+        "power_arm_id": "供电臂主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "power_arm_code": "供电臂编码",
+        "start_km": "区段起点里程，单位km",
+        "end_km": "区段终点里程，单位km",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "max_traction_supply_kw": "供电臂最大牵引供电功率，单位kW",
+        "max_regen_absorption_kw": "供电臂最大再生能量吸收功率，单位kW",
+        "max_grid_feedback_kw": "供电臂允许向电网反馈的最大功率，单位kW",
+        "direct_use_allowed": "供电臂是否允许再生能量直接利用：1允许，0不允许",
+        "needs_manual_review": "供电臂参数是否需要人工核对：1需要，0不需要",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_power_arm_settlement": {
+      "comment": "供电臂时间窗口能量结算表",
+      "columns": {
+        "settlement_id": "供电臂窗口结算主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "power_arm_code": "供电臂编码",
+        "window_start_s": "供电臂结算窗口开始时刻，相对秒",
+        "window_end_s": "供电臂结算窗口结束时刻，相对秒",
+        "traction_demand_kwh": "本结算窗口牵引负荷需求电量，单位kWh",
+        "regen_input_kwh": "本结算窗口输入供电臂的再生电量，单位kWh",
+        "accepted_kwh": "供电臂在本窗口接受的再生电量，单位kWh",
+        "charge_kwh": "本结算窗口的储能充电电量，单位kWh",
+        "discharge_kwh": "本结算窗口的储能放电电量，单位kWh",
+        "wasted_kwh": "未被利用或吸收的再生电量，单位kWh",
+        "grid_kwh": "从电网购入或供给牵引的电量，单位kWh",
+        "max_traction_supply_kw": "供电臂最大牵引供电功率，单位kW",
+        "max_regen_absorption_kw": "供电臂最大再生能量吸收功率，单位kW",
+        "electrical_constraint_violation_kwh": "本供电臂窗口电气约束违反电量，单位kWh",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_project": {
+      "comment": "重空协同算法项目表",
+      "columns": {
+        "project_id": "算法项目主键，唯一标识本记录",
+        "project_code": "算法项目业务编码，与energy_project.project_code对应",
+        "project_name": "项目名称",
+        "route_name": "项目或版本适用的线路名称",
+        "timezone": "项目业务时区",
+        "status": "项目状态：active启用、inactive停用、archived归档",
+        "created_at": "记录创建时间",
+        "updated_at": "记录最后更新时间"
+      }
+    },
+    "energy_project_version": {
+      "comment": "算法输入与配置版本表",
+      "columns": {
+        "version_id": "重空输入版本主键，唯一标识本记录",
+        "project_id": "算法项目ID，对应energy_project.project_id；是否物理外键以表约束为准",
+        "version_code": "项目内的数据版本业务编码",
+        "version_name": "用于页面选择的数据版本名称",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "lifecycle_status": "版本生命周期：draft草稿、published已发布、retired退役",
+        "effective_from": "版本生效时间",
+        "effective_to": "版本失效时间",
+        "source_note": "版本来源与适用范围说明",
+        "content_sha256": "文件内容的SHA-256校验值，64位十六进制字符串",
+        "published_at": "发布时间",
+        "created_at": "记录创建时间",
+        "updated_at": "记录最后更新时间"
+      }
+    },
+    "energy_resource_conflict": {
+      "comment": "运行图资源冲突表",
+      "columns": {
+        "conflict_id": "资源冲突主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "case_name": "结果所属方案名称，例如baseline基线、optimized优化方案",
+        "scenario_name": "供页面展示的场景名称或说明",
+        "conflict_type": "冲突类型",
+        "severity": "问题或冲突严重程度编码，例如blocking阻断、high高、medium中、low低",
+        "resource_code": "运行资源编码",
+        "resource_name": "运行资源名称",
+        "train_a": "资源冲突涉及的第一列车标识",
+        "train_b": "资源冲突涉及的第二列车标识",
+        "overlap_start_s": "资源冲突重叠的开始时刻，相对秒",
+        "overlap_end_s": "资源冲突重叠的结束时刻，相对秒",
+        "overlap_duration_s": "资源占用冲突的重叠时长，单位秒",
+        "location_km": "冲突的单点里程，单位km；区间位置无法压成单点时为空，范围见message",
+        "message": "说明信息",
+        "suggestion": "建议",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_result_artifact": {
+      "comment": "算法结果产物留档表",
+      "columns": {
+        "artifact_id": "结果工件主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "relative_path": "文件在版本或任务内的相对路径，不含存储根目录",
+        "artifact_type": "产物类型，例如 summary、timeseries、report",
+        "media_type": "产物媒体类型",
+        "content": "产物原始字节内容",
+        "content_size_bytes": "产物字节数",
+        "content_sha256": "文件内容的SHA-256校验值，64位十六进制字符串",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_result_kpi": {
+      "comment": "算法结果指标表",
+      "columns": {
+        "result_kpi_id": "结果指标主键",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "case_name": "结果所属方案名称，例如baseline基线、optimized优化方案",
+        "feasible": "结果是否满足约束，1 是 0 否",
+        "total_gen_kwh": "场景产生的总能量，单位 kWh",
+        "total_con_kwh": "场景消耗的总能量，单位 kWh",
+        "accepted_by_power_arm_kwh": "供电臂接受的再生电量，单位kWh",
+        "recovered_energy_kwh": "当前结果口径下有效回收电量，单位kWh，计算分解见metrics_json",
+        "recovery_rate": "再生能量有效回收率，比例值，页面可换算为百分比",
+        "direct_used_kwh": "再生能量直接供其他牵引负荷使用的电量，单位kWh",
+        "battery_charge_kwh": "进入储能设备的充电电量，单位kWh",
+        "battery_discharge_kwh": "储能设备向负荷释放的放电电量，单位kWh",
+        "wasted_kwh": "未被利用或吸收的再生电量，单位kWh",
+        "grid_kwh": "从电网购入或供给牵引的电量，单位kWh",
+        "effective_regen_loss_kwh": "再生链有效损失能量，单位 kWh",
+        "final_soc_kwh": "仿真或场景结束时的储能电量，单位kWh",
+        "constraint_violation": "算法汇总的约束违反量，组成和量纲见原始指标；0表示未记录违反",
+        "resource_conflict_count": "资源占用冲突条数",
+        "total_cost": "算法目标使用的总成本或总代价值，计价及组成见原始指标",
+        "metrics_json": "基线或优化方案的完整原始指标JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_rolling_control_event": {
+      "comment": "滚动重调度控制事件表",
+      "columns": {
+        "event_id": "滚动控制事件主键，由任务与轮次确定的UUID",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "cycle_index": "滚动控制轮次序号",
+        "current_time_s": "本轮滚动控制的当前仿真时刻，相对秒",
+        "commit_status": "滚动控制提交状态，例如committed_robust_feasible通过、withheld_infeasible暂不采用；非现场已下发凭证",
+        "safety_state": "本轮滚动控制安全状态编码，详细原因见event_json",
+        "safety_action": "本轮建议的安全动作编码，仅作为仿真决策记录",
+        "core_robust_feasible": "是否通过核心扰动场景稳健可行性检查：1通过，0未通过",
+        "operational_intervention_required": "是否需要人工运营干预：1需要，0不需要",
+        "attempt_count": "本轮安全控制评估的尝试次数",
+        "request_fingerprint": "本轮滚动请求的稳定指纹，64位十六进制摘要",
+        "event_json": "本轮安全转移、候选诊断及逐储能设备状态/电量等原始JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_route_segment": {
+      "comment": "线路区间与线路条件表",
+      "columns": {
+        "segment_id": "线路区间主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "segment_code": "线路区段业务编码",
+        "start_km": "区段起点里程，单位km",
+        "end_km": "区段终点里程，单位km",
+        "gradient_permille": "线路坡度，单位‰，正负号遵循线路方向约定",
+        "curve_radius_m": "区段曲线半径，单位 m，直线可为空",
+        "speed_limit_kmh": "区段限速，单位 km/h",
+        "terrain": "区段地形或线路环境标签",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "source_note": "区段数据来源与核对说明",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_run": {
+      "comment": "算法运行任务表",
+      "columns": {
+        "run_id": "重空算法任务主键，唯一标识本记录",
+        "project_id": "算法项目ID，对应energy_project.project_id；是否物理外键以表约束为准",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "timetable_id": "运行图ID，对应energy_timetable.timetable_id；是否物理外键以表约束为准",
+        "scenario_id": "关联运行场景 ID",
+        "run_type": "任务类型：dispatch调度、timetable_audit审查、timetable_optimization优化、rolling_rescheduling滚动、joint_parameter_robustness联合参数、storage_planning储能规划",
+        "status": "任务状态：pending排队、validating校验、running计算、succeeded成功、failed失败、cancelled取消",
+        "requested_by": "发起任务的平台登录账号或调用方标识",
+        "code_version": "执行代码版本或 Git 提交标识",
+        "random_seed": "随机数种子",
+        "input_sha256": "运行输入快照 SHA-256 校验值",
+        "result_sha256": "运行结果 SHA-256 校验值",
+        "error_count": "错误数量",
+        "warning_count": "警告数量",
+        "error_message": "执行失败、取消或校验异常的说明，正常时可为空",
+        "queued_at": "进入队列时间",
+        "started_at": "任务开始执行时间",
+        "finished_at": "任务结束时间，含成功、失败或取消",
+        "worker_id": "执行工作进程标识",
+        "created_at": "记录创建时间",
+        "updated_at": "记录最后更新时间",
+        "idempotency_key": "调用方提供的重复提交识别键，唯一范围见本表唯一索引",
+        "request_sha256": "任务规范化请求参数的SHA-256摘要，用于幂等内容校验",
+        "attempt_count": "本任务或本轮控制已进行的尝试次数",
+        "lease_token": "运行租约令牌",
+        "lease_expires_at": "运行租约过期时间",
+        "heartbeat_at": "工作进程最近一次续约或存活心跳时间",
+        "state_version": "状态版本号，单调递增"
+      }
+    },
+    "energy_run_input_snapshot": {
+      "comment": "算法运行输入快照表",
+      "columns": {
+        "snapshot_id": "输入快照主键",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "captured_at": "快照采集时间",
+        "input_sha256": "冻结输入 SHA-256 校验值",
+        "manifest_json": "输入文件路径、媒体类型、大小及SHA-256等快照清单JSON",
+        "frozen": "是否已冻结，1 是 0 否",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_run_log": {
+      "comment": "算法运行日志表",
+      "columns": {
+        "log_id": "日志主键",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "level": "日志级别，例如 info、warning、error",
+        "event_code": "日志事件编码",
+        "message": "日志消息",
+        "details_json": "本条运行日志的附加上下文JSON",
+        "occurred_at": "日志发生时间"
+      }
+    },
+    "energy_run_parameter": {
+      "comment": "算法运行参数表",
+      "columns": {
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "parameters_json": "经任务类型白名单校验的算法调用参数JSON",
+        "parameter_schema_version": "运行参数结构版本",
+        "created_at": "记录创建时间",
+        "updated_at": "记录最后更新时间"
+      }
+    },
+    "energy_run_state_event": {
+      "comment": "算法运行状态变更事件表",
+      "columns": {
+        "event_id": "状态事件主键",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "state_version": "状态版本号",
+        "from_status": "变更前状态",
+        "to_status": "变更后状态",
+        "worker_id": "执行工作进程标识",
+        "lease_token": "状态变更时使用的租约令牌",
+        "reason": "状态变更原因",
+        "details_json": "本次状态迁移的原因及租约上下文JSON",
+        "occurred_at": "状态变更时间"
+      }
+    },
+    "energy_scenario": {
+      "comment": "能耗评价场景表",
+      "columns": {
+        "scenario_id": "场景主键",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "scenario_code": "场景业务编码",
+        "allow_direct_use": "是否允许再生电能直接利用，1 是 0 否",
+        "allow_storage": "是否允许储能参与，1 是 0 否",
+        "settlement_step_s": "能量结算步长，单位 s",
+        "parameters_json": "能量评价场景的结算与设备开关等扩展参数JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_scenario_result": {
+      "comment": "候选方案场景评价结果表",
+      "columns": {
+        "scenario_result_id": "候选场景评价主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "scenario_name": "供页面展示的场景名称或说明",
+        "core_for_feasibility": "该场景是否纳入核心可行性约束：1纳入，0仅诊断",
+        "feasible": "是否可行",
+        "blocking": "该场景结果是否构成候选方案的阻断项：1是，0否",
+        "constraint_violation": "算法汇总的约束违反量，组成和量纲见原始指标；0表示未记录违反",
+        "resource_conflict_count": "资源占用冲突条数",
+        "total_cost": "算法目标使用的总成本或总代价值，计价及组成见原始指标",
+        "grid_kwh": "从电网购入或供给牵引的电量，单位kWh",
+        "wasted_kwh": "未被利用或吸收的再生电量，单位kWh",
+        "battery_charge_kwh": "进入储能设备的充电电量，单位kWh",
+        "battery_discharge_kwh": "储能设备向负荷释放的放电电量，单位kWh",
+        "final_soc_deviation_kwh": "期末储能电量相对目标或初始电量的偏差，单位kWh",
+        "conflict_summary": "冲突汇总",
+        "details_json": "候选方案在该运行扰动场景下的完整评价JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_segment_consumption_summary": {
+      "comment": "按版本、区间、时窗与方向汇总的能耗展示数据表",
+      "columns": {
+        "summary_id": "区间能耗汇总主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "segment_id": "线路区间ID，对应energy_route_segment.segment_id；是否物理外键以表约束为准",
+        "window_start": "能耗汇总窗口开始时间",
+        "window_end": "能耗汇总窗口结束时间",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "train_count": "纳入本次汇总或审查的列车数量",
+        "sample_count": "汇总使用的有效遥测样本数量",
+        "traction_consumption_kwh": "汇总窗口内牵引耗电量，单位kWh",
+        "regenerative_energy_kwh": "汇总窗口内再生电量，单位kWh",
+        "net_energy_kwh": "汇总窗口净能耗，单位kWh，牵引与再生抵扣口径按来源算法",
+        "distance_train_km": "窗口累计列车走行量，单位列车·km",
+        "energy_intensity_kwh_per_train_km": "单位列车走行能耗强度，单位kWh/(列车·km)",
+        "energy_level": "区间能耗等级：low低、medium中、high高",
+        "source_type": "汇总来源：sensor_aggregate遥测汇总、import导入、demo演示",
+        "algorithm_version": "生成该汇总记录的算法版本标识",
+        "generated_at": "该汇总记录生成时间"
+      }
+    },
+    "energy_signaling_block": {
+      "comment": "闭塞分区参数表",
+      "columns": {
+        "signaling_block_id": "闭塞分区主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "block_code": "闭塞分区业务编码",
+        "start_km": "区段起点里程，单位km",
+        "end_km": "区段终点里程，单位km",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "capacity": "容量",
+        "release_margin_s": "闭塞资源释放的附加安全间隔，单位秒",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_station": {
+      "comment": "线路车站表",
+      "columns": {
+        "station_id": "线路车站主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "station_code": "车站编码",
+        "station_name": "车站名称",
+        "position_km": "车站、站址或设施在线路上的里程，单位km",
+        "station_type": "车站类型",
+        "track_capacity": "车站允许同时占用的股道资源数量",
+        "throat_capacity": "车站咽喉允许同时办理作业的资源数量",
+        "is_terminal": "是否为线路终端车站：1是，0否",
+        "source_note": "来源备注",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_station_resource": {
+      "comment": "车站股道与咽喉资源表",
+      "columns": {
+        "station_resource_id": "车站资源主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "station_id": "线路车站ID，对应energy_station.station_id；是否物理外键以表约束为准",
+        "track_capacity": "车站允许同时占用的股道资源数量",
+        "throat_capacity": "车站咽喉允许同时办理作业的资源数量",
+        "station_occupancy_s": "车站资源一次作业的占用时长，单位秒",
+        "throat_occupancy_s": "咽喉资源一次作业的占用时长，单位秒",
+        "extra_rules_json": "股道、咽喉及技术作业约束的扩展规则JSON",
+        "source_note": "来源备注",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_storage_candidate_site": {
+      "comment": "储能候选站址表",
+      "columns": {
+        "candidate_site_id": "储能候选站点主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "site_code": "站址编码",
+        "site_name": "站址名称",
+        "position_km": "车站、站址或设施在线路上的里程，单位km",
+        "power_arm_code": "供电臂编码",
+        "storage_section_start_km": "储能站址可服务区段的起点里程，单位km",
+        "storage_section_end_km": "储能站址可服务区段的终点里程，单位km",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "buildable": "是否可建设",
+        "max_connection_power_kw": "候选站址允许的最大接入功率，单位kW",
+        "max_capacity_kwh": "站址或接入条件允许的最大储能容量，单位kWh",
+        "fixed_site_cost_cny": "候选站点建设的固定场地投资，单位元",
+        "allowed_technology_codes_json": "该候选站址允许采用的储能技术编码数组JSON",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注"
+      }
+    },
+    "energy_storage_device": {
+      "comment": "储能设备静态参数表",
+      "columns": {
+        "storage_id": "储能设备主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "storage_code": "储能编码",
+        "label": "储能设备的页面展示名称",
+        "capacity_kwh": "储能额定容量或方案设备容量，单位kWh",
+        "max_charge_power_kw": "设备额定最大充电功率，单位kW",
+        "max_discharge_power_kw": "设备额定最大放电功率，单位kW",
+        "charge_efficiency": "充电效率",
+        "discharge_efficiency": "放电效率",
+        "initial_soc_kwh": "储能初始可用电量，单位kWh，不是SOC百分比",
+        "min_soc_kwh": "储能允许运行的最低电量，单位kWh",
+        "max_soc_kwh": "储能允许运行的最高电量，单位kWh",
+        "start_km": "区段起点里程，单位km",
+        "end_km": "区段终点里程，单位km",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "available": "是否可用",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_storage_plan": {
+      "comment": "储能选址定容候选方案表",
+      "columns": {
+        "storage_plan_id": "储能规划方案主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "source_plan_code": "来源方案编码",
+        "rank": "排序名次",
+        "selected": "是否选中",
+        "feasible": "是否可行",
+        "within_budget": "方案是否满足投资预算：1满足，0不满足",
+        "meets_business_thresholds": "方案是否满足最低节能和经济门槛：1满足，0不满足",
+        "site_count": "规划方案拟建设的候选站点数量",
+        "site_codes": "规划方案采用的候选站点编码集合，分隔方式见原始结果",
+        "total_capacity_kwh": "规划方案全部设备额定容量合计，单位kWh",
+        "total_charge_power_kw": "规划方案全部设备充电功率合计，单位kW",
+        "total_discharge_power_kw": "规划方案全部设备放电功率合计，单位kW",
+        "capex_cny": "方案或设备初始建设投资，单位元",
+        "annual_total_cost_cny": "规划方案年化总成本，单位元每年",
+        "annual_saving_vs_no_build_cny": "相对不建设基线的年节约金额，单位元每年",
+        "grid_reduction_vs_no_build_kwh_per_year": "相对不建设基线的年购电削减量，单位kWh每年",
+        "rejection_reasons": "候选方案未通过约束、预算或业务门槛的原因编码集合",
+        "metrics_json": "规划候选方案的完整成本、能量、约束及门槛评价JSON"
+      }
+    },
+    "energy_storage_plan_decision": {
+      "comment": "储能规划最终决策表",
+      "columns": {
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "decision": "规划决策：recommend_build建议建设、keep_no_build不建设、no_feasible_plan无可行方案",
+        "selected_storage_plan_id": "最终选中方案ID，关联energy_storage_plan.storage_plan_id，可为空",
+        "best_build_storage_plan_id": "最佳可行建设备选ID，关联energy_storage_plan.storage_plan_id，可为空",
+        "decision_reason": "决策原因",
+        "recommendation_level": "规划结论可用等级，例如diagnostic_only诊断、planning_sensitivity敏感性分析，以算法结果为准",
+        "formal_engineering_conclusion_allowed": "是否允许形成正式工程结论：1允许，0不允许",
+        "complete_for_declared_domain": "是否完成声明离散搜索域的全部评价：1完成，0未完成；不等于连续域全局最优",
+        "decision_json": "规划最终决策、搜索域、结果依据和适用限制的原始JSON"
+      }
+    },
+    "energy_storage_plan_device": {
+      "comment": "储能规划方案设备明细表",
+      "columns": {
+        "storage_plan_device_id": "方案设备明细主键，唯一标识本记录",
+        "storage_plan_id": "储能规划方案ID，对应energy_storage_plan.storage_plan_id；是否物理外键以表约束为准",
+        "device_index": "设备序号",
+        "site_code": "站址编码",
+        "technology_code": "技术编码",
+        "capacity_kwh": "储能额定容量或方案设备容量，单位kWh",
+        "charge_power_kw": "规划设备的充电功率，单位kW",
+        "discharge_power_kw": "规划设备的放电功率，单位kW",
+        "capex_cny": "方案或设备初始建设投资，单位元",
+        "device_json": "本方案该站点设备配置及投资明细JSON"
+      }
+    },
+    "energy_storage_plan_scenario_result": {
+      "comment": "储能规划方案场景结果表",
+      "columns": {
+        "storage_plan_scenario_result_id": "方案场景评价主键，唯一标识本记录",
+        "storage_plan_id": "储能规划方案ID，对应energy_storage_plan.storage_plan_id；是否物理外键以表约束为准",
+        "scenario_code": "评价场景编码",
+        "core_for_feasibility": "该场景是否纳入核心可行性约束：1纳入，0仅诊断",
+        "feasible": "是否可行",
+        "grid_kwh": "从电网购入或供给牵引的电量，单位kWh",
+        "wasted_kwh": "未被利用或吸收的再生电量，单位kWh",
+        "storage_charge_kwh": "规划场景储能充电电量，单位kWh",
+        "storage_discharge_kwh": "规划场景储能放电电量，单位kWh",
+        "final_soc_kwh": "仿真或场景结束时的储能电量，单位kWh",
+        "annual_operating_cost_cny": "规划方案在本场景下的年运行成本，单位元每年",
+        "result_json": "方案在该规划场景的完整能量与经济评价JSON"
+      }
+    },
+    "energy_storage_planning_policy": {
+      "comment": "储能规划策略表",
+      "columns": {
+        "planning_policy_id": "规划策略主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "policy_code": "输入版本内储能规划策略业务编码",
+        "policy_json": "规划预算、建设数量、目标、风险、SOC规则及搜索资源策略JSON",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注"
+      }
+    },
+    "energy_storage_planning_scenario": {
+      "comment": "储能规划评价场景表",
+      "columns": {
+        "planning_scenario_id": "规划场景主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "scenario_set_code": "储能规划场景集合的业务编码",
+        "scenario_code": "评价场景编码",
+        "scenario_name": "供页面展示的场景名称或说明",
+        "weight": "规划场景概率或权重，同一场景集按合同校验归一性",
+        "core_for_feasibility": "该场景是否纳入核心可行性约束：1纳入，0仅诊断",
+        "scenario_json": "规划场景的运行图或模板、电价、扰动、停运与参数倍率等JSON",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注"
+      }
+    },
+    "energy_storage_site_technology_option": {
+      "comment": "储能站址技术选项表",
+      "columns": {
+        "option_id": "站点技术关联主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "site_code": "站址编码",
+        "technology_code": "技术编码",
+        "limits_json": "站址与技术组合的容量/功率/设备数量约束JSON",
+        "available": "是否可用",
+        "source_note": "来源备注"
+      }
+    },
+    "energy_storage_technology": {
+      "comment": "储能技术参数表",
+      "columns": {
+        "storage_technology_id": "储能技术主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "technology_code": "技术编码",
+        "technology_name": "技术名称",
+        "parameters_json": "储能容量/功率档位、效率、寿命、投资及运维成本等技术参数JSON",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注"
+      }
+    },
+    "energy_time_slice": {
+      "comment": "算法能耗时间片表",
+      "columns": {
+        "time_slice_id": "能量时间片主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "case_name": "结果所属方案名称，例如baseline基线、optimized优化方案",
+        "slice_start_s": "能量时间片开始时刻，相对秒",
+        "slice_end_s": "能量时间片结束时刻，相对秒",
+        "power_arm_code": "供电臂编码",
+        "storage_code": "储能编码",
+        "traction_kwh": "本时间片牵引耗电量，单位kWh",
+        "regen_kwh": "本时间片产生的再生电量，单位kWh",
+        "accepted_by_power_arm_kwh": "供电臂接受的再生电量，单位kWh",
+        "direct_used_kwh": "再生能量直接供其他牵引负荷使用的电量，单位kWh",
+        "battery_charge_kwh": "进入储能设备的充电电量，单位kWh",
+        "battery_discharge_kwh": "储能设备向负荷释放的放电电量，单位kWh",
+        "wasted_kwh": "未被利用或吸收的再生电量，单位kWh",
+        "grid_kwh": "从电网购入或供给牵引的电量，单位kWh",
+        "soc_before_kwh": "时间片开始前储能电量，单位kWh；未记录时为空",
+        "soc_after_kwh": "时间片结束后储能电量，单位kWh；未记录时为空",
+        "constraint_violation_kwh": "本时间片电气约束违反电量，单位kWh",
+        "details_json": "本时间片的原始功率、设备和结算字段JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_timetable": {
+      "comment": "运行图主表",
+      "columns": {
+        "timetable_id": "运行图主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "timetable_code": "运行图编码",
+        "timetable_name": "运行图名称",
+        "service_date": "运行图基准服务日期",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "来源备注",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_timetable_audit_summary": {
+      "comment": "运行图审查汇总表",
+      "columns": {
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "valid": "有效",
+        "train_count": "纳入本次汇总或审查的列车数量",
+        "running_arc_count": "审查包含的列车运行弧数量",
+        "time_slice_count": "审查包含的能量时间片数量",
+        "settlement_window_count": "审查包含的能量结算窗口数量",
+        "energy_event_count": "审查识别的能量事件数量",
+        "issue_count": "审查发现的问题条数",
+        "suggestion_count": "审查生成的优化建议条数",
+        "baseline_total_gen_kwh": "基线方案产生的再生电量，单位kWh",
+        "baseline_wasted_kwh": "基线方案弃能电量，单位kWh",
+        "baseline_grid_kwh": "基线方案电网供电量，单位kWh",
+        "summary_json": "运行图审查场景指标、问题汇总及诊断的原始JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_timetable_running_arc": {
+      "comment": "运行图运行弧表",
+      "columns": {
+        "running_arc_id": "列车运行弧主键，唯一标识本记录",
+        "run_id": "重空算法任务ID，对应energy_run.run_id；是否物理外键以表约束为准",
+        "candidate_id": "优化候选方案ID，对应energy_optimization_candidate.candidate_id；是否物理外键以表约束为准",
+        "source_arc_id": "原始算法结果文件中的运行弧编码",
+        "train_id": "结果文件中的列车业务标识或车次，不是列车类型参数主键",
+        "train_type": "列车类型",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "from_station_code": "运行弧起点车站业务编码",
+        "to_station_code": "运行弧终点车站业务编码",
+        "arc_type": "运行弧类型，例如区间运行、停站或技术作业",
+        "start_time_s": "运行弧或问题窗口的开始时刻，相对秒",
+        "end_time_s": "运行弧或问题窗口的结束时刻，相对秒",
+        "start_km": "区段起点里程，单位km",
+        "end_km": "区段终点里程，单位km",
+        "traction_energy_kwh": "运行弧的牵引耗电量，单位kWh",
+        "regen_energy_kwh": "运行弧的再生制动电量，单位kWh",
+        "power_arm_code": "供电臂编码",
+        "storage_code": "储能编码",
+        "details_json": "本运行弧的原始时空、能量及设施属性JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_timetable_stop": {
+      "comment": "运行图停站明细表",
+      "columns": {
+        "stop_id": "运行图停站主键，唯一标识本记录",
+        "timetable_train_id": "运行图列车ID，对应energy_timetable_train.timetable_train_id；是否物理外键以表约束为准",
+        "seq": "列车沿途停站的顺序号",
+        "station_id": "线路车站ID，对应energy_station.station_id；是否物理外键以表约束为准",
+        "arrival_time": "到达时刻时间",
+        "departure_time": "发车时刻时间",
+        "arrival_offset_s": "到达时刻相对运行图基准的偏移，单位秒",
+        "departure_offset_s": "出发时刻相对运行图基准的偏移，单位秒",
+        "stop_type": "停站类型",
+        "track": "停站所用股道编号或名称",
+        "operation_type": "该停站对应的装卸、对位等作业类型",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_timetable_train": {
+      "comment": "运行图列车表",
+      "columns": {
+        "timetable_train_id": "运行图列车主键，唯一标识本记录",
+        "timetable_id": "运行图ID，对应energy_timetable.timetable_id；是否物理外键以表约束为准",
+        "train_type_id": "列车类型参数ID，对应energy_train_type_parameter.train_type_id；是否物理外键以表约束为准",
+        "train_no": "运行图内的业务车次号",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "origin_station_id": "起点车站ID，对应energy_station.station_id",
+        "destination_station_id": "终点车站ID，对应energy_station.station_id",
+        "service_type": "列车在该运行图中的运输服务类型",
+        "evaluation_enabled": "本运行图列车是否纳入评价：1纳入，0不纳入",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_train_telemetry": {
+      "comment": "列车实测遥测数据表",
+      "columns": {
+        "telemetry_id": "列车遥测记录主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "segment_id": "线路区间ID，对应energy_route_segment.segment_id；是否物理外键以表约束为准",
+        "train_code": "列车编码",
+        "observed_at": "传感器观测时间，保留毫秒精度",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "longitude": "遥测定位经度，单位度，坐标基准随来源记录",
+        "latitude": "遥测定位纬度，单位度，坐标基准随来源记录",
+        "speed_kmh": "观测列车速度，单位km/h",
+        "acceleration_ms2": "观测列车加速度，单位m/s²",
+        "gradient_permille": "线路坡度，单位‰，正负号遵循线路方向约定",
+        "traction_meter_kwh": "牵引电能表累计读数，单位kWh",
+        "regenerative_meter_kwh": "再生电能表累计读数，单位kWh",
+        "interval_traction_kwh": "本采样区间牵引耗电量，单位kWh",
+        "interval_regenerative_kwh": "本采样区间再生电量，单位kWh",
+        "quality_status": "遥测质量：valid有效、suspect可疑、invalid无效",
+        "raw_payload": "上游遥测原始报文JSON，保留来源字段以供追溯",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_train_type_parameter": {
+      "comment": "重空协同列车编组及牵引制动参数投影表",
+      "columns": {
+        "train_type_id": "列车类型参数主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "train_type_code": "列车类型业务编码",
+        "train_type": "列车类型，例如 Heavy 或 Empty",
+        "mass_t": "整列车总质量，含车辆与机车，单位t；区别于源trains.csv不含机车的车辆质量",
+        "mass_min_t": "整列车质量下限，含机车，单位t",
+        "mass_max_t": "整列车质量上限，含机车，单位t",
+        "length_km": "列车长度，单位 km",
+        "rotational_mass_factor": "回转质量系数",
+        "max_traction_kn": "最大牵引力，单位 kN",
+        "max_brake_kn": "最大制动力，单位 kN",
+        "max_power_kw": "来源列车记录的功率参数，单位kW；完整编组及曲线冻结在输入文件中",
+        "davis_a": "Davis基本阻力常数项，标准口径N/kN；历史记录按版本来源解释",
+        "davis_b": "Davis速度一次项系数，标准口径N/(kN·km/h)",
+        "davis_c": "Davis速度二次项系数，标准口径N/(kN·(km/h)²)",
+        "traction_curve_json": "牵引力随速度变化曲线 JSON",
+        "brake_curve_json": "制动力随速度变化曲线 JSON",
+        "regen_power_limit_kw": "再生功率上限，单位 kW",
+        "regen_efficiency": "再生链效率",
+        "direction": "方向：forward沿里程增大、reverse沿里程减小、both双向；允许值以本表约束为准",
+        "longitudinal_segments": "纵向动力学区段数量",
+        "extra_parameters_json": "列车编组、首型机车及未独立列化的扩展参数JSON",
+        "data_status": "数据来源等级：official正式、derived_from_official推导、planning_placeholder占位、synthetic合成；单列车派生版可为derived",
+        "source_note": "参数来源与假设说明",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_transport_task": {
+      "comment": "运输任务需求表",
+      "columns": {
+        "task_id": "运输任务主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "task_code": "输入版本内的运输任务业务编码",
+        "task_type": "运输任务的业务类型，例如重车或空车运输",
+        "origin_station_id": "起点车站ID，对应energy_station.station_id",
+        "destination_station_id": "终点车站ID，对应energy_station.station_id",
+        "required_count": "运输任务要求完成的列车数量",
+        "time_window_start": "时间窗口开始",
+        "time_window_end": "时间窗口结束",
+        "parameters_json": "运输任务的数量、时间窗及其他业务约束扩展参数JSON",
+        "created_at": "记录创建时间"
+      }
+    },
+    "energy_version_edit_sheet": {
+      "comment": "输入版本编辑记录表",
+      "columns": {
+        "sheet_id": "版本编辑记录主键，唯一标识本记录",
+        "version_id": "重空输入版本ID，对应energy_project_version.version_id；是否物理外键以表约束为准",
+        "topic_code": "版本编辑主题编码，例如geometry、trains、storage_planning",
+        "sheet_name": "该主题下的中文工作表名称",
+        "columns_json": "该中文工作表的列名数组JSON",
+        "rows_json": "该中文工作表编辑行数组JSON",
+        "source_note": "来源备注",
+        "updated_by": "最后修改人标识",
+        "created_at": "记录创建时间",
+        "updated_at": "记录最后更新时间"
+      }
+    },
+    "single_artifact": {
+      "comment": "单列车结果文件索引表，文件内容存于任务结果目录",
+      "columns": {
+        "artifact_id": "结果文件索引主键，UUID",
+        "run_id": "所属单列车任务ID，关联single_run.run_id",
+        "case_id": "所属案例ID，关联single_case.case_id；运行清单等任务级文件为空",
+        "relative_path": "相对于该run_id结果目录的文件路径，需结合单列车结果根目录读取",
+        "kind": "结果文件类型：csv完整表格、npz压缩曲线、manifest运行清单",
+        "size_bytes": "文件大小，单位字节",
+        "content_sha256": "文件内容的SHA-256校验值，64位十六进制字符串"
+      }
+    },
+    "single_case": {
+      "comment": "单列车任务逐场景、逐控制器的指标与审计结果表",
+      "columns": {
+        "case_id": "案例主键，由任务、场景及控制器组合确定的UUID",
+        "run_id": "所属单列车任务ID，关联single_run.run_id",
+        "scenario_key": "制动场景及其变体的稳定编码",
+        "scenario_name": "供页面展示的场景名称或说明",
+        "controller_key": "控制器内部稳定编码，例如rhonn_nsmc、pi、pid",
+        "controller_name": "供页面展示的控制器名称",
+        "status": "案例执行状态：completed已完成、failed执行失败；物理越限另看audit与eligible",
+        "eligible": "该案例是否具备有效比较、排名资格：1具备，0不具备",
+        "metrics_json": "完整案例指标JSON，含能量、净再生回收、步长、指标版本与越限标记",
+        "audit_json": "案例审计JSON，含物理约束、控制器审计、参数等级及说明",
+        "error_message": "执行失败、取消或校验异常的说明，正常时可为空"
+      }
+    },
+    "single_dept_project": {
+      "comment": "部门可访问单列车项目的关联表",
+      "columns": {
+        "dept_id": "可访问该项目或任务的部门ID，对应sys_dept.dept_id",
+        "project_code": "算法项目业务编码，与energy_project.project_code对应",
+        "enabled": "项目访问绑定是否启用：1启用，0禁用"
+      }
+    },
+    "single_run": {
+      "comment": "单列车能量回收仿真任务及执行状态表",
+      "columns": {
+        "run_id": "单列车仿真任务主键，UUID",
+        "version_id": "所选单列车数据版本ID，关联single_version.version_id",
+        "project_code": "算法项目业务编码，与energy_project.project_code对应",
+        "dept_id": "可访问该项目或任务的部门ID，对应sys_dept.dept_id",
+        "requested_by": "发起任务的平台登录账号或调用方标识",
+        "run_type": "任务类型：simulation主算法仿真、comparison控制器对比、validation多场景验证",
+        "status": "任务状态：queued排队、running计算、completed完成、partial部分完成、failed失败、cancelled取消",
+        "idempotency_key": "同一requested_by账号下的重复提交识别键",
+        "request_sha256": "任务规范化请求参数的SHA-256摘要，用于幂等内容校验",
+        "snapshot_json": "创建任务时冻结的文件、四类参数、来源与版本名称JSON",
+        "parameters_json": "本次任务业务参数JSON：场景、初始速度/SOC及线路起点等",
+        "code_sha256": "任务创建时算法与适配代码的SHA-256摘要，用于执行前一致性检查",
+        "total_cases": "任务计划执行的场景与控制器组合总数",
+        "completed_cases": "已结束的案例数，包含成功和失败案例",
+        "current_case": "正在执行的场景与控制器组合说明",
+        "error_message": "执行失败、取消或校验异常的说明，正常时可为空",
+        "cancel_requested": "是否已请求取消任务：1是，0否",
+        "created_at": "记录创建时间",
+        "started_at": "任务开始执行时间",
+        "heartbeat_at": "工作进程最近一次续约或存活心跳时间",
+        "finished_at": "任务结束时间，含成功、失败或取消"
+      }
+    },
+    "single_version": {
+      "comment": "单列车及跨模块派生数据版本表，保存冻结文件与专用参数",
+      "columns": {
+        "version_id": "派生数据版本主键，UUID",
+        "target_module": "派生版本的目标模块：single单列车，energy重空协同",
+        "project_code": "算法项目业务编码，与energy_project.project_code对应",
+        "version_code": "项目内的数据版本业务编码",
+        "version_name": "用于页面选择的数据版本名称",
+        "route_name": "项目或版本适用的线路名称",
+        "status": "版本状态：draft草稿、publishing发布中、published已发布",
+        "data_status": "版本来源状态，例如derived派生、synthetic演示，详细字段等级见参数JSON",
+        "files_json": "冻结输入文件字典JSON，键为相对路径，值为Base64编码文件内容",
+        "parameters_json": "列车train、电机motor、变流器dc_dc、储能storage四类专用参数JSON",
+        "provenance_json": "来源模块/版本、输入指纹、复制文件与默认参数依据等溯源JSON",
+        "content_sha256": "冻结files与parameters内容的SHA-256摘要",
+        "created_by": "创建人标识",
+        "created_at": "记录创建时间"
+      }
+    }
+  }
+}

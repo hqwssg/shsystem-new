@@ -1,0 +1,9 @@
+{
+  "parameter_ranges_relative_path": "platform/joint_parameter_ranges.json",
+  "heavy_count": 2,
+  "empty_count": 2,
+  "baseline_heavy_headway_s": 3300,
+  "baseline_empty_headway_s": 3300,
+  "baseline_phase_s": 840,
+  "settlement_step_s": 10
+}

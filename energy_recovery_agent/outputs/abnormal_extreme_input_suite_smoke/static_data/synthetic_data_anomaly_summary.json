@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "passed": true,
+  "source_dir": "C:\\Users\\reinvent\\Desktop\\work003\\energy_recovery_agent\\data\\real_shuohuang",
+  "baseline_valid": true,
+  "baseline_error_count": 0,
+  "baseline_warning_count": 1,
+  "baseline_unchanged": true,
+  "case_count": 29,
+  "passed_count": 29,
+  "failed_count": 0,
+  "categories": {
+    "文件与模式": {
+      "case_count": 4,
+      "passed_count": 4,
+      "failed_count": 0
+    },
+    "线路与拓扑": {
+      "case_count": 10,
+      "passed_count": 10,
+      "failed_count": 0
+    },
+    "车辆物理": {
+      "case_count": 5,
+      "passed_count": 5,
+      "failed_count": 0
+    },
+    "储能与电气": {
+      "case_count": 5,
+      "passed_count": 5,
+      "failed_count": 0
+    },
+    "资源与跨表": {
+      "case_count": 5,
+      "passed_count": 5,
+      "failed_count": 0
+    }
+  },
+  "case_set_sha256": "886c4899517585dfab2aa122411d2d0d28dd8697492513b9d7278c7833dc8096",
+  "outputs": {
+    "report": "SYNTHETIC_DATA_ANOMALY_REPORT.md",
+    "summary": "synthetic_data_anomaly_summary.json",
+    "cases": "synthetic_data_anomaly_cases.csv",
+    "failures": "synthetic_data_anomaly_failures.json"
+  }
+}

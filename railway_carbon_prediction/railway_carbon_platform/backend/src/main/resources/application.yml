@@ -1,0 +1,34 @@
+server:
+  port: ${PREDICTION_PLATFORM_PORT:8086}
+
+spring:
+  application:
+    name: railway-carbon-platform
+  datasource:
+    url: ${DATABASE_JDBC_URL:${CERDB_JDBC_URL:jdbc:mysql://127.0.0.1:3306/carbon_emissions?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}}
+    username: ${DATABASE_USER:${CERDB_APP_USER:shsystem_app}}
+    password: ${DATABASE_PASSWORD:${CERDB_APP_PASSWORD:}}
+    driver-class-name: ${DATABASE_JDBC_DRIVER:${CERDB_JDBC_DRIVER:com.mysql.cj.jdbc.Driver}}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 10000
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+
+platform:
+  prediction:
+    base-url: ${PREDICTION_BASE_URL:http://127.0.0.1:8090}
+    api-key: ${PREDICTION_API_KEY:dev-key}
+    timeout-seconds: ${PREDICTION_TIMEOUT:180}
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+  security:
+    enabled: ${RUOYI_SECURITY_ENABLED:true}
+    endpoint: ${RUOYI_SECURITY_ENDPOINT:http://127.0.0.1:8081/internal/security/context}
+
+logging:
+  level:
+    com.railway.carbon.platform: INFO

@@ -1,0 +1,1422 @@
+{
+ "locomotives": {
+  "SS4": {
+   "alias": "SS4",
+   "traction_system": "直流传动（相控调压）",
+   "brake_type": "电阻制动",
+   "regenerative": false,
+   "resistance_coeffs": {
+    "A": 2.25,
+    "B": 0.019,
+    "C": 0.00032,
+    "source": "表2"
+   },
+   "params": {
+    "source_table": "表10",
+    "axle_arrangement": "2(B0-B0)",
+    "axle_load_t": 23.0,
+    "computed_mass_t": 184.0,
+    "adhesion_mass_t": 184.0,
+    "max_start_traction_kN": 649.8,
+    "continuous_speed_kmh": 51.5,
+    "continuous_traction_kN": 431.6,
+    "max_speed_kmh": 100.0,
+    "length_m": 32.8
+   },
+   "adhesion_traction_curve": {
+    "source": "表B.5",
+    "page": 28,
+    "points": [
+     {
+      "v": 0,
+      "F": 649.8
+     },
+     {
+      "v": 10,
+      "F": 554.0
+     },
+     {
+      "v": 20,
+      "F": 517.0
+     },
+     {
+      "v": 30,
+      "F": 497.0
+     },
+     {
+      "v": 40,
+      "F": 484.8
+     },
+     {
+      "v": 50,
+      "F": 476.5
+     },
+     {
+      "v": 60,
+      "F": 470.6
+     }
+    ]
+   },
+   "brake_curve": {
+    "source": "表B.5续",
+    "page": 29,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 0.0
+     },
+     {
+      "v": 10,
+      "Bd": 168.7
+     },
+     {
+      "v": 20,
+      "Bd": 333.5
+     },
+     {
+      "v": 30,
+      "Bd": 482.7
+     },
+     {
+      "v": 40,
+      "Bd": 376.7
+     },
+     {
+      "v": 50,
+      "Bd": 482.7
+     },
+     {
+      "v": 60,
+      "Bd": 374.7
+     },
+     {
+      "v": 70,
+      "Bd": 321.8
+     },
+     {
+      "v": 80,
+      "Bd": 280.7
+     },
+     {
+      "v": 90,
+      "Bd": 250.2
+     },
+     {
+      "v": 100,
+      "Bd": 225.6
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "表B.5续",
+    "page": 29,
+    "points": [
+     {
+      "v": 10,
+      "w": 2.47
+     },
+     {
+      "v": 20,
+      "w": 2.76
+     },
+     {
+      "v": 30,
+      "w": 3.11
+     },
+     {
+      "v": 40,
+      "w": 3.52
+     },
+     {
+      "v": 50,
+      "w": 4.0
+     },
+     {
+      "v": 60,
+      "w": 4.54
+     },
+     {
+      "v": 70,
+      "w": 5.15
+     },
+     {
+      "v": 80,
+      "w": 5.82
+     },
+     {
+      "v": 90,
+      "w": 6.55
+     },
+     {
+      "v": 100,
+      "w": 7.35
+     }
+    ]
+   }
+  },
+  "SS4A": {
+   "alias": "SS4(改)",
+   "traction_system": "直流传动（相控调压）",
+   "brake_type": "电阻制动",
+   "regenerative": false,
+   "resistance_coeffs": {
+    "A": 2.25,
+    "B": 0.019,
+    "C": 0.00032,
+    "source": "表2"
+   },
+   "params": {
+    "source_table": "表10",
+    "axle_arrangement": "2(B0-B0)",
+    "axle_load_t": 23.0,
+    "computed_mass_t": 184.0,
+    "adhesion_mass_t": 184.0,
+    "max_start_traction_kN": 628.0,
+    "continuous_speed_kmh": 51.5,
+    "continuous_traction_kN": 436.5,
+    "max_speed_kmh": 100.0,
+    "length_m": 32.8
+   },
+   "brake_curve": {
+    "source": "表B.6",
+    "page": 29,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 27.0
+     },
+     {
+      "v": 10,
+      "Bd": 412.0
+     },
+     {
+      "v": 20,
+      "Bd": 412.0
+     },
+     {
+      "v": 30,
+      "Bd": 412.0
+     },
+     {
+      "v": 40,
+      "Bd": 412.0
+     },
+     {
+      "v": 50,
+      "Bd": 412.0
+     },
+     {
+      "v": 60,
+      "Bd": 320.0
+     },
+     {
+      "v": 70,
+      "Bd": 273.0
+     },
+     {
+      "v": 80,
+      "Bd": 238.5
+     },
+     {
+      "v": 90,
+      "Bd": 180.0
+     },
+     {
+      "v": 100,
+      "Bd": 125.0
+     }
+    ]
+   }
+  },
+  "SS4B": {
+   "alias": "SS4B",
+   "traction_system": "直流传动（相控调压）",
+   "brake_type": "电阻制动",
+   "regenerative": false,
+   "resistance_coeffs": {
+    "A": 2.16,
+    "B": 0.0012,
+    "C": 0.000401,
+    "source": "表2"
+   },
+   "params": {
+    "source_table": "表10",
+    "axle_arrangement": "2(B0-B0)",
+    "axle_load_t": 23.0,
+    "computed_mass_t": 184.0,
+    "adhesion_mass_t": 184.0,
+    "max_start_traction_kN": 628.0,
+    "continuous_speed_kmh": 50.0,
+    "continuous_traction_kN": 450.0,
+    "max_speed_kmh": 100.0,
+    "length_m": 32.8
+   },
+   "brake_curve": {
+    "source": "表B.7续",
+    "page": 30,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 44.7
+     },
+     {
+      "v": 10,
+      "Bd": 400.0
+     },
+     {
+      "v": 20,
+      "Bd": 400.0
+     },
+     {
+      "v": 30,
+      "Bd": 400.0
+     },
+     {
+      "v": 40,
+      "Bd": 400.0
+     },
+     {
+      "v": 50,
+      "Bd": 400.0
+     },
+     {
+      "v": 60,
+      "Bd": 334.0
+     },
+     {
+      "v": 70,
+      "Bd": 287.0
+     },
+     {
+      "v": 80,
+      "Bd": 250.0
+     },
+     {
+      "v": 90,
+      "Bd": 222.0
+     },
+     {
+      "v": 100,
+      "Bd": 165.0
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "表B.7续",
+    "page": 30,
+    "points": [
+     {
+      "v": 10,
+      "w": 2.21
+     },
+     {
+      "v": 20,
+      "w": 2.34
+     },
+     {
+      "v": 30,
+      "w": 2.56
+     },
+     {
+      "v": 40,
+      "w": 2.85
+     },
+     {
+      "v": 50,
+      "w": 3.22
+     },
+     {
+      "v": 60,
+      "w": 3.68
+     },
+     {
+      "v": 70,
+      "w": 4.21
+     },
+     {
+      "v": 80,
+      "w": 4.82
+     },
+     {
+      "v": 90,
+      "w": 5.52
+     },
+     {
+      "v": 100,
+      "w": 6.29
+     }
+    ]
+   }
+  },
+  "HXD1_23t": {
+   "alias": "HXD1（轴重23t）",
+   "traction_system": "交流传动",
+   "brake_type": "再生制动",
+   "regenerative": true,
+   "resistance_coeffs": {
+    "A": 1.2,
+    "B": 0.0065,
+    "C": 0.000279,
+    "source": "表2"
+   },
+   "params": {
+    "source_table": "表10",
+    "axle_arrangement": "2(B0-B0)",
+    "axle_load_t": 23.0,
+    "computed_mass_t": 184.0,
+    "adhesion_mass_t": 184.0,
+    "max_start_traction_kN": 700.0,
+    "continuous_speed_kmh": 70.0,
+    "continuous_traction_kN": 493.7,
+    "max_speed_kmh": 120.0,
+    "length_m": 35.2
+   },
+   "brake_curve": {
+    "source": "表B.17续",
+    "page": 37,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 0.0
+     },
+     {
+      "v": 10,
+      "Bd": 461.0
+     },
+     {
+      "v": 20,
+      "Bd": 461.0
+     },
+     {
+      "v": 30,
+      "Bd": 461.0
+     },
+     {
+      "v": 40,
+      "Bd": 461.0
+     },
+     {
+      "v": 50,
+      "Bd": 461.0
+     },
+     {
+      "v": 60,
+      "Bd": 461.0
+     },
+     {
+      "v": 70,
+      "Bd": 460.8
+     },
+     {
+      "v": 80,
+      "Bd": 432.0
+     },
+     {
+      "v": 90,
+      "Bd": 384.0
+     },
+     {
+      "v": 100,
+      "Bd": 345.6
+     },
+     {
+      "v": 110,
+      "Bd": 314.2
+     },
+     {
+      "v": 120,
+      "Bd": 288.0
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "表B.17续",
+    "page": 37,
+    "points": [
+     {
+      "v": 10,
+      "w": 1.29
+     },
+     {
+      "v": 20,
+      "w": 1.44
+     },
+     {
+      "v": 30,
+      "w": 1.65
+     },
+     {
+      "v": 40,
+      "w": 1.91
+     },
+     {
+      "v": 50,
+      "w": 2.22
+     },
+     {
+      "v": 60,
+      "w": 2.59
+     },
+     {
+      "v": 70,
+      "w": 3.02
+     },
+     {
+      "v": 80,
+      "w": 3.51
+     },
+     {
+      "v": 90,
+      "w": 4.04
+     },
+     {
+      "v": 100,
+      "w": 4.64
+     },
+     {
+      "v": 110,
+      "w": 5.29
+     },
+     {
+      "v": 120,
+      "w": 6.0
+     }
+    ]
+   },
+   "regen_current_curve": {
+    "source": "图L.1",
+    "page": 141,
+    "note": "电流从0近线性升至约75km/h的362A，之后恒定",
+    "points": [
+     {
+      "v": 0,
+      "I": 0
+     },
+     {
+      "v": 10,
+      "I": 48
+     },
+     {
+      "v": 20,
+      "I": 96
+     },
+     {
+      "v": 30,
+      "I": 145
+     },
+     {
+      "v": 40,
+      "I": 193
+     },
+     {
+      "v": 50,
+      "I": 241
+     },
+     {
+      "v": 60,
+      "I": 290
+     },
+     {
+      "v": 70,
+      "I": 338
+     },
+     {
+      "v": 75,
+      "I": 362
+     },
+     {
+      "v": 80,
+      "I": 362
+     },
+     {
+      "v": 90,
+      "I": 362
+     },
+     {
+      "v": 100,
+      "I": 362
+     },
+     {
+      "v": 110,
+      "I": 362
+     },
+     {
+      "v": 120,
+      "I": 362
+     }
+    ]
+   }
+  },
+  "HXD1_25t": {
+   "alias": "HXD1（轴重25t）",
+   "traction_system": "交流传动",
+   "brake_type": "再生制动",
+   "regenerative": true,
+   "resistance_coeffs": {
+    "A": 1.2,
+    "B": 0.0065,
+    "C": 0.000279,
+    "source": "表2"
+   },
+   "params": {
+    "source_table": "表10",
+    "axle_arrangement": "2(B0-B0)",
+    "axle_load_t": 25.0,
+    "computed_mass_t": 200.0,
+    "adhesion_mass_t": 200.0,
+    "max_start_traction_kN": 760.0,
+    "continuous_speed_kmh": 65.0,
+    "continuous_traction_kN": 531.7,
+    "max_speed_kmh": 120.0,
+    "length_m": 35.2
+   },
+   "note": "与23t版共用图F.17/表B.17的电制动与阻力曲线（差异小，未单独取点）",
+   "brake_curve": {
+    "source": "沿用表B.17续（HXD1_23t，同一图）",
+    "page": 37,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 0.0
+     },
+     {
+      "v": 10,
+      "Bd": 461.0
+     },
+     {
+      "v": 20,
+      "Bd": 461.0
+     },
+     {
+      "v": 30,
+      "Bd": 461.0
+     },
+     {
+      "v": 40,
+      "Bd": 461.0
+     },
+     {
+      "v": 50,
+      "Bd": 461.0
+     },
+     {
+      "v": 60,
+      "Bd": 461.0
+     },
+     {
+      "v": 70,
+      "Bd": 460.8
+     },
+     {
+      "v": 80,
+      "Bd": 432.0
+     },
+     {
+      "v": 90,
+      "Bd": 384.0
+     },
+     {
+      "v": 100,
+      "Bd": 345.6
+     },
+     {
+      "v": 110,
+      "Bd": 314.2
+     },
+     {
+      "v": 120,
+      "Bd": 288.0
+     }
+    ]
+   },
+   "regen_current_curve": {
+    "source": "沿用图L.1（HXD1_23t，同一图）",
+    "page": 141,
+    "points": [
+     {
+      "v": 0,
+      "I": 0
+     },
+     {
+      "v": 10,
+      "I": 48
+     },
+     {
+      "v": 20,
+      "I": 96
+     },
+     {
+      "v": 30,
+      "I": 145
+     },
+     {
+      "v": 40,
+      "I": 193
+     },
+     {
+      "v": 50,
+      "I": 241
+     },
+     {
+      "v": 60,
+      "I": 290
+     },
+     {
+      "v": 70,
+      "I": 338
+     },
+     {
+      "v": 75,
+      "I": 362
+     },
+     {
+      "v": 80,
+      "I": 362
+     },
+     {
+      "v": 90,
+      "I": 362
+     },
+     {
+      "v": 100,
+      "I": 362
+     },
+     {
+      "v": 110,
+      "I": 362
+     },
+     {
+      "v": 120,
+      "I": 362
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "沿用表B.17续（HXD1_23t，同一图）",
+    "page": 37,
+    "points": [
+     {
+      "v": 10,
+      "w": 1.29
+     },
+     {
+      "v": 20,
+      "w": 1.44
+     },
+     {
+      "v": 30,
+      "w": 1.65
+     },
+     {
+      "v": 40,
+      "w": 1.91
+     },
+     {
+      "v": 50,
+      "w": 2.22
+     },
+     {
+      "v": 60,
+      "w": 2.59
+     },
+     {
+      "v": 70,
+      "w": 3.02
+     },
+     {
+      "v": 80,
+      "w": 3.51
+     },
+     {
+      "v": 90,
+      "w": 4.04
+     },
+     {
+      "v": 100,
+      "w": 4.64
+     },
+     {
+      "v": 110,
+      "w": 5.29
+     },
+     {
+      "v": 120,
+      "w": 6.0
+     }
+    ]
+   },
+   "curve_backfill_note": "原条目缺曲线（会使电制动力与再生电量恒为 0），由 tools/derive_shenhua12_entry.py 按自身注释所述共用关系补全自 HXD1_23t。"
+  },
+  "HXD1B": {
+   "alias": "HXD1B",
+   "traction_system": "交流传动",
+   "brake_type": "再生制动",
+   "regenerative": true,
+   "resistance_coeffs": {
+    "A": 1.2,
+    "B": 0.0065,
+    "C": 0.000279,
+    "source": "表2"
+   },
+   "params": {
+    "source_table": "表10",
+    "axle_arrangement": "C0-C0",
+    "axle_load_t": 25.0,
+    "computed_mass_t": 150.0,
+    "adhesion_mass_t": 150.0,
+    "max_start_traction_kN": 570.0,
+    "continuous_speed_kmh": 81.9,
+    "continuous_traction_kN": 422.0,
+    "max_speed_kmh": 120.0,
+    "length_m": 22.7
+   },
+   "brake_curve": {
+    "source": "表B.18",
+    "page": 37,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 0.0
+     },
+     {
+      "v": 10,
+      "Bd": 346.0
+     },
+     {
+      "v": 20,
+      "Bd": 346.0
+     },
+     {
+      "v": 30,
+      "Bd": 346.0
+     },
+     {
+      "v": 40,
+      "Bd": 346.0
+     },
+     {
+      "v": 50,
+      "Bd": 346.0
+     },
+     {
+      "v": 60,
+      "Bd": 346.0
+     },
+     {
+      "v": 70,
+      "Bd": 346.0
+     },
+     {
+      "v": 80,
+      "Bd": 346.0
+     },
+     {
+      "v": 90,
+      "Bd": 346.0
+     },
+     {
+      "v": 100,
+      "Bd": 345.6
+     },
+     {
+      "v": 110,
+      "Bd": 314.2
+     },
+     {
+      "v": 120,
+      "Bd": 288.0
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "表B.18",
+    "page": 37,
+    "points": [
+     {
+      "v": 10,
+      "w": 1.29
+     },
+     {
+      "v": 20,
+      "w": 1.44
+     },
+     {
+      "v": 30,
+      "w": 1.65
+     },
+     {
+      "v": 40,
+      "w": 1.91
+     },
+     {
+      "v": 50,
+      "w": 2.22
+     },
+     {
+      "v": 60,
+      "w": 2.59
+     },
+     {
+      "v": 70,
+      "w": 3.02
+     },
+     {
+      "v": 80,
+      "w": 3.51
+     },
+     {
+      "v": 90,
+      "w": 4.04
+     },
+     {
+      "v": 100,
+      "w": 4.64
+     },
+     {
+      "v": 110,
+      "w": 5.29
+     },
+     {
+      "v": 120,
+      "w": 6.0
+     }
+    ]
+   },
+   "regen_current_curve": {
+    "source": "图L.2",
+    "page": 141,
+    "points": [
+     {
+      "v": 0,
+      "I": 0
+     },
+     {
+      "v": 10,
+      "I": 24
+     },
+     {
+      "v": 20,
+      "I": 48
+     },
+     {
+      "v": 40,
+      "I": 96
+     },
+     {
+      "v": 60,
+      "I": 145
+     },
+     {
+      "v": 80,
+      "I": 193
+     },
+     {
+      "v": 90,
+      "I": 217
+     },
+     {
+      "v": 100,
+      "I": 241
+     },
+     {
+      "v": 110,
+      "I": 241
+     },
+     {
+      "v": 120,
+      "I": 241
+     }
+    ]
+   }
+  },
+  "SHENHUA_12": {
+   "params": {
+    "computed_mass_t": 300.0,
+    "axle_count": 12,
+    "continuous_power_kW": 14400.0,
+    "source_table": "实测 + 技术方案推导（标准表10 无此机型）",
+    "axle_arrangement": "3(B0-B0)",
+    "axle_load_t": 25.0,
+    "adhesion_mass_t": 300.0,
+    "max_start_traction_kN": 1140.0,
+    "continuous_speed_kmh": 65.0,
+    "continuous_traction_kN": 797.55,
+    "max_speed_kmh": 120.0,
+    "length_m": 52.8
+   },
+   "alias": "神华号 12 轴（交流 12 轴）",
+   "traction_system": "交流传动",
+   "brake_type": "再生制动",
+   "regenerative": true,
+   "data_status": "derived_1p5x_HXD1_pending_owner_confirmation",
+   "derivation": {
+    "basis": "1.5 × HXD1_23t 的电制动与再生电流曲线",
+    "anchors": [
+     "整备质量 300 t：智能电表单机行 辆数=3 × 100 t/节（车型码 233，592 趟）",
+     "轮周牵引功率 14400 kW：技术方案原文「十二轴交流 14400kW」，为神 8（9600 kW）的 1.5 倍",
+     "起动牵引力 1140 kN = 1.5 × HXD1_25t 的 760 kN，与黏着上限 μ·300t·9.81 吻合"
+    ],
+    "not_scaled": [
+     "unit_resistance_curve / resistance_coeffs：单位基本阻力为强度量（N/kN），不随机车节数缩放"
+    ],
+    "regenerate_with": "tools/derive_shenhua12_entry.py"
+   },
+   "resistance_coeffs": {
+    "A": 1.2,
+    "B": 0.0065,
+    "C": 0.000279,
+    "source": "表2"
+   },
+   "brake_curve": {
+    "source": "1.5 × 表B.17续（HXD1_23t）",
+    "page": 37,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 0.0
+     },
+     {
+      "v": 10,
+      "Bd": 691.5
+     },
+     {
+      "v": 20,
+      "Bd": 691.5
+     },
+     {
+      "v": 30,
+      "Bd": 691.5
+     },
+     {
+      "v": 40,
+      "Bd": 691.5
+     },
+     {
+      "v": 50,
+      "Bd": 691.5
+     },
+     {
+      "v": 60,
+      "Bd": 691.5
+     },
+     {
+      "v": 70,
+      "Bd": 691.2
+     },
+     {
+      "v": 80,
+      "Bd": 648.0
+     },
+     {
+      "v": 90,
+      "Bd": 576.0
+     },
+     {
+      "v": 100,
+      "Bd": 518.4
+     },
+     {
+      "v": 110,
+      "Bd": 471.3
+     },
+     {
+      "v": 120,
+      "Bd": 432.0
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "沿用表B.17续（HXD1_23t）",
+    "page": 37,
+    "points": [
+     {
+      "v": 10,
+      "w": 1.29
+     },
+     {
+      "v": 20,
+      "w": 1.44
+     },
+     {
+      "v": 30,
+      "w": 1.65
+     },
+     {
+      "v": 40,
+      "w": 1.91
+     },
+     {
+      "v": 50,
+      "w": 2.22
+     },
+     {
+      "v": 60,
+      "w": 2.59
+     },
+     {
+      "v": 70,
+      "w": 3.02
+     },
+     {
+      "v": 80,
+      "w": 3.51
+     },
+     {
+      "v": 90,
+      "w": 4.04
+     },
+     {
+      "v": 100,
+      "w": 4.64
+     },
+     {
+      "v": 110,
+      "w": 5.29
+     },
+     {
+      "v": 120,
+      "w": 6.0
+     }
+    ]
+   },
+   "regen_current_curve": {
+    "source": "1.5 × 图L.1（HXD1_23t）",
+    "page": 141,
+    "note": "三节车体并联，满负荷再生电流按节数 1.5 倍放大",
+    "points": [
+     {
+      "v": 0,
+      "I": 0.0
+     },
+     {
+      "v": 10,
+      "I": 72.0
+     },
+     {
+      "v": 20,
+      "I": 144.0
+     },
+     {
+      "v": 30,
+      "I": 217.5
+     },
+     {
+      "v": 40,
+      "I": 289.5
+     },
+     {
+      "v": 50,
+      "I": 361.5
+     },
+     {
+      "v": 60,
+      "I": 435.0
+     },
+     {
+      "v": 70,
+      "I": 507.0
+     },
+     {
+      "v": 75,
+      "I": 543.0
+     },
+     {
+      "v": 80,
+      "I": 543.0
+     },
+     {
+      "v": 90,
+      "I": 543.0
+     },
+     {
+      "v": 100,
+      "I": 543.0
+     },
+     {
+      "v": 110,
+      "I": 543.0
+     },
+     {
+      "v": 120,
+      "I": 543.0
+     }
+    ]
+   },
+   "note": "神 12 为朔黄实际主力车型（电表 83,549 行中占 39.3%）。曲线为推导值，拿到厂家牵引计算资料后应替换。"
+  },
+  "SHENHUA_8": {
+   "params": {
+    "source_table": "工程推导（标准表10 无神华号条目）",
+    "axle_arrangement": "2(B0-B0)",
+    "axle_load_t": 25.0,
+    "computed_mass_t": 200.0,
+    "adhesion_mass_t": 200.0,
+    "max_start_traction_kN": 760.0,
+    "continuous_speed_kmh": 65.0,
+    "continuous_traction_kN": 531.7,
+    "max_speed_kmh": 120.0,
+    "length_m": 35.2,
+    "axle_count": 8,
+    "continuous_power_kW": 9600.0
+   },
+   "alias": "神华号 8 轴（交流 8 轴 / 国能号 8 轴）",
+   "traction_system": "交流传动",
+   "brake_type": "再生制动",
+   "regenerative": true,
+   "data_status": "derived_from_hxd1_25t_pending_owner_confirmation",
+   "derivation": {
+    "basis": "沿用 HXD1_25t（2(B0-B0)、200 t、760 kN 起动、531.7 kN 持续）的全部参数与曲线",
+    "anchors": [
+     "编组模式文档：两万吨 1+1（交+交）——两台机车",
+     "运行图技术资料第 7 页：国能号 12 轴 + 国能号 8 轴",
+     "技术方案原文「神 8 = 9600 kW」，与神 12（14400 kW）成 1.5 倍关系，互为校验",
+     "智能电表 231 型恒为 2 块表 —— 8 轴 = 2 节，与 2(B0-B0) 一致"
+    ],
+    "not_scaled": [
+     "unit_resistance_curve / resistance_coeffs：单位基本阻力为强度量（N/kN），不随机车节数缩放"
+    ],
+    "regenerate_with": "tools/derive_shenhua8_entry.py"
+   },
+   "resistance_coeffs": {
+    "A": 1.2,
+    "B": 0.0065,
+    "C": 0.000279,
+    "source": "表2"
+   },
+   "brake_curve": {
+    "source": "沿用表B.17续（HXD1_23t，同一图）",
+    "page": 37,
+    "points": [
+     {
+      "v": 0,
+      "Bd": 0.0
+     },
+     {
+      "v": 10,
+      "Bd": 461.0
+     },
+     {
+      "v": 20,
+      "Bd": 461.0
+     },
+     {
+      "v": 30,
+      "Bd": 461.0
+     },
+     {
+      "v": 40,
+      "Bd": 461.0
+     },
+     {
+      "v": 50,
+      "Bd": 461.0
+     },
+     {
+      "v": 60,
+      "Bd": 461.0
+     },
+     {
+      "v": 70,
+      "Bd": 460.8
+     },
+     {
+      "v": 80,
+      "Bd": 432.0
+     },
+     {
+      "v": 90,
+      "Bd": 384.0
+     },
+     {
+      "v": 100,
+      "Bd": 345.6
+     },
+     {
+      "v": 110,
+      "Bd": 314.2
+     },
+     {
+      "v": 120,
+      "Bd": 288.0
+     }
+    ]
+   },
+   "unit_resistance_curve": {
+    "source": "沿用表B.17续（HXD1_23t，同一图）",
+    "page": 37,
+    "points": [
+     {
+      "v": 10,
+      "w": 1.29
+     },
+     {
+      "v": 20,
+      "w": 1.44
+     },
+     {
+      "v": 30,
+      "w": 1.65
+     },
+     {
+      "v": 40,
+      "w": 1.91
+     },
+     {
+      "v": 50,
+      "w": 2.22
+     },
+     {
+      "v": 60,
+      "w": 2.59
+     },
+     {
+      "v": 70,
+      "w": 3.02
+     },
+     {
+      "v": 80,
+      "w": 3.51
+     },
+     {
+      "v": 90,
+      "w": 4.04
+     },
+     {
+      "v": 100,
+      "w": 4.64
+     },
+     {
+      "v": 110,
+      "w": 5.29
+     },
+     {
+      "v": 120,
+      "w": 6.0
+     }
+    ]
+   },
+   "note": "补机（中部/尾部）与 12 轴本务同族，区别只在节数。8 轴机车的电表读数当前数据集内没有，整列目标按「两台等分」处理，需甲方补数后复核。"
+  }
+ },
+ "freight_resistance_coeffs": {
+  "source_table": "表5",
+  "loaded": {
+   "A": 0.92,
+   "B": 0.0048,
+   "C": 0.000125
+  },
+  "empty": {
+   "A": 2.23,
+   "B": 0.0053,
+   "C": 0.000675
+  },
+  "note": "货车单位运行基本阻力 w0' = A + Bv + Cv^2（N/kN），v 单位 km/h"
+ },
+ "adhesion_formulas": {
+  "source_section": "4.11 制动黏着系数 与 5.2 黏着系数及黏着牵引力",
+  "brake": {
+   "dry": {
+    "formula": "0.0624 + 45.60/(260+v)",
+    "eq": "式(52)"
+   },
+   "wet_without_antiskid": {
+    "formula": "0.0405 + 13.55/(120+v)",
+    "eq": "式(53)"
+   },
+   "wet_with_antiskid": {
+    "formula": "0.0486 + 13.55/(120+v)",
+    "eq": "式(54)"
+   },
+   "note": "v 单位 km/h，适用 v<=160km/h；式(53)为潮湿无防滑，式(54)为潮湿有防滑"
+  },
+  "traction": {
+   "SS": {
+    "formula": "0.24 + 12/(100+8v)",
+    "eq": "式(55)"
+   },
+   "8G": {
+    "formula": "0.28 + 4/(50+6v) - 0.0006v",
+    "eq": "式(56)"
+   },
+   "8K": {
+    "formula": "0.38*(10+0.11v)/(10+0.2v)",
+    "eq": "式(57)"
+   },
+   "curve_radius_lt_600m": {
+    "formula": "mu_ji*(0.67+0.00055R)",
+    "eq": "式(58)"
+   },
+   "adhesion_traction_force": {
+    "formula": "F_mu = M_mu * mu_muj * g",
+    "eq": "式(59)"
+   },
+   "note": "HXD 系列交流传动电力机车标准未给静态黏着公式（黏着由牵引控制动态调节）；v 单位 km/h，R 单位 m"
+  }
+ },
+ "multi_loco_derating": {
+  "source_section": "5.4 牵引力的特殊规定",
+  "rules": [
+   {
+    "condition": "多机重联/同步操纵",
+    "factor_per_loco": 1.0
+   },
+   {
+    "condition": "分别操纵（第二台及以后）",
+    "factor_per_loco": 0.98
+   },
+   {
+    "condition": "推送补机",
+    "factor_per_loco": 0.95
+   }
+  ]
+ },
+ "regen_energy_formula": {
+  "source_section": "8.6",
+  "formula": "Q_z = U_w * Σ(I_z * t_z) / 60",
+  "symbols": {
+   "Q_z": "再生制动运行发电量 (kWh)",
+   "U_w": "牵引网电压 (kV)",
+   "I_z": "再生制动发电有功电流 (A)，查附录 B 或附录 L",
+   "t_z": "再生制动时间 (min)"
+  },
+  "U_w_evidence": {
+   "source_file": "shuohuang_data/智能电表数据带说明/SS4-151.xlsx, SS4-58.xlsx",
+   "field": "wy（网压，单位 V）",
+   "SS4-151": {
+    "n": 142569,
+    "p5_kV": 26.344,
+    "median_kV": 27.117,
+    "p95_kV": 27.527
+   },
+   "SS4-58": {
+    "n": 173567,
+    "p5_kV": 26.078,
+    "median_kV": 27.387,
+    "p95_kV": 28.493
+   }
+  },
+  "U_w_kV": 27.42,
+  "U_w_data_status": "measured_from_smart_meter_wy_5_units",
+  "U_w_note": "实测值：智能电表逐时刻 wy（网压）字段，5 台车共 569,436 条有效样本（剔除 <10 kV 缺测），合并中位 27,420 V。分车中位：SS4-151 27.117 kV、SS4-58 27.387 kV、2010A 27.691 kV、2010B 27.780 kV、2010C 27.739 kV；p5–p95 为 26.35–28.62 kV。取合并中位而非单台中位，是因为此前 27.2 kV 只用了 SS4 两台、样本偏向旧车型。Q_z ∝ U_w，故较 27.2 kV 上浮 0.8%。与本值同源的样本统计见 shared/smart_meter_catenary_voltage.csv。",
+  "U_w_reference_alternatives_kV": [
+   25.0,
+   27.5
+  ]
+ },
+ "schema_version": "2.0",
+ "source_standard": "TB/T 1407.1-2018 列车牵引计算 第1部分：机车牵引式列车",
+ "source_file": "shuohuang_data/TBT1407.1-2018FDIS.pdf",
+ "extraction_method": "manual_digitize",
+ "extraction_note": "数值从标准扫描件人工逐格读取。电制动力/单位阻力以附录B表格值为准（权威数据）；电制动曲线形态参考附录F示意图。取点有目测误差（表格值 ±1%，曲线值 ±3%），建议以机车厂实测数据最终复核。",
+ "extracted_at_utc": "2026-11-03",
+ "page_offset_note": "PDF物理页索引 = 标准页码 + 4",
+ "units": {
+  "force": "kN",
+  "speed": "km/h",
+  "current": "A",
+  "resistance_specific": "N/kN",
+  "mass": "t",
+  "length": "m",
+  "power": "kW"
+ }
+}

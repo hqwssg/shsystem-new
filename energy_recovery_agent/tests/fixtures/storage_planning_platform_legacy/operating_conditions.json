@@ -1,0 +1,8 @@
+{
+  "default_adhesion_coefficient": 0.28,
+  "traction_adhesion_safety_factor": 0.85,
+  "braking_adhesion_safety_factor": 0.65,
+  "weather_conditions": [],
+  "adhesion_zones": [],
+  "speed_restrictions": []
+}

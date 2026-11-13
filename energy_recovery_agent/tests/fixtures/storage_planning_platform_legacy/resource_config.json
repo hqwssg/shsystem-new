@@ -1,0 +1,17 @@
+{
+  "station_track_capacity": 2,
+  "terminal_track_capacity": 4,
+  "throat_capacity": 1,
+  "station_occupancy_s": 180,
+  "throat_occupancy_s": 90,
+  "section_release_margin_s": 30,
+  "section_capacity_spacing_km": 8.0,
+  "single_line_ranges_km": [],
+  "min_depart_headway_s": 300,
+  "min_depart_headway_source": "",
+  "min_overlap_s": 1,
+  "conflict_limit": 50,
+  "initial_heavy_flow_count": 1000,
+  "initial_empty_flow_count": 1000,
+  "enforce_flow_continuity": true
+}
