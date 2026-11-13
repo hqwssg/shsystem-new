@@ -94,3 +94,8 @@ Java 调用链已恢复为 Python 内部 HTTP 任务 API：报告渲染、Markdo
 - 因目标仓库旧历史存在缺失对象，GitHub 接收增量 pack 时返回 `did not receive expected object d1da62a...`；为确保目标仓库可完整拉取，基于已验证的当前工作树创建独立根提交：`41bb4959e36e2e8c91d97c3f9354e198c4276024`。
 - 已使用 `git push --force --no-thin origin main` 覆盖同步至 `hqwssg/shsystem-new.git`，远端 `main` 已指向 `41bb4959e36e2e8c91d97c3f9354e198c4276024`。
 - 本次仅调整本地代码并同步 GitHub，未创建或启动容器。
+
+## 13. 2026-11-14 最终远端指针
+
+- 迁移记录补充提交已完成，`hqwssg/shsystem-new.git` 的 `main` 最终指向：`aab4390baca09d4c63dacccf49f7a0f34823752e`。
+- 该提交包含三类服务器拆分代码及本次 GitHub 同步记录；工作树无未提交改动。
